@@ -1,0 +1,38 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+BraceWrapping:
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  AfterExternBlock: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  AfterNamespace: true
+BreakBeforeBraces: Attach
+UseTab: Never
+TabWidth: 4
+IndentWidth: 4
+ColumnLimit: 120
+AlignConsecutiveAssignments: None
+AlignConsecutiveBitFields: None
+AlignConsecutiveDeclarations: None
+AlignConsecutiveMacros: None
+AlignEscapedNewlines: Right
+AlignOperands: Align
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: All
+InsertBraces: true
+...

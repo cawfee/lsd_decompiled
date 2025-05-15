@@ -1,0 +1,2 @@
+ninja
+splat64[mips]
