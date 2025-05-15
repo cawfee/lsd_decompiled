@@ -1,0 +1,122 @@
+#ifndef LSD_310CC_H
+#define LSD_310CC_H
+
+#include <common.h>
+
+typedef struct class_310CC_vtable {
+    /* 0x000 8006eb90 */ u32 value;
+    /* 0x004 8006eb94 */ void (*Destroy)(void *);
+    /* 0x008 8006eb98 */ void (*Construct)(void *, s32, s32, s32);
+    /* 0x00C 8006eb9c */ void (*Cleanup)(void *);
+    /* 0x010 8006eba0 */ void (*Unk3)(void *);
+    /* 0x014 8006eba4 */ void (*Unk4)(void *);
+    /* 0x018 8006eba8 */ void (*Unk5)(void *);
+    /* 0x01C 8006ebac */ void (*Unk6)(void *);
+    /* 0x020 8006ebb0 */ void (*Unk7)(void *);
+    /* 0x024 8006ebb4 */ void (*Unk8)(void *);
+    /* 0x028 8006ebb8 */ void (*Unk9)(void *);
+    /* 0x02C 8006ebbc */ void (*Unk10)(void *);
+    /* 0x030 8006ebc0 */ void (*Unk11)(void *);
+    /* 0x034 8006ebc4 */ void (*Unk12)(void *);
+    /* 0x038 8006ebc8 */ void (*Unk13)(void *);
+    /* 0x03C 8006ebcc */ void (*Unk14)(void *);
+    /* 0x040 8006ebd0 */ void (*Unk15)(void *, s32);
+    /* 0x044 8006ebd4 */ void (*Unk16)(void *);
+    /* 0x048 8006ebd8 */ void (*Unk17)(void *);
+    /* 0x04C 8006ebdc */ void (*Unk18)(void *, s32, void *);
+    /* 0x050 8006ebe0 */ void (*Unk19)(void *);
+    /* 0x054 8006ebe4 */ void (*Unk20)(void *);
+    /* 0x058 8006ebe8 */ void (*Unk21)(void *);
+    /* 0x05C 8006ebec */ void (*Unk22)(void *);
+    /* 0x060 8006ebf0 */ void (*Unk23)(void *);
+    /* 0x064 8006ebf4 */ void (*Unk24)(void *);
+    /* 0x068 8006ebf8 */ void (*Unk25)(void *);
+    /* 0x06C 8006ebfc */ void (*Unk26)(void *);
+    /* 0x070 8006ec00 */ void (*Unk27)(void *);
+    /* 0x074 8006ec04 */ void (*Unk28)(void *);
+    /* 0x078 8006ec08 */ void (*Unk29)(void *);
+    /* 0x07C 8006ec0c */ void (*Unk30)(void *);
+    /* 0x080 8006ec10 */ void (*Unk31)(void *);
+    /* 0x084 8006ec14 */ void (*Unk32)(void *);
+    /* 0x088 8006ec18 */ void (*Unk33)(void *);
+    /* 0x08C 8006ec1c */ void (*Unk34)(void *);
+    /* 0x090 8006ec20 */ void (*Unk35)(void *);
+    /* 0x094 8006ec24 */ void (*Unk36)(void *);
+    /* 0x098 8006ec28 */ void (*Unk37)(void *);
+    /* 0x09C 8006ec2c */ void (*Unk38)(void *);
+    /* 0x0A0 8006ec30 */ void (*Unk39)(void *);
+    /* 0x0A4 8006ec34 */ void (*Unk40)(void *);
+    /* 0x0A8 8006ec38 */ void (*Unk41)(void *);
+    /* 0x0AC 8006ec3c */ void (*Unk42)(void *);
+    /* 0x0B0 8006ec40 */ void (*Unk43)(void *);
+    /* 0x0B4 8006ec44 */ void (*Unk44)(void *);
+    /* 0x0B8 8006ec48 */ void (*Unk45)(void *, char *);
+    /* 0x0BC 8006ec4c */ void (*Unk46)(void *);
+    /* 0x0C0 8006ec50 */ void (*Unk47)(void *);
+    /* 0x0C4 8006ec54 */ void (*Unk48)(void *);
+    /* 0x0C8 8006ec58 */ void (*Unk49)(void *);
+    /* 0x0CC 8006ec5c */ void (*Unk50)(void *);
+    /* 0x0D0 8006ec60 */ void (*Unk51)(void *);
+    /* 0x0D4 8006ec64 */ void (*Unk52)(void *);
+} class_310CC_vtable_t;
+
+typedef struct class_310CC {
+    /* 0x00 */ class_310CC_vtable_t *vtable;
+    /* 0x04 */ s32 m_Unk0;
+    /* 0x08 */ s32 m_Unk1;
+    /* 0x0C */ s32 m_Unk2;
+    /* 0x10 */ s32 m_Unk3;
+    /* 0x14 */ s32 m_Unk4;
+    /* 0x18 */ s32 m_Unk5;
+    /* 0x1C */ s32 m_Unk6;
+    /* 0x20 */ s32 m_Unk7;
+    /* 0x24 */ s32 m_Unk8;
+    /* 0x28 */ s32 m_Unk9;
+    /* 0x2C */ s32 m_Unk10;
+    /* 0x30 */ s32 m_Unk11;
+    /* 0x34 */ s32 m_Unk12;
+    /* 0x38 */ s32 m_Unk13;
+    /* 0x3C */ s32 m_Unk14;
+    /* 0x40 */ s32 m_Unk15;
+    /* 0x44 */ s32 m_Unk16;
+    /* 0x48 */ s32 m_Unk17;
+    /* 0x4C */ s32 m_Unk18;
+    /* 0x50 */ s32 m_Unk19;
+    /* 0x54 */ s32 m_Unk20;
+    /* 0x58 */ s32 m_Unk21;
+    /* 0x5C */ s32 m_Unk22;
+    /* 0x60 */ s32 m_Unk23;
+    /* 0x64 */ s32 m_Unk24;
+    /* 0x68 */ s32 m_Unk25;
+    /* 0x6C */ s32 m_Unk26;
+    /* 0x70 */ s32 m_Unk27;
+    /* 0x74 */ s32 m_Unk28;
+    /* 0x78 */ s32 m_Unk29;
+    /* 0x7C */ s32 m_Unk30;
+    /* 0x80 */ s32 m_Unk31;
+    /* 0x84 */ s32 m_Unk32;
+    /* 0x88 */ s32 m_Unk33;
+    /* 0x8C */ s32 m_Unk34;
+    /* 0x90 */ s32 m_Unk35;
+    /* 0x94 */ s32 m_Unk36;
+    /* 0x98 */ s32 m_Unk37;
+    /* 0x9C */ s32 m_Unk38;
+    /* 0xA0 */ s32 m_Unk39;
+    /* 0xA4 */ s32 m_Unk40;
+    /* 0xA8 */ s8 m_Unk41_1;
+    /* 0xA9 */ s8 m_Unk41_2;
+    /* 0xAA */ s8 m_Unk41_3;
+    /* 0xAB */ s8 m_Unk41_4;
+    /* 0xAC */ s8 m_Unk42_1;
+    /* 0xAD */ s8 m_Unk42_2;
+    /* 0xAE */ s8 m_Unk42_3;
+    /* 0xAF */ s8 m_Unk42_4;
+    /* 0xB0 */ s32 m_Unk43;
+    /* 0xB4 */ void *m_Unk44;
+    /* 0xB8 */ s32 m_Unk45;
+} class_310CC_t;
+
+class_310CC_vtable_t *func_80040FB0(void);
+class_310CC_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3);
+
+#endif

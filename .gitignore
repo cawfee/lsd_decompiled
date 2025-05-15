@@ -1,0 +1,17 @@
+# IDE
+.vscode
+.idea
+
+# Build
+asm/
+build/
+build.ninja
+
+# Python
+__pycache__
+
+# Extra
+rom
+ctx.c
+tools/m2c
+tools/maspsx
