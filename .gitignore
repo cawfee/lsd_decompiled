@@ -11,7 +11,7 @@ build.ninja
 __pycache__
 
 # Extra
-rom
+rom/SLPS_015.56
 ctx.c
 tools/m2c
 tools/maspsx    
