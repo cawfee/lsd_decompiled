@@ -32,7 +32,7 @@ typedef struct class_2C694_vtable {
     /* 0x050 8006e780 */ void (*Unk19)(void *);
     /* 0x054 8006e784 */ void (*Unk20)(void *);
     /* 0x058 8006e788 */ void (*Unk21)(void *);
-    /* 0x05C 8006e78c */ void (*Unk22)(void *);
+    /* 0x05C 8006e78c */ void (*Unk22)(void *, s32, s32);
     /* 0x060 8006e790 */ void (*Unk23)(void *, s32);
     /* 0x064 8006e794 */ void (*Unk24)(void *);
     /* 0x068 8006e798 */ void (*Unk25)(void *);

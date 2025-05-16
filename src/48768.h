@@ -20,7 +20,7 @@ typedef struct class_48768_vtable {
     /* 0x034 80087ae0 */ void (*Unk12)(void *);
     /* 0x038 80087ae4 */ void (*Unk13)(void *);
     /* 0x03C 80087ae8 */ void (*Unk14)(void *);
-    /* 0x040 80087aec */ void (*Unk15)(void *);
+    /* 0x040 80087aec */ void (*Unk15)(void *, void *);
     /* 0x044 80087af0 */ void (*Unk16)(void *);
     /* 0x048 80087af4 */ void (*Unk17)(void *);
     /* 0x04C 80087af8 */ void (*Unk18)(void *);
@@ -31,8 +31,8 @@ typedef struct class_48768_vtable {
     /* 0x060 80087b0c */ void (*Unk23)(void *);
     /* 0x064 80087b10 */ void (*Unk24)(void *);
     /* 0x068 80087b14 */ void (*Unk25)(void *);
-    /* 0x06C 80087b18 */ void (*Unk26)(void *);
-    /* 0x070 80087b1c */ void (*Unk27)(void *);
+    /* 0x06C 80087b18 */ void (*Unk26)(void *, s32);
+    /* 0x070 80087b1c */ void (*Unk27)(void *, s32);
     /* 0x074 80087b20 */ void (*Unk28)(void *);
     /* 0x078 80087b24 */ void (*Unk29)(void *);
     /* 0x07C 80087b28 */ void (*Unk30)(void *);
@@ -57,8 +57,8 @@ typedef struct class_48768_vtable {
     /* 0x0C8 80087b74 */ void (*Unk49)(void *);
     /* 0x0CC 80087b78 */ void (*Unk50)(void *);
     /* 0x0D0 80087b7c */ void (*Unk51)(void *);
-    /* 0x0D4 80087b80 */ void (*Unk52)(void *);
-    /* 0x0D8 80087b84 */ void (*Unk53)(void *);
+    /* 0x0D4 80087b80 */ void (*Unk52)(void *, const char *, void *);
+    /* 0x0D8 80087b84 */ void (*Unk53)(void *, s32);
     /* 0x0DC 80087b88 */ void (*Unk54)(void *);
     /* 0x0E0 80087b8c */ void (*Unk55)(void *);
     /* 0x0E4 80087b90 */ void (*Unk56)(void *);
@@ -123,7 +123,7 @@ typedef struct class_48768 {
     /* 0x98 */ s32 m_Unk37;
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
-    /* 0xA4 */ s32 m_Unk40;
+    /* 0xA4 */ void *m_Unk40;
     /* 0xA8 */ s32 m_Unk41;
     /* 0xAC */ s32 m_Unk42;
     /* 0xB0 */ s32 m_Unk43;
@@ -226,7 +226,7 @@ typedef struct class_48768 {
     s32 m_Unk140;
     s32 m_Unk141;
     s32 m_Unk142;
-    s32 m_Unk143;
+    void *m_Unk143;
     s32 m_Unk144;
     s32 m_Unk145;
 } class_48768_t;

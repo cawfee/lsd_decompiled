@@ -51,6 +51,7 @@ def parse_c_obj(fp: str):
 def main():
     total_size = 0
     total_decompiled = 0
+    psyq_size = 0
     file_stats = []
 
     for root, _, files in os.walk(BUILD_DIR):
@@ -61,7 +62,11 @@ def main():
                 obj_size = get_object_size(fp)
 
                 if "src/" not in fp:
-                    file_stats.append({"path": fp, "decompiled": 0, "total": obj_size, "type": "asm"})
+                    # Skip default libs
+                    if file.startswith("psyq_"):
+                        psyq_size += obj_size
+                    else:
+                        file_stats.append({"path": fp, "decompiled": 0, "total": obj_size, "type": "asm"})
                 else:
                     # Assume hasm is 100%
                     file_stats.append({"path": fp, "decompiled": obj_size, "total": obj_size, "type": "hasm"})
@@ -91,6 +96,8 @@ def main():
         transient=False
     ) as progress:
         progress.add_task(f"[{color}]Total Decompiled", total=total_size, completed=total_decompiled)
+
+    CONSOLE.print(f"\n[default]PSYQ Size: {psyq_size}/{total_size} ({psyq_size / total_size * 100:.2f}%)")
 
     CONSOLE.print("\n[bold]File Breakdown:[/]")
     table = Table(show_header=True, header_style="bold magenta")

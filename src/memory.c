@@ -9,8 +9,8 @@ void memory_set_manager(void *Manager) {
     g_MEMORY_MANAGER = Manager;
 }
 
-void func_80017AA8(void) {
-    func_80011F68();
+void func_80017AA8(void *Buffer) {
+    free2(Buffer);
 }
 
 INCLUDE_ASM("asm/nonmatchings/memory", memory_setup_manager);
