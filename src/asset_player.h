@@ -21,7 +21,7 @@ typedef struct asset_player_vtable {
     /* 0x038 8006e630 */ void (*Unk13)(void *);
     /* 0x03C 8006e634 */ void (*Unk14)(void *);
     /* 0x040 8006e638 */ void (*Unk15)(void *);
-    /* 0x044 8006e63c */ void (*Unk16)(void *);
+    /* 0x044 8006e63c */ void (*Unk16)(void *, void *, const char *, s32, s32);
     /* 0x048 8006e640 */ void (*Unk17)(void *);
     /* 0x04C 8006e644 */ void (*Unk18)(void *);
     /* 0x050 8006e648 */ void (*Unk19)(void *);
@@ -31,7 +31,7 @@ typedef struct asset_player_vtable {
     /* 0x060 8006e658 */ void (*Unk23)(void *, s32);
     /* 0x064 8006e65c */ void (*Unk24)(void *);
     /* 0x068 8006e660 */ void (*Unk25)(void *);
-    /* 0x06C 8006e664 */ void (*Unk26)(void *);
+    /* 0x06C 8006e664 */ void (*Unk26)(void *, u32);
     /* 0x070 8006e668 */ void (*Unk27)(void *);
     /* 0x074 8006e66c */ void (*Unk28)(void *);
     /* 0x078 8006e670 */ void (*Unk29)(void *);
@@ -79,7 +79,7 @@ typedef struct asset_player_vtable {
     /* 0x120 8006e718 */ void (*Unk71)(void *);
     /* 0x124 8006e71c */ void (*Unk72)(void *);
     /* 0x128 8006e720 */ void (*Unk73)(void *);
-    /* 0x12C 8006e724 */ void (*Unk74)(void *);
+    /* 0x12C 8006e724 */ void (*Unk74)(void *, s32);
     /* 0x130 8006e728 */ void (*Unk75)(void *);
     /* 0x134 8006e72c */ void (*Unk76)(void *);
 } asset_player_vtable_t;
@@ -143,6 +143,7 @@ typedef struct asset_player {
     /* 0xDC */ s32 m_Unk54;
 } asset_player_t;
 
-asset_player_vtable_t *func_8003BE84(void);
+asset_player_t *asset_player_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
+asset_player_vtable_t *asset_player_get_vtable(void);
 
 #endif

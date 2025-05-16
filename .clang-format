@@ -35,4 +35,5 @@ AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
 InsertBraces: true
+IndentCaseLabels: true
 ...

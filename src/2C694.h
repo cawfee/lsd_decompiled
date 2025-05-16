@@ -26,7 +26,7 @@ typedef struct class_2C694_vtable {
     /* 0x038 8006e768 */ void (*Unk13)(void *, void **, s32);
     /* 0x03C 8006e76c */ void (*Unk14)(void *);
     /* 0x040 8006e770 */ void (*Unk15)(void *);
-    /* 0x044 8006e774 */ void (*Unk16)(void *, s32, s32);
+    /* 0x044 8006e774 */ void (*Unk16)(void *, void *, s32);
     /* 0x048 8006e778 */ void (*Unk17)(void *);
     /* 0x04C 8006e77c */ void (*Unk18)(void *);
     /* 0x050 8006e780 */ void (*Unk19)(void *);
@@ -47,7 +47,7 @@ typedef struct class_2C694_vtable {
     /* 0x08C 8006e7bc */ void (*Unk34)(void *);
     /* 0x090 8006e7c0 */ void (*Unk35)(void *);
     /* 0x094 8006e7c4 */ void (*Unk36)(void *);
-    /* 0x098 8006e7c8 */ void (*Unk37)(void *);
+    /* 0x098 8006e7c8 */ void (*Unk37)(void *, void (*)(), void *);
     /* 0x09C 8006e7cc */ void (*Unk38)(void *, s32);
     /* 0x0A0 8006e7d0 */ void (*Unk39)(void *, s32);
     /* 0x0A4 8006e7d4 */ void (*Unk40)(void *);
@@ -62,7 +62,7 @@ typedef struct class_2C694_vtable {
     /* 0x0C8 8006e7f8 */ void (*Unk49)(void *);
     /* 0x0CC 8006e7fc */ void (*Unk50)(void *);
     /* 0x0D0 8006e800 */ void (*Unk51)(void *);
-    /* 0x0D4 8006e804 */ void (*Unk52)(void *, s32, s32);
+    /* 0x0D4 8006e804 */ void (*Unk52)(void *, char *, s32);
     /* 0x0D8 8006e808 */ void (*Unk53)(void *, s32);
     /* 0x0DC 8006e80c */ void (*Unk54)(void *);
     /* 0x0E0 8006e810 */ void (*Unk55)(void *, s32);
@@ -129,6 +129,7 @@ typedef struct class_2C694 {
     /* 0xA4 */ s32 m_Unk40;
 } class_2C694_t;
 
+class_2C694_t *func_8003BE94(u32 Unk1, u32 Unk2, u32 Unk3);
 class_2C694_vtable_t *func_8003DFBC(void);
 
 #endif

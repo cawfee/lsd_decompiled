@@ -82,7 +82,8 @@ def main():
 
     CONSOLE.print("\n[bold underline cyan]Progress Report[/]")
 
-    total_progress = (total_decompiled / total_size) * 100
+    total_non_psyq = total_size - psyq_size
+    total_progress = (total_decompiled / total_non_psyq) * 100
     color = "green" if total_progress > 75 else ("yellow" if total_progress > 25 else "red")
 
     CONSOLE.print("\n[bold]Overall Progress:[/]")
@@ -91,11 +92,11 @@ def main():
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TextColumn("[progress.percentage]{task.percentage:>3.1f}%"),
-        TextColumn(f"({total_decompiled:,} / {total_size:,} bytes)"),
+        TextColumn(f"({total_decompiled:,} / {total_non_psyq:,} bytes)"),
         console=CONSOLE,
         transient=False
     ) as progress:
-        progress.add_task(f"[{color}]Total Decompiled", total=total_size, completed=total_decompiled)
+        progress.add_task(f"[{color}]Total Decompiled", total=total_non_psyq, completed=total_decompiled)
 
     CONSOLE.print(f"\n[default]PSYQ Size: {psyq_size}/{total_size} ({psyq_size / total_size * 100:.2f}%)")
 

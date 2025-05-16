@@ -8,7 +8,7 @@ typedef struct timer_vtable {
     /* 0x004 8006e87c */ void (*Destroy)(void *);
     /* 0x008 8006e880 */ void (*Construct)(void *);
     /* 0x00C 8006e884 */ void (*Cleanup)(void *);
-    /* 0x010 8006e888 */ void (*Unk3)(void *);
+    /* 0x010 8006e888 */ void (*Unk3)(void *, s32);
     /* 0x014 8006e88c */ void (*Unk4)(void *);
     /* 0x018 8006e890 */ void (*Unk5)(void *);
     /* 0x01C 8006e894 */ void (*Unk6)(void *);
@@ -23,7 +23,7 @@ typedef struct timer_vtable {
     /* 0x040 8006e8b8 */ void (*Unk15)(void *);
     /* 0x044 8006e8bc */ void (*Unk16)(void *, s32, s32);
     /* 0x048 8006e8c0 */ void (*Unk17)(void *);
-    /* 0x04C 8006e8c4 */ u32 pad2;
+    /* 0x04C 8006e8c4 */ void (*Unk18)(void *, s32, s32, s32);
     /* 0x050 8006e8c8 */ void (*Unk19)(void *);
     /* 0x054 8006e8cc */ void (*Unk20)(void *, void **, s32);
     /* 0x058 8006e8d0 */ void (*Unk21)(void *, void **, s32);

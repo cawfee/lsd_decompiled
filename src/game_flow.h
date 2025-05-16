@@ -42,7 +42,7 @@ typedef struct game_flow {
     /* 0x12 */ s16 unk4;
     /* 0x14 */ s32 unk5;
     /* 0x18 */ s32 m_IsInit;
-    /* 0x1C */ void *m_RegisteredObjects;
+    /* 0x1C */ void *m_Unk7;
     /* 0x20 */ game_config_t *m_Config;
     /* 0x24 */ s32 m_UnkGameMember;
     /* 0x28 */ dream_sys_t *m_pDreamSys;
@@ -51,5 +51,7 @@ typedef struct game_flow {
 
 game_flow_t *game_flow_create(game_config_t *);
 game_flow_vtable_t *game_flow_get_vtable(void);
+
+void game_flow_callback();
 
 #endif

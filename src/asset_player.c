@@ -2,22 +2,22 @@
 
 #include "2C694.h"
 
-extern asset_player_vtable_t **D_8006E5F8;
+extern asset_player_vtable_t **g_ASSET_PLAYER_VTABLE;
 
-asset_player_t *get_frame_context(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
+asset_player_t *asset_player_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     asset_player_t *allocated = (asset_player_t *) memory_allocate_mem(0xDC);
 
     if (allocated) {
-        func_8003BE84()->Construct(allocated, Unk1, Unk2, Unk3, Unk4);
+        asset_player_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3, Unk4);
         return allocated;
     }
 
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/asset_player", func_8003B8E4);
+INCLUDE_ASM("asm/nonmatchings/asset_player", asset_player_construct);
 
-INCLUDE_ASM("asm/nonmatchings/asset_player", func_8003B9DC);
+INCLUDE_ASM("asm/nonmatchings/asset_player", asset_player_cleanup);
 
 void func_8003BA38(asset_player_t *This) {
     This->m_Unk49 = -1;
@@ -94,6 +94,6 @@ void func_8003BE7C(asset_player_t *This, s32 Value) {
     This->m_Unk52 = Value;
 }
 
-asset_player_vtable_t *func_8003BE84(void) {
-    return &D_8006E5F8;
+asset_player_vtable_t *asset_player_get_vtable(void) {
+    return &g_ASSET_PLAYER_VTABLE;
 }
