@@ -13,5 +13,6 @@ extern void SsSeqSetVol(short, short, short);
 extern void SsSeqReplay(short);
 extern void SsSeqStop(short);
 extern void SsSeqPlay(short, char, short);
+extern void SsSeqPause(short);
 
 #endif

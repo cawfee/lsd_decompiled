@@ -4,6 +4,7 @@
 
 #include "base_class.h"
 #include "sound_engine.h"
+#include "32ACC.h"
 
 // also sound related class
 

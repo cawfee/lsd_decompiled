@@ -3,6 +3,7 @@
 #include "texture_helper.h"
 
 #include "memory.h"
+#include "171F0.h"
 
 extern texture_helper_t *g_TEXTURE_HELPER_VTABLE;
 

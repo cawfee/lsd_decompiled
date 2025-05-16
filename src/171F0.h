@@ -49,6 +49,7 @@ typedef struct class_171F0 {
     s16 m_Unk10;
 } class_171F0_t;
 
+void *func_80026CAC();
 class_171F0_vtable_t *func_80026C9C(void);
 
 #endif

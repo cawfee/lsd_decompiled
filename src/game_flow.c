@@ -3,7 +3,7 @@
 #include <psx/libetc.h>
 
 #include "game_flow.h"
-#include "path_helper.h"
+#include "utils/path_helper.h"
 #include "2B78C.h"
 #include "memory.h"
 
@@ -29,7 +29,7 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
     This->vtable = game_flow_get_vtable();
     This->m_Config = Config;
 
-    func_800270AC(func_80048CF0());
+    func_800270AC(get_data_folder());
 
     buffer[0] = 0;
     buffer[1] = "ETC\\DREAME5.TMD";

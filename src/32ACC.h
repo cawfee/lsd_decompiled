@@ -52,6 +52,7 @@ typedef struct class_32ACC {
     /* 0x30 */ s32 m_Unk11;
 } class_32ACC_t;
 
+class_32ACC_t *func_800422CC(u32 Unk1);
 class_32ACC_vtable_t *func_800423F0(void);
 
 #endif
