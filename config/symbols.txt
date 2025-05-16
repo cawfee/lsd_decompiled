@@ -294,9 +294,6 @@ _new_card = 0x80050B98;
 g_ASMKLOGO_PATH = 0x800107B4;
 g_OSDLOGO_PATH = 0x800107C8;
 
-frame_setup = 0x80026F34;
-get_frame_context = 0x8003B854;
-
 nullsub3 = 0x80017EA8;
 nullsub12 = 0x80026690;
 nullsub13 = 0x80026C80;
@@ -446,7 +443,8 @@ get_movie_duration_maybe = 0x800493C8;
 //
 
 // UNSORTED
-
+set_data_folder = 0x800270AC;
+frame_setup = 0x80026F34;
 
 // 2MBYTE
 __main = 0x80011994;
@@ -631,6 +629,7 @@ game_flow_play_special_day = 0x8002677C;
 game_flow_execute_dream = 0x80026698;
 game_flow_execute_main_menu = 0x80026410;
 game_flow_execute_phases = 0x8003B110;
+game_flow_callback = 0x80026328;
 
 // Memory Card
 g_MEMORY_CARD_VTABLE = 0x80086DC4;
@@ -721,3 +720,10 @@ main = 0x800118DC;
 g_GAME_CONFIG = 0x80066828;
 g_MEMORY_MANAGER_MAIN = 0x8008A808;
 g_GAME_FLOW = 0x8008AC20;
+
+// Asset Player? TODO change name
+g_ASSET_PLAYER_VTABLE = 0x8006E5F8;
+asset_player_create = 0x8003B854;
+asset_player_construct = 0x8003B8E4;
+asset_player_cleanup = 0x8003B9DC;
+asset_player_get_vtable = 0x8003BE84;

@@ -204,7 +204,7 @@ s32 func_80026FE8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/171F0", func_80027024);
 
-INCLUDE_ASM("asm/nonmatchings/171F0", func_800270AC);
+INCLUDE_ASM("asm/nonmatchings/171F0", set_data_folder);
 
 INCLUDE_ASM("asm/nonmatchings/171F0", func_800270B8);
 

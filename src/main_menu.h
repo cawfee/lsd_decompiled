@@ -144,6 +144,7 @@ typedef struct main_menu {
     /* 0xC4 */ s32 m_Unk48;
 } main_menu_t;
 
+main_menu_t *main_menu_create(u32 Unk1);
 main_menu_vtable_t *main_menu_get_vtable(void);
 
 #endif

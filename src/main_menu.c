@@ -371,7 +371,7 @@ STORE_AND_PROCEED:
     *v1_target_addr_in_buf = v0_val_to_modify;
 
 UPDATES_ONLY:
-    if ((++D_8008AA28 & 0xFFU) >= 3U) { // This implies u8 comparison, was correct
+    if ((++D_8008AA28 & 0xFFU) >= 3) {
         D_8008AA28 = 0;
     }
 

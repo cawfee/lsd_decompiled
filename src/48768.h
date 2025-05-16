@@ -231,6 +231,7 @@ typedef struct class_48768 {
     s32 m_Unk145;
 } class_48768_t;
 
+class_48768_t *func_80057F68(s32 Unk1);
 class_48768_vtable_t *func_80058764(void);
 
 #endif

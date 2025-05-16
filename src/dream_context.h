@@ -21,7 +21,7 @@ typedef struct dream_context_vtable {
     /* 0x038 80086600 */ void (*Unk13)(void *);
     /* 0x03C 80086604 */ void (*Unk14)(void *);
     /* 0x040 80086608 */ void (*Unk15)(void *);
-    /* 0x044 8008660c */ void (*Unk16)(void *);
+    /* 0x044 8008660c */ s32 (*ExecuteDream)(void *);
     /* 0x048 80086610 */ void (*Unk17)(void *);
     /* 0x04C 80086614 */ void (*Unk18)(void *);
     /* 0x050 80086618 */ void (*Unk19)(void *);
