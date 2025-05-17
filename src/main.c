@@ -14,7 +14,7 @@ static game_config_t g_GAME_CONFIG = {
     .enable_movie = 1,
     .enable_logo = 1,
     .enable_main_menu = 1,
-    .enable_unk = 1  
+    .enable_unk = 1,
 };
 
 // sdata

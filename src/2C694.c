@@ -60,7 +60,7 @@ INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C63C);
 void func_8003C794(class_2C694_t *This, s32 Unk2) {
     This->m_TimeoutIdleTime = Unk2;
 
-    if ( Unk2 >= 0 ) {
+    if (Unk2 >= 0) {
         This->m_TimeoutIdleTime = 20 * Unk2;
     }
 }
@@ -100,7 +100,7 @@ void func_8003C8D0(class_2C694_t *This) {
 }
 
 void func_8003C944(class_2C694_t *This) {
-    void (*callback)(void); 
+    void (*callback)(void);
 
     if (This->m_Unk18) {
         if (This->m_HasIdleTimeout == 1) {

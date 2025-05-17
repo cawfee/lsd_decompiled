@@ -22,7 +22,7 @@ class_1C92C_t *func_8002C12C(u32 Unk1, u32 Unk2) {
 void func_8002C18C(class_1C92C_t *This, s32 Unk) {
     void *unk_class = func_80026CAC();
     (*(void (**)(void *))(unk_class + 8))(This);
-    
+
     This->vtable = func_8002C3A8();
     This->m_Unk10 = 0;
     This->m_Unk11 = 0;
@@ -34,7 +34,7 @@ void func_8002C18C(class_1C92C_t *This, s32 Unk) {
 
 void func_8002C200(void *This) {
     void *table = func_80026CAC();
-    (*((void (**)(void *))table + 3))(This);
+    (*((void (**)(void *)) table + 3))(This);
 }
 
 void func_8002C238(class_1C92C_t *This) {

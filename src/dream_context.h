@@ -3,12 +3,16 @@
 
 #include <common.h>
 
+#include "dream_sys.h"
+#include "texture_helper.h"
+#include "gs_helper.h"
+
 typedef struct dream_context_vtable {
     /* 0x000 800865c8 */ u32 value;
     /* 0x004 800865cc */ void (*Destroy)(void *);
-    /* 0x008 800865d0 */ void (*Construct)(void *, s32, s32, s32);
+    /* 0x008 800865d0 */ void (*Construct)(void *, gs_helper_t *, dream_sys_t *, s32);
     /* 0x00C 800865d4 */ void (*Cleanup)(void *);
-    /* 0x010 800865d8 */ void (*Unk3)(void *);
+    /* 0x010 800865d8 */ void (*Unk3)(void *, dream_sys_t *);
     /* 0x014 800865dc */ void (*Unk4)(void *);
     /* 0x018 800865e0 */ void (*Unk5)(void *);
     /* 0x01C 800865e4 */ void (*Unk6)(void *);
@@ -36,15 +40,15 @@ typedef struct dream_context_vtable {
     /* 0x074 8008663c */ void (*Unk28)(void *);
     /* 0x078 80086640 */ void (*Unk29)(void *);
     /* 0x07C 80086644 */ void (*Unk30)(void *);
-    /* 0x080 80086648 */ void (*Unk31)(void *);
-    /* 0x084 8008664c */ void (*Unk32)(void *);
+    /* 0x080 80086648 */ void (*Unk31)(void *, void **, s32);
+    /* 0x084 8008664c */ void (*Unk32)(void *, void **, s32);
 } dream_context_vtable_t;
 
 typedef struct dream_context {
     /* 0x00 */ dream_context_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ s32 m_Unk2;
+    /* 0x0C */ gs_helper_t *m_GSHelper;
     /* 0x10 */ s32 m_Unk3;
     /* 0x14 */ s32 m_Unk4;
     /* 0x18 */ s32 m_Unk5;
@@ -55,15 +59,16 @@ typedef struct dream_context {
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
-    /* 0x38 */ s32 m_Unk13;
+    /* 0x38 */ dream_sys_t *m_DreamSys;
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ s32 m_Unk15;
-    /* 0x44 */ s32 m_Unk16;
+    /* 0x44 */ texture_helper_t *m_TextureHelper;
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
 } dream_context_t;
 
+dream_context_t *dream_context_create(gs_helper_t *GsHelper, dream_sys_t *DreamSys, s32 EnableSomething);
 dream_context_vtable_t *dream_context_get_vtable(void);
 
 #endif

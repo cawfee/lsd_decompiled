@@ -1,5 +1,5 @@
-#include <psx/libspu.h>
 #include <psx/libcd.h>
+#include <psx/libspu.h>
 
 #include "3770C.h"
 #include "base_class.h"
@@ -23,15 +23,15 @@ void func_80046F88(class_3770C_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
     base_class_get_vtable()->Construct(This);
     This->vtable = func_80047900();
     This->m_Unk12 = Unk2;
-    
+
     This->m_Unk11 = 0;
-    
+
     if (Unk2 < 4) {
         This->m_Unk13 = 2054 * (300 / Unk3 / 2);
     } else {
         This->m_Unk13 = 2054 * (150 / Unk3 / 2);
     }
-    
+
     This->m_Unk14 = Unk4;
     This->m_Unk19 = 0;
     This->m_Unk18 = 0;
@@ -46,7 +46,7 @@ void func_80047074(class_3770C_t *This) {
 }
 
 void func_800470C8(class_3770C_t *This, s32 Unk2, u32 Unk3) {
-    if ( !This->m_Unk10 ) {
+    if (!This->m_Unk10) {
         StSetRing(Unk2, Unk3 >> 11);
         This->m_Unk19 = Unk2;
     }

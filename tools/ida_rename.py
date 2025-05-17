@@ -1,5 +1,6 @@
 import re
 
+import ida_name
 import idc
 import idautils
 import ida_kernwin
@@ -37,7 +38,7 @@ if __name__ == "__main__":
 
             if symbols.get(function) and function_name != symbols[function]:
                 # print(f"Renaming function {function_name} to {symbols[function]}")
-                idc.set_name(function, symbols[function], idc.SN_AUTO)
+                idc.set_name(function, symbols[function], ida_name.SN_FORCE)
                 renamed += 1
 
         print(f"Renamed {renamed} functions")

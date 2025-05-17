@@ -5,7 +5,7 @@ void *func_80043840(s32 Unk1) {
 
     if (allocated) {
         void *vtable = func_80043B78();
-        if ((*((s32 (**)(void *, s32)) vtable + 2))(allocated, Unk1)) {
+        if ((*((s32(**)(void *, s32)) vtable + 2))(allocated, Unk1)) {
             return allocated;
         }
         memory_free_mem(allocated);

@@ -2,9 +2,9 @@
 
 #include <psx/libsnd.h>
 
+#include "32ACC.h"
 #include "base_class.h"
 #include "sound_engine.h"
-#include "32ACC.h"
 
 // also sound related class
 
@@ -136,7 +136,9 @@ void func_80039DB0(class_2A0E0_t *This) {
     }
 }
 
-void func_80039DF4(class_2A0E0_t *This, s16 Unk1, s16 Unk2) { SsSeqSetVol(This->m_SeqAccess, Unk1, Unk2); }
+void func_80039DF4(class_2A0E0_t *This, s16 Unk1, s16 Unk2) {
+    SsSeqSetVol(This->m_SeqAccess, Unk1, Unk2);
+}
 
 void func_80039E24(class_2A0E0_t *This, s16 arg1, s32 arg2) {
     SsSeqSetCrescendo(This->m_SeqAccess, arg1, func_8002CC28() * arg2);
@@ -170,7 +172,7 @@ void func_80039F64(class_2A0E0_t *This, s32 Unk) {
     if (This->m_Unk6_2) {
         This->vtable->Unk17(This);
     }
-    
+
     if (This->m_SoundEngine) {
         This->m_SoundEngine->vtable->Destruct(This->m_SoundEngine);
         This->m_SoundEngine = NULL;
@@ -188,20 +190,18 @@ void func_80039F64(class_2A0E0_t *This, s32 Unk) {
     }
 }
 
-class_2A0E0_vtable_t *func_8003A04C(void) { 
+class_2A0E0_vtable_t *func_8003A04C(void) {
 #ifndef CCG8
     return &D_8006E48C;
 #else
     // G8 hack
     class_2A0E0_vtable_t *result;
 
-    __asm__ (
-        "lui     %0, %%hi(%1)\n\t"
-        "addiu   %0, %0, %%lo(%1)"
-        : "=r"(result)
-        : "i"(&D_8006E48C)
-    );
+    __asm__("lui     %0, %%hi(%1)\n\t"
+            "addiu   %0, %0, %%lo(%1)"
+            : "=r"(result)
+            : "i"(&D_8006E48C));
 
     return result;
 #endif
- }
+}

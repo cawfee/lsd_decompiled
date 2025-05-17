@@ -30,7 +30,7 @@ void func_80017F98(base_class_t *This, base_class_t *Next) {
 
 void func_80017FF0(base_class_t *This, base_class_t *Next) {
     func_80018208(&This->m_Unk0);
-     Next->vtable->Unk8(Next, This);
+    Next->vtable->Unk8(Next, This);
 }
 
 INCLUDE_ASM("asm/nonmatchings/base_class", func_80018040);
@@ -60,22 +60,22 @@ void func_8001816C(base_class_t *This, void **Unk2, void **Unk3) {
     if (!*Unk2) {
         *Unk3 = This->m_Unk1;
     }
-    
+
     func_800183A0(Unk2, Unk3);
 }
 
 s32 func_800181AC(void **Unk1, void *Unk2) {
-    void* mem;
+    void *mem;
 
     mem = memory_allocate_mem(8);
-    
+
     if (mem) {
         *((u32 *) mem + 0) = *(u32 *) Unk1;
         *((u32 *) mem + 1) = Unk2;
         *Unk1 = mem;
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -85,7 +85,8 @@ INCLUDE_ASM("asm/nonmatchings/base_class", func_80018288);
 
 INCLUDE_ASM("asm/nonmatchings/base_class", func_800182CC);
 
-void func_80018350(void) { }
+void func_80018350(void) {
+}
 
 void func_80018358(base_class_t *This, void *Unk2, s32 Unk3) {
     if (Unk3 == 1) {
@@ -98,13 +99,10 @@ base_class_vtable_t *base_class_get_vtable(void) {
 }
 
 void func_800183A0(void *Unk1, void **Unk2) {
-    if ( *Unk2 )
-  {
-    *(u32 *)Unk1 = *((u32 *)*Unk2 + 1);
-    *Unk2 = *(void **)*Unk2;
-  }
-  else
-  {
-    *(u32 *)Unk1 = 0;
-  }
+    if (*Unk2) {
+        *(u32 *) Unk1 = *((u32 *) *Unk2 + 1);
+        *Unk2 = *(void **) *Unk2;
+    } else {
+        *(u32 *) Unk1 = 0;
+    }
 }

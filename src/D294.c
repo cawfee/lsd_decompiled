@@ -27,7 +27,7 @@ void *func_8001CAF4(class_D294_t *This) {
 
     if (This->m_Unk4) {
         buffer = memory_allocate_mem(0x28);
-        *((u32 *)This->m_Unk4 + 17) = buffer;
+        *((u32 *) This->m_Unk4 + 17) = buffer;
 
         if (buffer) {
             base_class_get_vtable()->Construct(This);
@@ -35,7 +35,7 @@ void *func_8001CAF4(class_D294_t *This) {
             This->m_Unk7 = 0;
             This->m_Unk5 = 0;
             This->m_Unk2 = 0;
-            *((u32 *)This->m_Unk4 + 18) = 0;
+            *((u32 *) This->m_Unk4 + 18) = 0;
             This->vtable->Unk15(This);
             return This;
         }
@@ -50,7 +50,7 @@ void func_8001CBA4(class_D294_t *This) {
     This->vtable->Unk19(This);
     This->vtable->Unk20(This);
     This->vtable->Unk22(This, 0);
-    memory_free_mem(*((void **)This->m_Unk4 + 17));
+    memory_free_mem(*((void **) This->m_Unk4 + 17));
     memory_free_mem(This->m_Unk4);
     base_class_get_vtable()->Cleanup(This);
 }
@@ -58,13 +58,13 @@ void func_8001CBA4(class_D294_t *This) {
 void func_8001CC48(class_D294_t *This, void **Unk) {
     base_class_get_vtable()->Unk3(This, Unk);
 
-    if ( (*(u32 *)*Unk & 0xF) == 9 ) {
+    if ((*(u32 *) *Unk & 0xF) == 9) {
         func_8001E770(This, Unk);
     }
 }
 
 void func_8001CCB4(class_D294_t *This, void **Unk) {
-    if ( (*(u32 *)*Unk & 0xF) == 9 ) {
+    if ((*(u32 *) *Unk & 0xF) == 9) {
         func_8001E7B0(This);
     }
 
@@ -80,7 +80,7 @@ void func_8001CD60(class_D294_t *This, void **Unk2, s32 Unk3) {
     u32 value;
     base_class_get_vtable()->Unk13(This, Unk2, Unk3);
 
-    value = *(u32 *)*Unk2 & 0xF;
+    value = *(u32 *) *Unk2 & 0xF;
 
     if (value == 2) {
         // Update buttons?

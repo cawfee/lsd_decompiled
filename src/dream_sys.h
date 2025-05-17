@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "texture_helper.h"
+
 typedef enum {
     MOVE_NONE = 0,
     MOVE_FORWARD = 1,
@@ -18,7 +20,7 @@ typedef struct dream_sys_vtable {
     /* 0x004 80087be0 */ void (*Unk0)(void *);
     /* 0x008 80087be4 */ void (*Unk1)(void *);
     /* 0x00C 80087be8 */ void (*Unk2)(void *);
-    /* 0x010 80087bec */ void (*Unk3)(void *);
+    /* 0x010 80087bec */ void (*Unk3)(void *, void *);
     /* 0x014 80087bf0 */ void (*Unk4)(void *);
     /* 0x018 80087bf4 */ void (*Unk5)(void *);
     /* 0x01C 80087bf8 */ void (*Unk6)(void *);
@@ -81,9 +83,9 @@ typedef struct dream_sys_vtable {
     /* 0x100 80087cdc */ void (*Unk63)(void *);
     /* 0x104 80087ce0 */ void (*Unk64)(void *);
     /* 0x108 80087ce4 */ void (*Unk65)(void *);
-    /* 0x10C 80087ce8 */ void (*Unk66)(void *);
-    /* 0x110 80087cec */ void (*Unk67)(void *);
-    /* 0x114 80087cf0 */ void (*Unk68)(void *);
+    /* 0x10C 80087ce8 */ void (*Unk66)(void *, s32);
+    /* 0x110 80087cec */ void (*Unk67)(void *, void *);
+    /* 0x114 80087cf0 */ void (*Unk68)(void *, texture_helper_t *);
     /* 0x118 80087cf4 */ void (*Unk69)(void *);
     /* 0x11C 80087cf8 */ void (*Unk70)(void *);
     /* 0x120 80087cfc */ void (*Unk71)(void *);

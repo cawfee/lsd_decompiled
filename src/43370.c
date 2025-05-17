@@ -38,8 +38,8 @@ void func_80052D10(class_43370_t *This, void **Unk2, s32 Unk3) {
     s32 value;
 
     func_8004A4B8()->Unk13(This, Unk2, Unk3);
-    value = *(s32 *)*Unk2;
-    
+    value = *(s32 *) *Unk2;
+
     if ((value & 0xFFF) == 0x114) {
         This->vtable->Unk44(This, Unk2, Unk3);
     } else if ((value & 0xFFF) == 0x164) {

@@ -27,7 +27,7 @@ void func_8004D42C(void) {
 }
 
 void func_8004D434(class_3DB8C_t *This, void **Unk) {
-    if (*(u8 *)*Unk == 52) {
+    if (*(u8 *) *Unk == 52) {
         This->vtable->Unk45(This);
     }
 }

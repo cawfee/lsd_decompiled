@@ -81,12 +81,10 @@ class_171F0_vtable_t *func_80026C9C(void) {
     // G8 hack
     class_171F0_vtable_t *result;
 
-    __asm__ (
-        "lui     %0, %%hi(%1)\n\t"
-        "addiu   %0, %0, %%lo(%1)"
-        : "=r"(result)
-        : "i"(&D_8006D430)
-    );
+    __asm__("lui     %0, %%hi(%1)\n\t"
+            "addiu   %0, %0, %%lo(%1)"
+            : "=r"(result)
+            : "i"(&D_8006D430));
 
     return result;
 #endif

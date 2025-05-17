@@ -55,7 +55,7 @@ INCLUDE_ASM("asm/nonmatchings/sound_engine", func_8002C6FC);
 //         case 6:
 //             if (This->m_FlagsUnk & 0x200) {
 //                 This->unk21_1 = SsVabTransBody(This->unk4, This->unk21_1);
-    
+
 //                 if (This->unk21_1 != -1) {
 //                     This->unk22_2 = 1;
 //                     This->vtable->Unk14(This, 1);
@@ -74,12 +74,12 @@ s32 func_8002C824(sound_engine_t *This, s32 Unk) {
             SsVabTransCompleted(1);
             This->unk22_2 = 0;
             This->unk22_1 = 1;
-            
+
             This->vtable->Unk15(This);
             return_value = 1;
         }
     }
-    
+
     return return_value;
 }
 

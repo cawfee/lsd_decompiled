@@ -70,6 +70,7 @@ typedef struct texture_helper {
     s32 unk20;
 } texture_helper_t;
 
+texture_helper_t *texture_helper_create(const char *Unk1);
 texture_helper_vtable_t *texture_helper_get_vtable(void);
 
 #endif
