@@ -1,11 +1,12 @@
-#include "common.h"
+#include "3DA54.h"
 
-void *func_8004D254() {
-    void *allocated = (void *) memory_allocate_mem(0xDC);
+extern class_3DA54_vtable_t **D_800869D8;
+
+class_3DA54_t *func_8004D254() {
+    class_3DA54_t *allocated = (class_3DA54_t *) memory_allocate_mem(0xDC);
 
     if (allocated) {
-        void *vtable = func_8004D37C();
-        (*((void (**)(void *)) vtable + 2))(allocated);
+        func_8004D37C()->Construct(allocated);
         return allocated;
     }
 
@@ -31,4 +32,6 @@ void func_8004D36C(void) {
 void func_8004D374(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3DA54", func_8004D37C);
+class_3DA54_vtable_t *func_8004D37C(void) {
+    return &D_800869D8;
+}

@@ -1,7 +1,7 @@
 #ifndef LSD_GS_HELPER_H
 #define LSD_GS_HELPER_H
 
-#include "common.h"
+#include <common.h>
 
 typedef struct gs_helper_vtable {
     /* 0x000 8006c070 */ u32 value;
