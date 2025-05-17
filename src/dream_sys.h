@@ -124,7 +124,8 @@ typedef struct dream_sys_vtable {
     /* 0x1A4 80087d80 */ void (*Unk104)(void *);
     /* 0x1A8 80087d84 */ void (*Unk105)(void *);
     /* 0x1AC 80087d88 */ s32 (*Unk106)(void *);
-    /* 0x1B0 80087d8c */ void *(*GetRegionCode)(void *, s32 *);  // probably a struct, not region code or anything? TODO name change
+    /* 0x1B0 80087d8c */ void *(*GetRegionCode)(
+        void *, s32 *); // probably a struct, not region code or anything? TODO name change
     /* 0x1B4 80087d90 */ void (*Unk108)(void *);
     /* 0x1B8 80087d94 */ void (*Unk109)(void *);
     /* 0x1BC 80087d98 */ void (*Unk110)(void *);

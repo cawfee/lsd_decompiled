@@ -3,9 +3,9 @@
 
 #include <common.h>
 
-#include "35730.h"
-#include "354D4.h"
 #include "349B4.h"
+#include "354D4.h"
+#include "35730.h"
 #include "sound_engine.h"
 
 typedef struct class_2C694_vtable {
@@ -101,7 +101,7 @@ typedef struct class_2C694 {
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_HasIdleTimeout;
-    /* 0x40 */ u32 m_TimeoutIdleTime;  // Max time for idling before event occurs (menu movie plays, etc.)
+    /* 0x40 */ u32 m_TimeoutIdleTime; // Max time for idling before event occurs (menu movie plays, etc.)
     /* 0x44 */ s32 m_Unk16;
     /* 0x48 */ sound_engine_t *m_Unk17;
     /* 0x4C */ s32 m_Unk18;
