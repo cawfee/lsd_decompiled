@@ -2,8 +2,8 @@
 
 #include <psx/rand.h>
 
-#include "paths.h"
 #include "../stage_grid.h"
+#include "paths.h"
 
 static char *g_CDI_STR = "CDI\\";
 static s32 D_8008A964 = NULL;
@@ -11,15 +11,10 @@ static s32 D_8008A968 = NULL;
 
 extern const char *g_SE_PATHS[];
 
-static s16 D_80086170[] = {
-    0x424, 0x440, 0x3B9, 0x49B, 0x3D3, 0x4CF, 0x416,
-    0x1DA, 0x20C, 0x1B7, 0x15D, 0x17B, 0x160, 0x160,
-    0x1DB, 0x363, 0x20F, 0x1BD, 0x18F, 0x243, 0x108,
-    0x21D, 0x236, 0x145, 0x1B4, 0x20C, 0x20A, 0x20B,
-    0x289, 0x1C3, 0x1D1, 0x1D9, 0x19B, 0x1EA, 0x1D3,
-    0x20B, 0xBB, 0x180, 0x5A, 0x5A, 0x5A, 0x5A, 0x5A,
-    0x5A, 0x5A, 0x5A, 0x5A, 0x5A, 0xFFF6, 0x5A
-};
+static s16 D_80086170[] = { 0x424, 0x440, 0x3B9, 0x49B, 0x3D3, 0x4CF, 0x416, 0x1DA, 0x20C, 0x1B7,  0x15D, 0x17B, 0x160,
+                            0x160, 0x1DB, 0x363, 0x20F, 0x1BD, 0x18F, 0x243, 0x108, 0x21D, 0x236,  0x145, 0x1B4, 0x20C,
+                            0x20A, 0x20B, 0x289, 0x1C3, 0x1D1, 0x1D9, 0x19B, 0x1EA, 0x1D3, 0x20B,  0xBB,  0x180, 0x5A,
+                            0x5A,  0x5A,  0x5A,  0x5A,  0x5A,  0x5A,  0x5A,  0x5A,  0x5A,  0xFFF6, 0x5A };
 
 char *get_data_folder(void) {
     return g_CDI_STR;
@@ -37,7 +32,7 @@ void func_80048D28(s32 arg0, s32 arg1) {
     if (arg0 >= 0) {
         D_8008A964 = arg0;
     }
-    
+
     if (arg1 >= 0) {
         D_8008A968 = arg1;
     }
@@ -97,7 +92,7 @@ const char *get_logo_asmk_path(s32 *DurationMaybe) {
         *DurationMaybe = '1';
     }
 
-    return "ETC\\ASMK.STR\0\0";  // TODO pad
+    return "ETC\\ASMK.STR\0\0"; // TODO pad
 }
 
 const char *get_opening_movie_path(s32 *arg0) {
@@ -176,20 +171,16 @@ s32 get_movie_duration_maybe(s32 Index) {
     s32 result;
     s32 a0_r;
 
-    __asm__(
-        ".set noat\n\t"
-        "sll   %1, %2, 1\n\t"
-        "lui   $1, %%hi(%3)\n\t"
-        "addiu $1, $1, %%lo(%3)\n\t"
-        "addu  $1, $1, %1\n\t"
-        "lh    %0, 0($1)\n\t"
+    __asm__(".set noat\n\t"
+            "sll   %1, %2, 1\n\t"
+            "lui   $1, %%hi(%3)\n\t"
+            "addiu $1, $1, %%lo(%3)\n\t"
+            "addu  $1, $1, %1\n\t"
+            "lh    %0, 0($1)\n\t"
 
-        : "=r" (result),
-          "=r" (a0_r)
-        : "1" (Index),
-          "i" (&D_80086170)
-        : "$1"
-    );
+            : "=r"(result), "=r"(a0_r)
+            : "1"(Index), "i"(&D_80086170)
+            : "$1");
 
     return result;
 #endif

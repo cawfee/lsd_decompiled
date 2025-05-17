@@ -2,7 +2,7 @@
 #define PSX_LIBSND_H
 
 #define SS_MUTE_OFF 0
-#define SS_MUTE_ON  1
+#define SS_MUTE_ON 1
 
 extern void SsSetMute(char);
 extern short SsVabTransCompleted(short);

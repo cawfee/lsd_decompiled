@@ -3,7 +3,7 @@
 
 extern void SetMem(long);
 
-extern long OpenEvent(unsigned long,long,long,long (*Func)());
+extern long OpenEvent(unsigned long, long, long, long (*Func)());
 extern long CloseEvent(long);
 
 extern void EnterCriticalSection(void);
