@@ -5,6 +5,6 @@
 
 u8 *bcopy(u8 *, u8 *, s32);
 s8 *bzero(s8 *, s32);
-int   memcmp (/*  unsigned char *, unsigned char *, int  */);
+int memcmp(/*  unsigned char *, unsigned char *, int  */);
 
 #endif

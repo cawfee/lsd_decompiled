@@ -4,10 +4,10 @@
 u8 *bcopy(u8 *arg0, u8 *arg1, s32 arg2) {
     s32 var_a2;
     u8 temp_v0;
-    u8* temp_v1;
-    u8* var_a0;
-    u8* var_a1;
-    u8* var_v0;
+    u8 *temp_v1;
+    u8 *var_a0;
+    u8 *var_a1;
+    u8 *var_v0;
 
     var_a0 = arg0;
     var_a1 = arg1;
@@ -31,8 +31,8 @@ u8 *bcopy(u8 *arg0, u8 *arg1, s32 arg2) {
 
 s8 *bzero(s8 *arg0, s32 arg1) {
     s32 var_a1;
-    s8* var_a0;
-    s8* var_v0;
+    s8 *var_a0;
+    s8 *var_v0;
 
     var_a0 = arg0;
     var_a1 = arg1;
