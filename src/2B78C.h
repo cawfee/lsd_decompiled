@@ -19,7 +19,7 @@ typedef struct class_2B78C_vtable {
     /* 0x030 8006b5bc */ void (*Unk11)(void *, s32);
     /* 0x034 8006b5c0 */ void (*Unk12)(void *);
     /* 0x038 8006b5c4 */ void (*Unk13)(void *, void *, s32);
-    
+
     /* 0x03C 8006b5c8 */ void (*Unk14)(void *);
     /* 0x040 8006b5cc */ void (*Unk15)(void *);
     /* 0x044 8006b5d0 */ void (*Unk16)(void *, s32, s32, u32);

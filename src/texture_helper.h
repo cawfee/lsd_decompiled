@@ -65,7 +65,7 @@ typedef struct texture_helper {
     s32 unk15;
     s32 unk16;
     s32 unk17;
-    s32 m_MaybeLoaded;  // Unchecked
+    s32 m_MaybeLoaded; // Unchecked
     s32 unk19;
     s32 unk20;
 } texture_helper_t;

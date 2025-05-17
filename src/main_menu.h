@@ -3,11 +3,11 @@
 
 #include <common.h>
 
+#include "310CC.h"
 #include "dream_sys.h"
 #include "memory_card.h"
-#include "texture_helper.h"
 #include "sound_engine.h"
-#include "310CC.h"
+#include "texture_helper.h"
 
 typedef struct main_menu_vtable {
     /* 0x000 80086b60 */ u32 value;
@@ -139,7 +139,7 @@ typedef struct main_menu {
     /* 0xB0 */ class_310CC_t *m_Unk43;
     /* 0xB4 */ s32 m_Unk44;
     /* 0xB8 */ s32 m_Unk45;
-    /* 0xBC */ char *m_RegionCode;  // Points to J01, probably a struct
+    /* 0xBC */ char *m_RegionCode;    // Points to J01, probably a struct
     /* 0xC0 */ s32 m_RegionCodeParam; // Set to 0x700, argument passed into GetRegionCode
     /* 0xC4 */ s32 m_Unk48;
 } main_menu_t;

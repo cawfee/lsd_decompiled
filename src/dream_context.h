@@ -4,8 +4,8 @@
 #include <common.h>
 
 #include "dream_sys.h"
-#include "texture_helper.h"
 #include "gs_helper.h"
+#include "texture_helper.h"
 
 typedef struct dream_context_vtable {
     /* 0x000 800865c8 */ u32 value;
