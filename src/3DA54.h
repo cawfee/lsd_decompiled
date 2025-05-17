@@ -1,0 +1,121 @@
+#ifndef LSD_3DA54_H
+#define LSD_3DA54_H
+
+#include <common.h>
+
+typedef struct class_3DA54_vtable {
+    /* 0x000 800869d8 */ u32 value;
+    /* 0x004 800869dc */ void (*Destroy)(void *);
+    /* 0x008 800869e0 */ void (*Construct)(void *);
+    /* 0x00C 800869e4 */ void (*Cleanup)(void *);
+    /* 0x010 800869e8 */ void (*Unk3)(void *);
+    /* 0x014 800869ec */ void (*Unk4)(void *);
+    /* 0x018 800869f0 */ void (*Unk5)(void *);
+    /* 0x01C 800869f4 */ void (*Unk6)(void *);
+    /* 0x020 800869f8 */ void (*Unk7)(void *);
+    /* 0x024 800869fc */ void (*Unk8)(void *);
+    /* 0x028 80086a00 */ void (*Unk9)(void *);
+    /* 0x02C 80086a04 */ void (*Unk10)(void *);
+    /* 0x030 80086a08 */ void (*Unk11)(void *);
+    /* 0x034 80086a0c */ void (*Unk12)(void *);
+    /* 0x038 80086a10 */ void (*Unk13)(void *);
+    /* 0x03C 80086a14 */ void (*Unk14)(void *);
+    /* 0x040 80086a18 */ void (*Unk15)(void *);
+    /* 0x044 80086a1c */ void (*Unk16)(void *);
+    /* 0x048 80086a20 */ void (*Unk17)(void *);
+    /* 0x04C 80086a24 */ void (*Unk18)(void *);
+    /* 0x050 80086a28 */ void (*Unk19)(void *);
+    /* 0x054 80086a2c */ void (*Unk20)(void *);
+    /* 0x058 80086a30 */ void (*Unk21)(void *);
+    /* 0x05C 80086a34 */ void (*Unk22)(void *);
+    /* 0x060 80086a38 */ void (*Unk23)(void *);
+    /* 0x064 80086a3c */ void (*Unk24)(void *);
+    /* 0x068 80086a40 */ void (*Unk25)(void *);
+    /* 0x06C 80086a44 */ void (*Unk26)(void *);
+    /* 0x070 80086a48 */ void (*Unk27)(void *);
+    /* 0x074 80086a4c */ void (*Unk28)(void *);
+    /* 0x078 80086a50 */ void (*Unk29)(void *);
+    /* 0x07C 80086a54 */ void (*Unk30)(void *);
+    /* 0x080 80086a58 */ void (*Unk31)(void *);
+    /* 0x084 80086a5c */ void (*Unk32)(void *);
+    /* 0x088 80086a60 */ void (*Unk33)(void *);
+    /* 0x08C 80086a64 */ void (*Unk34)(void *);
+    /* 0x090 80086a68 */ void (*Unk35)(void *);
+    /* 0x094 80086a6c */ void (*Unk36)(void *);
+    /* 0x098 80086a70 */ void (*Unk37)(void *);
+    /* 0x09C 80086a74 */ void (*Unk38)(void *);
+    /* 0x0A0 80086a78 */ void (*Unk39)(void *);
+    /* 0x0A4 80086a7c */ void (*Unk40)(void *);
+    /* 0x0A8 80086a80 */ void (*Unk41)(void *);
+    /* 0x0AC 80086a84 */ void (*Unk42)(void *);
+    /* 0x0B0 80086a88 */ void (*Unk43)(void *);
+    /* 0x0B4 80086a8c */ void (*Unk44)(void *);
+    /* 0x0B8 80086a90 */ void (*Unk45)(void *);
+    /* 0x0BC 80086a94 */ void (*Unk46)(void *);
+    /* 0x0C0 80086a98 */ void (*Unk47)(void *);
+    /* 0x0C4 80086a9c */ void (*Unk48)(void *);
+} class_3DA54_vtable_t;
+
+typedef struct class_3DA54 {
+    /* 0x00 */ class_3DA54_vtable_t *vtable;
+    /* 0x04 */ s32 m_Unk0;
+    /* 0x08 */ s32 m_Unk1;
+    /* 0x0C */ s32 m_Unk2;
+    /* 0x10 */ s32 m_Unk3;
+    /* 0x14 */ s32 m_Unk4;
+    /* 0x18 */ s32 m_Unk5;
+    /* 0x1C */ s32 m_Unk6;
+    /* 0x20 */ s32 m_Unk7;
+    /* 0x24 */ s32 m_Unk8;
+    /* 0x28 */ s32 m_Unk9;
+    /* 0x2C */ s32 m_Unk10;
+    /* 0x30 */ s32 m_Unk11;
+    /* 0x34 */ s32 m_Unk12;
+    /* 0x38 */ s32 m_Unk13;
+    /* 0x3C */ s32 m_Unk14;
+    /* 0x40 */ s32 m_Unk15;
+    /* 0x44 */ s32 m_Unk16;
+    /* 0x48 */ s32 m_Unk17;
+    /* 0x4C */ s32 m_Unk18;
+    /* 0x50 */ s32 m_Unk19;
+    /* 0x54 */ s32 m_Unk20;
+    /* 0x58 */ s32 m_Unk21;
+    /* 0x5C */ s32 m_Unk22;
+    /* 0x60 */ s32 m_Unk23;
+    /* 0x64 */ s32 m_Unk24;
+    /* 0x68 */ s32 m_Unk25;
+    /* 0x6C */ s32 m_Unk26;
+    /* 0x70 */ s32 m_Unk27;
+    /* 0x74 */ s32 m_Unk28;
+    /* 0x78 */ s32 m_Unk29;
+    /* 0x7C */ s32 m_Unk30;
+    /* 0x80 */ s32 m_Unk31;
+    /* 0x84 */ s32 m_Unk32;
+    /* 0x88 */ s32 m_Unk33;
+    /* 0x8C */ s32 m_Unk34;
+    /* 0x90 */ s32 m_Unk35;
+    /* 0x94 */ s32 m_Unk36;
+    /* 0x98 */ s32 m_Unk37;
+    /* 0x9C */ s32 m_Unk38;
+    /* 0xA0 */ s32 m_Unk39;
+    /* 0xA4 */ s32 m_Unk40;
+    /* 0xA8 */ s32 m_Unk41;
+    /* 0xAC */ s32 m_Unk42;
+    /* 0xB0 */ s32 m_Unk43;
+    /* 0xB4 */ s32 m_Unk44;
+    /* 0xB8 */ s32 m_Unk45;
+    /* 0xBC */ s32 m_Unk46;
+    /* 0xC0 */ s32 m_Unk47;
+    /* 0xC4 */ s32 m_Unk48;
+    /* 0xC8 */ s32 m_Unk49;
+    /* 0xCC */ s32 m_Unk50;
+    /* 0xD0 */ s32 m_Unk51;
+    /* 0xD4 */ s32 m_Unk52;
+    /* 0xD8 */ s32 m_Unk53;
+    /* 0xDC */ s32 m_Unk54;
+} class_3DA54_t;
+
+class_3DA54_t *func_8004D254();
+class_3DA54_vtable_t *func_8004D37C(void);
+
+#endif
