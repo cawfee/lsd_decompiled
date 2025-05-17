@@ -1,11 +1,12 @@
-#include "common.h"
+#include "3ACC8.h"
 
-void *func_8004A4C8(u32 Unk1, u32 Unk2) {
-    void *allocated = (void *) memory_allocate_mem(0x1E8);
+extern class_3ACC8_vtable_t **D_800866E8;
+
+class_3ACC8_t *func_8004A4C8(u32 Unk1, u32 Unk2) {
+    class_3ACC8_t *allocated = (class_3ACC8_t *) memory_allocate_mem(0x1E8);
 
     if (allocated) {
-        void *vtable = func_8004D244();
-        (*((void (**)(u32 *, s32, s32)) vtable + 2))(allocated, Unk1, Unk2);
+        func_8004D244()->Construct(allocated, Unk1, Unk2);
         return allocated;
     }
 
@@ -115,9 +116,13 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CDA4);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CE24);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CFA8);
+void *func_8004CFA8(class_3ACC8_t *This) {
+    return &This->m_Unk114;
+}
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CFB0);
+void func_8004CFB0(class_3ACC8_t *This, s32 Unk) {
+    This->m_Unk118 = Unk;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CFB8);
 
@@ -133,4 +138,6 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D140);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D1D0);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D244);
+class_3ACC8_vtable_t *func_8004D244(void) {
+    return &D_800866E8;
+}

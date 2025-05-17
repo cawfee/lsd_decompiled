@@ -1,5 +1,3 @@
-#include "common.h"
-
 #include <psx/libsnd.h>
 
 #include "sound_engine.h"

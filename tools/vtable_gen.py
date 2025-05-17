@@ -18,7 +18,7 @@ def main(name: str, vtable_start: int, member_count: int, functions_count: int):
 
 
 if __name__ == "__main__":
-    base_address = 0x80087034
-    end_address = 0x80087108
-    members = 0x88
-    main("class_43370", base_address, int(members / 4), int((end_address - base_address) / 4))
+    base_address = 0x800869D8
+    end_address = 0x80086A9C
+    members = 0xdc
+    main("class_3DA54", base_address, int(members / 4), int((end_address - base_address) / 4))

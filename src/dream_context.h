@@ -4,6 +4,9 @@
 #include <common.h>
 
 #include "16634.h"
+#include "32C00.h"
+#include "3ACC8.h"
+#include "3DA54.h"
 #include "dream_sys.h"
 #include "gs_helper.h"
 #include "texture_helper.h"
@@ -12,9 +15,9 @@
 typedef struct {
     gs_helper_t *gs_helper;
     class_16634_t *cls_16634;
-    void *cls_32c00;
-    void *cls_3acc8;
-    void *cls_3da54;
+    class_32C00_t *cls_32c00;
+    class_3ACC8_t *cls_3acc8;
+    class_3DA54_t *cls_3da54;
 } game_graphics_ctx_t;
 
 typedef struct dream_context_vtable {

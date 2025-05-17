@@ -1,6 +1,8 @@
 #ifndef LSD_SOUND_ENGINE_H
 #define LSD_SOUND_ENGINE_H
 
+#include <common.h>
+
 typedef struct {
     u32 value;
     void (*Destruct)(void *);

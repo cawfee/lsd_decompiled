@@ -4,7 +4,6 @@
 #include <psx/libgs.h>
 
 #include "base_class.h"
-#include "common.h"
 
 extern gs_helper_vtable_t **g_GS_HELPER_VTABLE;
 
