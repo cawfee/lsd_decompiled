@@ -13,7 +13,7 @@ void nullsub25(void) {
 
 INCLUDE_ASM("asm/nonmatchings/2B78C", func_8003B02C);
 
-INCLUDE_ASM("asm/nonmatchings/2B78C", func_8003B044);
+INCLUDE_ASM("asm/nonmatchings/2B78C", game_flow_init_graphics);
 
 void func_8003B108(void) {
 }

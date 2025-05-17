@@ -35,7 +35,7 @@ typedef struct gs_helper_vtable {
     /* 0x070 8006c0e0 */ void (*SetVBlanks)(void *, s32);
     /* 0x074 8006c0e4 */ void (*GetVBlanks)(void *);
     /* 0x078 8006c0e8 */ void (*Unk29)(void *, unsigned char *, s32);
-    /* 0x07C 8006c0ec */ void (*GetScreenSize)(void *, void *);
+    /* 0x07C 8006c0ec */ void *(*GetScreenSize)(void *, void *);
     /* 0x080 8006c0f0 */ void (*Unk31)(void *, s32);
     /* 0x084 8006c0f4 */ void (*SetVSyncCallback)(void *, void (*Callback)());
 } gs_helper_vtable_t;

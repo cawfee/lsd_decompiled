@@ -35,7 +35,7 @@ void main(int argc, const char **argv) {
     g_GAME_FLOW = game_flow_create(&g_GAME_CONFIG);
 
     gs_helper = gs_helper_create();
-    g_GAME_FLOW->vtable->GetUnk1(g_GAME_FLOW, gs_helper, func_80025B34(0, 0));
+    g_GAME_FLOW->vtable->Init(g_GAME_FLOW, gs_helper, func_80025B34(0, 0));
     g_GAME_FLOW->vtable->ExecutePhases(g_GAME_FLOW);
 }
 

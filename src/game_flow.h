@@ -1,6 +1,8 @@
 #ifndef LSD_GAME_FLOW_H
 #define LSD_GAME_FLOW_H
 
+#include "16634.h"
+#include "dream_context.h"
 #include "dream_sys.h"
 #include "gs_helper.h"
 
@@ -22,7 +24,7 @@ typedef struct game_flow_vtable {
     /* 0x038 8006d400 */ void (*Unk13)(void *, void *, void *);
     /* 0x03C 8006d404 */ u32 pad;
     /* 0x040 8006d408 */ void (*GetDayBasedSeed)(void *);
-    /* 0x044 8006d40c */ void (*GetUnk1)(void *, void *, void *);
+    /* 0x044 8006d40c */ void (*Init)(void *, gs_helper_t *, class_16634_t *);
     /* 0x048 8006d410 */ void (*Unk17)(void *);
     /* 0x04C 8006d414 */ void (*ExecutePhases)(void *);
     /* 0x050 8006d418 */ void (*DisplayLogoSequence)(void *);
@@ -43,7 +45,7 @@ typedef struct game_flow {
     /* 0x12 */ s16 unk4;
     /* 0x14 */ s32 unk5;
     /* 0x18 */ s32 m_IsInit;
-    /* 0x1C */ gs_helper_t *m_GSHelper;
+    /* 0x1C */ game_graphics_ctx_t *m_GraphicsCtx;
     /* 0x20 */ game_config_t *m_Config;
     /* 0x24 */ s32 m_UnkGameMember;
     /* 0x28 */ dream_sys_t *m_pDreamSys;

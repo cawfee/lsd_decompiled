@@ -21,7 +21,7 @@ typedef struct dream_sys_vtable {
     /* 0x008 80087be4 */ void (*Unk1)(void *);
     /* 0x00C 80087be8 */ void (*Unk2)(void *);
     /* 0x010 80087bec */ void (*Unk3)(void *, void *);
-    /* 0x014 80087bf0 */ void (*Unk4)(void *);
+    /* 0x014 80087bf0 */ void (*Unk4)(void *, void *);
     /* 0x018 80087bf4 */ void (*Unk5)(void *);
     /* 0x01C 80087bf8 */ void (*Unk6)(void *);
     /* 0x020 80087bfc */ void (*Unk7)(void *);

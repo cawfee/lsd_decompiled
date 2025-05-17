@@ -49,9 +49,9 @@ s32 game_flow_get_day_rand() {
     return get_seeded_random(*(s32 *) GET_SCRATCH_ADDR(0) % 365, 0);
 }
 
-void func_80026108(game_flow_t *This, s32 Unk2, s32 Unk3) {
+void game_flow_init(game_flow_t *This, gs_helper_t *GsHelper, class_16634_t *Unk3) {
     if (!This->m_IsInit) {
-        func_8003B20C()->Unk16(This, Unk2, Unk3, 0);
+        func_8003B20C()->InitGraphics(This, GsHelper, Unk3, 0);
     }
 }
 
@@ -69,7 +69,7 @@ void game_flow_display_logo_sequence(game_flow_t *This) {
         path = get_logo_asmk_path(&index);
         duration = get_movie_duration_maybe(index);
 
-        player->vtable->Unk16(player, This->m_GSHelper, path, duration, 1);
+        player->vtable->Unk16(player, This->m_GraphicsCtx, path, duration, 1);
         player->vtable->Destroy(player);
 
         game_flow_display_logo(This, "ETC\\OSDLOGO.TIM");
@@ -81,7 +81,7 @@ void game_flow_display_logo(game_flow_t *This, const char *Path) {
     cls->vtable->Unk37(cls, &game_flow_callback, This);
     cls->vtable->Unk26(cls, 0);
     cls->vtable->Unk52(cls, Path, 0);
-    cls->vtable->Unk16(cls, This->m_GSHelper, 0);
+    cls->vtable->Unk16(cls, This->m_GraphicsCtx, 0);
     cls->vtable->Destruct(cls);
 }
 
@@ -101,7 +101,7 @@ void game_flow_play_intro_movie(game_flow_t *This) {
         player = asset_player_create(0, 0, 0, 0);
         path = func_8004913C(&index, 0);
         duration = get_movie_duration_maybe(index);
-        player->vtable->Unk16(player, This->m_GSHelper, path, duration, 1);
+        player->vtable->Unk16(player, This->m_GraphicsCtx, path, duration, 1);
         player->vtable->Destroy(player);
     }
 }
@@ -113,18 +113,18 @@ s32 game_flow_execute_main_menu(game_flow_t *This) {
         frame_setup(0, 0, 0);
 
         if (This->m_pDreamSys->vtable->Unk103(This->m_pDreamSys, 0) != 1 && !This->m_UnkGameMember &&
-            func_80026518(&func_80057F68, This->m_pDreamSys, This->m_GSHelper) == 2) {
+            func_80026518(&func_80057F68, This->m_pDreamSys, This->m_GraphicsCtx) == 2) {
             func_8002658C(This);
         }
 
         while (1) {
-            value = func_80026518(main_menu_create, This->m_pDreamSys, This->m_GSHelper);
+            value = func_80026518(main_menu_create, This->m_pDreamSys, This->m_GraphicsCtx);
 
             if (value != 2) {
                 break;
             }
 
-            func_80026518(func_80057F68, This->m_pDreamSys, This->m_GSHelper);
+            func_80026518(func_80057F68, This->m_pDreamSys, This->m_GraphicsCtx);
         }
 
         This->m_UnkGameMember = 0;
@@ -154,7 +154,7 @@ void func_8002658C(game_flow_t *This) {
         path = func_800493E4(&unk[2], 0, 10);
         player->vtable->Unk26(player, unk[2] / 0xF);
         player->vtable->Unk74(player, 0);
-        player->vtable->Unk16(player, This->m_GSHelper, path, -1, 1);
+        player->vtable->Unk16(player, This->m_GraphicsCtx, path, -1, 1);
         player->vtable->Destroy(player);
     }
 }
@@ -170,7 +170,7 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     s32 result;
 
     // Start the dream and cleanup
-    dream_ctx = dream_context_create(This->m_GSHelper, This->m_pDreamSys, This->m_Config->enable_something);
+    dream_ctx = dream_context_create(This->m_GraphicsCtx, This->m_pDreamSys, This->m_Config->enable_something);
     dream_result = dream_ctx->vtable->ExecuteDream(dream_ctx);
     dream_ctx->vtable->Destroy(dream_ctx);
 
@@ -214,7 +214,7 @@ void game_flow_play_ending_movie(game_flow_t *This) {
         player->vtable->Unk74(player, 0);
         movie_path = get_ending_movie_path_2(&duration_index, 0);
         duration = get_movie_duration_maybe(duration_index);
-        player->vtable->Unk16(player, This->m_GSHelper, movie_path, duration, 1);
+        player->vtable->Unk16(player, This->m_GraphicsCtx, movie_path, duration, 1);
         player->vtable->Destroy(player);
     }
 }

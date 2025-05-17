@@ -3,6 +3,7 @@
 
 #include <common.h>
 
+#include "dream_context.h"
 #include "sound_engine.h"
 
 typedef struct class_3A930_vtable {
@@ -23,7 +24,7 @@ typedef struct class_3A930_vtable {
     /* 0x038 800866a0 */ void (*Unk13)(void *, void **, s32);
     /* 0x03C 800866a4 */ void (*Unk14)(void *);
     /* 0x040 800866a8 */ void (*Unk15)(void *);
-    /* 0x044 800866ac */ void (*Unk16)(void *, s32, s32);
+    /* 0x044 800866ac */ void (*Unk16)(void *, game_graphics_ctx_t *, s32);
     /* 0x048 800866b0 */ void (*Unk17)(void *);
     /* 0x04C 800866b4 */ void (*Unk18)(void *);
     /* 0x050 800866b8 */ void (*Unk19)(void *);
