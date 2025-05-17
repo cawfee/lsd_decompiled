@@ -23,9 +23,10 @@ if __name__ == "__main__":
     # members = 0xdc
     from argparse import ArgumentParser
     parser = ArgumentParser()
+    parser.add_argument("name")
     parser.add_argument("base", type=int)
     parser.add_argument("last", type=int)
     parser.add_argument("members", type=int)
     args = parser.parse_args()
 
-    main("class_3DA54", args.base, int(args.members / 4), int((args.last - args.base) / 4))
+    main(args.name, args.base, int(args.members / 4), int((args.last - args.base) / 4))
