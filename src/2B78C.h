@@ -3,26 +3,30 @@
 
 #include <common.h>
 
-typedef struct class_2B78C_vtable {
-    /* 0x000 8006b58c */ u32 value;
-    /* 0x004 8006b590 */ void (*Destroy)(void *);
-    /* 0x008 8006b594 */ void (*Construct)(void *, s32);
-    /* 0x00C 8006b598 */ void (*Cleanup)(void *);
-    /* 0x010 8006b59c */ void (*Unk3)(void *, void *);
-    /* 0x014 8006b5a0 */ void (*Unk4)(void *, void *);
-    /* 0x018 8006b5a4 */ void (*Unk5)(void *);
-    /* 0x01C 8006b5a8 */ void (*Unk6)(void *, void *, void **);
-    /* 0x020 8006b5ac */ void (*Unk7)(void *, void *);
-    /* 0x024 8006b5b0 */ void (*Unk8)(void *, void *);
-    /* 0x028 8006b5b4 */ void (*Unk9)(void *);
-    /* 0x02C 8006b5b8 */ void (*Unk10)(void *, void *, void **);
-    /* 0x030 8006b5bc */ void (*Unk11)(void *, s32);
-    /* 0x034 8006b5c0 */ void (*Unk12)(void *);
-    /* 0x038 8006b5c4 */ void (*Unk13)(void *, void *, s32);
+#include "16634.h"
+#include "gs_helper.h"
 
-    /* 0x03C 8006b5c8 */ void (*Unk14)(void *);
-    /* 0x040 8006b5cc */ void (*Unk15)(void *);
-    /* 0x044 8006b5d0 */ void (*Unk16)(void *, s32, s32, u32);
+typedef struct class_2B78C_vtable {
+    /* 0x000 8006E4F0 */ u32 value;
+    /* 0x004 8006E4F4 */ void (*Destroy)(void *);
+    /* 0x008 8006E4F8 */ void (*Construct)(void *, s32);
+    /* 0x00C 8006E4FC */ void (*Cleanup)(void *);
+    /* 0x010 8006E500 */ void (*Unk3)(void *, void *);
+    /* 0x014 8006E504 */ void (*Unk4)(void *, void *);
+    /* 0x018 8006E508 */ void (*Unk5)(void *);
+    /* 0x01C 8006E50C */ void (*Unk6)(void *, void *, void **);
+    /* 0x020 8006E510 */ void (*Unk7)(void *, void *);
+    /* 0x024 8006E514 */ void (*Unk8)(void *, void *);
+    /* 0x028 8006E518 */ void (*Unk9)(void *);
+    /* 0x02C 8006E51C */ void (*Unk10)(void *, void *, void **);
+    /* 0x030 8006E520 */ void (*Unk11)(void *, s32);
+    /* 0x034 8006E524 */ void (*Unk12)(void *);
+    /* 0x038 8006E528 */ void (*Unk13)(void *, void *, s32);
+    /* 0x03C 8006E52C */ void (*Unk14)(void *);
+    /* 0x040 8006E530 */ void (*Unk15)(void *);
+    /* 0x044 8006E534 */ void (*InitGraphics)(void *, gs_helper_t *, class_16634_t *, u32);
+    /* 0x048 8006E538 */ void (*Unk17)(void *);
+    /* 0x04C 8006E53C */ void (*Unk18)(void *);
 } class_2B78C_vtable_t;
 
 typedef struct class_2B78C {

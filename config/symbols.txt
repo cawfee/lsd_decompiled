@@ -650,6 +650,8 @@ game_flow_execute_dream = 0x80026698;
 game_flow_execute_main_menu = 0x80026410;
 game_flow_execute_phases = 0x8003B110;
 game_flow_callback = 0x80026328;
+game_flow_init = 0x80026108;
+game_flow_init_graphics = 0x8003B044;
 
 // Memory Card
 g_MEMORY_CARD_VTABLE = 0x80086DC4;

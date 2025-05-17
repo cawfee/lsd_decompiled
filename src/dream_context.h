@@ -3,17 +3,27 @@
 
 #include <common.h>
 
+#include "16634.h"
 #include "dream_sys.h"
 #include "gs_helper.h"
 #include "texture_helper.h"
 
+// TODO move?
+typedef struct {
+    gs_helper_t *gs_helper;
+    class_16634_t *cls_16634;
+    void *cls_32c00;
+    void *cls_3acc8;
+    void *cls_3da54;
+} game_graphics_ctx_t;
+
 typedef struct dream_context_vtable {
     /* 0x000 800865c8 */ u32 value;
     /* 0x004 800865cc */ void (*Destroy)(void *);
-    /* 0x008 800865d0 */ void (*Construct)(void *, gs_helper_t *, dream_sys_t *, s32);
+    /* 0x008 800865d0 */ void (*Construct)(void *, game_graphics_ctx_t *, dream_sys_t *, s32);
     /* 0x00C 800865d4 */ void (*Cleanup)(void *);
     /* 0x010 800865d8 */ void (*Unk3)(void *, dream_sys_t *);
-    /* 0x014 800865dc */ void (*Unk4)(void *);
+    /* 0x014 800865dc */ void (*Unk4)(void *, dream_sys_t *);
     /* 0x018 800865e0 */ void (*Unk5)(void *);
     /* 0x01C 800865e4 */ void (*Unk6)(void *);
     /* 0x020 800865e8 */ void (*Unk7)(void *);
@@ -48,7 +58,7 @@ typedef struct dream_context {
     /* 0x00 */ dream_context_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ gs_helper_t *m_GSHelper;
+    /* 0x0C */ game_graphics_ctx_t *m_GraphicsCtx;
     /* 0x10 */ s32 m_Unk3;
     /* 0x14 */ s32 m_Unk4;
     /* 0x18 */ s32 m_Unk5;
@@ -68,7 +78,7 @@ typedef struct dream_context {
     /* 0x50 */ s32 m_Unk19;
 } dream_context_t;
 
-dream_context_t *dream_context_create(gs_helper_t *GsHelper, dream_sys_t *DreamSys, s32 EnableSomething);
+dream_context_t *dream_context_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 EnableSomething);
 dream_context_vtable_t *dream_context_get_vtable(void);
 
 #endif
