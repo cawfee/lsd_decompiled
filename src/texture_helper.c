@@ -2,12 +2,12 @@
 
 #include "texture_helper.h"
 
-#include "memory.h"
 #include "171F0.h"
+#include "memory.h"
 
 extern texture_helper_t *g_TEXTURE_HELPER_VTABLE;
 
-texture_helper_t *texture_helper_create(u32 Unk1, u32 Unk2) {
+texture_helper_t *texture_helper_create(const char *Unk1) {
     texture_helper_t *allocated = (texture_helper_t *) memory_allocate_mem(0x50);
 
     if (allocated) {
@@ -21,7 +21,7 @@ texture_helper_t *texture_helper_create(u32 Unk1, u32 Unk2) {
 void func_8003B3FC(texture_helper_t *This, s32 Unk) {
     void *unk_class = func_80026CAC();
     (*(void (**)(texture_helper_t *))(unk_class + 8))(This);
-    
+
     This->vtable = texture_helper_get_vtable();
     This->m_MaybeLoaded = 0;
     This->unk19 = 0;

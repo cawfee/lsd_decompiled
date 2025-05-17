@@ -14,7 +14,7 @@ void func_8003E030(timer_t *This, void **Unk2, void *Unk3) {
     u32 value;
     base_class_get_vtable()->Unk13(This, Unk2, Unk3);
 
-    value = *(u32 *)*Unk2 & 0xF;
+    value = *(u32 *) *Unk2 & 0xF;
 
     if (value == 1) {
         This->vtable->Unk20(This, Unk2, Unk3);

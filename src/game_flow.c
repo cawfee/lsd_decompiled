@@ -15,7 +15,7 @@
 extern game_flow_vtable_t g_GAME_FLOW_VTABLE;
 
 game_flow_t *game_flow_create(game_config_t *Config) {
-    game_flow_t *allocated = (game_flow_t *)memory_allocate_mem(0x2C);
+    game_flow_t *allocated = (game_flow_t *) memory_allocate_mem(0x2C);
 
     if (allocated) {
         game_flow_get_vtable()->Construct(allocated, Config);
@@ -46,7 +46,7 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
 }
 
 s32 game_flow_get_day_rand() {
-    return get_seeded_random(*(s32 *)GET_SCRATCH_ADDR(0) % 365, 0);
+    return get_seeded_random(*(s32 *) GET_SCRATCH_ADDR(0) % 365, 0);
 }
 
 void func_80026108(game_flow_t *This, s32 Unk2, s32 Unk3) {
@@ -69,7 +69,7 @@ void game_flow_display_logo_sequence(game_flow_t *This) {
         path = get_logo_asmk_path(&index);
         duration = get_movie_duration_maybe(index);
 
-        player->vtable->Unk16(player, This->m_Unk7, path, duration, 1);
+        player->vtable->Unk16(player, This->m_GSHelper, path, duration, 1);
         player->vtable->Destroy(player);
 
         game_flow_display_logo(This, "ETC\\OSDLOGO.TIM");
@@ -81,7 +81,7 @@ void game_flow_display_logo(game_flow_t *This, const char *Path) {
     cls->vtable->Unk37(cls, &game_flow_callback, This);
     cls->vtable->Unk26(cls, 0);
     cls->vtable->Unk52(cls, Path, 0);
-    cls->vtable->Unk16(cls, This->m_Unk7, 0);
+    cls->vtable->Unk16(cls, This->m_GSHelper, 0);
     cls->vtable->Destruct(cls);
 }
 
@@ -101,7 +101,7 @@ void game_flow_play_intro_movie(game_flow_t *This) {
         player = asset_player_create(0, 0, 0, 0);
         path = func_8004913C(&index, 0);
         duration = get_movie_duration_maybe(index);
-        player->vtable->Unk16(player, This->m_Unk7, path, duration, 1);
+        player->vtable->Unk16(player, This->m_GSHelper, path, duration, 1);
         player->vtable->Destroy(player);
     }
 }
@@ -113,18 +113,18 @@ s32 game_flow_execute_main_menu(game_flow_t *This) {
         frame_setup(0, 0, 0);
 
         if (This->m_pDreamSys->vtable->Unk103(This->m_pDreamSys, 0) != 1 && !This->m_UnkGameMember &&
-            func_80026518(&func_80057F68, This->m_pDreamSys, This->m_Unk7) == 2) {
+            func_80026518(&func_80057F68, This->m_pDreamSys, This->m_GSHelper) == 2) {
             func_8002658C(This);
         }
 
         while (1) {
-            value = func_80026518(main_menu_create, This->m_pDreamSys, This->m_Unk7);
+            value = func_80026518(main_menu_create, This->m_pDreamSys, This->m_GSHelper);
 
             if (value != 2) {
                 break;
             }
 
-            func_80026518(func_80057F68, This->m_pDreamSys, This->m_Unk7);
+            func_80026518(func_80057F68, This->m_pDreamSys, This->m_GSHelper);
         }
 
         This->m_UnkGameMember = 0;
@@ -137,8 +137,8 @@ s32 game_flow_execute_main_menu(game_flow_t *This) {
 
 s32 func_80026518(s32 (*Callback)(s32), s32 Unk1, s32 Unk2) {
     s32 vtable = Callback(Unk1);
-    s32 result = (*(s32(**)(s32, s32, u32))(*(u32 *)vtable + 68))(vtable, Unk2, 0);
-    void (*callback2)(s32) = *(void (**)(s32))(*(u32 *)vtable + 4);
+    s32 result = (*(s32(**)(s32, s32, u32))(*(u32 *) vtable + 68))(vtable, Unk2, 0);
+    void (*callback2)(s32) = *(void (**)(s32))(*(u32 *) vtable + 4);
     callback2(vtable);
     return result;
 }
@@ -154,7 +154,7 @@ void func_8002658C(game_flow_t *This) {
         path = func_800493E4(&unk[2], 0, 10);
         player->vtable->Unk26(player, unk[2] / 0xF);
         player->vtable->Unk74(player, 0);
-        player->vtable->Unk16(player, This->m_Unk7, path, -1, 1);
+        player->vtable->Unk16(player, This->m_GSHelper, path, -1, 1);
         player->vtable->Destroy(player);
     }
 }
@@ -170,7 +170,7 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     s32 result;
 
     // Start the dream and cleanup
-    dream_ctx = dream_context_create(This->m_Unk7, This->m_pDreamSys, This->m_Config->enable_something);
+    dream_ctx = dream_context_create(This->m_GSHelper, This->m_pDreamSys, This->m_Config->enable_something);
     dream_result = dream_ctx->vtable->ExecuteDream(dream_ctx);
     dream_ctx->vtable->Destroy(dream_ctx);
 
@@ -214,7 +214,7 @@ void game_flow_play_ending_movie(game_flow_t *This) {
         player->vtable->Unk74(player, 0);
         movie_path = get_ending_movie_path_2(&duration_index, 0);
         duration = get_movie_duration_maybe(duration_index);
-        player->vtable->Unk16(player, This->m_Unk7, movie_path, duration, 1);
+        player->vtable->Unk16(player, This->m_GSHelper, movie_path, duration, 1);
         player->vtable->Destroy(player);
     }
 }

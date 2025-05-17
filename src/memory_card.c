@@ -2,8 +2,8 @@
 
 #include <psx/kernel.h>
 
-#include "memory_card.h"
 #include "base_class.h"
+#include "memory_card.h"
 
 extern memory_card_vtable_t *g_MEMORY_CARD_VTABLE;
 extern s32 D_80086E78;
@@ -39,8 +39,8 @@ void func_8004E444(memory_card_t *This, void *Unk) {
     if (Unk) {
         base_class_get_vtable()->Unk3(This, Unk);
 
-        unk = **(s32 **)Unk;
-        
+        unk = **(s32 **) Unk;
+
         if ((unk & 0xF) == 2) {
             This->m_Unk23 = Unk;
         } else {
@@ -61,8 +61,8 @@ void func_8004E4E8(memory_card_t *This, void *Unk) {
     s32 unk;
 
     if (Unk) {
-        unk = **(s32 **)Unk;
-        
+        unk = **(s32 **) Unk;
+
         if ((unk & 0xF) == 2) {
             This->m_Unk23 = NULL;
         } else {
@@ -95,7 +95,7 @@ void func_8004E5D4(memory_card_t *This, s32 Count) {
     This->m_Unk3 = 16 * Count;
 }
 
-s32 func_8004E5E4(memory_card_t* arg0) {
+s32 func_8004E5E4(memory_card_t *arg0) {
     s32 temp_a1;
     s32 var_s2;
     s32 *var_s0 = NULL;
@@ -110,7 +110,7 @@ s32 func_8004E5E4(memory_card_t* arg0) {
         var_s1->m_Unk4 = OpenEvent(0xF4000001, temp_a1, 0x2000, 0);
         var_s0 += 1;
         var_s2 += 1;
-        var_s1 = (memory_card_t *)((u32) var_s1 + 4);
+        var_s1 = (memory_card_t *) ((u32) var_s1 + 4);
     } while (var_s2 < 4);
     ExitCriticalSection();
     func_8004F394(arg0);
@@ -218,16 +218,16 @@ INCLUDE_ASM("asm/nonmatchings/memory_card", func_80050670);
 void func_80050730(memory_card_t *This, void *UnkClass, s32 Unk) {
     switch (Unk) {
         case 2:
-            This->m_Unk31 = (*(s32 (**)(void *))(*(u32 *)UnkClass + 156))(UnkClass);
+            This->m_Unk31 = (*(s32(**)(void *))(*(u32 *) UnkClass + 156))(UnkClass);
             This->vtable->Unk42(This);
             This->vtable->Unk30(This, 14);
             break;
 
         case 3:
-             This->vtable->Unk42(This);
-              This->vtable->Unk30(This, 23);
-                break;
-        
+            This->vtable->Unk42(This);
+            This->vtable->Unk30(This, 23);
+            break;
+
         default:
             break;
     }

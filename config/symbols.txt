@@ -192,17 +192,12 @@ _SsVmSetProgVol = 0x800307F0;
 SsUtKeyOnV = 0x8003149C;
 
 // LIBETC
-SetVideoMode = 0x80025504;
 
 trapIntrDMA = 0x8002557C;
-setIntrDMA = 0x80025700;
-memclr_2 = 0x800257A8;
+
 
 trapIntrVSync = 0x8002582C;
 setIntrVSync = 0x800258A8;
-memclr_3 = 0x800258D4;
-VSync = 0x80025900;
-v_wait = 0x80025A48;
 
 // LIBSPU
 SpuInitHot = 0x80032388;
@@ -240,41 +235,25 @@ CdIntstr = 0x80028D30;
 CdSync = 0x80028D68;
 CdReady = 0x80028D88;
 CdSyncCallback = 0x80028DA8;
-CdReadyCallback = 0x80028DC0;
+
 CdReadCallback = 0x80028DD8;
-CdControl = 0x80028DF0;
 CdControlF = 0x80028F38;
 CdControlB = 0x80029074;
 CdMix = 0x800291C8;
 CdGetSector = 0x800291EC;
-CdDataCallback = 0x80029210;
+
 CdDataSync = 0x80029234;
-CdReadSync = 0x80029254;
-CdRead = 0x80029274;
-CdIntToPos = 0x800292F4;
+
 CdPosToInt = 0x800293F8;
 CdInit = 0x8003B294;
 def_cbsync = 0x8003B324;
 def_cbready = 0x8003B34C;
 def_cbread = 0x8003B374;
 exit = 0x80046538;
-StClearRing = 0x80047910;
+
 StUnSetRing = 0x80047970;
-StSetStream = 0x80047A5C;
-init_ring_status = 0x80047AE4;
-StCdInterrupt = 0x80047B24;
-mem2mem = 0x8004849C;
-dma_execute = 0x800484D0;
-StSetMask = 0x8004865C;
-StSetRing = 0x8004867C;
-StGetNext = 0x800486AC;
-data_ready_callback = 0x80048770;
 StFreeRing = 0x800487D8;
-CD_sync = 0x800299BC;
-CD_ready = 0x80029C40;
-Cd_cw = 0x80029F10;
-CD_read = 0x8002AEE0;
-CD_datasync = 0x8002B198;
+
 
 // LIBPRESS
 MDEC_vlc_brk = 0x800465B8;
@@ -300,8 +279,6 @@ nullsub13 = 0x80026C80;
 nullsub25 = 0x8003B024;
 init_800269F0 = 0x800269F0;
 
-GetStageGridDimensionsTable = 0x800494bc;
-GetStageGridDimensions = 0x800494d8;
 GetStageChunkFromMood = 0x8004950c;
 GetMoodFromStageChunk = 0x800495b8;
 
@@ -361,10 +338,6 @@ Entity__GetUnlockEffect = 0x8005d95c;
 Entity__GetLinkStage = 0x8005d994;
 Entity__GetEventVideo = 0x8005d9d0;
 Get_vtable_Entity = 0x8005e150;
-
-// First short is amount of columns, second is amount of rows
-// third and fourth is a bool determining whether the stage is "tower-like"
-STAGE_GRID_DIMENSIONS = 0x800861d4; // type:s16 size:112
 
 // Low byte is dynamic effect, high byte is upper effect
 STG00_CHUNK_MOODS = 0x80086244; // type:s16 size:12
@@ -505,9 +478,19 @@ trapIntr = 0x80024F84;
 setIntr = 0x8002516C;
 stopIntr = 0x800252C0;
 restartIntr = 0x80025370;
-memclr_1 = 0x800253F8;
 startIntrVSync = 0x800257D4;
 startIntrDMA = 0x8002552C;
+PadInit = 0x80025EAC;
+PadRead = 0x80025EFC;
+PadStop = 0x80025F2C;
+setIntrDMA = 0x80025700;
+memclr_dma = 0x800257A8;
+memclr_vb = 0x800258D4;
+memclr = 0x800253F8;
+SetVideoMode = 0x80025504;
+GetVideoMode = 0x8002551C;
+VSync = 0x80025900;
+v_wait = 0x80025A48;
 
 // LIBSND
 SsSeqOpen = 0x8003A99C;
@@ -554,7 +537,6 @@ ResetGraph = 0x80020C74;
 PutDrawEnv = 0x800216EC;
 GsDRAWENV = 0x8008E8C4;
 GsDISPENV = 0x8008E920;
-GetVideoMode = 0x8002551C;
 PSDGPU = 0x80090B80;
 PutDispEnv = 0x800217E8;
 gte_init = 0x800247D4;
@@ -614,6 +596,44 @@ SetRotMatrix = 0x80015EFC;
 SetTransMatrix = 0x80015F8C;
 gte_rotate_z_matrix = 0x8001458C;
 gte_scale_matrix = 0x80014644;
+
+// LIBCD
+cd_bios_getintr = 0x80029478;
+CD_sync = 0x800299BC;
+CD_ready = 0x80029C40;
+cd_Alarm = 0x8008B3E4;
+Cd_cw = 0x80029F10;
+CD_vol = 0x8002A378;
+CD_flush = 0x8002A510;
+CD_initvol = 0x8002A5F8;
+CD_initintr = 0x8002A6EC;
+CD_init = 0x8002A75C;
+CD_datasync = 0x8002B198;
+CdSearchFile = 0x8002B640;
+cd_iso9660_cmp = 0x8002B928;
+CD_newmedia = 0x8002B94C;
+CD_searchdir = 0x8002BC40;
+CD_cachefile = 0x8002BCEC;
+CdIntToPos = 0x800292F4;
+memcpy_c2 = 0x8002C014;
+CD_read = 0x8002BFA8;
+CdRead = 0x8002AEE0;
+CdControl = 0x80028DF0;
+CdReadSync = 0x80029254;
+init_ring_status = 0x80047AE4;
+StClearRing = 0x80047910;
+CdDataCallback = 0x80029210;
+CdReadyCallback = 0x80028DC0;
+CdRead2 = 0x800479C8;
+cd_StMode = 0x8008E274;
+StSetStream = 0x80047A5C;
+StCdInterrupt = 0x80047B24;
+cd_c011_mem2mem = 0x8004849C;
+cd_c011_dma_execute = 0x800484D0;
+StSetMask = 0x8004865C;
+StSetRing = 0x8004867C;
+StGetNext = 0x800486AC;
+cd_data_ready_callback = 0x80048770;
 
 // Game Flow
 g_GAME_FLOW_VTABLE = 0x8006D3C8;
@@ -707,6 +727,10 @@ main_menu_create = 0x8004D518;
 g_DREAM_CONTEXT_VTABLE = 0x800865C8;
 dream_context_get_vtable = 0x8004A060;
 dream_context_create = 0x80049608;
+dream_context_construct = 0x80049684;
+dream_context_cleanup = 0x80049830;
+dream_context_execute_dream = 0x80049A1C;
+dream_context_on_tick = 0x80049958;
 
 // Timer?
 g_TIMER_VTABLE = 0x8006E878;
@@ -727,3 +751,9 @@ asset_player_create = 0x8003B854;
 asset_player_construct = 0x8003B8E4;
 asset_player_cleanup = 0x8003B9DC;
 asset_player_get_vtable = 0x8003BE84;
+
+// Stage Grid
+g_STAGE_GRID_DIMENSIONS = 0x800861D4;
+stage_grid_get_dimension_count = 0x800494B4;
+stage_grid_get_dimension_table = 0x800494BC;
+stage_grid_get_dimension = 0x800494D8;

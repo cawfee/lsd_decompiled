@@ -5,7 +5,7 @@ void *func_8003FDB0(s32 Unk1, s32 Unk2, s32 Unk3) {
 
     if (allocated) {
         void *vtable = func_800404C0();
-        (*((s32 (**)(void *, s32, s32, s32)) vtable + 2))(allocated, Unk1, Unk2, Unk3);
+        (*((s32(**)(void *, s32, s32, s32)) vtable + 2))(allocated, Unk1, Unk2, Unk3);
         return allocated;
     }
 

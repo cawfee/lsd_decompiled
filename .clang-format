@@ -36,4 +36,7 @@ AllowShortLoopsOnASingleLine: false
 AllowShortLambdasOnASingleLine: All
 InsertBraces: true
 IndentCaseLabels: true
+SpaceAfterCStyleCast: true
+BinPackParameters: false
+Cpp11BracedListStyle: false
 ...

@@ -38,7 +38,7 @@ void game_flow_execute_phases(game_flow_t *This) {
                     if (status != 1) {
                         break;
                     }
-                    
+
                     // Debug left over? Empty function
                     This->vtable->Menu_Unused(This);
                 }
@@ -50,8 +50,8 @@ void game_flow_execute_phases(game_flow_t *This) {
                         // Will play the ending movie if returns true
                         This->vtable->PlayEndingMovie(This);
                     }
-                } 
-            } while ( status );
+                }
+            } while (status);
         }
     }
 }

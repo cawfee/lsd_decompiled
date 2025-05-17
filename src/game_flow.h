@@ -2,6 +2,7 @@
 #define LSD_GAME_FLOW_H
 
 #include "dream_sys.h"
+#include "gs_helper.h"
 
 typedef struct game_flow_vtable {
     /* 0x000 8006d3c8 */ u32 value;
@@ -42,7 +43,7 @@ typedef struct game_flow {
     /* 0x12 */ s16 unk4;
     /* 0x14 */ s32 unk5;
     /* 0x18 */ s32 m_IsInit;
-    /* 0x1C */ void *m_Unk7;
+    /* 0x1C */ gs_helper_t *m_GSHelper;
     /* 0x20 */ game_config_t *m_Config;
     /* 0x24 */ s32 m_UnkGameMember;
     /* 0x28 */ dream_sys_t *m_pDreamSys;
