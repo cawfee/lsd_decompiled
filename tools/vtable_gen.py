@@ -18,7 +18,14 @@ def main(name: str, vtable_start: int, member_count: int, functions_count: int):
 
 
 if __name__ == "__main__":
-    base_address = 0x800869D8
-    end_address = 0x80086A9C
-    members = 0xdc
-    main("class_3DA54", base_address, int(members / 4), int((end_address - base_address) / 4))
+    # base_address = 0x800869D8
+    # end_address = 0x80086A9C
+    # members = 0xdc
+    from argparse import ArgumentParser
+    parser = ArgumentParser()
+    parser.add_argument("base", type=int)
+    parser.add_argument("last", type=int)
+    parser.add_argument("members", type=int)
+    args = parser.parse_args()
+
+    main("class_3DA54", args.base, int(args.members / 4), int((args.last - args.base) / 4))
