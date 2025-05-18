@@ -1,46 +1,50 @@
-#include "common.h"
+#include "1CBB8.h"
+
+extern class_1CBB8_vtable_t **g_CLASS_1CBB8_VTABLE;
 
 s32 func_8002C3B8(void) {
     return 0;
 }
 
-void func_8002C3C0(void) {
+void class_1CBB8_construct(void) {
 }
 
-void func_8002C3C8(void) {
+void class_1CBB8_cleanup(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1CBB8", func_8002C3D0);
+INCLUDE_ASM("asm/nonmatchings/1CBB8", class_1CBB8_unk15);
 
-INCLUDE_ASM("asm/nonmatchings/1CBB8", func_8002C3E0);
+INCLUDE_ASM("asm/nonmatchings/1CBB8", class_1CBB8_unk16);
 
-void SetVib(void) {
+void class_1CBB8_unk17(void) {
 }
 
-void SsUtVibrateOn(void) {
+void class_1CBB8_unk18(void) {
 }
 
-void SsUtVibrateOff(void) {
+void class_1CBB8_unk19(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1CBB8", func_8002C408);
+INCLUDE_ASM("asm/nonmatchings/1CBB8", class_1CBB8_unk20);
 
-void SeVibOn_0(void) {
+void class_1CBB8_unk21(void) {
 }
 
-void SetVib_0(void) {
+void class_1CBB8_unk25(void) {
 }
 
-void SsUtVibrateOn_0(void) {
+void class_1CBB8_unk26(void) {
 }
 
-void SsUtVibrateOff_0(void) {
+void class_1CBB8_unk27(void) {
 }
 
-void func_8002C430(void) {
+void class_1CBB8_unk28(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/1CBB8", func_8002C438);
+class_1CBB8_vtable_t *class_1CBB8_get_vtable(void) {
+    return &g_CLASS_1CBB8_VTABLE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1CBB8", func_8002C448);
 

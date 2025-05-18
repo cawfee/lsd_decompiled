@@ -39,7 +39,7 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
     buffer[0] = NULL;
     buffer[1] = "ETC\\DREAME5.TMD";
 
-    This->m_pDreamSys = New_DreamSys(func_80043840(&buffer), 0, 0);
+    This->m_pDreamSys = dream_sys_create(func_80043840(&buffer), 0, 0);
     This->m_UnkGameMember = 0;
     This->m_pDreamSys->vtable->Unk137(This->m_pDreamSys, Config->enable_unk);
     This->vtable->GetDayBasedSeed(This);

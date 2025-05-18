@@ -75,7 +75,10 @@ asm_auto_targets = [
     "asm/317C0.s",
     "asm/3244C.s",
     "asm/3328C.s",
-    "asm/36654.s",
+    "asm/psyq_libpress_libpress.s",
+    "asm/psyq_libc_exit.s",
+    "asm/psyq_libpress_vlc.s",
+    "asm/psyq_libpress_vlc2.s",
     "asm/psyq_libcd_c002.s",
     "asm/psyq_libcd_c003.s",
     "asm/psyq_libcd_c005.s",
@@ -94,7 +97,16 @@ asm_auto_targets = [
     "asm/8BDC.s",
     "asm/ED8C.s",
     "asm/FB94.s",
-    "asm/GsSetAmbient.s",
+    "asm/psyq_libgs_110.s",
+    "asm/psyq_libgte_reg03.s",
+    "asm/psyq_libgs_010.s",
+    "asm/psyq_libgs_121.s",
+    "asm/psyq_libgs_103.s",
+    "asm/psyq_libgs_003.s",
+    "asm/psyq_libgs_002.s",
+    "asm/psyq_libgs_001.s",
+    "asm/psyq_libgpu_prim.s",
+    "asm/psyq_libgpu_sys.s",
     "asm/data/1764.rodata.s",
     "asm/data/17EC.rodata.s",
     "asm/data/1818.rodata.s",
@@ -286,7 +298,7 @@ c_targets_g8 = [
 
     "src/main_menu.c",
     "src/171F0.c",
-    "src/2A0E0.c",
+    "src/bgm.c",
 ]
 cpp_targets = [
 

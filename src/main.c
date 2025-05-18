@@ -25,7 +25,7 @@ static game_flow_t *g_GAME_FLOW;
 
 void main(int argc, const char **argv) {
     void *manager;
-    void *gs_helper;
+    gs_helper_t *gs_helper;
 
     SetMem(2);
     manager = memory_create_manager(0x166C00, 0);
