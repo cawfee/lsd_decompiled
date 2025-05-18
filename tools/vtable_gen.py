@@ -24,9 +24,9 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument("name")
-    parser.add_argument("base", type=int)
-    parser.add_argument("last", type=int)
-    parser.add_argument("members", type=int)
+    parser.add_argument("base", type=lambda x: int(x, 0))
+    parser.add_argument("last", type=lambda x: int(x, 0))
+    parser.add_argument("members", type=lambda x: int(x, 0))
     args = parser.parse_args()
 
     main(args.name, args.base, int(args.members / 4), int((args.last - args.base) / 4))

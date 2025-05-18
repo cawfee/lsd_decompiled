@@ -52,6 +52,6 @@ typedef struct class_1C92C {
     /* 0x34 */ s32 m_Unk12;
 } class_1C92C_t;
 
-class_1C92C_vtable_t *func_8002C3A8(void);
+class_1C92C_vtable_t *class_1C92C_get_vtable(void);
 
 #endif

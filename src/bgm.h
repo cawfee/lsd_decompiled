@@ -1,11 +1,11 @@
-#ifndef LSD_2A0E0_H
-#define LSD_2A0E0_H
+#ifndef LSD_BGM_H
+#define LSD_BGM_H
 
 #include <common.h>
 
 #include "sound_engine.h"
 
-typedef struct class_2A0E0_vtable {
+typedef struct bgm_vtable {
     /* 0x000 8006e48c */ u32 value;
     /* 0x004 8006e490 */ void (*Destroy)(void *);
     /* 0x008 8006e494 */ void (*Construct)(void *, s32, s32, s32);
@@ -31,10 +31,10 @@ typedef struct class_2A0E0_vtable {
     /* 0x058 8006e4e4 */ void (*Unk21)(void *);
     /* 0x05C 8006e4e8 */ void (*Unk22)(void *, s32);
     /* 0x060 8006e4ec */ void (*Unk23)(void *, s32);
-} class_2A0E0_vtable_t;
+} bgm_vtable_t;
 
-typedef struct class_2A0E0 {
-    /* 0x00 */ class_2A0E0_vtable_t *vtable;
+typedef struct bgm {
+    /* 0x00 */ bgm_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
     /* 0x0C */ sound_engine_t *m_SoundEngine;
@@ -47,8 +47,8 @@ typedef struct class_2A0E0 {
     /* 0x1E */ u16 m_Unk6_2;
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
-} class_2A0E0_t;
+} bgm_t;
 
-class_2A0E0_vtable_t *func_8003A04C(void);
+bgm_vtable_t *bgm_get_vtable(void);
 
 #endif

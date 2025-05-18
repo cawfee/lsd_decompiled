@@ -2,6 +2,7 @@
 
 #include "base_class.h"
 #include "memory.h"
+#include "1CBB8.h"
 
 extern class_171F0_vtable_t **D_8006D430;
 static s32 D_8008A84C = 0x13;
@@ -92,7 +93,7 @@ class_171F0_vtable_t *func_80026C9C(void) {
 
 void *func_80026CAC() {
     if (D_8008A84C == 0x23) {
-        return func_8002C438();
+        return class_1CBB8_get_vtable();
     } else {
         return func_80027E68();
     }

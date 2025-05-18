@@ -147,7 +147,7 @@ const char *get_event_movie_path(s32 *DurationMaybe, s32 Index) {
         *DurationMaybe = Index + duration_copy;
     }
 
-    return path + (0x1C * Index);
+    return path + (LSD_PATH_LEN * Index);
 }
 
 // Gets FILM\SPDAY01A.STR, SPDAY02A, and so on from a given index

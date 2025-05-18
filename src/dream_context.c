@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "texture_helper.h"
 #include "utils/path_helper.h"
+#include "bgm.h"
 
 extern dream_context_vtable_t **g_DREAM_CONTEXT_VTABLE;
 
@@ -36,7 +37,7 @@ void dream_context_construct(dream_context_t *This,
     unk[1] = "ETC\\DREAMER.TMD";
 
     This->m_Unk17 = func_80043840(unk);
-    This->m_Unk15 = func_800398E0(get_random_sound_type(NULL), 0, 1);
+    This->m_Unk15 = bgm_create(get_random_sound_type(NULL), 0, 1);
 
     func_8004A070(1);
     frame_setup(EnableSomething == 0, 1, 1);

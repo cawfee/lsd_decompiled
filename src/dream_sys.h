@@ -17,8 +17,8 @@ typedef enum {
 
 typedef struct dream_sys_vtable {
     /* 0x000 80087bdc */ u32 value;
-    /* 0x004 80087be0 */ void (*Unk0)(void *);
-    /* 0x008 80087be4 */ void (*Unk1)(void *);
+    /* 0x004 80087be0 */ void (*Destruct)(void *);
+    /* 0x008 80087be4 */ void (*Construct)(void *, s32, s32, s32);
     /* 0x00C 80087be8 */ void (*Unk2)(void *);
     /* 0x010 80087bec */ void (*Unk3)(void *, void *);
     /* 0x014 80087bf0 */ void (*Unk4)(void *, void *);
@@ -747,5 +747,7 @@ typedef struct dream_sys {
     /* 0x924 */ s32 m_Unk584;
     /* 0x928 */ s32 m_Unk585;
 } dream_sys_t;
+
+dream_sys_vtable_t *dream_sys_get_vtable(void);
 
 #endif

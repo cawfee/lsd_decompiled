@@ -3,8 +3,8 @@ _mk_xpndsp = 0x80014BA0;
 _mk_normsp = 0x80014E68;
 GsMapModelingData = 0x80020548;
 GsDefDispBuff = 0x80024734;
-GsGetActiveBuff = 0x80024820;
-GsSwapDispBuff = 0x8002494C;
+
+
 GsInit3D = 0x8003B21C;
 GsGetTimInfo = 0x8003B770;
 GsSetRefView2 = 0x8003F2AC;
@@ -17,7 +17,7 @@ GsDrawOt = 0x8003FBF4;
 // GsDrawOtIO = 0x8003FBF4;
 GsClearOt = 0x8003FC18;
 GsSetLightMode = 0x8003FC70;
-GsSetAmbient = 0x800428F4;
+
 GsSetFlatLight = 0x80042A8C;
 gte_set_lc = 0x80042F50;
 gte_read_lc = 0x80042FB8;
@@ -99,24 +99,23 @@ RCpolyGT4A = 0x8001C47C;
 ratan2 = 0x8001F0C8;
 SquareRoot0 = 0x800205C0;
 SquareRoot12 = 0x80020644;
-SetVertex0 = 0x80024A40;
-SetVertex1 = 0x80024A50;
-SetVertex2 = 0x80024A60;
-SetVertexTri = 0x80024A70;
-SetRGBfifo = 0x80024A90;
-SetIR123 = 0x80024AA4;
-SetIR0 = 0x80024AB8;
-SetBackColor = 0x80024AC4;
-SetFarColor = 0x80024AE4;
-SetSZfifo3 = 0x80024B04;
-SetSZfifo4 = 0x80024B18;
-SetSXSYfifo = 0x80024B30;
-SetRii = 0x80024B44;
-SetMAC123 = 0x80024B58;
-SetData32 = 0x80024B6C;
-SetGeomScreen = 0x80024B90;
-SetDQA = 0x80024B9C;
-SetDQB = 0x80024BA8;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 InitGeom = 0x80024BC0;
 _patch_gte = 0x80024C40;
 TransposeMatrix = 0x8003FCFC;
@@ -181,13 +180,8 @@ SsInitHot = 0x80027D40;
 SpuClearReverbWorkArea = 0x80038B28;
 SsUtPitchBend = 0x800319B4;
 SsUtGetDetVVol = 0x80031E94;
-SetVib = 0x8002C3F0;
-SsUtVibrateOn = 0x8002C3F8;
-SsUtVibrateOff = 0x8002C400;
-SeVibOn_0 = 0x8002C410;
-SetVib_0 = 0x8002C418;
-SsUtVibrateOn_0 = 0x8002C420;
-SsUtVibrateOff_0 = 0x8002C428;
+
+
 _SsVmSetProgVol = 0x800307F0;
 SsUtKeyOnV = 0x8003149C;
 
@@ -254,13 +248,6 @@ exit = 0x80046538;
 StUnSetRing = 0x80047970;
 StFreeRing = 0x800487D8;
 
-
-// LIBPRESS
-MDEC_vlc_brk = 0x800465B8;
-MDEC_vlc = 0x800465E8;
-MDEC_vlc2 = 0x8004691C;
-ivlc_dct_dc_size = 0x80046CF8;
-
 // LIBCARD
 _card_load = 0x80050B08;
 _card_info = 0x80050B18;
@@ -282,8 +269,6 @@ init_800269F0 = 0x800269F0;
 GetStageChunkFromMood = 0x8004950c;
 GetMoodFromStageChunk = 0x800495b8;
 
-New_DreamSys = 0x80058774;
-DreamSys__DreamSys = 0x800587f0;
 DreamSys__func_588ec = 0x800588ec;
 DreamSys__func_58968 = 0x80058968;
 DreamSys__TimerTick = 0x80058d94;
@@ -317,7 +302,7 @@ DreamSys__CalcUnlockScore = 0x8005b6e0;
 DreamSys__AddFlashback = 0x8005b74c;
 DreamSys__FlashbackSaving = 0x8005b81c;
 DreamSys__ResetFlashbackList = 0x8005B8FC;
-Get_vtable_DreamSys = 0x8005ba40;
+
 InitNavChallengesArray = 0x8005ba50;
 CalcNavigationScore = 0x8005ba7c;
 GetRandomSpawnFromStage = 0x8005bb30;
@@ -355,8 +340,6 @@ STG11_CHUNK_MOODS = 0x80086548; // type:s16 size:24
 STG12_CHUNK_MOODS = 0x80086560; // type:s16 size:40
 STG13_CHUNK_MOODS = 0x80086588; // type:s16 size:8
 STAGE_CHUNK_MOODS = 0x80086590; // type:s32 size:56
-
-DREAMSYS_METHODS = 0x80087bdc;
 
 // Array of shorts defining dream length is seconds
 STAGE_TIME_LIMITS = 0x80087f14; // type:s16 size:28
@@ -532,16 +515,13 @@ todigit = 0x80050AA4;
 
 // LIBGS
 GsInitGraph = 0x800238DC;
-gs001_sub_74 = 0x80023954;
-ResetGraph = 0x80020C74;
-PutDrawEnv = 0x800216EC;
+gs001_gpu_init = 0x80023954;
 GsDRAWENV = 0x8008E8C4;
 GsDISPENV = 0x8008E920;
 PSDGPU = 0x80090B80;
-PutDispEnv = 0x800217E8;
 gte_init = 0x800247D4;
 PSDIDX = 0x80090B78;
-gs001_sub_1F8 = 0x80023B24;
+gs001_valiable_init = 0x80023B24;
 HWD0 = 0x8008E980;
 VWD0 = 0x8008E988;
 CLIP2 = 0x8008EA04;
@@ -550,11 +530,8 @@ GsSetDrawBuffClip = 0x8002469C;
 GsSetDrawBuffOffset = 0x80024830;
 GsSortClear = 0x80023DA0;
 PSDOFSY = 0x8008E244;
-AddPrim = 0x80024130;
 GsORGOFSY = 0x8008E940;
 GsORGOFSX = 0x8008E93C;
-SetGeomOffset = 0x80024B78;
-SetDispMask = 0x80021078;
 GsCLIP3near = 0x800902E4;
 GsLIGHT_MODE = 0x800902E0;
 GsCLIP3far = 0x8008E9D8;
@@ -579,9 +556,103 @@ _make_packet = 0x80013D00;
 GsGetLws = 0x80014768;
 GsSortBoxFill = 0x80014A88;
 GsLinkObject4 = 0x8001EF70;
+GsSetAmbient = 0x800428F4;
+GsGetActiveBuff = 0x80024820;
+GsSwapDispBuff = 0x8002494C;
+GsInitGraph2 = 0x80023AAC;
 
 // LIBGPU
 DumpClut = 0x800240B8;
+DumpDispEnv = 0x800245F0;
+DumpDrawEnv = 0x80024470;
+MargePrim = 0x80024438;
+SetDrawMove = 0x8002441C;
+SetBlockFill = 0x80024408;
+SetLineG4 = 0x800243E8;
+SetLineF4 = 0x800243C8;
+SetLineG3 = 0x800243A8;
+SetLineF3 = 0x80024388;
+SetLineG2 = 0x80024374;
+SetLineF2 = 0x80024360;
+SetTile = 0x8002434C;
+SetTile16 = 0x80024338;
+SetTile8 = 0x80024324;
+SetTile1 = 0x80024310;
+SetSprt = 0x800242FC;
+SetSprt16 = 0x800242E8;
+SetSprt8 = 0x800242D4;
+SetPolyGT4 = 0x800242C0;
+SetPolyG4 = 0x800242AC;
+SetPolyFT4 = 0x80024298;
+SetPolyF4 = 0x80024284;
+SetPolyGT3 = 0x80024270;
+SetPolyG3 = 0x8002425C;
+SetPolyFT3 = 0x80024248;
+SetPolyF3 = 0x80024234;
+SetShadeTex = 0x8002420C;
+SetSemiTrans = 0x800241E4;
+TermPrim = 0x800241CC;
+CatPrim = 0x800241A8;
+AddPrims = 0x8002416C;
+AddPrim = 0x80024130;
+IsEndPrim = 0x80024114;
+NextPrim = 0x800240F8;
+DumpTPage = 0x80023FE8;
+GetClut = 0x80023FD0;
+GetTPage = 0x80023F08;
+GetGraphType = 0x80020FFC;
+ResetGraph = 0x80020C74;
+SetGraphReverse = 0x80020DD0;
+SetGraphDebug = 0x80020EE4;
+SetGraphQueue = 0x80020F50;
+GetGraphDebug = 0x8002100C;
+DrawSyncCallback = 0x8002101C;
+SetDispMask = 0x80021078;
+DrawSync = 0x80021114;
+checkRECT = 0x80021180;
+ClearImage = 0x800212A8;
+LoadImage = 0x8002133C;
+StoreImage = 0x800213A0;
+MoveImage = 0x80021404;
+ClearOTag = 0x800214C8;
+ClearOTagR = 0x80021580;
+DrawPrim = 0x80021618;
+DrawOTag = 0x80021678;
+PutDrawEnv = 0x800216EC;
+GetDrawEnv = 0x800217B0;
+PutDispEnv = 0x800217E8;
+GetDispEnv = 0x80021C0C;
+GetODE = 0x80021C44;
+SetTexWindow = 0x80021C78;
+SetDrawArea = 0x80021CB4;
+SetDrawOffset = 0x80021D38;
+SetPriority = 0x80021D7C;
+SetDrawMode = 0x80021DA4;
+SetDrawEnv = 0x80021DFC;
+gpu_sys_get_mode = 0x800220A0;
+gpu_sys_get_cs = 0x800220FC;
+gpu_sys_get_ofs = 0x80022294;
+gpu_sys_get_tw = 0x800222DC;
+gpu_sys_get_dx = 0x80022360;
+gpu_sys_status = 0x8002241C;
+gpu_sys_otc = 0x80022434;
+gpu_sys_clr = 0x8002251C;
+gpu_sys_dws = 0x8002273C;
+gpu_sys_ctl = 0x80022C2C;
+gpu_sys_drs = 0x80022990;
+gpu_sys_getctl = 0x80022C58;
+gpu_sys_cwb = 0x80022C70;
+gpu_sys_cwc = 0x80022CC0;
+gpu_sys_param = 0x80022D0C;
+gpu_sys_addque = 0x80022D3C;
+gpu_sys_addque2 = 0x80022D60;
+gpu_sys_exeque = 0x80023054;
+gpu_sys_reset = 0x80023368;
+gpu_sys_sync = 0x800234A4;
+gpu_sys_set_alarm = 0x800235EC;
+gpu_sys_get_alarm = 0x80023620;
+gpu_sys_version = 0x8002378C;
+gpu_sys_memset = 0x8002386C;
 
 // LIBGTE
 ApplyMatrixLV = 0x80015618;
@@ -596,6 +667,25 @@ SetRotMatrix = 0x80015EFC;
 SetTransMatrix = 0x80015F8C;
 gte_rotate_z_matrix = 0x8001458C;
 gte_scale_matrix = 0x80014644;
+SetBackColor = 0x80024AC4;
+SetVertex0 = 0x80024A40;
+SetVertex1 = 0x80024A50;
+SetVertex2 = 0x80024A60;
+SetVertexTri = 0x80024A70;
+SetRGBfifo = 0x80024A90;
+SetIR123 = 0x80024AA4;
+SetIR0 = 0x80024AB8;
+SetFarColor = 0x80024AE4;
+SetSZfifo3 = 0x80024B04;
+SetSZfifo4 = 0x80024B18;
+SetSXSYfifo = 0x80024B30;
+SetRii = 0x80024B44;
+SetMAC123 = 0x80024B58;
+SetData32 = 0x80024B6C;
+SetGeomOffset = 0x80024B78;
+SetGeomScreen = 0x80024B90;
+SetDQA = 0x80024B9C;
+SetDQB = 0x80024BA8;
 
 // LIBCD
 cd_bios_getintr = 0x80029478;
@@ -634,6 +724,28 @@ StSetMask = 0x8004865C;
 StSetRing = 0x8004867C;
 StGetNext = 0x800486AC;
 cd_data_ready_callback = 0x80048770;
+
+// LIBPRESS
+libpress_timeout = 0x80046404;
+MDEC_out_sync = 0x8004636C;
+MDEC_in_sync = 0x800462D4;
+MDEC_out = 0x80046244;
+MDEC_in = 0x800461B0;
+MDEC_reset = 0x800460A8;
+DecDCToutCallback = 0x80046084;
+DecDCTinCallback = 0x80046060;
+DecDCToutSync = 0x80046040;
+DecDCTinSync = 0x80046020;
+DecDCTout = 0x80046000;
+DecDCTin = 0x80045F84;
+DecDCTBufSize = 0x80045F78;
+DecDCTPutEnv = 0x80045F18;
+DecDCTGetEnv = 0x80045E8C;
+DecDCTReset = 0x80045E54;
+MDEC_vlc_brk = 0x800465B8;
+MDEC_vlc = 0x800465E8;
+MDEC_vlc2 = 0x8004691C;
+ivlc_dct_dc_size = 0x80046CF8;
 
 // Game Flow
 g_GAME_FLOW_VTABLE = 0x8006D3C8;
@@ -759,3 +871,53 @@ g_STAGE_GRID_DIMENSIONS = 0x800861D4;
 stage_grid_get_dimension_count = 0x800494B4;
 stage_grid_get_dimension_table = 0x800494BC;
 stage_grid_get_dimension = 0x800494D8;
+
+// Dream system
+g_DREAM_SYS_VTABLE = 0x80087BDC;
+dream_sys_create = 0x80058774;
+dream_sys_get_vtable = 0x8005ba40;
+dream_sys_construct = 0x800587f0;
+
+// Class 1C92C
+g_CLASS_1C92C_VTABLE = 0x8006D940;
+class_1C92C_get_vtable = 0x8002C3A8;
+class_1C92C_create = 0x8002C12C;
+class_1C92C_construct = 0x8002C18C;
+class_1C92C_cleanup = 0x8002C200;
+class_1C92C_unk24 = 0x8002C238;
+class_1C92C_unk29 = 0x8002C278;
+
+// Class 1CBB8
+g_CLASS_1CBB8_VTABLE = 0x8006D9BC;
+class_1CBB8_get_vtable = 0x8002C438;
+class_1CBB8_construct = 0x8002C3C0;
+class_1CBB8_cleanup = 0x8002C3C8;
+class_1CBB8_unk15 = 0x8002C3D0;
+class_1CBB8_unk16 = 0x8002C3E0;
+class_1CBB8_unk17 = 0x8002C3F0;
+class_1CBB8_unk18 = 0x8002C3F8;
+class_1CBB8_unk19 = 0x8002C400;
+class_1CBB8_unk20 = 0x8002C408;
+class_1CBB8_unk21 = 0x8002C410;
+class_1CBB8_unk25 = 0x8002C418;
+class_1CBB8_unk26 = 0x8002C420;
+class_1CBB8_unk27 = 0x8002C428;
+class_1CBB8_unk28 = 0x8002C430;
+
+// BGM
+g_BGM_VTABLE = 0x8006E48C;
+bgm_get_vtable = 0x8003A04C;
+bgm_create = 0x800398E0;
+bgm_construct = 0x8003995C;
+bgm_cleanup = 0x80039A34;
+bgm_unk13 = 0x80039B04;
+bgm_unk15 = 0x80039B90;
+bgm_handle_monitor_event = 0x80039C04;
+bgm_unk16 = 0x80039CBC;
+bgm_unk17 = 0x80039D14;
+bgm_unk18 = 0x80039D68;
+bgm_unk19 = 0x80039DB0;
+bgm_unk20 = 0x80039DF4;
+bgm_unk21 = 0x8006E4E4;
+bgm_unk22 = 0x80039E7C;
+bgm_unk23 = 0x80039F64;

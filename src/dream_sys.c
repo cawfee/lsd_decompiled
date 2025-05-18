@@ -1,8 +1,19 @@
 #include "dream_sys.h"
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", New_DreamSys);
+extern dream_sys_vtable_t **g_DREAM_SYS_VTABLE;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__DreamSys);
+dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
+    dream_sys_t *allocated = (dream_sys_t *) memory_allocate_mem(0x928);
+
+    if (allocated) {
+        dream_sys_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);
+        return allocated;
+    }
+
+    return NULL;
+}
+
+INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_construct);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__func_588ec);
 
@@ -205,7 +216,9 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005B990);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BA20);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", Get_vtable_DreamSys);
+dream_sys_vtable_t *dream_sys_get_vtable(void) {
+    return &g_DREAM_SYS_VTABLE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", InitNavChallengesArray);
 

@@ -69,9 +69,9 @@ void func_800208F8(gs_helper_t *This, s16 *Unk2, s32 Unk3) {
 
     if (!This->m_VSyncCount || This->m_Unk9) {
         gs_helper_copy_unk(unk_struct, Unk2);
-        func_8002133C(unk_struct, Unk3);
+        LoadImage(unk_struct, Unk3);
         if (This->m_Unk9) {
-            func_80021114(0);
+            DrawSync(0);
         }
     }
 }
@@ -89,9 +89,9 @@ void func_800209A0(gs_helper_t *This, s32 Unk2, s16 *Unk3) {
 
     if (!This->m_VSyncCount || This->m_Unk9) {
         gs_helper_copy_unk(unk_struct, Unk3);
-        func_800213A0(unk_struct, Unk2);
+        StoreImage(unk_struct, Unk2);
         if (This->m_Unk9) {
-            func_80021114(0);
+            DrawSync(0);
         }
     }
 }
@@ -105,7 +105,7 @@ void func_80020A24(gs_helper_t *This, s16 *Unk1, s16 Unk2, s16 Unk3) {
     s16 unk_struct[4];
 
     gs_helper_copy_unk((s16 *) &unk_struct, (s16 *) Unk1);
-    func_80021404((s16 *) &unk_struct, (s16) Unk2, (s16) Unk3);
+    MoveImage((s16 *) &unk_struct, (s16) Unk2, (s16) Unk3);
 }
 
 void gs_helper_do_vsync_internal(gs_helper_t *This) {
@@ -159,7 +159,7 @@ void func_80020B74(gs_helper_t *This, unsigned char *UnkData, s32 Unk3) {
         This->vtable->Unk29(This, UnkData, unk_buffer1);
     } else {
         gs_helper_copy_unk(unk_buffer2, Unk3);
-        func_800212A8((int) unk_buffer2, *UnkData, UnkData[1], UnkData[2]);
+        ClearImage((int) unk_buffer2, *UnkData, UnkData[1], UnkData[2]);
     }
 }
 
