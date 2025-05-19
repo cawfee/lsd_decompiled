@@ -21,7 +21,7 @@ typedef struct gs_helper_vtable {
     /* 0x038 8006c0a8 */ void (*Unk13)(void *);
     /* 0x03C 8006c0ac */ void (*Unk14)(void *);
     /* 0x040 8006c0b0 */ void (*Reset)(void *);
-    /* 0x044 8006c0b4 */ void (*InitGS)(void *);
+    /* 0x044 8006c0b4 */ void (*InitGS)(void *, s16 *, s32);
     /* 0x048 8006c0b8 */ void (*DoVSync)(void *);
     /* 0x04C 8006c0bc */ void (*Unk18)(void *);
     /* 0x050 8006c0c0 */ void (*ResetVSyncCount)(void *);

@@ -37,7 +37,7 @@ INCLUDE_ASM("asm/nonmatchings/timer", func_8003E280);
 INCLUDE_ASM("asm/nonmatchings/timer", func_8003E418);
 
 // Increment the timer by 1 tick
-void timer_increment(timer_t *This) {
+void timer_increment(timer_t *This, void **Unk2, s32 Unk3) {
     This->m_TicksPassed++;
 }
 

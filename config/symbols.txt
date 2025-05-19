@@ -269,8 +269,7 @@ init_800269F0 = 0x800269F0;
 GetStageChunkFromMood = 0x8004950c;
 GetMoodFromStageChunk = 0x800495b8;
 
-DreamSys__func_588ec = 0x800588ec;
-DreamSys__func_58968 = 0x80058968;
+
 DreamSys__TimerTick = 0x80058d94;
 DreamSys__WallLink = 0x80058fac;
 DreamSys__GetSetDreamTimeLimit = 0x80059328;
@@ -877,6 +876,8 @@ g_DREAM_SYS_VTABLE = 0x80087BDC;
 dream_sys_create = 0x80058774;
 dream_sys_get_vtable = 0x8005ba40;
 dream_sys_construct = 0x800587f0;
+dream_sys_unk15 = 0x800588ec;
+dream_sys_unk18 = 0x80058968;
 
 // Class 1C92C
 g_CLASS_1C92C_VTABLE = 0x8006D940;
@@ -921,3 +922,6 @@ bgm_unk20 = 0x80039DF4;
 bgm_unk21 = 0x8006E4E4;
 bgm_unk22 = 0x80039E7C;
 bgm_unk23 = 0x80039F64;
+
+// Class 2B78C
+g_CD_INIT = 0x8008a8dc;

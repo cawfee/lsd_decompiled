@@ -1,8 +1,8 @@
 #include "171F0.h"
 
+#include "1CBB8.h"
 #include "base_class.h"
 #include "memory.h"
-#include "1CBB8.h"
 
 extern class_171F0_vtable_t **D_8006D430;
 static s32 D_8008A84C = 0x13;
