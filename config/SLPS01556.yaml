@@ -274,7 +274,7 @@ segments:
       - [0x7b020, sdata]
       - [0x7b04c, .sdata, 171F0]
       - [0x7b050, sdata]
-      - [0x7b0d4, sdata]  #2A0E0
+      - [0x7b0d4, sdata]
       - [0x7b0dc, sdata]
       - [0x7b158, .sdata, utils/path_helper]
       - [0x7B16C, sdata]

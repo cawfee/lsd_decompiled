@@ -1,10 +1,10 @@
 #include "dream_context.h"
 #include "3A930.h"
+#include "bgm.h"
 #include "dream_sys.h"
 #include "memory.h"
 #include "texture_helper.h"
 #include "utils/path_helper.h"
-#include "bgm.h"
 
 extern dream_context_vtable_t **g_DREAM_CONTEXT_VTABLE;
 

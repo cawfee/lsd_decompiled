@@ -39,7 +39,7 @@ typedef struct dream_sys_vtable {
     /* 0x050 80087c2c */ void (*Unk19)(void *);
     /* 0x054 80087c30 */ void (*Unk20)(void *);
     /* 0x058 80087c34 */ void (*Unk21)(void *);
-    /* 0x05C 80087c38 */ void (*Unk22)(void *);
+    /* 0x05C 80087c38 */ void (*Unk22)(void *, s32);
     /* 0x060 80087c3c */ void (*Unk23)(void *);
     /* 0x064 80087c40 */ void (*Unk24)(void *);
     /* 0x068 80087c44 */ void (*Unk25)(void *);
@@ -138,7 +138,7 @@ typedef struct dream_sys_vtable {
     /* 0x1D8 80087db4 */ void (*Unk117)(void *);
     /* 0x1DC 80087db8 */ void (*Unk118)(void *);
     /* 0x1E0 80087dbc */ void (*Unk119)(void *);
-    /* 0x1E4 80087dc0 */ void (*Unk120)(void *);
+    /* 0x1E4 80087dc0 */ void (*Unk120)(void *, void **, s32);
     /* 0x1E8 80087dc4 */ void (*Unk121)(void *);
     /* 0x1EC 80087dc8 */ void (*Unk122)(void *);
     /* 0x1F0 80087dcc */ void (*Unk123)(void *);

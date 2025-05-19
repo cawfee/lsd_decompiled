@@ -1,4 +1,6 @@
 #include "dream_sys.h"
+#include "base_class.h"
+#include "477E4.h"
 
 extern dream_sys_vtable_t **g_DREAM_SYS_VTABLE;
 
@@ -15,9 +17,9 @@ dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_construct);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__func_588ec);
+INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_unk15);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__func_58968);
+INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_unk18);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058A94);
 

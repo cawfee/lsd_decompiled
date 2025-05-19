@@ -8,8 +8,8 @@ typedef struct class_D294_vtable {
     /* 0x004 8006b5d0 */ void (*Destroy)(void *);
     /* 0x008 8006b5d4 */ void *(*Construct)(void *);
     /* 0x00C 8006b5d8 */ void (*Cleanup)(void *);
-    /* 0x010 8006b5dc */ void (*Unk3)(void *);
-    /* 0x014 8006b5e0 */ void (*Unk4)(void *);
+    /* 0x010 8006b5dc */ void (*Unk3)(void *, void **);
+    /* 0x014 8006b5e0 */ void (*Unk4)(void *, void **);
     /* 0x018 8006b5e4 */ void (*Unk5)(void *);
     /* 0x01C 8006b5e8 */ void (*Unk6)(void *);
     /* 0x020 8006b5ec */ void (*Unk7)(void *);

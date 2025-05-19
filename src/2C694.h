@@ -50,7 +50,7 @@ typedef struct class_2C694_vtable {
     /* 0x098 8006e7c8 */ void (*Unk37)(void *, void (*)(), void *);
     /* 0x09C 8006e7cc */ void (*Unk38)(void *, s32);
     /* 0x0A0 8006e7d0 */ void (*Unk39)(void *, s32);
-    /* 0x0A4 8006e7d4 */ void (*Unk40)(void *);
+    /* 0x0A4 8006e7d4 */ void (*Unk40)(void *, char *, char *, s16 *);
     /* 0x0A8 8006e7d8 */ void (*Unk41)(void *);
     /* 0x0AC 8006e7dc */ void (*Unk42)(void *);
     /* 0x0B0 8006e7e0 */ void (*Unk43)(void *);
@@ -69,7 +69,7 @@ typedef struct class_2C694_vtable {
     /* 0x0E4 8006e814 */ void (*Unk56)(void *, char *);
     /* 0x0E8 8006e818 */ void (*Unk57)(void *);
     /* 0x0EC 8006e81c */ void (*Unk58)(void *);
-    /* 0x0F0 8006e820 */ void (*Unk59)(void *);
+    /* 0x0F0 8006e820 */ void (*Unk59)(void *, s32, s32);
     /* 0x0F4 8006e824 */ void (*Unk60)(void *);
     /* 0x0F8 8006e828 */ void (*Unk61)(void *);
     /* 0x0FC 8006e82c */ void (*Unk62)(void *);

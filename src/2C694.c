@@ -53,9 +53,101 @@ INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C3D0);
 
 INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C48C);
 
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C51C);
+void func_8003C51C(class_2C694_t *This, void **Unk2, s32 Unk3) {
+    class_2C694_vtable_t *vtable;
+
+    vtable = This->vtable;
+    timer_get_vtable()->Increment(This, Unk2, Unk3);
+
+    if (This->m_HasIdleTimeout && This->m_TicksPassed > This->m_TimeoutIdleTime) {
+        vtable->Unk23(This, 6);
+    }
+
+    switch (This->m_Unk7) {
+        case 2:
+            vtable->Unk23(This, 4);
+            break;
+
+        case 4:
+            vtable->Unk42(This);
+            break;
+
+        case 7:
+            vtable->Unk47(This);
+            break;
+
+        case 8:
+            vtable->Unk23(This, 3);
+            break;
+
+        default:
+            break;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C63C);
+// void func_8003C63C(class_2C694_t *This, s32 Unk2) {
+//     class_2C694_vtable_t *vtable;
+
+//     vtable = This->vtable;
+//     timer_get_vtable()->Unk23(This, Unk2);
+
+//     switch (Unk2) {
+//         case 4:
+//         case 7:
+//             This->m_TicksPassed = 0;
+//             This->m_HasIdleTimeout = 0;
+//             break;
+
+//         case 5:
+//             vtable->Unk56(This, (char *)(This->m_Unk18 + 16));
+//             vtable->Unk59(This, *(u32 *)(This->m_Unk18 + 8), 0);
+//             This->m_TicksPassed = 0;
+//             This->m_HasIdleTimeout = 1;
+//             break;
+
+//         case 6:
+//             This->m_Unk13 = 1;
+//             vtable->Unk36(This);
+//             break;
+
+//         case 8:
+//             This->m_TicksPassed = 0;
+//             break;
+
+//         case 9:
+//         case 10:
+//         case 11:
+//         case 14:
+//         case 15:
+//         case 16:
+//         case 17:
+//             This->m_Unk7 = 5;
+//             This->m_TicksPassed = 0;
+
+//             switch (Unk2) {
+//                 case 11:
+//                     vtable->Unk35(This);
+//                     break;
+
+//                 case 15:
+//                     vtable->Unk66(This);
+//                     break;
+
+//                 case 17:
+//                     vtable->Unk67(This);
+//                     break;
+
+//                 default:
+//                     break;
+//             }
+
+//             break;
+
+//         default:
+//             break;
+//     }
+// }
 
 void func_8003C794(class_2C694_t *This, s32 Unk2) {
     This->m_TimeoutIdleTime = Unk2;
