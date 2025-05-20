@@ -59,7 +59,7 @@ typedef struct class_477E4_vtable {
     /* 0x0D0 800879a4 */ void (*Unk51)(void *);
     /* 0x0D4 800879a8 */ void (*Unk52)(void *);
     /* 0x0D8 800879ac */ void (*Unk53)(void *);
-    /* 0x0DC 800879b0 */ void (*Unk54)(void *);
+    /* 0x0DC 800879b0 */ void (*Unk54)(void *, void **, s32);
     /* 0x0E0 800879b4 */ void (*Unk55)(void *);
     /* 0x0E4 800879b8 */ void (*Unk56)(void *);
     /* 0x0E8 800879bc */ void (*Unk57)(void *);

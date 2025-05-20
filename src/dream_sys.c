@@ -1,6 +1,6 @@
 #include "dream_sys.h"
-#include "base_class.h"
 #include "477E4.h"
+#include "base_class.h"
 
 extern dream_sys_vtable_t **g_DREAM_SYS_VTABLE;
 
@@ -29,36 +29,91 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058C58);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__TimerTick);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058E8C);
+void func_80058E8C(dream_sys_t *This, void **Unk2, s32 Unk3) {
+    func_80057C84()->Unk38(This, Unk2, Unk3);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058F18);
+    if ((*(u32 *) *Unk2 & 0xFFF) == 0x114) {
+        This->vtable->Unk120(This, Unk2, Unk3);
+    }
+}
+
+void func_80058F18(dream_sys_t *This, void **Unk2, s32 Unk3) {
+    func_80057C84()->Unk54(This, Unk2, Unk3);
+
+    if ((*(u32 *) *Unk2 & 0xFFFFF) == 0x1F234) {
+        This->vtable->Unk121(This, Unk2, Unk3);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__WallLink);
 
 void func_800590E0(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800590E8);
+s32 func_800590E8(dream_sys_t *This, void **Unk2, s32 Unk3) {
+    s32 value; // $s1
+
+    value = This->m_Unk25;
+    if (Unk3 < 0) {
+        *Unk2 = (void *) CalcDreamColor((char *) &This->m_Unk99 + 2 * This->m_Unk95);
+    } else {
+        This->m_Unk25 = Unk3;
+    }
+
+    return value;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059148);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800591B4);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059310);
+void func_80059310(dream_sys_t *This) {
+    This->m_Unk27 = 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005931C);
+s32 func_8005931C(dream_sys_t *This) {
+    return This->m_Unk28;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetSetDreamTimeLimit);
+s32 DreamSys__GetSetDreamTimeLimit(dream_sys_t *This, s32 Limit) {
+    s32 old_limit;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059360);
+    if (Limit >= 0) {
+        Limit *= 15;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005937C);
+    old_limit = This->m_DreamTimeLimit;
+    This->m_DreamTimeLimit = Limit;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059384);
+    if (old_limit >= 0) {
+        old_limit /= 15U;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005938C);
+    return old_limit;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059394);
+s32 func_80059360(dream_sys_t *This) {
+    return This->m_GameTick / 15;
+}
+
+void func_8005937C(dream_sys_t *This, s32 Value) {
+    This->m_Unk21 = Value;
+}
+
+void func_80059384(dream_sys_t *This, s32 Value) {
+    This->m_Unk22 = Value;
+}
+
+void func_8005938C(dream_sys_t *This, s32 Value) {
+    This->m_Unk24 = Value;
+}
+
+void func_80059394(dream_sys_t *This) {
+    if (This->m_Unk27 == 0) {
+        This->m_Unk28 = 0;
+        This->m_Unk72 = This->m_GameTick % This->m_Unk71 == 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800593D8);
 
@@ -66,27 +121,110 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005942C);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005950C);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059590);
+void func_80059590(dream_sys_t *This) {
+    This->m_Unk30 = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059598);
+void func_80059598(dream_sys_t *This) {
+    This->m_Unk29 = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800595A0);
+s32 func_800595A0(dream_sys_t *This) {
+    return 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800595A8);
+void func_800595A8(dream_sys_t *This, s32 Unk) {
+    This->vtable->Unk78(This, 0);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059610);
+    if (Unk) {
+        This->vtable->Unk77(This, 0);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005966C);
+void func_80059610(dream_sys_t *This, s32 Unk2, s32 Unk3) {
+    This->vtable->Unk78(This, Unk2);
+    This->vtable->Unk77(This, Unk3);
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800596E8);
+void func_8005966C(dream_sys_t *This, s32 Unk) {
+    dream_sys_vtable_t *vtable = This->vtable;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800597C0);
+    This->m_Unk32 = Unk;
+
+    switch (Unk) {
+        case 0:
+            This->m_Unk31 = 0;
+            break;
+
+        case 1:
+            This->m_Unk31 = vtable->Unk79;
+            break;
+
+        case 2:
+            This->m_Unk31 = vtable->Unk82;
+            break;
+
+        case 3:
+            This->m_Unk31 = vtable->Unk83;
+            break;
+
+        default:
+            break;
+    }
+}
+
+void func_800596E8(dream_sys_t *This, s32 Unk) {
+    s32 fnc;
+    dream_sys_vtable_t *vtable = This->vtable;
+
+    if (This->m_Unk38 == 2) {
+        vtable->Unk94(This, 0);
+    }
+
+    This->m_Unk38 = Unk;
+
+    switch (Unk) {
+        case 0:
+            This->m_Unk37 = 0;
+            break;
+
+        case 1:
+            This->m_Unk37 = vtable->Unk84;
+            break;
+
+        case 2:
+            fnc = vtable->Unk93;
+            This->m_Unk48 = 1;
+            This->m_Unk49 = 1;
+            This->m_Unk37 = fnc;
+            func_8002CC34(This->m_Unk21, &This->m_Unk50, 1, This, This->vtable->Unk100);
+            break;
+
+        default:
+            break;
+    }
+}
+
+void func_800597C0(dream_sys_t *This) {
+    This->vtable->Unk80(This);
+    This->vtable->Unk81(This);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059814);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800598E8);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059A1C);
+void func_80059A1C(dream_sys_t *This) {
+    This->m_Unk41 = 0;
+
+    if (This->m_MoveState) {
+        if ((This->m_MoveState & 1) == 0) {
+            This->m_MoveState -= 1;
+        } else {
+            This->m_MoveState += 1;
+        }
+    }
+}
 
 void func_80059A48(void) {
 }
@@ -94,13 +232,42 @@ void func_80059A48(void) {
 void func_80059A50(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059A58);
+void func_80059A58(dream_sys_t *This) {
+    if (This->m_Unk26 == 0) {
+        This->vtable->Unk92(This);
+        This->vtable->Unk85(This);
+    } else if (This->m_Unk26 == 2) {
+        This->vtable->Unk87(This);
+    } else {
+        This->vtable->Unk86(This);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059AEC);
+void func_80059AEC(dream_sys_t *This) {
+    s32 value;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059B50);
+    if (!This->m_Unk27) {
+        value = This->vtable->Unk88(This, 1);
+        This->vtable->Unk91(This, value);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059BD4);
+void func_80059B50(dream_sys_t *This) {
+    s32 value;
+
+    This->m_MoveState = MOVE_FORWARD;
+
+    if (!This->m_Unk27) {
+        value = This->vtable->Unk88(This, 1);
+        This->vtable->Unk91(This, value);
+    } else {
+        This->vtable->Unk88(This, 0);
+    }
+}
+
+void func_80059BD4(dream_sys_t *This) {
+    This->m_MoveState = MOVE_FORWARD;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059BE0);
 
@@ -114,17 +281,59 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A050);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A0B0);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A134);
+void func_8005A134(dream_sys_t *This, s32 Unk) {
+    This->m_Unk48 = 0;
+    This->m_Unk49 = Unk;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A168);
+    if (Unk) {
+        func_8002CC84(This->m_Unk21, &This->m_Unk50);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A184);
+s32 func_8005A168(dream_sys_t *This, s32 Value) {
+    s32 old_value = This->m_Unk42;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1A4);
+    if (Value >= 0) {
+        This->m_Unk42 = Value;
+        This->m_Unk43 = Value;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1B0);
+    return old_value;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1EC);
+s32 func_8005A184(dream_sys_t *This, s32 Value) {
+    s32 next_value;
+
+    next_value = This->m_Unk42;
+    if (next_value != Value) {
+        This->m_Unk43 = next_value;
+        This->m_Unk42 = Value;
+    }
+    return next_value;
+}
+
+void func_8005A1A4(dream_sys_t *This) {
+    This->m_Unk42 = This->m_Unk43;
+}
+
+void func_8005A1B0(dream_sys_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
+    if (Unk2 >= 0) {
+        This->m_Unk72 = Unk2;
+    }
+    if (Unk3 >= 0) {
+        This->m_Unk73 = Unk3;
+    }
+    if (Unk4 >= 0) {
+        This->m_Unk74 = Unk4;
+    }
+    if (Unk5 >= 0) {
+        This->m_Unk75 = Unk5;
+    }
+}
+
+void func_8005A1EC(dream_sys_t *This, s32 Value) {
+    This->m_Unk71 = Value;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1F4);
 
