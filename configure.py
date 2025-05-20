@@ -226,6 +226,14 @@ asm_auto_targets = [
     "asm/psyq_libc_strcat.s",
     "asm/psyq_libcd_bios.s",
     "asm/psyq_libcd_iso9660.s",
+    "asm/psyq_libcard_a74.s",
+    "asm/psyq_libcard_a75.s",
+    "asm/psyq_libcard_a78.s",
+    "asm/psyq_libcard_a80.s",
+    "asm/psyq_libcard_c112.s",
+    "asm/psyq_libcard_c171.s",
+    "asm/psyq_libcard_c172.s",
+    "asm/psyq_libcard_card.s",
 
     "src/psx/SetMem.s",
 ]

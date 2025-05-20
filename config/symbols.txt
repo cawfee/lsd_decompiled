@@ -248,14 +248,6 @@ exit = 0x80046538;
 StUnSetRing = 0x80047970;
 StFreeRing = 0x800487D8;
 
-// LIBCARD
-_card_load = 0x80050B08;
-_card_info = 0x80050B18;
-_card_write = 0x80050B58;
-InitCARD = 0x80050B68;
-StartCARD = 0x80050B78;
-_new_card = 0x80050B98;
-
 // Constants
 g_ASMKLOGO_PATH = 0x800107B4;
 g_OSDLOGO_PATH = 0x800107C8;
@@ -442,7 +434,6 @@ delete = 0x80050908;
 format = 0x80050918;
 read = 0x80050928;
 open = 0x80050938;
-_bu_init = 0x80050B88;
 
 // LIBETC
 ResetCallback = 0x80024D10;
@@ -723,6 +714,16 @@ StSetMask = 0x8004865C;
 StSetRing = 0x8004867C;
 StGetNext = 0x800486AC;
 cd_data_ready_callback = 0x80048770;
+
+// LIBCARD
+InitCARD = 0x80050B68;
+StartCARD = 0x80050B78;
+_card_write = 0x80050B58;
+_new_card = 0x80050B98;
+_bu_init = 0x80050B88;
+_card_load = 0x80050B08;
+_card_info = 0x80050B18;
+_card_clear = 0x80050B28;
 
 // LIBPRESS
 libpress_timeout = 0x80046404;
