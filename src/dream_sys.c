@@ -51,7 +51,7 @@ void func_800590E0(void) {
 }
 
 s32 func_800590E8(dream_sys_t *This, void **Unk2, s32 Unk3) {
-    s32 value; // $s1
+    s32 value;
 
     value = This->m_Unk25;
     if (Unk3 < 0) {
