@@ -4,6 +4,7 @@
 #include <psx/libgs.h>
 
 #include "base_class.h"
+#include <common.h>
 
 extern gs_helper_vtable_t **g_GS_HELPER_VTABLE;
 
@@ -124,9 +125,9 @@ void gs_helper_do_vsync_internal(gs_helper_t *This) {
 void func_80020AF4(gs_helper_t *This) {
     UNUSED(This);
 
-    void *struct_data; // $a0
-    int unk;           // $v1
-    int unk2;          // $v0
+    void *struct_data;
+    int unk;
+    int unk2;
 
     struct_data = func_80020C5C();
     unk = *((u32 *) struct_data + 8);
