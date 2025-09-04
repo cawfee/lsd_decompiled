@@ -259,7 +259,6 @@ INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DC64);
 //     This->m_Unk43->vtable->Unk18(This->m_Unk43, Unk, &D_8008A9B4);
 // }
 
-// INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DCD0);
 void func_8004DCD0(main_menu_t *This, char *Unk_arg_s0) {
     u8 local_buf[3];
     u8 *s1_buf_ptr = local_buf;

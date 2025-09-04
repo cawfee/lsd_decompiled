@@ -307,14 +307,6 @@ IsDaySpecial = 0x8005c438;
 
 SetTeleportsEnabled = 0x8005c6d8;
 
-New_Entity = 0x8005cfdc;
-Entity__Entity = 0x8005d068;
-Entity__GetMoodEffect = 0x8005d944;
-Entity__GetUnlockEffect = 0x8005d95c;
-Entity__GetLinkStage = 0x8005d994;
-Entity__GetEventVideo = 0x8005d9d0;
-Get_vtable_Entity = 0x8005e150;
-
 // Low byte is dynamic effect, high byte is upper effect
 STG00_CHUNK_MOODS = 0x80086244; // type:s16 size:12
 STG01_CHUNK_MOODS = 0x80086250; // type:s16 size:12
@@ -926,3 +918,34 @@ bgm_unk23 = 0x80039F64;
 
 // Class 2B78C
 g_CD_INIT = 0x8008a8dc;
+
+// Class FA50
+g_CLASS_FA50_VTABLE = 0x8006BEA0;
+class_FA50_create = 0x8001F250;
+class_FA50_get_vtable = 0x8001F384;
+class_FA50_construct = 0x8001F2B0;
+
+// Entity
+g_ENTITY_VTABLE = 0x80089AD4;
+entity_create = 0x8005cfdc;
+entity_get_vtable = 0x8005e150;
+entity_construct = 0x8005d068;
+
+
+Entity__GetMoodEffect = 0x8005d944;
+Entity__GetUnlockEffect = 0x8005d95c;
+Entity__GetLinkStage = 0x8005d994;
+Entity__GetEventVideo = 0x8005d9d0;
+
+// Class 55DD4
+g_CLASS_55DD4_VTABLE = 0x8008A6C4;
+class_55DD4_create = 0x800655D4;
+class_55DD4_get_vtable = 0x80066818;
+class_55DD4_construct = 0x80065650;
+class_55DD4_cleanup = 0x8006573C;
+
+// Class 305B0
+g_CLASS_305B0_VTABLE = 0x8006E99C;
+class_305B0_create = 0x8003FDB0;
+class_305B0_get_vtable = 0x800404C0;
+class_305B0_construct = 0x8003FE2C;
