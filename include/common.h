@@ -13,4 +13,10 @@ typedef struct {
     s32 y;
 } vec2d_t;
 
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} vec3d_t;
+
 #endif

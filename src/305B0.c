@@ -35,15 +35,15 @@ void func_8003FF44(class_305B0_t *This, int Unk2, int Unk3) {
         if (value > 0) {
             if (This->m_Unk30 != 9) {
                 if ((This->m_Unk29 & 4) != 0) {
-                    ((u8 *)&This->m_Unk24)[0] += (u8)This->m_Unk28;
+                    ((u8 *) &This->m_Unk24)[0] += (u8) This->m_Unk28;
                 }
 
                 if ((This->m_Unk29 & 2) != 0) {
-                    ((u8 *)&This->m_Unk24)[1] += (u8)This->m_Unk28;
+                    ((u8 *) &This->m_Unk24)[1] += (u8) This->m_Unk28;
                 }
 
                 if ((This->m_Unk29 & 1) != 0) {
-                    ((u8 *)&This->m_Unk24)[2] += (u8)This->m_Unk28;
+                    ((u8 *) &This->m_Unk24)[2] += (u8) This->m_Unk28;
                 }
             }
         } else {
@@ -70,7 +70,10 @@ INCLUDE_ASM("asm/nonmatchings/305B0", func_8004042C);
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040490);
 
-INCLUDE_ASM("asm/nonmatchings/305B0", func_800404B4);
+void func_800404B4(class_305B0_t *This, s32 Unk2, s32 Unk3) {
+    This->m_Unk37 = Unk2;
+    This->m_Unk38 = Unk3;
+}
 
 class_305B0_vtable_t *class_305B0_get_vtable() {
     return &g_CLASS_305B0_VTABLE;

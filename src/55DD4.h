@@ -23,7 +23,7 @@ typedef struct class_55DD4_vtable {
     /* 0x040 8008a704 */ void (*Unk15)(void *);
     /* 0x044 8008a708 */ void (*Unk16)(void *);
     /* 0x048 8008a70c */ void (*Unk17)(void *);
-    /* 0x04C 8008a710 */ void (*Unk18)(void *);
+    /* 0x04C 8008a710 */ void (*Unk18)(void *, s32, s32, s32, s32);
     /* 0x050 8008a714 */ void (*Unk19)(void *);
     /* 0x054 8008a718 */ void (*Unk20)(void *);
     /* 0x058 8008a71c */ void (*Unk21)(void *);
@@ -42,7 +42,7 @@ typedef struct class_55DD4_vtable {
     /* 0x08C 8008a750 */ void (*Unk34)(void *);
     /* 0x090 8008a754 */ void (*Unk35)(void *);
     /* 0x094 8008a758 */ void (*Unk36)(void *);
-    /* 0x098 8008a75c */ void (*Unk37)(void *);
+    /* 0x098 8008a75c */ void (*Unk37)(void *, s32, s32);
     /* 0x09C 8008a760 */ void (*Unk38)(void *);
     /* 0x0A0 8008a764 */ void (*Unk39)(void *);
     /* 0x0A4 8008a768 */ void (*Unk40)(void *);
@@ -60,7 +60,7 @@ typedef struct class_55DD4_vtable {
     /* 0x0D4 8008a798 */ void (*Unk52)(void *);
     /* 0x0D8 8008a79c */ void (*Unk53)(void *);
     /* 0x0DC 8008a7a0 */ void (*Unk54)(void *);
-    /* 0x0E0 8008a7a4 */ void (*Unk55)(void *);
+    /* 0x0E0 8008a7a4 */ void (*Unk55)(void *, s32, s32);
     /* 0x0E4 8008a7a8 */ void (*Unk56)(void *, s32);
     /* 0x0E8 8008a7ac */ void (*Unk57)(void *);
     /* 0x0EC 8008a7b0 */ void (*Unk58)(void *);

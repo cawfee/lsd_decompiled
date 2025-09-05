@@ -931,12 +931,6 @@ entity_create = 0x8005cfdc;
 entity_get_vtable = 0x8005e150;
 entity_construct = 0x8005d068;
 
-
-Entity__GetMoodEffect = 0x8005d944;
-Entity__GetUnlockEffect = 0x8005d95c;
-Entity__GetLinkStage = 0x8005d994;
-Entity__GetEventVideo = 0x8005d9d0;
-
 // Class 55DD4
 g_CLASS_55DD4_VTABLE = 0x8008A6C4;
 class_55DD4_create = 0x800655D4;
@@ -949,3 +943,7 @@ g_CLASS_305B0_VTABLE = 0x8006E99C;
 class_305B0_create = 0x8003FDB0;
 class_305B0_get_vtable = 0x800404C0;
 class_305B0_construct = 0x8003FE2C;
+entity_get_mood_effect = 0x8005d944;
+entity_get_unlock_effect = 0x8005d95c;
+entity_get_link_stage = 0x8005d994;
+entity_get_event_video = 0x8005d9d0;
