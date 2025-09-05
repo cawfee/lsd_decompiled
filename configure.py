@@ -57,7 +57,7 @@ CPPPLUS_FLAGS = INCLUDE_FLAGS + ["-lang-c++"]
 C_FLAGS = ["-quiet", "-Wall", "-fno-builtin", "-mno-abicalls", "-funsigned-char", "-G0", "-O2"]
 C_FLAGS_G8 = [flag for flag in C_FLAGS if not flag.startswith("-G")] + ["-G8"]
 CPLUS_FLAGS = C_FLAGS + []
-MASPSX_FLAGS = ["--dont-force-G0", "--expand-div", "--aspsx-version=2.34", "-G8"]
+MASPSX_FLAGS = ["--dont-force-G0", "--expand-div", "--aspsx-version=2.21", "-G8"]
 LD_FLAGS = ["--no-check-sections", "-nostdlib", "-s"]
 
 if NON_MATCHING:
