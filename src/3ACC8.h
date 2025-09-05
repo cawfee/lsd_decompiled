@@ -59,7 +59,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x0D0 800867b8 */ void (*Unk51)(void *);
     /* 0x0D4 800867bc */ void (*Unk52)(void *);
     /* 0x0D8 800867c0 */ void (*Unk53)(void *);
-    /* 0x0DC 800867c4 */ void (*Unk54)(void *);
+    /* 0x0DC 800867c4 */ void (*Unk54)(void *, s32);
     /* 0x0E0 800867c8 */ void (*Unk55)(void *);
     /* 0x0E4 800867cc */ void (*Unk56)(void *);
     /* 0x0E8 800867d0 */ void (*Unk57)(void *);
@@ -68,7 +68,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x0F4 800867dc */ void (*Unk60)(void *);
     /* 0x0F8 800867e0 */ void (*Unk61)(void *);
     /* 0x0FC 800867e4 */ void (*Unk62)(void *);
-    /* 0x100 800867e8 */ void (*Unk63)(void *);
+    /* 0x100 800867e8 */ void (*Unk63)(void *, s32 **, s32);
     /* 0x104 800867ec */ void (*Unk64)(void *);
     /* 0x108 800867f0 */ void (*Unk65)(void *);
     /* 0x10C 800867f4 */ void (*Unk66)(void *);
@@ -101,7 +101,8 @@ typedef struct class_3ACC8 {
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
-    /* 0x34 */ s32 m_Unk12;
+    /* 0x34 */ u16 m_Unk12_1;
+    /* 0x36 */ u16 m_Unk12_2;
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ s32 m_Unk15;

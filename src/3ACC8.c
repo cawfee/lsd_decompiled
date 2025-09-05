@@ -1,4 +1,5 @@
 #include "3ACC8.h"
+#include "D294.h"
 
 extern class_3ACC8_vtable_t **D_800866E8;
 
@@ -17,23 +18,43 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004A534);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004A7C0);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004A984);
+void func_8004A984(class_3ACC8_t *This, s32 **Unk2, s32 Unk3) {
+    func_8001E57C()->Unk13(This, Unk2, Unk3);
+
+    if ((**Unk2 & 0xF) == 1) {
+        This->vtable->Unk63(This, Unk2, Unk3);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AA10);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AA6C);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AB24);
+void func_8004AB24(class_3ACC8_t *This) {
+    if (This->m_Unk27) {
+        This->vtable->Unk60(This);
+        This->vtable->Unk78(This);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AB88);
+void func_8004AB88(class_3ACC8_t *This, u8 **Unk) {
+    if (**Unk == 52) {
+        This->vtable->Unk51(This);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004ABD0);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004ACF8);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004ADC4);
+void func_8004ADC4(class_3ACC8_t *This, s32 Unk2, s32 Unk3) {
+    This->m_Unk23 = Unk2;
+    This->m_Unk24 = Unk3;
+}
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004ADD0);
+void func_8004ADD0(class_3ACC8_t *This, s32 Value) {
+    This->m_Unk57 = Value;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004ADD8);
 
@@ -45,9 +66,15 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B030);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B100);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B2D4);
+void func_8004B2D4(class_3ACC8_t *This) {
+    if (This && (This->m_Unk12_2 & 0x80) != 0) {
+        This->vtable->Unk13(This);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B31C);
+s32 *func_8004B31C(class_3ACC8_t *This) {
+    return &This->m_Unk111;
+}
 
 void func_8004B324(void) {
 }
