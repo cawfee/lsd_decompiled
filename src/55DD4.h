@@ -59,7 +59,7 @@ typedef struct class_55DD4_vtable {
     /* 0x0D0 8008a794 */ void (*Unk51)(void *);
     /* 0x0D4 8008a798 */ void (*Unk52)(void *);
     /* 0x0D8 8008a79c */ void (*Unk53)(void *);
-    /* 0x0DC 8008a7a0 */ void (*Unk54)(void *);
+    /* 0x0DC 8008a7a0 */ void (*Unk54)(void *, s32, s32);
     /* 0x0E0 8008a7a4 */ void (*Unk55)(void *, s32, s32);
     /* 0x0E4 8008a7a8 */ void (*Unk56)(void *, s32);
     /* 0x0E8 8008a7ac */ void (*Unk57)(void *);
