@@ -915,6 +915,7 @@ bgm_unk20 = 0x80039DF4;
 bgm_unk21 = 0x8006E4E4;
 bgm_unk22 = 0x80039E7C;
 bgm_unk23 = 0x80039F64;
+bgm_set_crescendo = 0x80039E24;
 
 // Class 2B78C
 g_CD_INIT = 0x8008a8dc;
@@ -951,3 +952,8 @@ entity_cleanup = 0x8005D1EC;
 entity_check_proximity = 0x8005D714;
 entity_get_distance = 0x8005D7FC;
 g_ENTITY_TABLE = 0x80089EA4;
+
+// Unknown helper 1
+helper_1_update_entity = 0x8002CD08;
+helper_1_get_crescendo_time_mod = 0x8002CC28;
+helper_1_set_entity = 0x8002CC34;

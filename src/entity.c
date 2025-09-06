@@ -29,7 +29,7 @@ entity_vtable_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Un
     if (class_55DD4_get_vtable()->Construct(This, Unk3, Unk4)) {
         This->vtable = entity_get_vtable();
         This->m_EntityID = EntityID;
-        This->m_Unk38 = 0;
+        This->m_EntityContext = 0;
         This->m_Class_305B0 = NULL;
         This->m_Unk64 = 0;
         This->vtable->Unk15(This);
@@ -157,7 +157,7 @@ void func_8005D658(entity_t *This, s32 Unk2, s32 Unk3) {
 }
 
 void func_8005D6D4(entity_t *This) {
-    func_8002CD08(This->m_Unk21, &This->m_Unk38);
+    helper_1_update_entity(This->m_Unk21, &This->m_EntityContext);
     ++This->m_Unk62;
 }
 
@@ -181,15 +181,11 @@ s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4
         Unk4 = Unk4 << 11;
     }
 
-     call_arg_1 = 0;
-     call_arg_2 = Unk3 << 11;
+    call_arg_1 = 0;
+    call_arg_2 = Unk3 << 11;
 
-    return (*(s32 ( **)(s32, s32, s32, s32 *, s32))(*(s32 *)This->m_Unk36 + 288))(
-           This->m_Unk36,
-           call_arg_1,
-           call_arg_2,
-           &local_data,
-           Unk4);
+    return (*(s32(**)(s32, s32, s32, s32 *, s32))(*(s32 *) This->m_Unk36 + 288))(This->m_Unk36, call_arg_1, call_arg_2,
+                                                                                 &local_data, Unk4);
 }
 
 s32 entity_get_distance(entity_t *This, void *a1) {
@@ -280,17 +276,18 @@ void func_8005DAAC(entity_t *This, s32 Value) {
 }
 
 void func_8005DAFC(entity_t *This) {
-    func_8002CC34(This->m_Unk21, &This->m_Unk38, This->m_EntityID + 1, This, g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
+    helper_1_set_entity(This->m_Unk21, &This->m_EntityContext, This->m_EntityID + 1, This,
+                        g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
 
-    This->vtable->Unk74(This);
-    This->vtable->Unk67(This);
+    This->vtable->Unk74(This); // This->m_Unk35 = 1
+    This->vtable->Unk67(This); // This->m_Unk34 = 1
 
     This->m_Unk62 = 0;
     This->m_Unk61 = 1;
 }
 
 void func_8005DB8C(entity_t *This) {
-    func_8002CC84(This->m_Unk21, &This->m_Unk38);
+    func_8002CC84(This->m_Unk21, &This->m_EntityContext);
     This->vtable->Unk75(This);
     This->vtable->Unk68(This);
     This->m_Unk61 = 0;
@@ -313,7 +310,8 @@ s32 func_8005DBF0(entity_t *This) {
             goto end_logic;
         }
 
-        if (entity_check_proximity(This, This->m_Unk4 + 24, property->interaction_range, property->interaction_param) == 0) {
+        if (entity_check_proximity(This, This->m_Unk4 + 24, property->interaction_range, property->interaction_param) ==
+            0) {
             goto func_returned_zero;
         }
 
@@ -518,3 +516,228 @@ s32 func_8005E0B0(const entity_t *This) {
 entity_vtable_t *entity_get_vtable() {
     return &g_ENTITY_VTABLE;
 }
+
+// entity_t *, entity_context_t *, -1
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E160);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E3C4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E480);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E4D0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E694);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E6F0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E7A8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005E7F8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EA94);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EBB4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EC98);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005ED10);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005ED30);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EF20);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EF54);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005EFF4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F0D8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F1A8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F1D4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F368);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F454);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F544);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F608);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F6D4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F708);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F800);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005F970);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FA64);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FA94);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FB6C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FC58);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FDFC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FEC8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FEF8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8005FF7C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060148);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800602AC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800603C4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800604DC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800605D0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060710);
+
+void func_800607F8(void) {
+}
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060800);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8006090C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060A4C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060B34);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060CF0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060D80);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80060F38);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061070);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061158);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061198);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061400);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061778);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061A90);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061C04);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061C2C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061E60);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80061F30);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8006204C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800620C4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800621A8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800623E8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800624BC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062570);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062660);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062730);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800628D4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062970);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062A40);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062C58);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80062FAC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063094);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063144);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800634A8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800636E4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063784);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063874);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063BC0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063C84);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063CAC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063CC8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063D40);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063DC8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063E68);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80063ED4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064078);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800641C0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064294);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064450);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800644E8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064618);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800646D8);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064928);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064AA4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064B14);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064B80);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064CA4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064CEC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064D48);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064E34);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80064FBC);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800650D4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800650F4);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8006519C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800651D0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80065204);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80065238);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_8006536C);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_800654A0);
+
+INCLUDE_ASM("asm/nonmatchings/entity", func_80065514);

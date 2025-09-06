@@ -140,8 +140,8 @@ void bgm_unk20(bgm_t *This, s16 Unk1, s16 Unk2) {
     SsSeqSetVol(This->m_SeqAccess, Unk1, Unk2);
 }
 
-void func_80039E24(bgm_t *This, s16 arg1, s32 arg2) {
-    SsSeqSetCrescendo(This->m_SeqAccess, arg1, func_8002CC28() * arg2);
+void bgm_set_crescendo(bgm_t *This, s16 Volume, s32 Time) {
+    SsSeqSetCrescendo(This->m_SeqAccess, Volume, helper_1_get_crescendo_time_mod() * Time);
 }
 
 void bgm_unk22(bgm_t *This, s32 Unk) {

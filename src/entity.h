@@ -146,7 +146,7 @@ typedef struct entity {
     /* 0x90 */ s32 m_Unk35;
     /* 0x94 */ s32 m_Unk36;
     /* 0x98 */ s32 m_EntityID;
-    /* 0x9C */ s32 m_Unk38;
+    /* 0x9C */ s32 m_EntityContext;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
     /* 0xA8 */ s32 m_Unk41;
@@ -191,6 +191,14 @@ typedef struct {
 
     /* 0x0C */ void (*behaviour_fn)(entity_t *This, void *);
 } entity_prop_t;
+
+typedef struct {
+    /* 0x00 */ s32 entity_id;
+    /* 0x04 */ s32 current_tick;
+    /* 0x08 */ entity_t *entity_cls_1;
+    /* 0x0C */ entity_t *entity_cls_2;
+    /* 0x10 */ s32 update_flags;
+} entity_context_t;
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3);
 entity_vtable_t *entity_get_vtable();
