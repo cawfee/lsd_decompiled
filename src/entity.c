@@ -10,6 +10,8 @@ extern s8 D_80089EAC[];
 extern s8 D_80089EA4[];
 extern s8 D_80089EA6[];
 extern s8 D_80089EAE[];
+extern s8 D_80089EA7[];
+extern s8 D_80089EAF[];
 extern s32 D_80089EB0[];
 
 void func_8005DF9C(entity_t *This, s32 Unk2);
@@ -85,9 +87,32 @@ void func_8005D1EC(entity_t *This) {
     class_55DD4_get_vtable()->Cleanup(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005D278);
+void func_8005D278(entity_t *This) {
+    if ((u8) ((u32) (D_80089EA6[This->m_Unk37 * 16] - 1)) < 9) {
+        This->vtable->Unk27(This, 1);
+    }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005D314);
+    This->vtable->Unk66(This, 66);
+    This->vtable->Unk87(This);
+}
+
+void func_8005D314(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
+    if (This->m_Unk2 == 0) {
+        s32 m_Unk37_temp;
+
+        class_55DD4_get_vtable()->Unk18(This, Unk2, Unk3, Unk4, Unk5);
+
+        m_Unk37_temp = This->m_Unk37;
+        This->m_Unk18 = Unk4;
+
+        if (D_80089EA7[m_Unk37_temp * 16] == 0) {
+            This->vtable->Unk86(This);
+            if (D_80089EAF[This->m_Unk37 * 16] == 0) {
+                This->vtable->Unk89(This);
+            }
+        }
+    }
+}
 
 void func_8005D418(entity_t *This) {
     if (This->m_Unk2) {
@@ -108,7 +133,27 @@ void func_8005D480(entity_t *This, s32 Unk2, s32 Unk3) {
     class_55DD4_get_vtable()->Unk37(This, Unk2, Unk3);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005D560);
+void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
+    s32 v5;
+
+    v5 = D_80089EAB[This->m_Unk37 * 16];
+
+    if (((u32) (Unk3 - 2) >= 7U) || (v5 > 0)) {
+        class_55DD4_get_vtable()->Unk54(This, Unk2, Unk3);
+
+        if ((Unk3 == 4) && (v5 > 0)) {
+            if (v5 != 127) {
+                Unk3 = 10;
+            } else {
+                Unk3 = 12;
+                if (D_80089EAC[This->m_Unk37 * 16] != 0) {
+                    Unk3 = 11;
+                }
+            }
+            This->vtable->Unk11(This, Unk3);
+        }
+    }
+}
 
 void func_8005D658(entity_t *This, s32 Unk2, s32 Unk3) {
     class_55DD4_get_vtable()->Unk55(This, Unk2, Unk3);
@@ -122,52 +167,30 @@ void func_8005D6D4(entity_t *This) {
     ++This->m_Unk62;
 }
 
-// https://decomp.me/scratch/N3lft
 s32 func_8005D714(void *This, vec3d_t *data, s32 arg2, s32 arg3) {
     vec3d_t local_data;
     s8 byte_val;
 
-    // This struct copy generates the exact function prologue, including the
-    // `move t1, a0` to save the `this` pointer from register pressure.
     local_data = *data;
 
-    // Access member at offset 0x98 using pointer arithmetic.
     byte_val = D_80089EA6[*(s32 *) ((u8 *) This + 0x98) * 16];
 
-    // This condition checks if `byte_val` is in the signed range [-9, -1].
     if ((u8) (byte_val + 9) < 9) {
-        // Sign-extended left shift, matching the `sll`/`sra` pair.
         local_data.y += (s32) byte_val << 10;
     }
 
-    // Modify `arg3` in-place to ensure the result ends up in the $a3 register.
     if (arg3 < 0) {
-        // The `(~x) + 1` idiom generates the target's `nor`/`addiu` negation.
         arg3 = 2048 / ((~arg3) + 1);
     } else {
         arg3 = arg3 << 11;
     }
 
-    // --- The Virtual Call ---
     {
-        // By pre-calculating these arguments, we make them available to the
-        // instruction scheduler. The scheduler can then use these independent
-        // operations to fill the load-delay slots of the subsequent memory fetches.
         s32 call_arg_1 = 0;
         s32 call_arg_2 = arg2 << 11;
 
-        // This complex, single expression resolves the function pointer via the vtable.
-        // It is cast and called in the same statement.
         return ((s32(*)(void *, s32, s32, void *, s32))(*((void ***) (*(void **) ((u8 *) This + 0x94))))[0x120 / 4])(
-            // Arg 0: Re-evaluate to force the `lw a0, 0x94(t1)` instruction.
-            *(void **) ((u8 *) This + 0x94),
-            // Args 1 & 2: Use the pre-calculated local variables.
-            call_arg_1, call_arg_2,
-            // Arg 3: The address of the stack variable, which the compiler
-            // will place into $a3 during the `jalr` delay slot.
-            &local_data,
-            // Arg 4: The modified arg3, passed on the stack.
-            arg3);
+            *(void **) ((u8 *) This + 0x94), call_arg_1, call_arg_2, &local_data, arg3);
     }
 }
 
