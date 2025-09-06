@@ -145,7 +145,7 @@ typedef struct entity {
     /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
     /* 0x94 */ s32 m_Unk36;
-    /* 0x98 */ s32 m_Unk37;
+    /* 0x98 */ s32 m_EntityID;
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
@@ -175,6 +175,22 @@ typedef struct entity {
     /* 0x104 */ s32 m_Unk64;
     /* 0x108 */ s32 m_Unk65;
 } entity_t;
+
+typedef struct {
+    /* 0x00 */ s8 mood_effect[2];
+    /* 0x02 */ s8 unlock;
+    /* 0x03 */ s8 behaviour;
+    /* 0x04 */ s8 interaction_type;
+    /* 0x05 */ s8 interaction_range;
+    /* 0x06 */ s8 interaction_angle;
+    /* 0x07 */ s8 link_stage;
+    /* 0x08 */ s8 event_video_id;
+    /* 0x09 */ s8 interaction_param;
+    /* 0x0A */ s8 proximity;
+    /* 0x0B */ s8 link_flag;
+
+    /* 0x0C */ void (*behaviour_fn)(entity_t *This, void *);
+} entity_prop_t;
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3);
 entity_vtable_t *entity_get_vtable();

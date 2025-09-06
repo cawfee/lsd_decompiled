@@ -947,3 +947,7 @@ entity_get_mood_effect = 0x8005d944;
 entity_get_unlock_effect = 0x8005d95c;
 entity_get_link_stage = 0x8005d994;
 entity_get_event_video = 0x8005d9d0;
+entity_cleanup = 0x8005D1EC;
+entity_check_proximity = 0x8005D714;
+entity_get_distance = 0x8005D7FC;
+g_ENTITY_TABLE = 0x80089EA4;
