@@ -5,17 +5,10 @@ extern entity_vtable_t g_ENTITY_VTABLE;
 
 extern void *D_8008AC14;
 extern void *D_8008AC0C;
-extern s8 D_80089EAB[];
-extern s8 D_80089EAC[];
-extern s8 D_80089EA4[];
-extern s8 D_80089EA6[];
-extern s8 D_80089EAE[];
-extern s8 D_80089EA7[];
-extern s8 D_80089EAF[];
-extern s32 D_80089EB0[];
+extern entity_prop_t g_ENTITY_TABLE[];
 
 void func_8005DF9C(entity_t *This, s32 Unk2);
-s32 func_8005D714(void *This, vec3d_t *data, s32 arg2, s32 arg3);
+s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4);
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     entity_t *allocated = (entity_t *) memory_allocate_mem(0x108);
@@ -32,10 +25,10 @@ entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     return NULL;
 }
 
-entity_vtable_t *entity_construct(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
+entity_vtable_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Unk4) {
     if (class_55DD4_get_vtable()->Construct(This, Unk3, Unk4)) {
         This->vtable = entity_get_vtable();
-        This->m_Unk37 = Unk2;
+        This->m_EntityID = EntityID;
         This->m_Unk38 = 0;
         This->m_Class_305B0 = NULL;
         This->m_Unk64 = 0;
@@ -75,7 +68,7 @@ class_305B0_t *func_8005D108(entity_t *This, void *Unk2, void *Unk3, s32 Unk4, s
     return out;
 }
 
-void func_8005D1EC(entity_t *This) {
+void entity_cleanup(entity_t *This) {
     if (This->m_Class_305B0) {
         This->m_Class_305B0->vtable->Destroy(This->m_Class_305B0);
     }
@@ -88,7 +81,7 @@ void func_8005D1EC(entity_t *This) {
 }
 
 void func_8005D278(entity_t *This) {
-    if ((u8) ((u32) (D_80089EA6[This->m_Unk37 * 16] - 1)) < 9) {
+    if ((u8) ((u32) (g_ENTITY_TABLE[This->m_EntityID].unlock - 1)) < 9) {
         This->vtable->Unk27(This, 1);
     }
 
@@ -98,16 +91,17 @@ void func_8005D278(entity_t *This) {
 
 void func_8005D314(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     if (This->m_Unk2 == 0) {
-        s32 m_Unk37_temp;
+        s32 entity_id;
 
         class_55DD4_get_vtable()->Unk18(This, Unk2, Unk3, Unk4, Unk5);
 
-        m_Unk37_temp = This->m_Unk37;
+        entity_id = This->m_EntityID;
         This->m_Unk18 = Unk4;
 
-        if (D_80089EA7[m_Unk37_temp * 16] == 0) {
+        if (g_ENTITY_TABLE[entity_id].behaviour == 0) {
             This->vtable->Unk86(This);
-            if (D_80089EAF[This->m_Unk37 * 16] == 0) {
+
+            if (g_ENTITY_TABLE[This->m_EntityID].link_flag == 0) {
                 This->vtable->Unk89(This);
             }
         }
@@ -136,7 +130,7 @@ void func_8005D480(entity_t *This, s32 Unk2, s32 Unk3) {
 void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
     s32 v5;
 
-    v5 = D_80089EAB[This->m_Unk37 * 16];
+    v5 = g_ENTITY_TABLE[This->m_EntityID].link_stage;
 
     if (((u32) (Unk3 - 2) >= 7U) || (v5 > 0)) {
         class_55DD4_get_vtable()->Unk54(This, Unk2, Unk3);
@@ -146,7 +140,7 @@ void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
                 Unk3 = 10;
             } else {
                 Unk3 = 12;
-                if (D_80089EAC[This->m_Unk37 * 16] != 0) {
+                if (g_ENTITY_TABLE[This->m_EntityID].event_video_id != 0) {
                     Unk3 = 11;
                 }
             }
@@ -167,34 +161,38 @@ void func_8005D6D4(entity_t *This) {
     ++This->m_Unk62;
 }
 
-s32 func_8005D714(void *This, vec3d_t *data, s32 arg2, s32 arg3) {
+s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4) {
     vec3d_t local_data;
-    s8 byte_val;
+    s8 unlock_value;
+    s32 call_arg_1;
+    s32 call_arg_2;
 
-    local_data = *data;
+    local_data = *Location;
 
-    byte_val = D_80089EA6[*(s32 *) ((u8 *) This + 0x98) * 16];
+    unlock_value = g_ENTITY_TABLE[This->m_EntityID].unlock;
 
-    if ((u8) (byte_val + 9) < 9) {
-        local_data.y += (s32) byte_val << 10;
+    if ((u8) (unlock_value + 9) < 9) {
+        local_data.y += (s32) unlock_value << 10;
     }
 
-    if (arg3 < 0) {
-        arg3 = 2048 / ((~arg3) + 1);
+    if (Unk4 < 0) {
+        Unk4 = 2048 / ((~Unk4) + 1);
     } else {
-        arg3 = arg3 << 11;
+        Unk4 = Unk4 << 11;
     }
 
-    {
-        s32 call_arg_1 = 0;
-        s32 call_arg_2 = arg2 << 11;
+     call_arg_1 = 0;
+     call_arg_2 = Unk3 << 11;
 
-        return ((s32(*)(void *, s32, s32, void *, s32))(*((void ***) (*(void **) ((u8 *) This + 0x94))))[0x120 / 4])(
-            *(void **) ((u8 *) This + 0x94), call_arg_1, call_arg_2, &local_data, arg3);
-    }
+    return (*(s32 ( **)(s32, s32, s32, s32 *, s32))(*(s32 *)This->m_Unk36 + 288))(
+           This->m_Unk36,
+           call_arg_1,
+           call_arg_2,
+           &local_data,
+           Unk4);
 }
 
-s32 func_8005D7FC(entity_t *This, void *a1) {
+s32 entity_get_distance(entity_t *This, void *a1) {
     int *v2_ptr;
     void *a0_ptr;
     int diff1;
@@ -227,7 +225,7 @@ s32 func_8005D7FC(entity_t *This, void *a1) {
 s32 func_8005D864(entity_t *This) {
     if (This->m_Unk36) {
         s32 vcall_result = This->vtable->Unk80(This, This->m_Unk36);
-        s32 array_val_shifted = (s32) D_80089EAE[This->m_Unk37 * 16] << 11;
+        s32 array_val_shifted = (s32) g_ENTITY_TABLE[This->m_EntityID].proximity << 11;
 
         if (array_val_shifted >= vcall_result) {
             s32 temp_quotient = array_val_shifted / This->m_Unk43;
@@ -240,15 +238,15 @@ s32 func_8005D864(entity_t *This) {
 }
 
 s8 *entity_get_mood_effect(entity_t *This) {
-    return &D_80089EA4[16 * This->m_Unk37];
+    return &g_ENTITY_TABLE[This->m_EntityID].mood_effect[0];
 }
 
 s32 entity_get_unlock_effect(entity_t *This) {
-    return 1000 * D_80089EA6[16 * This->m_Unk37];
+    return 1000 * g_ENTITY_TABLE[This->m_EntityID].unlock;
 }
 
 s32 entity_get_link_stage(entity_t *This) {
-    s8 val = D_80089EAB[This->m_Unk37 * 16];
+    s8 val = g_ENTITY_TABLE[This->m_EntityID].link_stage;
 
     if (val < 0) {
         return ~val;
@@ -258,7 +256,7 @@ s32 entity_get_link_stage(entity_t *This) {
 }
 
 s32 entity_get_event_video(entity_t *This) {
-    return D_80089EAC[This->m_Unk37 * 16] - 1;
+    return g_ENTITY_TABLE[This->m_EntityID].event_video_id - 1;
 }
 
 void func_8005D9F4(entity_t *This) {
@@ -282,7 +280,7 @@ void func_8005DAAC(entity_t *This, s32 Value) {
 }
 
 void func_8005DAFC(entity_t *This) {
-    func_8002CC34(This->m_Unk21, &This->m_Unk38, This->m_Unk37 + 1, This, D_80089EB0[This->m_Unk37 * 4]);
+    func_8002CC34(This->m_Unk21, &This->m_Unk38, This->m_EntityID + 1, This, g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
 
     This->vtable->Unk74(This);
     This->vtable->Unk67(This);
@@ -300,7 +298,7 @@ void func_8005DB8C(entity_t *This) {
 
 s32 func_8005DBF0(entity_t *This) {
     if (This->m_Unk59 == 0 && This->m_Unk16 != 1) {
-        s8 *p = &D_80089EA4[This->m_Unk37 * 16];
+        s8 *p = &g_ENTITY_TABLE[This->m_EntityID];
         s32 flag = 0;
         s8 p3;
 
@@ -315,7 +313,7 @@ s32 func_8005DBF0(entity_t *This) {
             goto end_logic;
         }
 
-        if (func_8005D714(This, This->m_Unk4 + 24, p[5], p[9]) == 0) {
+        if (entity_check_proximity(This, This->m_Unk4 + 24, p[5], p[9]) == 0) {
             goto func_returned_zero;
         }
 
@@ -355,7 +353,7 @@ s32 func_8005DD18(entity_t *This) {
         u8 *data_ptr;
         s32 should_call;
 
-        data_ptr = &D_80089EA4[This->m_Unk37 * 16];
+        data_ptr = &g_ENTITY_TABLE[This->m_EntityID];
         func_8005DF9C(This, 0);
 
         should_call = 0;
@@ -369,7 +367,7 @@ s32 func_8005DD18(entity_t *This) {
                 if (val5 != 0) {
                     s8 val9 = ((s8 *) data_ptr)[9];
 
-                    if (func_8005D714(This, This->m_Unk4 + 24, val5, val9) != 0) {
+                    if (entity_check_proximity(This, This->m_Unk4 + 24, val5, val9) != 0) {
                         if (data_ptr[4] == 1) {
                             should_call = 1;
                         }
@@ -394,7 +392,7 @@ s32 func_8005DE18(entity_t *this) {
     s8 *v2;
     s32 val;
 
-    v2 = &D_80089EA4[this->m_Unk37 * 16];
+    v2 = &g_ENTITY_TABLE[this->m_EntityID];
 
     if (this->m_Unk59 != 0) {
         if (this->m_Unk60 == 0) {
@@ -406,7 +404,7 @@ s32 func_8005DE18(entity_t *this) {
                 val = ~val + 1;
             }
 
-            if (func_8005D714(this, func_arg1, val, v2[9]) != 0) {
+            if (entity_check_proximity(this, func_arg1, val, v2[9]) != 0) {
                 this->vtable->Unk88(this, 1);
             }
         }
@@ -426,7 +424,7 @@ s32 func_8005DEE0(entity_t *This) {
         }
 
         if (This->m_Unk16 != 1) {
-            s8 *p = &D_80089EA4[This->m_Unk37 * 16];
+            s8 *p = &g_ENTITY_TABLE[This->m_EntityID];
             s32 val_b = p[11];
 
             if (val_b) {
@@ -436,7 +434,7 @@ s32 func_8005DEE0(entity_t *This) {
                     val_b = ~val_b + 1;
                 }
 
-                if (func_8005D714(This, arg1_val, val_b, p[9])) {
+                if (entity_check_proximity(This, arg1_val, val_b, p[9])) {
                     This->vtable->Unk89(This);
                 }
             }
@@ -447,10 +445,10 @@ s32 func_8005DEE0(entity_t *This) {
 }
 
 void func_8005DF9C(entity_t *This, s32 Unk2) {
-    s32 index = This->m_Unk37 << 4;
+    s32 entity_id = This->m_EntityID;
 
-    if (D_80089EAB[index] < 0) {
-        s8 val = D_80089EAC[index];
+    if (g_ENTITY_TABLE[entity_id].link_stage < 0) {
+        s8 val = g_ENTITY_TABLE[entity_id].event_video_id;
 
         if (val) {
             if (func_8005E02C(This, val << 9)) {
@@ -502,13 +500,13 @@ s32 func_8005E0B0(const entity_t *This) {
         s8 val;
         s32 unk4;
 
-        p = &D_80089EA4[This->m_Unk37 * 16];
+        p = &g_ENTITY_TABLE[This->m_EntityID];
         val = p[11];
 
         if (val < 0) {
             unk4 = This->m_Unk4;
 
-            if (func_8005D714(This, unk4 + 24, ~val + 1, p[9]) == 0) {
+            if (entity_check_proximity(This, unk4 + 24, ~val + 1, p[9]) == 0) {
                 This->vtable->Unk90(This);
             }
         }
