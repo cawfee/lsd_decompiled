@@ -177,7 +177,8 @@ segments:
       - [0x1C92C, c]
       - [0x1CBB8, c]
       - [0x1CC80, c, sound_engine]
-      - [0x1D41C, asm]
+      - [0x1D41C, c, helper_unk_1]
+      - [0x1D718, asm]
       - [0x272c8, asm, psyq_SpuSetMute]
       - [0x2A0E0, c, bgm]
       - [0x2A85C, asm]
@@ -263,7 +264,6 @@ segments:
       - [0x48F74, c, dream_sys]
       - [0x4CD08, asm, 4cd08] #DreamAux
       - [0x4D7DC, c, entity]
-      - [0x4E960, asm]
       - [0x55DD4, c] #class
       - [0x57028, .data, main]
       - [0x57040, data]

@@ -67,7 +67,7 @@ if NON_MATCHING:
 asm_auto_targets = [
     "asm/1145C.s",
     "asm/179D8.s",
-    "asm/1D41C.s",
+    "asm/1D718.s",
     "asm/2A85C.s",
     "asm/2BA1C.s",
     "asm/2BE24.s",
@@ -92,7 +92,6 @@ asm_auto_targets = [
     "asm/40FF8.s",
     "asm/44CE4.s",
     "asm/4775C.s",
-    "asm/4E960.s",
     "asm/4cd08.s",
     "asm/8BDC.s",
     "asm/ED8C.s",
@@ -297,6 +296,7 @@ c_targets = [
     "src/base_class.c",
     "src/dream_sys.c",
     "src/1CBB8.c",
+    "src/helper_unk_1.c",
 ]
 c_targets_g8 = [
     "src/main.c",

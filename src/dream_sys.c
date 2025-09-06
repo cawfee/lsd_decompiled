@@ -197,7 +197,7 @@ void func_800596E8(dream_sys_t *This, s32 Unk) {
             This->m_Unk48 = 1;
             This->m_Unk49 = 1;
             This->m_Unk37 = fnc;
-            func_8002CC34(This->m_Unk21, &This->m_Unk50, 1, This, This->vtable->Unk100);
+            helper_1_set_entity(This->m_Unk21, &This->m_Unk50, 1, This, This->vtable->Unk100);
             break;
 
         default:
