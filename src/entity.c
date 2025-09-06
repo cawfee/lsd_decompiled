@@ -298,26 +298,26 @@ void func_8005DB8C(entity_t *This) {
 
 s32 func_8005DBF0(entity_t *This) {
     if (This->m_Unk59 == 0 && This->m_Unk16 != 1) {
-        s8 *p = &g_ENTITY_TABLE[This->m_EntityID];
+        entity_prop_t *property = &g_ENTITY_TABLE[This->m_EntityID];
         s32 flag = 0;
         s8 p3;
 
-        p3 = p[3];
+        p3 = property->behaviour;
         if (p3 == 0) {
             goto end_logic;
         }
         if (p3 == 4) {
             goto rand_check;
         }
-        if (p[5] == 0) {
+        if (property->interaction_range == 0) {
             goto end_logic;
         }
 
-        if (entity_check_proximity(This, This->m_Unk4 + 24, p[5], p[9]) == 0) {
+        if (entity_check_proximity(This, This->m_Unk4 + 24, property->interaction_range, property->interaction_param) == 0) {
             goto func_returned_zero;
         }
 
-        p3 = p[3];
+        p3 = property->behaviour;
         if (p3 == 1) {
             flag = 1;
             goto end_logic;
@@ -328,7 +328,7 @@ s32 func_8005DBF0(entity_t *This) {
         }
 
     func_returned_zero:
-        if (p[3] != 2) {
+        if (property->behaviour != 2) {
             goto end_logic;
         } else {
             flag = 1;
@@ -389,27 +389,27 @@ s32 func_8005DD18(entity_t *This) {
 }
 
 s32 func_8005DE18(entity_t *this) {
-    s8 *v2;
+    entity_prop_t *property;
     s32 val;
 
-    v2 = &g_ENTITY_TABLE[this->m_EntityID];
+    property = &g_ENTITY_TABLE[this->m_EntityID];
 
     if (this->m_Unk59 != 0) {
         if (this->m_Unk60 == 0) {
             s32 func_arg1 = this->m_Unk4 + 24;
 
-            val = v2[6];
+            val = property->interaction_angle;
 
             if (val < 0) {
                 val = ~val + 1;
             }
 
-            if (entity_check_proximity(this, func_arg1, val, v2[9]) != 0) {
+            if (entity_check_proximity(this, func_arg1, val, property->interaction_param) != 0) {
                 this->vtable->Unk88(this, 1);
             }
         }
 
-        if ((s8) v2[6] < 0) {
+        if (property->interaction_angle < 0) {
             func_8001EACC(this, this->m_Unk36, 1, 0, 0);
         }
     }
@@ -424,17 +424,17 @@ s32 func_8005DEE0(entity_t *This) {
         }
 
         if (This->m_Unk16 != 1) {
-            s8 *p = &g_ENTITY_TABLE[This->m_EntityID];
-            s32 val_b = p[11];
+            entity_prop_t *property = &g_ENTITY_TABLE[This->m_EntityID];
+            s32 link_flag = property->link_flag;
 
-            if (val_b) {
+            if (link_flag) {
                 s32 arg1_val = This->m_Unk4 + 24;
 
-                if (val_b < 0) {
-                    val_b = ~val_b + 1;
+                if (link_flag < 0) {
+                    link_flag = ~link_flag + 1;
                 }
 
-                if (entity_check_proximity(This, arg1_val, val_b, p[9])) {
+                if (entity_check_proximity(This, arg1_val, link_flag, property->interaction_param)) {
                     This->vtable->Unk89(This);
                 }
             }
@@ -496,17 +496,17 @@ s32 func_8005E02C(entity_t *This, s32 Unk2) {
 
 s32 func_8005E0B0(const entity_t *This) {
     if (This->m_Unk59 != 0 && This->m_Unk61 != 0) {
-        s8 *p;
-        s8 val;
+        entity_prop_t *property;
+        s8 link_flag;
         s32 unk4;
 
-        p = &g_ENTITY_TABLE[This->m_EntityID];
-        val = p[11];
+        property = &g_ENTITY_TABLE[This->m_EntityID];
+        link_flag = property->link_flag;
 
-        if (val < 0) {
+        if (link_flag < 0) {
             unk4 = This->m_Unk4;
 
-            if (entity_check_proximity(This, unk4 + 24, ~val + 1, p[9]) == 0) {
+            if (entity_check_proximity(This, unk4 + 24, ~link_flag + 1, property->interaction_param) == 0) {
                 This->vtable->Unk90(This);
             }
         }
