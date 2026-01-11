@@ -1,6 +1,19 @@
-#include "common.h"
+#include "renderer.h"
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E5D8);
+extern renderer_vtable_t *g_RENDERER_VTABLE;
+
+void *renderer_create(void) {
+    void *temp_v0;
+
+    temp_v0 = memory_allocate_mem(0xBC);
+    
+    if (temp_v0 != 0) {
+        (*(void (**)(void *))(renderer_get_vtable() + 8))(temp_v0);
+        return temp_v0;
+    }
+    
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E628);
 
@@ -76,7 +89,9 @@ INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F23C);
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F244);
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F24C);
+renderer_vtable_t *renderer_get_vtable(void) {
+    return &g_RENDERER_VTABLE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F25C);
 

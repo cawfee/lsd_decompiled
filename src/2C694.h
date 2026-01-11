@@ -7,6 +7,7 @@
 #include "354D4.h"
 #include "35730.h"
 #include "sound_engine.h"
+#include "texture_helper.h"
 
 typedef struct class_2C694_vtable {
     /* 0x000 8006e730 */ u32 value;
@@ -74,7 +75,7 @@ typedef struct class_2C694_vtable {
     /* 0x0F8 8006e828 */ void (*Unk61)(void *);
     /* 0x0FC 8006e82c */ void (*Unk62)(void *);
     /* 0x100 8006e830 */ void (*Unk63)(void *, s32, s32);
-    /* 0x104 8006e834 */ void (*Unk64)(void *);
+    /* 0x104 8006e834 */ void (*Unk64)(void *, s32);
     /* 0x108 8006e838 */ void (*Unk65)(void *);
     /* 0x10C 8006e83c */ void (*Unk66)(void *);
     /* 0x110 8006e840 */ void (*Unk67)(void *);
@@ -113,14 +114,14 @@ typedef struct class_2C694 {
     /* 0x64 */ s32 *m_Unk24;
     /* 0x68 */ s32 m_Unk25;
     /* 0x6C */ s32 m_Unk26;
-    /* 0x70 */ s32 m_Unk27;
+    /* 0x70 */ s8 *m_Unk27;
     /* 0x74 */ s32 m_Unk28;
     /* 0x78 */ class_349B4_t *m_Unk29;
     /* 0x7C */ class_354D4_t *m_Unk30;
     /* 0x80 */ class_35730_t *m_Unk31;
     /* 0x84 */ s32 m_Unk32;
     /* 0x88 */ s32 (*m_Unk33)();
-    /* 0x8C */ s32 m_Unk34;
+    /* 0x8C */ s32 (*m_Unk34)();
     /* 0x90 */ s32 m_Unk35;
     /* 0x94 */ s32 m_Unk36;
     /* 0x98 */ s32 m_Unk37;

@@ -33,6 +33,9 @@ typedef struct class_2B78C {
     /* 0x00 */ class_2B78C_vtable_t *vtable;
     /* 0x04 */ void *m_Unk0;
     /* 0x08 */ s32 m_Unk1;
+    /* 0x0C */ s32 m_Unk2;
+    /* 0x10 */ s32 m_Unk3;
+    /* 0x14 */ s32 m_Unk4;
 } class_2B78C_t;
 
 class_2B78C_vtable_t *func_8003B20C(void);

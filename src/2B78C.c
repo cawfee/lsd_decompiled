@@ -13,7 +13,10 @@ INCLUDE_ASM("asm/nonmatchings/2B78C", func_8003AF8C);
 void nullsub25(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/2B78C", func_8003B02C);
+void func_8003B02C(class_2B78C_t *This, const s32 *src, s32 val) {
+    __builtin_memcpy(&This->m_Unk2, src, 8);
+    This->m_Unk4 = val;
+}
 
 void game_flow_init_graphics(game_flow_t *This, gs_helper_t *GsHelper, class_16634_t *Cls16634) {
     if (!This->m_IsInit) {

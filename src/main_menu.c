@@ -13,15 +13,15 @@ static u32 D_80086CE0[7] = { 0, 1, 0, 0, 0, 0, 0 };
 
 static const char *g_MENU_ITEMS[7] = { "START", "FLASHBACK", "SAVE", "LOAD", "GRAPH", "SHAKE", NULL };
 
-static u32 D_8008A9B4 = 0xFFFFFFFC;
-static u32 D_8008A9B8 = 0xFFFFFFE9;
-static u32 D_8008A9BC = 0xFFFFFFC2;
-static u32 D_8008A9C0 = 0xFFFFFFB0;
-static u32 D_8008A9C4 = 0xFFFFFFEA;
-static u32 D_8008A9C8 = 0xFFFFFFB0;
+static s32 D_8008A9B4 = -4;
+static s32 D_8008A9B8 = -23;
+static s32 D_8008A9BC = -62;
+static s32 D_8008A9C0 = -80;
+static s32 D_8008A9C4 = -22;
+static s32 D_8008A9C8 = -80;
 static u32 D_8008A9CC = 0xFFFF;
 
-static u32 D_80086D14[6][2] = { { 8, 0xFFFFFFFD }, { 8, 9 }, { 8, 21 }, { 8, 33 }, { 8, 45 }, { 8, 57 } };
+static s32 D_80086D14[6][2] = { { 8, -3 }, { 8, 9 }, { 8, 21 }, { 8, 33 }, { 8, 45 }, { 8, 57 } };
 
 static char *g_FONT_ICON_PATH SECTION(".data") = "ETC\\FONTICON.TIM";
 
