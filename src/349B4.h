@@ -50,7 +50,7 @@ typedef struct class_349B4_vtable {
     /* 0x0AC 8006f370 */ void (*Unk42)(void *);
     /* 0x0B0 8006f374 */ void (*Unk43)(void *);
     /* 0x0B4 8006f378 */ void (*Unk44)(void *);
-    /* 0x0B8 8006f37c */ void (*Unk45)(void *);
+    /* 0x0B8 8006f37c */ void (*Unk45)(void *, s32, u8 *);
     /* 0x0BC 8006f380 */ void (*Unk46)(void *);
 } class_349B4_vtable_t;
 

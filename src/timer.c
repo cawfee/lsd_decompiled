@@ -43,9 +43,18 @@ void timer_increment(timer_t *This, void **Unk2, s32 Unk3) {
 
 INCLUDE_ASM("asm/nonmatchings/timer", func_8003E4B8);
 
-INCLUDE_ASM("asm/nonmatchings/timer", func_8003E538);
+void func_8003E538(timer_t *This) {
+    u32 *m_Unk2;
 
-INCLUDE_ASM("asm/nonmatchings/timer", func_8003E578);
+  m_Unk2 = (u32 *)This->m_Unk2;
+  This->m_TicksPassed = 0;
+(*(int ( **)(u32))(*(u32 *)*m_Unk2 + 72))(*m_Unk2);
+}
+
+void func_8003E578(timer_t *This) {
+(*(void (**)(u32))(**(u32 **)This->m_Unk2 + 76))(*(u32 *)This->m_Unk2);
+  This->m_TicksPassed = 0;
+}
 
 timer_vtable_t *timer_get_vtable(void) {
     return &g_TIMER_VTABLE;

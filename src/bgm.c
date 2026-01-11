@@ -42,13 +42,13 @@ INCLUDE_ASM("asm/nonmatchings/bgm", bgm_construct);
 // }
 
 INCLUDE_ASM("asm/nonmatchings/bgm", bgm_cleanup);
-// void func_80039A34(bgm_t *This) {
+// void bgm_cleanup(bgm_t *This) {
 //     D_8008A8D8 = 0;
 //     This->vtable->Unk17(This);
 //     func_8003AE18(This->m_SeqAccess);
 
 //     if (This->m_SoundEngine) {
-//         (*(void ( **)(s32))(*(u32 *)This->m_SoundEngine + 4))(This->m_SoundEngine);
+//         This->m_SoundEngine->vtable->Destruct(This->m_SoundEngine);
 //     }
 
 //     if (This->m_Unk3) {

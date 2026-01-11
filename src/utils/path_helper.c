@@ -165,25 +165,7 @@ const char *get_special_movie_path(s32 *DurationMaybe, s32 Index) {
 INCLUDE_ASM("asm/nonmatchings/utils/path_helper", get_special_day_movie);
 
 s32 get_movie_duration_maybe(s32 Index) {
-#ifdef NON_MATCHING
     return D_80086170[Index];
-#else
-    s32 result;
-    s32 a0_r;
-
-    __asm__(".set noat\n\t"
-            "sll   %1, %2, 1\n\t"
-            "lui   $1, %%hi(%3)\n\t"
-            "addiu $1, $1, %%lo(%3)\n\t"
-            "addu  $1, $1, %1\n\t"
-            "lh    %0, 0($1)\n\t"
-
-            : "=r"(result), "=r"(a0_r)
-            : "1"(Index), "i"(&D_80086170)
-            : "$1");
-
-    return result;
-#endif
 }
 
 INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_800493E4);

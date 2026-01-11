@@ -957,3 +957,8 @@ g_ENTITY_TABLE = 0x80089EA4;
 helper_1_update_entity = 0x8002CD08;
 helper_1_get_crescendo_time_mod = 0x8002CC28;
 helper_1_set_entity = 0x8002CC34;
+
+// Renderer?
+renderer_create = 0x8003E5D8;
+renderer_get_vtable = 0x8003F24C;
+g_RENDERER_VTABLE = 0x8006E8E4;
