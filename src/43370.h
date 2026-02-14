@@ -9,14 +9,14 @@ typedef struct class_43370_vtable {
     /* 0x008 8008703c */ void (*Construct)(void *, s32, s32, s32, s32, s32);
     /* 0x00C 80087040 */ void (*Cleanup)(void *);
     /* 0x010 80087044 */ void (*Unk3)(void *);
-    /* 0x014 80087048 */ void (*Unk4)(void *);
+    /* 0x014 80087048 */ void (*Unk4)(void *, s32);
     /* 0x018 8008704c */ void (*Unk5)(void *);
     /* 0x01C 80087050 */ void (*Unk6)(void *);
     /* 0x020 80087054 */ void (*Unk7)(void *);
     /* 0x024 80087058 */ void (*Unk8)(void *);
     /* 0x028 8008705c */ void (*Unk9)(void *);
     /* 0x02C 80087060 */ void (*Unk10)(void *);
-    /* 0x030 80087064 */ void (*Unk11)(void *);
+    /* 0x030 80087064 */ void (*Unk11)(void *, s32);
     /* 0x034 80087068 */ void (*Unk12)(void *);
     /* 0x038 8008706c */ void (*Unk13)(void *);
     /* 0x03C 80087070 */ void (*Unk14)(void *);
@@ -50,7 +50,7 @@ typedef struct class_43370_vtable {
     /* 0x0AC 800870e0 */ void (*Unk42)(void *);
     /* 0x0B0 800870e4 */ void (*Unk43)(void *, void **, s32);
     /* 0x0B4 800870e8 */ void (*Unk44)(void *, void **, s32);
-    /* 0x0B8 800870ec */ void (*Unk45)(void *);
+    /* 0x0B8 800870ec */ void (*Unk45)(void *, s32);
     /* 0x0BC 800870f0 */ void (*Unk46)(void *);
     /* 0x0C0 800870f4 */ void (*Unk47)(void *);
     /* 0x0C4 800870f8 */ void (*Unk48)(void *);

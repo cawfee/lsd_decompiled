@@ -20,7 +20,11 @@ void func_80041DA4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/3249C", func_80041DAC);
 
-INCLUDE_ASM("asm/nonmatchings/3249C", func_80041E2C);
+void func_80041E2C(class_3249C_t *This, s32 *Unk) {
+    if (This->m_Unk2) {
+        __builtin_memcpy(&This->m_Unk39, Unk, 8);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3249C", func_80041E58);
 

@@ -25,13 +25,16 @@ CPP_FLAGS = [
     "-DM2CTX",
 ]
 
+
 def import_c_file(in_file) -> str:
     in_file = os.path.relpath(in_file, root_dir)
 
     cpp_command = ["gcc", "-E", "-P", "-dD", *CPP_FLAGS, in_file]
 
     with tempfile.NamedTemporaryFile(suffix=".c") as tmp:
-        stock_macros = subprocess.check_output(["gcc", "-E", "-P", "-dM", tmp.name], cwd=root_dir, encoding="utf-8")
+        stock_macros = subprocess.check_output(
+            ["gcc", "-E", "-P", "-dM", tmp.name], cwd=root_dir, encoding="utf-8"
+        )
 
     try:
         out_text = subprocess.check_output(cpp_command, cwd=root_dir, encoding="utf-8")
@@ -40,7 +43,7 @@ def import_c_file(in_file) -> str:
             "Failed to preprocess input file, when running command:\n"
             + " ".join(cpp_command),
             file=sys.stderr,
-            )
+        )
         sys.exit(1)
 
     if not out_text:
@@ -66,6 +69,7 @@ def import_c_file(in_file) -> str:
             del defines[sym]
 
     return "".join(defines.values()) + "".join(source_lines)
+
 
 def main():
     parser = argparse.ArgumentParser(

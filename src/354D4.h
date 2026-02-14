@@ -48,17 +48,19 @@ typedef struct class_354D4 {
     /* 0x1C */ s32 m_Unk6;
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
-    /* 0x28 */ s32 m_Unk9;
+    /* 0x28 */ s16 m_Unk9_1;
+    u16 m_Unk9_2;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
-    /* 0x40 */ s32 m_Unk15;
+    /* 0x40 */ s16 m_Unk15_1;
+    s16 m_Unk15_2;
     /* 0x44 */ s32 m_Unk16;
 } class_354D4_t;
 
 class_354D4_t *func_80044CD4(s32 Unk1, void *Unk2);
 class_354D4_vtable_t *func_80044F20(void);
 
-#endif
+#endif // LSD_354D4_H

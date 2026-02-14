@@ -21,7 +21,11 @@ INCLUDE_ASM("asm/nonmatchings/349B4", func_80044380);
 
 INCLUDE_ASM("asm/nonmatchings/349B4", func_8004441C);
 
-INCLUDE_ASM("asm/nonmatchings/349B4", func_8004464C);
+void func_8004464C(class_349B4_t *This, s32 Unk1, s8 *Data) {
+    if (Unk1) {
+        __builtin_memcpy(This->m_Unk20, Data, 3);
+    }
+}
 
 void func_80044674(void) {
 }

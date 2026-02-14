@@ -76,7 +76,7 @@ typedef struct class_349B4 {
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
-    /* 0x54 */ s32 m_Unk20;
+    /* 0x54 */ s8 m_Unk20[4];
     /* 0x58 */ s32 m_Unk21;
     /* 0x5C */ s32 m_Unk22;
     /* 0x60 */ s32 m_Unk23;

@@ -24,7 +24,7 @@ typedef struct class_16634_vtable {
     /* 0x044 8006d3b4 */ void (*Unk16)(void *);
     /* 0x048 8006d3b8 */ void (*Unk17)(void *);
     /* 0x04C 8006d3bc */ void (*Unk18)(void *);
-    /* 0x050 8006d3c0 */ void (*Unk19)(void *);
+    /* 0x050 8006d3c0 */ void (*Unk19)();
     /* 0x054 8006d3c4 */ void (*Unk20)(void *);
 } class_16634_vtable_t;
 
@@ -32,7 +32,8 @@ typedef struct class_16634 {
     /* 0x00 */ class_16634_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ s32 m_Unk2;
+    /* 0x0C */ u16 m_Unk2_1;
+    s16 m_Unk2_2;
     /* 0x10 */ s32 m_Unk3;
     /* 0x14 */ s32 m_Unk4;
     /* 0x18 */ s32 m_Unk5;

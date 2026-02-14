@@ -49,7 +49,7 @@ typedef struct class_35730 {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s16 m_Unk9_1;
-    /* 0x2A */ s16 m_Unk9_2;
+    /* 0x2A */ u16 m_Unk9_2;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s16 m_Unk11_1;
     /* 0x32 */ s16 m_Unk11_2;

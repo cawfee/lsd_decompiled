@@ -1,7 +1,10 @@
 #include "477E4.h"
 #include "D294.h"
 
-extern class_477E4_vtable_t **D_800878D4;
+extern class_477E4_vtable_t D_800878D4;
+
+extern s32 D_8008ABA4[];
+extern s32 D_8008ABA8[];
 
 class_477E4_t *func_80056FE4() {
     class_477E4_t *allocated = (class_477E4_t *) memory_allocate_mem(0x58);
@@ -89,22 +92,37 @@ void func_80057444(class_477E4_t *This, s16 *Unk) {
     This->vtable->Unk46(This, unk_struct);
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_8005748C);
+void func_8005748C(class_477E4_t *This, s32 Unk1, s32 Unk2) {
+    func_80057534(This, D_8008ABA8, Unk1, Unk2, 6);
+}
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800574C4);
+void func_800574C4(class_477E4_t *This, s32 Unk1, s32 Unk2) {
+    func_80057534(This, D_8008ABA4, Unk1, Unk2, 7);
+}
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800574FC);
+void func_800574FC(class_477E4_t *This, s32 Unk1, s32 Unk2) {
+    func_80057534(This, (char *) D_8008ABA4 + 2, Unk1, Unk2, 8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057534);
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800575B0);
+void func_800575B0(class_477E4_t *This, s32 Unk1, s32 Unk2) {
+func_80057618(This, This->vtable->Unk48, Unk1, Unk2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800575E0);
+void func_800575E0(class_477E4_t *This, s32 Unk1, s32 Unk2) {
+    func_80057618(This, This->vtable->Unk49, Unk1, Unk2);
+}
 
 void func_80057610(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057618);
+void func_80057618(class_477E4_t *This, void (*Fnc)(s32, s32, s32), s32 Unk1, s32 Unk2) {
+    This->m_Unk9 = 0;
+  Fnc(This, Unk1, Unk2);
+  if ( !This->m_Unk9 )
+    func_80057668(This);
+}
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057668);
 
@@ -114,18 +132,29 @@ INCLUDE_ASM("asm/nonmatchings/477E4", func_80057954);
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057A18);
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057B54);
+class_477E4_t *func_80057B54(class_477E4_t *This, s32 Unk1, s16 *Unk2) {
+    if (This && func_8001E7BC(This, Unk1, Unk2)) {
+        return This;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057B90);
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057C14);
+void func_80057C14(class_477E4_t *This, s32 Unk2, s32 Unk3) {
+    func_8001E57C()->Unk38(This, Unk2, Unk3);
+}
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057C6C);
+void func_80057C6C(class_477E4_t *This, s16 Unk) {
+    This->m_Unk17_1 = Unk;
+}
 
 void func_80057C74(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057C7C);
+void func_80057C7C(class_477E4_t *This, s32 Unk) {
+    This->m_Unk20 = Unk;
+}
 
 class_477E4_vtable_t *func_80057C84(void) {
     return &D_800878D4;

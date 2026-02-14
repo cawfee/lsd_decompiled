@@ -84,7 +84,7 @@ typedef struct class_326E8 {
     /* 0x6C */ s32 m_Unk26;
     /* 0x70 */ s32 m_Unk27;
     /* 0x74 */ s32 m_Unk28;
-    /* 0x78 */ s32 m_Unk29;
+    /* 0x78 */ s8 m_Unk29[4];
     /* 0x7C */ s32 m_Unk30;
     /* 0x80 */ s32 m_Unk31;
     /* 0x84 */ s32 m_Unk32;

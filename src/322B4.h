@@ -53,7 +53,7 @@ typedef struct class_322B4_vtable {
     /* 0x0B8 8006ed2c */ void (*Unk45)(void *);
     /* 0x0BC 8006ed30 */ void (*Unk46)(void *);
     /* 0x0C0 8006ed34 */ void (*Unk47)(void *);
-    /* 0x0C4 8006ed38 */ void (*Unk48)(void *);
+    /* 0x0C4 8006ed38 */ void (*Unk48)(void *, u8);
     /* 0x0C8 8006ed3c */ void (*Unk49)(void *);
 } class_322B4_vtable_t;
 
@@ -86,7 +86,7 @@ typedef struct class_322B4 {
     /* 0x64 */ s32 m_Unk24;
     /* 0x68 */ s32 m_Unk25;
     /* 0x6C */ s32 m_Unk26;
-    /* 0x70 */ s32 m_Unk27;
+    /* 0x70 */ u8 m_Unk27[4];
     /* 0x74 */ s32 m_Unk28;
     /* 0x78 */ s32 m_Unk29;
     /* 0x7C */ s32 m_Unk30;
@@ -100,7 +100,10 @@ typedef struct class_322B4 {
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
-    /* 0xA8 */ s32 m_Unk41;
+    /* 0xA8 */ u8 m_Unk41_1;
+    /* 0xA9 */ s8 m_Unk41_2;
+    /* 0xAA */ s8 m_Unk41_3;
+    /* 0xAB */ s8 m_Unk41_4;
     /* 0xAC */ s32 m_Unk42;
 } class_322B4_t;
 

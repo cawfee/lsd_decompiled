@@ -118,29 +118,49 @@ INCLUDE_ASM("asm/nonmatchings/D294", func_8001D280);
 void func_8001D33C(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D344);
+s32 func_8001D344(class_D294_t *This, s32 Unk) {
+    return func_8001EDAC(&This->m_Unk3, 31, 1, Unk == 0) == 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D374);
+void func_8001D374(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 30, 1, Unk != 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D3A0);
+void func_8001D3A0(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 28, 2, Unk);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D3CC);
+void func_8001D3CC(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 6, 1, Unk == 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D3F8);
+void func_8001D3F8(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 3, 3, Unk);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D424);
+void func_8001D424(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 0, 3, Unk);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D450);
+s32 func_8001D450(class_D294_t *This, s32 Unk) {
+    return func_8001EDAC(&This->m_Unk3, 7, 1, Unk == 0) == 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D480);
+void func_8001D480(class_D294_t *This, s32 Unk) {
+    func_8001EDAC(&This->m_Unk3, 9, 3, Unk);
+}
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D4AC);
+s32 func_8001D4AC(class_D294_t *This, s32 Unk) {
+    return func_8001EDAC(&This->m_Unk3, 8, 1, Unk == 0) == 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D4DC);
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D568);
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D600);
+void func_8001D600(class_D294_t *This, s32 Unk) {
+    func_8001F51C(This->m_Unk7, Unk);
+}
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D624);
 
@@ -150,7 +170,22 @@ void func_8001D6A4(void) {
 void func_8001D6AC(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D6B4);
+void func_8001D6B4(class_D294_t *This, s32 Unk1, s32 Unk2) {
+    switch (Unk2) {
+        case 2:
+        case 3:
+            This->vtable->Unk39(This, Unk1);
+            break;
+        
+        case 4:
+            This->m_Unk9 = Unk1;
+            break;
+        
+        default:
+            break;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D714);
 

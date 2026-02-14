@@ -48,7 +48,7 @@ def calculate_complexity(instructions) -> int:
         "CONTROL_FLOW_UNCOND": 4,
         "CONTROL_FLOW_CALL": 10,
         "SYSTEM_COPROC": 8,
-        "OTHER": 2
+        "OTHER": 2,
     }
     DATA_REF_BONUS = 2
 
@@ -59,64 +59,112 @@ def calculate_complexity(instructions) -> int:
     }
 
     arith_logic_simple_itypes = {
-        ida_allins.MIPS_add, ida_allins.MIPS_addu, ida_allins.MIPS_addi, ida_allins.MIPS_addiu,
-        ida_allins.MIPS_sub, ida_allins.MIPS_subu,
-        ida_allins.MIPS_and, ida_allins.MIPS_andi,
-        ida_allins.MIPS_or, ida_allins.MIPS_ori,
-        ida_allins.MIPS_xor, ida_allins.MIPS_xori,
+        ida_allins.MIPS_add,
+        ida_allins.MIPS_addu,
+        ida_allins.MIPS_addi,
+        ida_allins.MIPS_addiu,
+        ida_allins.MIPS_sub,
+        ida_allins.MIPS_subu,
+        ida_allins.MIPS_and,
+        ida_allins.MIPS_andi,
+        ida_allins.MIPS_or,
+        ida_allins.MIPS_ori,
+        ida_allins.MIPS_xor,
+        ida_allins.MIPS_xori,
         ida_allins.MIPS_nor,
-        ida_allins.MIPS_slt, ida_allins.MIPS_sltu, ida_allins.MIPS_slti, ida_allins.MIPS_sltiu,
-        ida_allins.MIPS_sll, ida_allins.MIPS_srl, ida_allins.MIPS_sra,
-        ida_allins.MIPS_sllv, ida_allins.MIPS_srlv, ida_allins.MIPS_srav,
+        ida_allins.MIPS_slt,
+        ida_allins.MIPS_sltu,
+        ida_allins.MIPS_slti,
+        ida_allins.MIPS_sltiu,
+        ida_allins.MIPS_sll,
+        ida_allins.MIPS_srl,
+        ida_allins.MIPS_sra,
+        ida_allins.MIPS_sllv,
+        ida_allins.MIPS_srlv,
+        ida_allins.MIPS_srav,
     }
 
     arith_logic_complex_itypes = {
-        ida_allins.MIPS_mult, ida_allins.MIPS_multu,
-        ida_allins.MIPS_div, ida_allins.MIPS_divu,
-        ida_allins.MIPS_mfhi, ida_allins.MIPS_mflo,
-        ida_allins.MIPS_mthi, ida_allins.MIPS_mtlo,
+        ida_allins.MIPS_mult,
+        ida_allins.MIPS_multu,
+        ida_allins.MIPS_div,
+        ida_allins.MIPS_divu,
+        ida_allins.MIPS_mfhi,
+        ida_allins.MIPS_mflo,
+        ida_allins.MIPS_mthi,
+        ida_allins.MIPS_mtlo,
     }
 
     memory_load_itypes = {
-        ida_allins.MIPS_lb, ida_allins.MIPS_lbu,
-        ida_allins.MIPS_lh, ida_allins.MIPS_lhu,
-        ida_allins.MIPS_lw, ida_allins.MIPS_lwl, ida_allins.MIPS_lwr,
-        ida_allins.MIPS_lwc1, ida_allins.MIPS_lwc2,
+        ida_allins.MIPS_lb,
+        ida_allins.MIPS_lbu,
+        ida_allins.MIPS_lh,
+        ida_allins.MIPS_lhu,
+        ida_allins.MIPS_lw,
+        ida_allins.MIPS_lwl,
+        ida_allins.MIPS_lwr,
+        ida_allins.MIPS_lwc1,
+        ida_allins.MIPS_lwc2,
     }
 
     memory_store_itypes = {
-        ida_allins.MIPS_sb, ida_allins.MIPS_sh, ida_allins.MIPS_sw,
-        ida_allins.MIPS_swl, ida_allins.MIPS_swr,
-        ida_allins.MIPS_swc1, ida_allins.MIPS_swc2,
+        ida_allins.MIPS_sb,
+        ida_allins.MIPS_sh,
+        ida_allins.MIPS_sw,
+        ida_allins.MIPS_swl,
+        ida_allins.MIPS_swr,
+        ida_allins.MIPS_swc1,
+        ida_allins.MIPS_swc2,
     }
 
     control_flow_cond_itypes = {
-        ida_allins.MIPS_beq, ida_allins.MIPS_bne,
-        ida_allins.MIPS_blez, ida_allins.MIPS_bgtz,
-        ida_allins.MIPS_bltz, ida_allins.MIPS_bgez,
-        ida_allins.MIPS_bc0f, ida_allins.MIPS_bc0t,
-        ida_allins.MIPS_bc1f, ida_allins.MIPS_bc1t,
-        ida_allins.MIPS_bc2f, ida_allins.MIPS_bc2t,
-        ida_allins.MIPS_bc3f, ida_allins.MIPS_bc3t,
+        ida_allins.MIPS_beq,
+        ida_allins.MIPS_bne,
+        ida_allins.MIPS_blez,
+        ida_allins.MIPS_bgtz,
+        ida_allins.MIPS_bltz,
+        ida_allins.MIPS_bgez,
+        ida_allins.MIPS_bc0f,
+        ida_allins.MIPS_bc0t,
+        ida_allins.MIPS_bc1f,
+        ida_allins.MIPS_bc1t,
+        ida_allins.MIPS_bc2f,
+        ida_allins.MIPS_bc2t,
+        ida_allins.MIPS_bc3f,
+        ida_allins.MIPS_bc3t,
     }
 
     control_flow_uncond_itypes = {
-        ida_allins.MIPS_j, ida_allins.MIPS_jr,
+        ida_allins.MIPS_j,
+        ida_allins.MIPS_jr,
     }
 
     control_flow_call_itypes = {
-        ida_allins.MIPS_jal, ida_allins.MIPS_jalr,
-        ida_allins.MIPS_bltzal, ida_allins.MIPS_bgezal,
+        ida_allins.MIPS_jal,
+        ida_allins.MIPS_jalr,
+        ida_allins.MIPS_bltzal,
+        ida_allins.MIPS_bgezal,
     }
 
     system_coproc_itypes = {
-        ida_allins.MIPS_syscall, ida_allins.MIPS_break,
-        ida_allins.MIPS_eret, ida_allins.MIPS_deret,
-        ida_allins.MIPS_mfc0, ida_allins.MIPS_mtc0, ida_allins.MIPS_cfc0, ida_allins.MIPS_ctc0,
+        ida_allins.MIPS_syscall,
+        ida_allins.MIPS_break,
+        ida_allins.MIPS_eret,
+        ida_allins.MIPS_deret,
+        ida_allins.MIPS_mfc0,
+        ida_allins.MIPS_mtc0,
+        ida_allins.MIPS_cfc0,
+        ida_allins.MIPS_ctc0,
         ida_allins.MIPS_cop0,
-        ida_allins.MIPS_mfc1, ida_allins.MIPS_mtc1, ida_allins.MIPS_cfc1, ida_allins.MIPS_ctc1,
+        ida_allins.MIPS_mfc1,
+        ida_allins.MIPS_mtc1,
+        ida_allins.MIPS_cfc1,
+        ida_allins.MIPS_ctc1,
         ida_allins.MIPS_cop1,
-        ida_allins.MIPS_mfc2, ida_allins.MIPS_mtc2, ida_allins.MIPS_cfc2, ida_allins.MIPS_ctc2,
+        ida_allins.MIPS_mfc2,
+        ida_allins.MIPS_mtc2,
+        ida_allins.MIPS_cfc2,
+        ida_allins.MIPS_ctc2,
         ida_allins.MIPS_cop2,
     }
 
@@ -208,7 +256,11 @@ def get_vtables():
     for function in idautils.Functions():
         instructions = get_instructions(function)
 
-        if [x[0] for x in instructions] == [ida_allins.MIPS_li, ida_allins.MIPS_jr, ida_allins.MIPS_nop]:
+        if [x[0] for x in instructions] == [
+            ida_allins.MIPS_li,
+            ida_allins.MIPS_jr,
+            ida_allins.MIPS_nop,
+        ]:
             vtable_addr = instructions[0][2][0]
 
             for xref in get_fn_xrefs(function):
@@ -219,12 +271,14 @@ def get_vtables():
                     print("Skip", hex(vtable_create_fn_addr))
                     continue
 
-                vtables.append({
-                    "start": vtable_create_fn_addr,
-                    "end": function + (4 * 3),
-                    "vtable": vtable_addr,
-                    "functions": get_vtable_functions(vtable_addr)
-                })
+                vtables.append(
+                    {
+                        "start": vtable_create_fn_addr,
+                        "end": function + (4 * 3),
+                        "vtable": vtable_addr,
+                        "functions": get_vtable_functions(vtable_addr),
+                    }
+                )
 
     return vtables
 
@@ -261,7 +315,14 @@ def print_call_tree(caller_callee_map: dict, out_file):
         print(prefix + connector + hex(node), file=out_file)
 
         if node in visited_path:
-            print(prefix + ("    " if is_last else "│   ") + "└── [Cycle detected: Called " + str(node) + " again]", file=out_file)
+            print(
+                prefix
+                + ("    " if is_last else "│   ")
+                + "└── [Cycle detected: Called "
+                + str(node)
+                + " again]",
+                file=out_file,
+            )
             return
 
         callers = callee_to_callers.get(node, [])
@@ -270,7 +331,7 @@ def print_call_tree(caller_callee_map: dict, out_file):
 
         num_callers = len(callers)
         for i, caller in enumerate(callers):
-            is_child_last = (i == num_callers - 1)
+            is_child_last = i == num_callers - 1
             print_branch(caller, new_prefix, is_child_last, new_visited_path)
 
     num_roots = len(root_nodes)
@@ -281,7 +342,7 @@ def print_call_tree(caller_callee_map: dict, out_file):
         callers = callee_to_callers.get(root, [])
         num_callers = len(callers)
         for j, caller in enumerate(callers):
-            is_child_last = (j == num_callers - 1)
+            is_child_last = j == num_callers - 1
             print_branch(caller, "", is_child_last, visited_path)
 
         if i < num_roots - 1:
@@ -312,18 +373,23 @@ def analyze_functions(vtables: list, out_file):
         complexity = calculate_complexity(instructions)
         name = ida_funcs.get_func_name(function)
 
-        all_functions.append({
-            "addr": function,
-            "name": name,
-            "xrefs": xref_count,
-            "instructions": len(instructions),
-            "complexity": complexity
-        })
+        all_functions.append(
+            {
+                "addr": function,
+                "name": name,
+                "xrefs": xref_count,
+                "instructions": len(instructions),
+                "complexity": complexity,
+            }
+        )
 
     all_functions.sort(key=lambda f: f["complexity"], reverse=True)
 
     for func in all_functions:
-        print(f"[{func['name']:<10}][{func['complexity']:04d}] xrefs={func['xrefs']} instructions={func['instructions']}", file=out_file)
+        print(
+            f"[{func['name']:<10}][{func['complexity']:04d}] xrefs={func['xrefs']} instructions={func['instructions']}",
+            file=out_file,
+        )
 
 
 def main():

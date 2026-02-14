@@ -30,10 +30,10 @@ typedef struct class_32ACC_vtable {
     /* 0x05C 8006ef34 */ void (*Unk22)(void *);
     /* 0x060 8006ef38 */ void (*Unk23)(void *);
     /* 0x064 8006ef3c */ void (*Unk24)(void *);
-    /* 0x068 8006ef40 */ u32 pad9;
-    /* 0x068 8006ef44 */ u32 pad10;
-    /* 0x068 8006ef48 */ u32 pad11;
-    /* 0x068 8006ef4C */ u32 pad12;
+    /* 0x068 8006ef40 */ void (*pad9)(void *);
+    /* 0x06C 8006ef44 */ void (*pad10)(struct class_32ACC *, unsigned char *);
+    /* 0x070 8006ef48 */ void (*pad11)(void *);
+    /* 0x074 8006ef4C */ void (*pad12)(void *);
 } class_32ACC_vtable_t;
 
 typedef struct class_32ACC {

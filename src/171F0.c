@@ -5,7 +5,9 @@
 #include "memory.h"
 
 extern class_171F0_vtable_t **D_8006D430;
+
 static s32 D_8008A84C = 0x13;
+extern s32 D_8008A854;
 
 s32 init_800269F0(class_171F0_t *This) {
     This->m_Unk7_1 = 0;
@@ -203,8 +205,12 @@ s32 func_80026FE8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/171F0", func_80027024);
 
-INCLUDE_ASM("asm/nonmatchings/171F0", set_data_folder);
+void set_data_folder(s32 Value) {
+    D_8008A854 = Value;
+}
 
-INCLUDE_ASM("asm/nonmatchings/171F0", func_800270B8);
+s32 func_800270B8() {
+    return D_8008A854;
+}
 
 INCLUDE_ASM("asm/nonmatchings/171F0", func_800270C4);

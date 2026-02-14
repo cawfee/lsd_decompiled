@@ -5,7 +5,10 @@
 // TODO vtable
 // Related to sound?
 
-extern sound_engine_vtable_t *g_SOUND_ENGINE_VTABLE;
+extern sound_engine_vtable_t g_SOUND_ENGINE_VTABLE;
+
+extern s32 D_8008A8C4;
+extern s32 D_8008A8CC;
 
 sound_engine_t *sound_engine_create(u32 Unk1) {
     sound_engine_t *allocated = (sound_engine_t *) memory_allocate_mem(0x64);
@@ -125,3 +128,44 @@ void func_8002CBF4(sound_engine_t *This, s32 Unk) {
 sound_engine_vtable_t *sound_engine_get_vtable(void) {
     return &g_SOUND_ENGINE_VTABLE;
 }
+
+s32 func_8002CC1C(void) {
+    return D_8008A8C4;
+}
+
+s32 helper_1_get_crescendo_time_mod(void) {
+    return D_8008A8CC;
+}
+
+s32 helper_1_set_entity(sound_engine_t *This, s32 *Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
+    s32 *ptr;
+    s32 val;
+    s32 i;
+
+    if (*Unk2 != 0) {
+        return 0;
+    }
+
+    ptr = Unk2 + 6;
+    val = -1;
+    i = 2;
+
+    Unk2[0] = Unk3;
+    Unk2[2] = Unk4;
+    Unk2[3] = Unk5;
+
+    do {
+        *ptr = val;
+        i--;
+        ptr += 5;
+    } while (i >= 0);
+
+    Unk2[1] = 0;
+    Unk2[5] = 10;
+
+    return 1;
+}
+
+INCLUDE_ASM("asm/nonmatchings/sound_engine", func_8002CC84);
+
+INCLUDE_ASM("asm/nonmatchings/sound_engine", helper_1_update_entity);

@@ -15,7 +15,7 @@ def main():
                 if found:
                     name = found.group(1).strip()
                     addr = int(found.group(2), 16)
-                    
+
                     if addr in addresses:
                         print(f"Duplicate address found: {addr:08x} for symbol {name}")
                     elif name in symbols:

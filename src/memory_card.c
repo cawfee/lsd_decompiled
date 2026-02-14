@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include <psx/kernel.h>
+#include <psx/libapi.h>
 
 #include "base_class.h"
 #include "memory_card.h"
@@ -159,21 +160,34 @@ INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004EF6C);
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F32C);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F394);
+void func_8004F394(memory_card_t *This) {
+    func_8004F40C(This, EnableEvent, 1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F3BC);
+void func_8004F3BC(memory_card_t *This) {
+    func_8004F40C(This, DisableEvent, 1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F3E4);
+void func_8004F3E4(memory_card_t *This) {
+    func_8004F40C(This, TestEvent, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F40C);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F4A4);
+s32 func_8004F4A4(memory_card_t *This) {
+    return func_8004F4C8(&This->m_Unk4, 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F4C8);
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F55C);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F5DC);
+void func_8004F5DC(memory_card_t *This) {
+  This->m_Unk26 = 0;
+  This->m_Unk25 = 0;
+  This->vtable->Unk4(This, This->m_Unk23);
+  This->vtable->Unk4(This, This->m_Unk24);
+}
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F638);
 
@@ -193,11 +207,24 @@ INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004FBE4);
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004FE24);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004FF40);
+void func_8004FF40(memory_card_t *This) {
+    s32 m_Unk27; // $a0
+
+  m_Unk27 = This->m_Unk27;
+  if ( m_Unk27 )
+    This->m_Unk27 = (*(int ( **)(s32))(*(s32 *)m_Unk27 + 4))(m_Unk27);
+}
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004FF90);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004FFF4);
+void func_8004FFF4(memory_card_t *This, s32 Unk) {
+    s32 m_Unk26; // $a0
+
+  m_Unk26 = This->m_Unk26;
+  if ( m_Unk26 ) {
+    (*(void ( **)(s32, int, int, int))(*(s32 *)m_Unk26 + 128))(m_Unk26, Unk, 127, 127);
+  }
+}
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_80050034);
 

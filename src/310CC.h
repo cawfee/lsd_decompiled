@@ -104,7 +104,7 @@ typedef struct class_310CC {
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
     /* 0xA8 */ s8 m_Unk41_1;
-    /* 0xA9 */ s8 m_Unk41_2;
+    /* 0xA9 */ u8 m_Unk41_2;
     /* 0xAA */ s8 m_Unk41_3;
     /* 0xAB */ s8 m_Unk41_4;
     /* 0xAC */ s8 m_Unk42_1;

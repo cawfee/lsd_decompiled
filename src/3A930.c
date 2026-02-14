@@ -2,7 +2,7 @@
 
 #include "timer.h"
 
-extern class_3A930_vtable_t **D_80086668;
+extern class_3A930_vtable_t D_80086668;
 
 class_3A930_t *func_8004A130(u32 Unk1, u32 Unk2) {
     class_3A930_t *allocated = (class_3A930_t *) memory_allocate_mem(0x38);
