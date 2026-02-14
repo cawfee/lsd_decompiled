@@ -17,7 +17,10 @@ asset_player_t *asset_player_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
 
 INCLUDE_ASM("asm/nonmatchings/asset_player", asset_player_construct);
 
-INCLUDE_ASM("asm/nonmatchings/asset_player", asset_player_cleanup);
+void asset_player_cleanup(asset_player_t *This) {
+    (*(void ( **)(s32))(*(s32 *)This->m_Unk44 + 4))(This->m_Unk44);
+  func_8003DFBC()->Cleanup(This);
+}
 
 void func_8003BA38(asset_player_t *This) {
     This->m_Unk49 = -1;

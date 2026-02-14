@@ -3,8 +3,12 @@
 
 extern entity_vtable_t g_ENTITY_VTABLE;
 
+extern s32 D_80089DCC;
+extern s32 D_80089DD8;
+extern s32 D_80089E38;
 extern void *D_8008AC14;
 extern void *D_8008AC0C;
+
 extern entity_prop_t g_ENTITY_TABLE[];
 
 void func_8005DF9C(entity_t *This, s32 Unk2);
@@ -523,7 +527,16 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005E160);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E3C4);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E480);
+void func_8005E480(entity_t *This, s32 *Unk) {
+    s32 v2; // $v0
+  s32 v4; // $v1
+
+  v2 = This->vtable->Unk81(This);
+  v4 = Unk[1];
+  Unk[4] = v2;
+  if ( !v4 )
+    Unk[7] = 23;
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E4D0);
 
@@ -531,7 +544,19 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005E694);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E6F0);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E7A8);
+void func_8005E7A8(entity_t *This, s32 *Unk) {
+    s32 v2; // $v0
+
+  v2 = Unk[1];
+  Unk[4] = 0;
+  if ( !v2 )
+  {
+    Unk[7] = 11;
+    Unk[12] = 11;
+    Unk[17] = 11;
+  }
+  This->vtable->Unk48(This, -30, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E7F8);
 
@@ -541,11 +566,18 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005EBB4);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005EC98);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005ED10);
+void func_8005ED10(entity_t *This, s32 *Unk) {
+    if (!This->m_Unk62) {
+        Unk[4] = 0;
+        Unk[7] = 15;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005ED30);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005EF20);
+void func_8005EF20(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089DD8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005EF54);
 
@@ -553,7 +585,9 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005EFF4);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F0D8);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F1A8);
+void func_8005F1A8(entity_t *This) {
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F1D4);
 
@@ -565,7 +599,9 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005F544);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F608);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F6D4);
+void func_8005F6D4(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089E38);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F708);
 
@@ -573,7 +609,9 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005F800);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F970);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005FA64);
+void func_8005FA64(entity_t *This) {
+    This->vtable->Unk48(This, -30, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FA94);
 
@@ -583,7 +621,9 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_8005FC58);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FDFC);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005FEC8);
+void func_8005FEC8(entity_t *This) {
+    This->vtable->Unk50(This, -90, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FEF8);
 
@@ -620,7 +660,11 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80060F38);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061070);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061158);
+void func_80061158(entity_t *This) {
+    if ( !This->m_Unk62 ) {
+        This->vtable->Unk50(This, -200, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061198);
 
@@ -630,7 +674,13 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80061778);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061A90);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061C04);
+void func_80061C04(entity_t *This, s32 *Unk) {
+    if (This->m_Unk32 == 30) {
+        Unk[7] = 18;
+        Unk[4] = 0;
+        Unk[8] = -1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061C2C);
 
@@ -678,9 +728,22 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80063874);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80063BC0);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063C84);
+void func_80063C84(entity_t *This) {
+    This->m_Unk3 = 0;
+    This->m_Unk6 = 7;
+    This->m_Unk7 = -2;
+    This->m_Unk11 = 7;
+    This->m_Unk12 = -2;
+    This->m_Unk16 = 7;
+    This->m_Unk17 = -2;
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063CAC);
+void func_80063CAC(entity_t *This) {
+    This->m_Unk6 = 18;
+    This->m_Unk3 = 0;
+    This->m_Unk11 = 3;
+    This->m_Unk16 = 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80063CC8);
 
@@ -714,7 +777,10 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80064B14);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80064B80);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064CA4);
+void func_80064CA4(entity_t *This) {
+    func_80062570();
+    This->vtable->Unk17(This, 1, &D_80089E38);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80064CEC);
 
@@ -724,15 +790,23 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80064E34);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80064FBC);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800650D4);
+void func_800650D4(entity_t *This, void *Unk) {
+    func_80060D80(This, Unk);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_800650F4);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8006519C);
+void func_8006519C(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089E38);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800651D0);
+void func_800651D0(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089E38);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80065204);
+void func_80065204(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089DCC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80065238);
 

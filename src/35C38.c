@@ -1,13 +1,18 @@
-#include "common.h"
+#include "35C38.h"
 
-void *func_80045438(s32 Unk1, s32 Unk2, s32 Unk3) {
-    void *allocated = (void *) memory_allocate_mem(0x6C);
+extern class_35C38_vtable_t D_8006F614;
+
+extern s32 D_8008A940;
+
+class_35C38_t *func_80045438(s32 Unk1, s32 Unk2, s32 Unk3) {
+    class_35C38_t *allocated = (class_35C38_t *) memory_allocate_mem(0x6C);
 
     if (allocated) {
-        void *vtable = func_80045E44();
-        if (!(*((s32(**)(void *, s32, s32, s32)) vtable + 2))(allocated, Unk1, Unk2, Unk3)) {
+        ;
+        if (!func_80045E44()->Construct(allocated, Unk1, Unk2, Unk3)) {
             return allocated;
         }
+
         memory_free_mem(allocated);
     }
 
@@ -24,11 +29,15 @@ INCLUDE_ASM("asm/nonmatchings/35C38", func_8004575C);
 
 INCLUDE_ASM("asm/nonmatchings/35C38", func_800457C0);
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_800458AC);
+void func_800458AC(class_35C38_t *This) {
+    This->m_Unk19 = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/35C38", func_800458B8);
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_8004593C);
+void func_8004593C(class_35C38_t *This) {
+    This->m_Unk19 = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/35C38", func_80045948);
 
@@ -51,10 +60,21 @@ INCLUDE_ASM("asm/nonmatchings/35C38", func_80045C94);
 
 INCLUDE_ASM("asm/nonmatchings/35C38", func_80045CFC);
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_80045DE0);
+void func_80045DE0(void) {
+    if (D_8008A940 != NULL) {
+        (*(void ( **)(int))(*(s32 *)D_8008A940 + 96))(D_8008A940);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_80045E18);
+void func_80045E18(class_35C38_t *This) {
+    while (!This->m_Unk18) {
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_80045E3C);
+void func_80045E3C(class_35C38_t *This, s32 Unk) {
+    This->m_Unk25 = Unk;
+}
 
-INCLUDE_ASM("asm/nonmatchings/35C38", func_80045E44);
+class_35C38_vtable_t *func_80045E44(void) {
+    return &D_8006F614;
+}

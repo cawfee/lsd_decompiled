@@ -36,8 +36,7 @@ def parse_c_obj(fp: str):
         start_size = int(start_size, 16)
         func_size = end_size - start_size
         non_matching_path = os.path.join(
-            NON_MATCHING_DIR,
-            os.path.relpath(fp, BUILD_SRC_DIR).replace(".c.o", "")
+            NON_MATCHING_DIR, os.path.relpath(fp, BUILD_SRC_DIR).replace(".c.o", "")
         )
 
         if not os.path.isfile(os.path.join(non_matching_path, name + ".s")):
@@ -66,15 +65,36 @@ def main():
                     if file.startswith("psyq_"):
                         psyq_size += obj_size
                     else:
-                        file_stats.append({"path": fp, "decompiled": 0, "total": obj_size, "type": "asm"})
+                        file_stats.append(
+                            {
+                                "path": fp,
+                                "decompiled": 0,
+                                "total": obj_size,
+                                "type": "asm",
+                            }
+                        )
                 else:
                     # Assume hasm is 100%
-                    file_stats.append({"path": fp, "decompiled": obj_size, "total": obj_size, "type": "hasm"})
+                    file_stats.append(
+                        {
+                            "path": fp,
+                            "decompiled": obj_size,
+                            "total": obj_size,
+                            "type": "hasm",
+                        }
+                    )
 
                 total_size += obj_size
             elif file.endswith(".c.o"):
                 decompiled_size, obj_size = parse_c_obj(fp)
-                file_stats.append({"path": fp, "decompiled": decompiled_size, "total": obj_size, "type": "C"})
+                file_stats.append(
+                    {
+                        "path": fp,
+                        "decompiled": decompiled_size,
+                        "total": obj_size,
+                        "type": "C",
+                    }
+                )
                 total_size += obj_size
                 total_decompiled += decompiled_size
             # else:
@@ -84,7 +104,9 @@ def main():
 
     total_non_psyq = total_size - psyq_size
     total_progress = (total_decompiled / total_non_psyq) * 100
-    color = "green" if total_progress > 75 else ("yellow" if total_progress > 25 else "red")
+    color = (
+        "green" if total_progress > 75 else ("yellow" if total_progress > 25 else "red")
+    )
 
     CONSOLE.print("\n[bold]Overall Progress:[/]")
 
@@ -94,11 +116,17 @@ def main():
         TextColumn("[progress.percentage]{task.percentage:>3.1f}%"),
         TextColumn(f"({total_decompiled:,} / {total_non_psyq:,} bytes)"),
         console=CONSOLE,
-        transient=False
+        transient=False,
     ) as progress:
-        progress.add_task(f"[{color}]Total Decompiled", total=total_non_psyq, completed=total_decompiled)
+        progress.add_task(
+            f"[{color}]Total Decompiled",
+            total=total_non_psyq,
+            completed=total_decompiled,
+        )
 
-    CONSOLE.print(f"\n[default]PSYQ Size: {psyq_size}/{total_size} ({psyq_size / total_size * 100:.2f}%)")
+    CONSOLE.print(
+        f"\n[default]PSYQ Size: {psyq_size}/{total_size} ({psyq_size / total_size * 100:.2f}%)"
+    )
 
     CONSOLE.print("\n[bold]File Breakdown:[/]")
     table = Table(show_header=True, header_style="bold magenta")
@@ -136,11 +164,7 @@ def main():
             perc_text = Text(f"{percentage:.2f}%", style="red")
 
         table.add_row(
-            display_path,
-            file_type,
-            f"{decompiled:,}",
-            f"{total:,}",
-            perc_text
+            display_path, file_type, f"{decompiled:,}", f"{total:,}", perc_text
         )
 
     CONSOLE.print(table)

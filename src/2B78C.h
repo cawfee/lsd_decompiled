@@ -23,7 +23,7 @@ typedef struct class_2B78C_vtable {
     /* 0x034 8006E524 */ void (*Unk12)(void *);
     /* 0x038 8006E528 */ void (*Unk13)(void *, void *, s32);
     /* 0x03C 8006E52C */ void (*Unk14)(void *);
-    /* 0x040 8006E530 */ void (*Unk15)(void *);
+    /* 0x040 8006E530 */ void (*Unk15)(void *, s32 *, s32);
     /* 0x044 8006E534 */ void (*InitGraphics)(void *, gs_helper_t *, class_16634_t *, u32);
     /* 0x048 8006E538 */ void (*Unk17)(void *);
     /* 0x04C 8006E53C */ void (*Unk18)(void *);
@@ -36,6 +36,7 @@ typedef struct class_2B78C {
     /* 0x0C */ s32 m_Unk2;
     /* 0x10 */ s32 m_Unk3;
     /* 0x14 */ s32 m_Unk4;
+    /* 0x18 */ s32 m_Unk5;
 } class_2B78C_t;
 
 class_2B78C_vtable_t *func_8003B20C(void);

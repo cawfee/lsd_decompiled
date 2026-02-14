@@ -1,6 +1,8 @@
 #include "FA50.h"
 #include "base_class.h"
 
+#include <psx/libgs.h>
+
 extern class_FA50_vtable_t g_CLASS_FA50_VTABLE;
 
 class_FA50_t *class_FA50_create(s32 Unk1) {

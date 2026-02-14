@@ -2,6 +2,9 @@
 
 extern class_305B0_vtable_t g_CLASS_305B0_VTABLE;
 
+extern s32 D_8006EAA8[];
+extern s32 D_8006EA90[];
+
 class_305B0_t *class_305B0_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     class_305B0_t *allocated = (class_305B0_t *) memory_allocate_mem(0xA0);
 
@@ -64,11 +67,21 @@ INCLUDE_ASM("asm/nonmatchings/305B0", func_80040154);
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_800402F0);
 
-INCLUDE_ASM("asm/nonmatchings/305B0", func_800403F8);
+s32 func_800403F8(class_305B0_t *This) {
+    if (This->m_Unk29 == 15) {
+        return D_8006EAA8;
+    }
+
+    return (s32 *)((s8 *)D_8006EA90 + 3 * This->m_Unk29);
+}
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_8004042C);
 
-INCLUDE_ASM("asm/nonmatchings/305B0", func_80040490);
+void func_80040490(class_305B0_t *This) {
+    __builtin_memcpy(&This->m_Unk19, &This->m_Unk35, 8);
+    This->m_Unk23_1 = This->m_Unk33;
+    This->m_Unk23_2 = This->m_Unk34;
+}
 
 void func_800404B4(class_305B0_t *This, s32 Unk2, s32 Unk3) {
     This->m_Unk37 = Unk2;

@@ -57,7 +57,7 @@ typedef struct asset_player_vtable {
     /* 0x0C8 8006e6c0 */ void (*Unk49)(void *);
     /* 0x0CC 8006e6c4 */ void (*Unk50)(void *);
     /* 0x0D0 8006e6c8 */ void (*Unk51)(void *);
-    /* 0x0D4 8006e6cc */ void (*Unk52)(void *);
+    /* 0x0D4 8006e6cc */ void (*Unk52)(void *, s8 *, s32);
     /* 0x0D8 8006e6d0 */ void (*Unk53)(void *);
     /* 0x0DC 8006e6d4 */ void (*Unk54)(void *);
     /* 0x0E0 8006e6d8 */ void (*Unk55)(void *);

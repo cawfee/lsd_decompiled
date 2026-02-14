@@ -9,7 +9,7 @@ typedef struct renderer_vtable {
     /* 0x008 8006e8ec */ void (*Construct)(void *);
     /* 0x00C 8006e8f0 */ void (*Cleanup)(void *);
     /* 0x010 8006e8f4 */ void (*Unk3)(void *);
-    /* 0x014 8006e8f8 */ void (*Unk4)(void *);
+    /* 0x014 8006e8f8 */ void (*Unk4)(void *, s32);
     /* 0x018 8006e8fc */ void (*Unk5)(void *);
     /* 0x01C 8006e900 */ void (*Unk6)(void *);
     /* 0x020 8006e904 */ void (*Unk7)(void *);
@@ -45,7 +45,7 @@ typedef struct renderer_vtable {
     /* 0x098 8006e97c */ void (*Unk37)(void *);
     /* 0x09C 8006e980 */ void (*Unk38)(void *);
     /* 0x0A0 8006e984 */ void (*Unk39)(void *);
-    /* 0x0A4 8006e988 */ void (*Unk40)(void *);
+    /* 0x0A4 8006e988 */ void (*Unk40)(void *, s32);
     /* 0x0A8 8006e98c */ void (*Unk41)(void *);
     /* 0x0AC 8006e990 */ void (*Unk42)(void *);
     /* 0x0B0 8006e994 */ void (*Unk43)(void *);
@@ -67,17 +67,15 @@ typedef struct renderer {
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
-    /* 0x34 */ s32 m_Unk12;
-    /* 0x38 */ s32 m_Unk13;
+    /* 0x34 */ s32 m_Unk12[2];
     /* 0x3C */ s32 m_Unk14;
-    /* 0x40 */ s32 m_Unk15;
+    /* 0x40 */ void (*m_Unk15)(void);
     /* 0x44 */ s32 m_Unk16;
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
     /* 0x54 */ s32 m_Unk20;
-    /* 0x58 */ s32 m_Unk21;
-    /* 0x5C */ s32 m_Unk22;
+    /* 0x58 */ s8 m_Unk21[8];
     /* 0x60 */ s32 m_Unk23;
     /* 0x64 */ s32 m_Unk24;
     /* 0x68 */ s32 m_Unk25;
@@ -103,5 +101,7 @@ typedef struct renderer {
     /* 0xB8 */ s32 m_Unk45;
     /* 0xBC */ s32 m_Unk46;
 } renderer_t;
+
+renderer_vtable_t *renderer_get_vtable(void);
 
 #endif

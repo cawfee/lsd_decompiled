@@ -6,7 +6,7 @@
 // TODO unknown class
 
 // vtable
-extern class_1C92C_vtable_t **g_CLASS_1C92C_VTABLE;
+extern class_1C92C_vtable_t g_CLASS_1C92C_VTABLE;
 
 class_1C92C_t *class_1C92C_create(u32 Unk1) {
     class_1C92C_t *allocated = (class_1C92C_t *) memory_allocate_mem(0x34);

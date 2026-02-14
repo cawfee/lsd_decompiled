@@ -46,14 +46,14 @@ INCLUDE_ASM("asm/nonmatchings/timer", func_8003E4B8);
 void func_8003E538(timer_t *This) {
     u32 *m_Unk2;
 
-  m_Unk2 = (u32 *)This->m_Unk2;
-  This->m_TicksPassed = 0;
-(*(int ( **)(u32))(*(u32 *)*m_Unk2 + 72))(*m_Unk2);
+    m_Unk2 = (u32 *) This->m_Unk2;
+    This->m_TicksPassed = 0;
+    (*(int (**)(u32))(*(u32 *) *m_Unk2 + 72))(*m_Unk2);
 }
 
 void func_8003E578(timer_t *This) {
-(*(void (**)(u32))(**(u32 **)This->m_Unk2 + 76))(*(u32 *)This->m_Unk2);
-  This->m_TicksPassed = 0;
+    (*(void (**)(u32))(**(u32 **) This->m_Unk2 + 76))(*(u32 *) This->m_Unk2);
+    This->m_TicksPassed = 0;
 }
 
 timer_vtable_t *timer_get_vtable(void) {

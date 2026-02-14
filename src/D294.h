@@ -44,7 +44,7 @@ typedef struct class_D294_vtable {
     /* 0x094 8006b660 */ void (*Unk36)(void *, void **, s32);
     /* 0x098 8006b664 */ void (*Unk37)(void *, void **, s32);
     /* 0x09C 8006b668 */ void (*Unk38)(void *, void **, s32);
-    /* 0x0A0 8006b66c */ void (*Unk39)(void *);
+    /* 0x0A0 8006b66c */ void (*Unk39)(void *, s32);
     /* 0x0A4 8006b670 */ void (*Unk40)(void *);
     /* 0x0A8 8006b674 */ void (*Unk41)(void *);
     /* 0x0AC 8006b678 */ void (*Unk42)(void *);

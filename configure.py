@@ -54,7 +54,15 @@ INCLUDE_FLAGS = ["-Iinclude/asm", "-Iinclude"]
 AS_FLAGS = INCLUDE_FLAGS + ["-march=r3000", "-mtune=r3000", "-no-pad-sections"]
 CPP_FLAGS = INCLUDE_FLAGS + ["-undef", "-Wall", "-lang-c", "-fno-builtin"]
 CPPPLUS_FLAGS = INCLUDE_FLAGS + ["-lang-c++"]
-C_FLAGS = ["-quiet", "-Wall", "-fno-builtin", "-mno-abicalls", "-funsigned-char", "-G0", "-O2"]
+C_FLAGS = [
+    "-quiet",
+    "-Wall",
+    "-fno-builtin",
+    "-mno-abicalls",
+    "-funsigned-char",
+    "-G0",
+    "-O2",
+]
 C_FLAGS_G8 = [flag for flag in C_FLAGS if not flag.startswith("-G")] + ["-G8"]
 CPLUS_FLAGS = C_FLAGS + []
 MASPSX_FLAGS = ["--dont-force-G0", "--expand-div", "--aspsx-version=2.21", "-G8"]
@@ -131,6 +139,7 @@ asm_auto_targets = [
     "asm/data/7B050.sdata.s",
     "asm/data/7B0D4.sdata.s",
     "asm/data/7B0DC.sdata.s",
+    "asm/data/7B0E8.sdata.s",
     "asm/data/7B16C.sdata.s",
     "asm/data/7B230.sdata.s",
     "asm/data/7B3C0.sdata.s",
@@ -233,28 +242,22 @@ asm_auto_targets = [
     "asm/psyq_libcard_c171.s",
     "asm/psyq_libcard_c172.s",
     "asm/psyq_libcard_card.s",
-
     "src/psx/SetMem.s",
 ]
 asm_targets = []
 c_targets = [
     "src/psx/memory.c",
-
     "src/timer.c",
-    "src/2B78C.c",
     "src/game_flow.c",
     "src/memory_card.c",
     "src/texture_helper.c",
     "src/asset_player.c",
     "src/renderer.c",
     "src/stage_grid.c",
-    
     "src/D294.c",
     "src/FA50.c",
     "src/gs_helper.c",
-    "src/16334.c",
     "src/1C92C.c",
-    "src/sound_engine.c",
     "src/2C694.c",
     "src/305B0.c",
     "src/30CD0.c",
@@ -276,12 +279,9 @@ c_targets = [
     "src/354D4.c",
     "src/35730.c",
     "src/359B8.c",
-    "src/35C38.c",
-    "src/3770C.c",
     "src/39094.c",
     "src/dream_context.c",
     "src/3A930.c",
-    "src/3ACC8.c",
     "src/3DA54.c",
     "src/3DB8C.c",
     "src/413A8.c",
@@ -294,30 +294,31 @@ c_targets = [
     "src/entity.c",
     "src/55DD4.c",
     "src/base_class.c",
-    "src/dream_sys.c",
-    "src/1CBB8.c",
-    "src/helper_unk_1.c",
 ]
 c_targets_g8 = [
     "src/main.c",
-
     "src/memory.c",
     "src/utils/path_helper.c",
-
     "src/main_menu.c",
     "src/171F0.c",
     "src/bgm.c",
+    "src/sound_engine.c",
+    "src/2B78C.c",
+    "src/dream_sys.c",
+    "src/1CBB8.c",
+    "src/35C38.c",
+    "src/3ACC8.c",
+    "src/3770C.c",
+    "src/16334.c",
 ]
-cpp_targets = [
-
-]
+cpp_targets = []
 clean_files = [
     UNDEF_SYMS,
     UNDEF_FUNCS,
     LD_SCRIPT,
     MAP_FILE,
     EXE,
-    ELF
+    ELF,
 ] + asm_auto_targets
 
 # Create writer
@@ -352,11 +353,7 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.newline()
 
     # Rule for .s files
-    n.rule(
-        "asm",
-        command="$as $asflags -o $out $in",
-        description="AS $out"
-    )
+    n.rule("asm", command="$as $asflags -o $out $in", description="AS $out")
     n.newline()
 
     # Rule for .c files
@@ -364,7 +361,7 @@ with open("build.ninja", "w", encoding="utf-8") as f:
         "cc",
         command="$cpp $cppflags $in | $cc $cflags | $python $maspsx $maspsxflags | $as $asflags -o $out",
         description="CC $out",
-        depfile="$out.asmproc.d"
+        depfile="$out.asmproc.d",
     )
 
     # G8 files
@@ -372,7 +369,7 @@ with open("build.ninja", "w", encoding="utf-8") as f:
         "cc_g8",
         command="$cpp $cppflags -DCCG8 $in | $cc $cflags_g8 | $python $maspsx $maspsxflags | $as $asflags -o $out",
         description="CC $out",
-        depfile="$out.asmproc.d"
+        depfile="$out.asmproc.d",
     )
     n.newline()
 
@@ -381,44 +378,28 @@ with open("build.ninja", "w", encoding="utf-8") as f:
         "cplus",
         command="$cpp263 $cppplusflags $in | $cplus $cplusflags | $python $maspsx $maspsxflags | $as $asflags -o $out",
         description="CXX $out",
-        depfile="$out.asmproc.d"
+        depfile="$out.asmproc.d",
     )
 
     n.rule(
         "link",
         command=f"$ld -o $out -Map {shlex.quote(MAP_FILE)} -T {shlex.quote(LD_SCRIPT)}"
-                f" -T {shlex.quote(UNDEF_SYMS)} -T {shlex.quote(UNDEF_FUNCS)} $ldflags $in",
-        description="LINK $out"
+        f" -T {shlex.quote(UNDEF_SYMS)} -T {shlex.quote(UNDEF_FUNCS)} $ldflags $in",
+        description="LINK $out",
     )
     n.newline()
 
-    n.rule(
-        "objcopy",
-        command="$objcopy -O binary $in $out",
-        description="OBJCOPY $out"
-    )
+    n.rule("objcopy", command="$objcopy -O binary $in $out", description="OBJCOPY $out")
     n.newline()
 
-    n.rule(
-        "splat",
-        command="$python $splat $in",
-        description="SPLAT $in"
-    )
+    n.rule("splat", command="$python $splat $in", description="SPLAT $in")
     n.newline()
 
     quoted_clean_files = " ".join([shlex.quote(f) for f in clean_files])
-    n.rule(
-        "clean_custom",
-        command=f"rm -rf {quoted_clean_files}",
-        description="CLEAN"
-    )
+    n.rule("clean_custom", command=f"rm -rf {quoted_clean_files}", description="CLEAN")
     n.newline()
 
-    n.rule(
-        "checksha",
-        command="sha1sum --check $in",
-        description="CHECK $in"
-    )
+    n.rule("checksha", command="sha1sum --check $in", description="CHECK $in")
     n.newline()
 
     n.build([LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS], "splat", SPLAT_CONFIG)
@@ -453,7 +434,7 @@ with open("build.ninja", "w", encoding="utf-8") as f:
         ELF,
         rule="link",
         inputs=obj_files,
-        implicit=[LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS]
+        implicit=[LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS],
     )
     n.newline()
 
@@ -504,7 +485,15 @@ def setup():
     if not os.path.isdir(maspsx_dir):
         print(f"Installing maspsx to {maspsx_dir}...")
 
-        subprocess.check_call(["git", "clone", "--recursive", "https://github.com/mkst/maspsx", maspsx_dir])
+        subprocess.check_call(
+            [
+                "git",
+                "clone",
+                "--recursive",
+                "https://github.com/mkst/maspsx",
+                maspsx_dir,
+            ]
+        )
 
 
 def check_dependencies():
@@ -512,16 +501,18 @@ def check_dependencies():
     import shutil
 
     if not os.path.isfile(SPLAT_CONFIG):
-        print(f"[!] Splat config file not found: {SPLAT_CONFIG}, run \"configure.py setup\"")
+        print(
+            f'[!] Splat config file not found: {SPLAT_CONFIG}, run "configure.py setup"'
+        )
 
     if not os.path.isfile(MASPSX):
-        print(f"[!] MASPSX is not found: {MASPSX}, run \"configure.py setup\"")
+        print(f'[!] MASPSX is not found: {MASPSX}, run "configure.py setup"')
 
     if not os.path.isfile(CC):
-        print(f"[!] CC is not found: {CC}, run \"configure.py setup\"")
+        print(f'[!] CC is not found: {CC}, run "configure.py setup"')
 
     if not shutil.which(CPP):
-        print(f"[!] CPP is not found: {CPP}, run \"configure.py setup\"")
+        print(f'[!] CPP is not found: {CPP}, run "configure.py setup"')
 
     if not shutil.which(OBJCOPY):
         print(f"[!] OBJCOPY is not found: {OBJCOPY}")

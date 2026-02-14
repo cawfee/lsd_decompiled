@@ -1,14 +1,29 @@
 #include "2B78C.h"
 
 #include "game_flow.h"
+#include "base_class.h"
 
-// Unsure how this class is structured
+// static s32 g_CD_INIT = 0;
+// static s32 D_8008A8E0[2] = {0x140, 0xF0};
 
-// static bool g_CD_INIT = false;
+extern class_2B78C_vtable_t D_8006E4F0;
 
-extern class_2B78C_vtable_t **D_8006E4F0;
+extern s32 g_CD_INIT;
+extern s32 D_8008A8E0[];
 
-INCLUDE_ASM("asm/nonmatchings/2B78C", func_8003AF8C);
+void func_8003AF8C(class_2B78C_t *This, s32 Unk) {
+    base_class_get_vtable()->Construct(This);
+    This->vtable = func_8003B20C();
+
+    if (!g_CD_INIT) {
+        CdInit();
+        g_CD_INIT = 1;
+    }
+
+    This->m_Unk5 = 0;
+    func_80026CFC(Unk);
+    This->vtable->Unk15(This, &D_8008A8E0, 0);
+}
 
 void nullsub25(void) {
 }

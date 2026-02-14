@@ -63,14 +63,18 @@ const char *get_se_path(void) {
     return *get_se_paths();
 }
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048E2C);
+s32 func_80048E2C(s32 Arg) {
+    return get_path_table(NULL) + (D_800819E8[Arg] * 0x1C);
+}
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048E80);
+const char *func_80048E80(s32 Arg) {
+    return func_80048E2C(Arg);
+}
 
 INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048EA0);
 
-const char *func_80048F60(void) {
-    return func_80048E2C() + 0x70;
+const char *func_80048F60(s32 Arg) {
+    return func_80048E2C(Arg) + 0x70;
 }
 
 INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048F84);

@@ -94,5 +94,6 @@ typedef struct class_477E4 {
 } class_477E4_t;
 
 class_477E4_vtable_t *func_80057C84(void);
+void func_80057618(class_477E4_t *This, void (*Fnc)(s32, s32, s32), s32 Unk1, s32 Unk2);
 
 #endif

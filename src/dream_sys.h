@@ -15,6 +15,22 @@ typedef enum {
     MOVE_COUNT
 } dream_sys_move_state_t;
 
+typedef union {
+    s16 value;
+
+    struct {
+        s8 dynamic;
+        s8 upper;
+    } axis;
+} dream_sys_mood_graph_point_t;
+
+typedef struct {
+    dream_sys_mood_graph_point_t last_mood;
+    s32 dynamic_mood;
+    s32 upper_mood;
+    s32 amount_mood;
+} dream_sys_mood_graph_contrib_t;
+
 typedef struct dream_sys_vtable {
     /* 0x000 80087bdc */ u32 value;
     /* 0x004 80087be0 */ void (*Destruct)(void *);
@@ -128,7 +144,7 @@ typedef struct dream_sys_vtable {
         void *, s32 *); // probably a struct, not region code or anything? TODO name change
     /* 0x1B4 80087d90 */ void (*Unk108)(void *);
     /* 0x1B8 80087d94 */ void (*Unk109)(void *);
-    /* 0x1BC 80087d98 */ void (*Unk110)(void *);
+    /* 0x1BC 80087d98 */ void (*Unk110)(void *, void *);
     /* 0x1C0 80087d9c */ void (*Unk111)(void *);
     /* 0x1C4 80087da0 */ void (*Unk112)(void *);
     /* 0x1C8 80087da4 */ void (*Unk113)(void *);
@@ -144,10 +160,10 @@ typedef struct dream_sys_vtable {
     /* 0x1F0 80087dcc */ void (*Unk123)(void *);
     /* 0x1F4 80087dd0 */ void (*Unk124)(void *);
     /* 0x1F8 80087dd4 */ void (*Unk125)(void *);
-    /* 0x1FC 80087dd8 */ void (*Unk126)(void *);
+    /* 0x1FC 80087dd8 */ void (*Unk126)(void *, s8 *);
     /* 0x200 80087ddc */ void (*Unk127)(void *);
     /* 0x204 80087de0 */ void (*Unk128)(void *);
-    /* 0x208 80087de4 */ void (*Unk129)(void *);
+    /* 0x208 80087de4 */ void (*Unk129)(void *, s32 *, s32);
     /* 0x20C 80087de8 */ void (*Unk130)(void *);
     /* 0x210 80087dec */ void (*Unk131)(void *);
     /* 0x214 80087df0 */ void (*Unk132)(void *);
@@ -573,7 +589,7 @@ typedef struct dream_sys {
     /* 0x66C */ s32 m_Unk410;
     /* 0x670 */ s32 m_Unk411;
     /* 0x674 */ s32 m_Unk412;
-    /* 0x678 */ s32 m_Unk413;
+    /* 0x678 */ s32 screen_shake_enabled;
     /* 0x67C */ s32 m_Unk414;
     /* 0x680 */ s32 m_Unk415;
     /* 0x684 */ s32 m_Unk416;

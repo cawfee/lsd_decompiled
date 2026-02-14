@@ -81,7 +81,23 @@ s32 func_800181AC(void **Unk1, void *Unk2) {
 
 INCLUDE_ASM("asm/nonmatchings/base_class", func_80018208);
 
-INCLUDE_ASM("asm/nonmatchings/base_class", func_80018288);
+void func_80018288(base_class_t *This) {
+    base_class_vtable_t *vtable_1;
+  base_class_vtable_t *vtable_2;
+
+  vtable_1 = This->vtable;
+  vtable_2 = This->vtable;
+  if ( vtable_2 )
+  {
+    do
+    {
+      vtable_1 = (base_class_vtable_t *)vtable_1->value;
+      memory_free_mem(vtable_2);
+      vtable_2 = vtable_1;
+    }
+    while ( vtable_1 );
+  }
+}
 
 INCLUDE_ASM("asm/nonmatchings/base_class", func_800182CC);
 

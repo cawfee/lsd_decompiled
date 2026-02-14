@@ -95,7 +95,13 @@ void func_80049AC0(dream_context_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049B54);
 
-INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049C50);
+void func_80049C50(dream_context_t *This) {
+    s32 m_Unk5; // $s0
+
+  m_Unk5 = This->m_Unk5;
+  (*(void ( **)(s32))(*(s32 *)m_Unk5 + 144))(m_Unk5);
+  (*(void ( **)(s32))(*(s32 *)m_Unk5 + 116))(m_Unk5);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049CA8);
 

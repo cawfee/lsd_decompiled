@@ -15,9 +15,18 @@ class_354D4_t *func_80044CD4(s32 Unk1, void *Unk2) {
 
 INCLUDE_ASM("asm/nonmatchings/354D4", func_80044D40);
 
-INCLUDE_ASM("asm/nonmatchings/354D4", func_80044DC8);
+void func_80044DC8(class_354D4_t *This) {
+    memory_free_mem(This->m_Unk13);
+  (*(void ( **)(class_354D4_t *))((s32) func_80026CAC() + 12))(This);
+}
 
-INCLUDE_ASM("asm/nonmatchings/354D4", func_80044E10);
+void func_80044E10(class_354D4_t *This) {
+    if ( !This->m_Unk9_2 )
+  {
+    This->vtable->Unk29(This);
+    This->m_Unk15_2 = 1;
+  }
+}
 
 INCLUDE_ASM("asm/nonmatchings/354D4", func_80044E64);
 

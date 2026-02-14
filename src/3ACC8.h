@@ -119,8 +119,10 @@ typedef struct class_3ACC8 {
     /* 0x6C */ s32 m_Unk26;
     /* 0x70 */ s32 m_Unk27;
     /* 0x74 */ s32 m_Unk28;
-    /* 0x78 */ s32 m_Unk29;
-    /* 0x7C */ s32 m_Unk30;
+    /* 0x78 */ s16 m_Unk29_1;
+    /* 0x7A */ s16 m_Unk29_2;
+    /* 0x7C */ s16 m_Unk30_1;
+    /* 0x7E */ s16 m_Unk30_2;
     /* 0x80 */ s32 m_Unk31;
     /* 0x84 */ s32 m_Unk32;
     /* 0x88 */ s32 m_Unk33;
@@ -148,7 +150,8 @@ typedef struct class_3ACC8 {
     /* 0xE0 */ s32 m_Unk55;
     /* 0xE4 */ s32 m_Unk56;
     /* 0xE8 */ s32 m_Unk57;
-    /* 0xEC */ s32 m_Unk58;
+    /* 0xEC */ u16 m_Unk58_1;
+    s16 m_Unk58_2;
     /* 0xF0 */ s32 m_Unk59;
     /* 0xF4 */ s32 m_Unk60;
     /* 0xF8 */ s32 m_Unk61;
@@ -215,5 +218,6 @@ typedef struct class_3ACC8 {
 } class_3ACC8_t;
 
 class_3ACC8_vtable_t *func_8004D244(void);
+void func_8004D108(class_3ACC8_t *, s32 *);
 
 #endif

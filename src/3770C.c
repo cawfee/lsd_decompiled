@@ -6,7 +6,9 @@
 
 // CD related class?
 
-extern class_3770C_vtable_t **D_800817E0;
+extern class_3770C_vtable_t D_800817E0;
+
+extern class_3770C_t *D_8008A950;
 
 class_3770C_t *func_80046F0C(s32 Unk1, s32 Unk2, s32 Unk3) {
     class_3770C_t *allocated = (class_3770C_t *) memory_allocate_mem(0x5C);
@@ -76,8 +78,15 @@ INCLUDE_ASM("asm/nonmatchings/3770C", func_8004728C);
 // gp
 INCLUDE_ASM("asm/nonmatchings/3770C", func_800472EC);
 
-// gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_80047388);
+void func_80047388(class_3770C_t *This) {
+    if ((D_8008A950 != NULL) && ((u8) This == 2)) {
+        CdSyncCallback(0);
+        
+        if (D_8008A950->m_Unk20) {
+            ((void (*)(s32)) D_8008A950->m_Unk20)(D_8008A950->m_Unk16);
+        }
+    }
+}
 
 // gp
 INCLUDE_ASM("asm/nonmatchings/3770C", func_800473E4);
@@ -85,8 +94,12 @@ INCLUDE_ASM("asm/nonmatchings/3770C", func_800473E4);
 // gp
 INCLUDE_ASM("asm/nonmatchings/3770C", func_800474C8);
 
-// gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_80047574);
+void func_80047574(class_3770C_t *This) {
+    if ((This->m_Unk10 == 4) && (D_8008A950 == This)) {
+        D_8008A950->m_Unk10 = 0;
+        D_8008A950->vtable->Unk18(D_8008A950, &D_8008A950->m_Unk2);
+    }
+}
 
 void func_800475C8(void) {
 }
@@ -102,20 +115,28 @@ INCLUDE_ASM("asm/nonmatchings/3770C", func_80047694);
 
 INCLUDE_ASM("asm/nonmatchings/3770C", func_800477B0);
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_80047810);
+void func_80047810(class_3770C_t *This) {
+    if (This->m_Unk18) {
+        ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
+    This->vtable->Unk17(This);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_80047870);
-// unsigned long func_80047870(class_3770C_t *This) {
-//     return StFreeRing();
-// }
+u32 func_80047870(class_3770C_t *This, u32 Base) {
+    return StFreeRing(Base);
+}
 
 void func_80047890() {
     StUnSetRing();
 }
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800478B0);
+void func_800478B0(void) {
+    StClearRing();
+}
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800478D0);
+s32 func_800478D0(class_3770C_t *This, s32 Mode) {
+    return CdSync(Mode, &This->m_Unk8);
+}
 
 void func_800478F8(void) {
 }

@@ -1,7 +1,7 @@
 #include "main_menu.h"
 #include "2C694.h"
 
-extern main_menu_vtable_t **g_MAIN_MENU_VTABLE;
+extern main_menu_vtable_t g_MAIN_MENU_VTABLE;
 
 static const char *g_MENU_BUTTON_STATES[3] = { "Off", "On", NULL };
 

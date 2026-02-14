@@ -2,7 +2,7 @@
 
 #include "D294.h"
 
-extern class_3DB8C_vtable_t **D_80086AA0;
+extern class_3DB8C_vtable_t D_80086AA0;
 
 class_3DB8C_t *func_8004D38C() {
     class_3DB8C_t *allocated = (class_3DB8C_t *) memory_allocate_mem(0x3C);

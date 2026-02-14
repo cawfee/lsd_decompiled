@@ -200,7 +200,41 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/game_flow", game_flow_play_special_day);
+void game_flow_play_special_day(game_flow_t *This) {
+    u16 day[4];
+    s32 duration[4];
+    s8 *movie_name;
+    asset_player_t *player;
+    class_2C694_t *cls;
+    dream_sys_t *dream_sys;
+
+    dream_sys = This->m_pDreamSys;
+    dream_sys->vtable->Unk110(day, dream_sys);
+
+    movie_name = get_special_day_movie(duration, day[0] | (day[1] << 16));
+
+    frame_setup(0, 0, 0);
+
+    if (duration[0] != -1) {
+        if (This->m_Config->enable_movie) {
+            player = asset_player_create(0, 0, 0, 0);
+            player->vtable->Unk74(player, 0);
+            player->vtable->Unk16(player, This->m_GraphicsCtx, (char *) movie_name,
+                                  get_movie_duration_maybe(duration[0]), 1);
+        } else {
+            return;
+        }
+    } else {
+        cls = func_8003BE94(0, 0, 0);
+        player = (asset_player_t *) cls;
+
+        cls->vtable->Unk26(cls, 10);
+        cls->vtable->Unk52(cls, (char *) movie_name, 0);
+        cls->vtable->Unk16(cls, This->m_GraphicsCtx, 0);
+    }
+
+    player->vtable->Destroy(player);
+}
 
 void game_flow_play_ending_movie(game_flow_t *This) {
     asset_player_t *player;

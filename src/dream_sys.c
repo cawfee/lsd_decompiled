@@ -2,7 +2,27 @@
 #include "477E4.h"
 #include "base_class.h"
 
-extern dream_sys_vtable_t **g_DREAM_SYS_VTABLE;
+extern dream_sys_vtable_t g_DREAM_SYS_VTABLE;
+
+extern s32 STAGE_PERMALINK_SPAWNS[];
+extern s32 STAGE_PERMALINK_TRIGGERS[];
+extern s32 LEN_STAGE_PERMALINK_TRIGGERS[];
+extern s32 D_80088820[];
+extern s32 D_80088980[];
+extern s32 D_800889F0[];
+extern s32 D_80088A80[];
+extern s32 D_80088B24[];
+extern s32 D_80088B5C[];
+extern s32 D_80088BA4[];
+extern s32 D_80088C4C[];
+extern s32 D_80088CBC[];
+extern s16 STAGE_TIME_LIMITS[];
+extern s32 D_8008ABE4;
+extern s32 D_8008ABF0[];
+extern s32 gpNavChallengesComplete;
+extern s32 gpDinamicLinkPenalty;
+extern s32 D_8008ACBC;
+extern s32 D_8008ACC4;
 
 dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     dream_sys_t *allocated = (dream_sys_t *) memory_allocate_mem(0x928);
@@ -115,7 +135,19 @@ void func_80059394(dream_sys_t *This) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_800593D8);
+void func_800593D8(dream_sys_t *This) {
+    void (*m_Unk31)(void);
+  void (*m_Unk37)(dream_sys_t *);
+
+    m_Unk31 = (void (*)(void))This->m_Unk31;
+  if ( m_Unk31 )
+    m_Unk31();
+    
+  m_Unk37 = (void ( *)(dream_sys_t *))This->m_Unk37;
+  if ( m_Unk37 )
+    m_Unk37(This);
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005942C);
 
@@ -273,7 +305,12 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059BE0);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059D1C);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059E3C);
+void func_80059E3C(dream_sys_t *This) {
+    if (This->m_Unk46 >= 0) {
+        (*(void ( **)(s32, s32))(*(s32 *)This->m_Unk21 + 132))(This->m_Unk21, This->m_Unk46);
+        This->m_Unk46 = -1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059E98);
 
@@ -339,27 +376,66 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1F4);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__InitNewGame);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetSetScreenShake);
+void DreamSys__GetSetScreenShake(dream_sys_t *This, s32 *Value) {
+    s32 old_value = This->screen_shake_enabled;
+    This->screen_shake_enabled = *Value;
+    *Value = old_value;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A2E4);
+s32 func_8005A2E4(dream_sys_t *This, s32 *Out) {
+    if (Out) {
+        *Out = This->m_Unk94;
+    }
+    return This->m_Unk95 + 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__AdvanceDay);
+s32 DreamSys__AdvanceDay(dream_sys_t *This) {
+    s32 next_day = This->m_Unk95 + 1;
+    This->m_Unk95 = next_day;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A33C);
+    if (next_day > 364) {
+        This->m_Unk95 = 0;
+        This->m_Unk94++;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A344);
+    return This->m_Unk95;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A350);
+void func_8005A33C(dream_sys_t *This) {
+    This->m_Unk541 = 0;
+}
+
+s32 func_8005A344(dream_sys_t *This) {
+    return This->m_Unk541;
+}
+
+s32 *func_8005A350(dream_sys_t *This, s32 *Size) {
+    if (Size) {
+        *Size = 0x700;
+    }
+
+    return &This->m_Unk93;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__StartDay);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__EndDay);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetCinematic);
+dream_sys_t *DreamSys__GetCinematic(dream_sys_t *This, void *Unk) {
+    return (dream_sys_t *)__builtin_memcpy((char *)This, (char *)Unk + 0x168, 4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__InitSpawnLoc);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__DynamicLink);
+void DreamSys__DynamicLink(dream_sys_t *This) {
+    s32 RandomSpawnFromStage;;
+    
+    if ( !This->m_Unk16 )
+  {
+    RandomSpawnFromStage = GetRandomSpawnFromStage(&This->m_Unk90, This->m_NextMap, This->m_GameTick);
+    ExecuteLink(This, RandomSpawnFromStage, 12, 1);
+  }
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__StaticWallLink);
 
@@ -385,7 +461,9 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AE40);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AF64);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AFD0);
+s32 func_8005AFD0(dream_sys_t *This) {
+    return This->m_NextMap;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__ProcessChunkChange);
 
@@ -395,19 +473,39 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetPreviousDayMood);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__InitMoodContibutors);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__LogChunkMood);
+void DreamSys__LogChunkMood(dream_sys_t *This, void *CurrentPosition) {
+    dream_sys_mood_graph_point_t *point = GetMoodFromStageChunk(This->m_NextMap, CurrentPosition);
+    This->vtable->Unk129(This, &This->m_Unk80, point);
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__LogInstanceMood);
+void DreamSys__LogInstanceMood(dream_sys_t *This, dream_sys_mood_graph_point_t *Source) {
+    This->vtable->Unk129(This, &This->m_Unk84, Source);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__UpdateDreamChart);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetDreamColor);
+s32 DreamSys__GetDreamColor(dream_sys_t *This) {
+    dream_sys_mood_graph_point_t current_mood;
+
+    This->vtable->Unk126(This, &current_mood);
+    return CalcDreamColor(&current_mood);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", CalcDreamColor);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__ClearMoodGraph);
+void DreamSys__ClearMoodGraph(dream_sys_t *This, dream_sys_mood_graph_contrib_t *Contrib) {
+    Contrib->last_mood.value = 0;
+    Contrib->upper_mood = 0;
+    Contrib->dynamic_mood = 0;
+    Contrib->amount_mood = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__LogMood);
+void DreamSys__LogMood(dream_sys_t *This, dream_sys_mood_graph_contrib_t *Contrib, dream_sys_mood_graph_point_t *Point) {
+    Contrib->last_mood.value = Point->value;
+    Contrib->dynamic_mood += Point->axis.dynamic;
+    Contrib->upper_mood += Point->axis.upper;
+    Contrib->amount_mood += 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__GetMoodAverage);
 
@@ -419,29 +517,62 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__AddFlashback);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__FlashbackSaving);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", DreamSys__ResetFlashbackList);
+void DreamSys__ResetFlashbackList(dream_sys_t *This) {
+    This->m_Unk282 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005B904);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005B990);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BA20);
+s32 func_8005BA20(dream_sys_t *This, s32 Value) {
+    s32 out;
+
+    if (Value >= 0) {
+        out = This->m_Unk584;
+        This->m_Unk584 = Value;
+    } else {
+        out = This->m_Unk584;
+    }
+
+    return out;
+}
 
 dream_sys_vtable_t *dream_sys_get_vtable(void) {
     return &g_DREAM_SYS_VTABLE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", InitNavChallengesArray);
+void InitNavChallengesArray(s32 *Unk1, s32 *Unk2) {
+    s32 var_v1;
+    s8* var_v0;
+
+    var_v1 = 0x1D;
+    var_v0 = (char *) Unk1 + 0x1D;
+    do {
+        *var_v0 = 0;
+        var_v1 -= 1;
+        var_v0 -= 1;
+    } while (var_v1 >= 0);
+    gpNavChallengesComplete = Unk1;
+    *Unk2 = 0;
+    gpDinamicLinkPenalty = Unk2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", CalcNavigationScore);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BB14);
+s32 func_8005BB14(s32 Unk) {
+    return STAGE_TIME_LIMITS[Unk];
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", GetRandomSpawnFromStage);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", TestForStaticLink);
+void TestForStaticLink(s32 Unk0, s32 Unk1, s32 Unk2) {
+    GetStaticSpawn(Unk0, Unk1, Unk2, LEN_STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_SPAWNS, 1);
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", Test4TunnelLinks);
+void Test4TunnelLinks(s32 Unk0, s32 Unk1, s32 Unk2) {
+    GetStaticSpawn(Unk0, Unk1, Unk2, D_800889F0, &D_80088980, &D_80088820, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BD3C);
 
@@ -449,15 +580,39 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BE28);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BE90);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BF48);
+s32 *func_8005BF48(void) {
+    s32 *out = NULL;
+    
+    if (D_8008ACC4 != 0xC) {
+        out = &D_8008ABF0;
+    }
+    
+    return out;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BF68);
+void func_8005BF68(s32 Unk) {
+    D_8008ABE4 = Unk;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", Test4InstantTeleporters);
+s32 Test4InstantTeleporters(s32 Unk1, s32 Unk2, s32 Unk3) {
+    if (D_8008ABE4) {
+        return GetStaticSpawn(Unk1, Unk2, Unk3, &D_80088B5C, &D_80088B24, &D_80088A80, 0);
+    }
+    
+    return -1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BFC4);
+s32 func_8005BFC4(void) {
+    return D_8008ACBC == 0 ? 0xA : 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", Test4StaircaseNodes);
+s32 Test4StaircaseNodes(s32 Unk1, s32 Unk2, s32 Unk3) {
+    if (!Unk3) {
+        return GetStaticSpawn(Unk1, Unk2, 0, D_80088CBC, &D_80088C4C, &D_80088BA4, 0);
+    }
+
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005C02C);
 
