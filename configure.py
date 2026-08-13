@@ -117,16 +117,12 @@ asm_auto_targets = [
     "asm/data/1764.rodata.s",
     "asm/data/17EC.rodata.s",
     "asm/data/1818.rodata.s",
-    "asm/data/1890.rodata.s",
+    "asm/data/1908.rodata.s",
     "asm/data/19DC.rodata.s",
-    "asm/data/1A90.rodata.s",
-    "asm/data/1C08.rodata.s",
-    "asm/data/1C0C.rodata.s",
+    "asm/data/1AA4.rodata.s",
     "asm/data/1D0C.rodata.s",
+    "asm/data/1DD0.rodata.s",
     "asm/data/1E28.rodata.s",
-    "asm/data/1EF4.rodata.s",
-    "asm/data/1F88.rodata.s",
-    "asm/data/2048.rodata.s",
     "asm/data/206C.rodata.s",
     "asm/data/57040.data.s",
     "asm/data/76A44.data.s",
@@ -271,7 +267,6 @@ c_targets = [
     "src/3311C.c",
     "src/33808.c",
     "src/34040.c",
-    "src/34388.c",
     "src/34684.c",
     "src/349B4.c",
     "src/34E8C.c",
@@ -296,6 +291,7 @@ c_targets = [
     "src/base_class.c",
 ]
 c_targets_g8 = [
+    "src/34388.c",
     "src/main.c",
     "src/memory.c",
     "src/utils/path_helper.c",
@@ -392,11 +388,24 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.rule("objcopy", command="$objcopy -O binary $in $out", description="OBJCOPY $out")
     n.newline()
 
-    n.rule("splat", command="$python $splat $in", description="SPLAT $in")
+    # TQDM_DISABLE=1 drops splat progress bars (token noise for agents / CI logs)
+    n.rule(
+        "splat",
+        command="env TQDM_DISABLE=1 $python $splat $in",
+        description="SPLAT $in",
+    )
     n.newline()
 
     quoted_clean_files = " ".join([shlex.quote(f) for f in clean_files])
     n.rule("clean_custom", command=f"rm -rf {quoted_clean_files}", description="CLEAN")
+    n.newline()
+
+    # Full resplit: wipe generated asm/ then splat (use after symbol/map changes)
+    n.rule(
+        "resplit_custom",
+        command="rm -rf asm && env TQDM_DISABLE=1 $python $splat $in",
+        description="RESPLIT $in",
+    )
     n.newline()
 
     n.rule("checksha", command="sha1sum --check $in", description="CHECK $in")
@@ -457,6 +466,10 @@ with open("build.ninja", "w", encoding="utf-8") as f:
 
     # Split rom
     n.build("split", "splat", SPLAT_CONFIG)
+    n.newline()
+
+    # Wipe asm/ and split from scratch
+    n.build("resplit", "resplit_custom", SPLAT_CONFIG)
     n.newline()
 
     # Clean helper
