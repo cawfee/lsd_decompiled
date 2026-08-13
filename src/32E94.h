@@ -8,7 +8,7 @@ typedef struct class_32E94_vtable {
     /* 0x004 8006efb0 */ void (*Destroy)(void *);
     /* 0x008 8006efb4 */ void (*Construct)(void *);
     /* 0x00C 8006efb8 */ void (*Cleanup)(void *);
-    /* 0x010 8006efbc */ void (*Unk3)(void *);
+    /* 0x010 8006efbc */ void (*Unk3)(void *, void *);
     /* 0x014 8006efc0 */ void (*Unk4)(void *);
     /* 0x018 8006efc4 */ void (*Unk5)(void *);
     /* 0x01C 8006efc8 */ void (*Unk6)(void *);
@@ -76,8 +76,8 @@ typedef struct class_32E94 {
     /* 0x44 */ s32 m_Unk16;
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
-    /* 0x50 */ s32 m_Unk19;
-    /* 0x54 */ s32 m_Unk20;
+    /* 0x50 */ s8 m_Ambient[3];
+    /* 0x53 */ s8 m_Unk19_pad;
 } class_32E94_t;
 
 class_32E94_vtable_t *func_800428E4();

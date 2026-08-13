@@ -74,7 +74,21 @@ void func_80051270(class_413A8_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/413A8", func_800512C8);
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80051370);
+void func_80051370(class_413A8_t *This) {
+    s32 unk10;
+    s32 unk11;
+
+    unk10 = This->m_Unk10;
+    if (unk10 < 4) {
+        if (!(unk10 < 2)) {
+            unk11 = This->m_Unk11;
+            This->m_Unk11 = unk11 + 1;
+            if (unk11) {
+                This->vtable->Unk20(This, 4);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/413A8", func_800513D0);
 
@@ -87,7 +101,21 @@ void func_8005161C(class_413A8_t *This, s32 Unk) {
   }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_8005165C);
+void func_8005165C(class_413A8_t *This) {
+    s32 old;
+    s32 neu;
+
+    if (This->m_Unk17) {
+        old = This->m_Unk5;
+        neu = old + 1;
+        This->m_Unk5 = neu;
+        if (neu < This->m_Unk3) {
+            This->vtable->Unk40(This, neu, 1);
+        } else {
+            This->m_Unk5 = old;
+        }
+    }
+}
 
 void func_800516C0(class_413A8_t *This) {
     s32 m_Unk5; // $v0
@@ -104,9 +132,33 @@ void func_800516C0(class_413A8_t *This) {
 }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80051720);
+void func_80051720(class_413A8_t *This) {
+    s32 neu;
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80051784);
+    if (This->m_Unk17) {
+        neu = This->m_Unk6 + 1;
+        This->m_Unk6 = neu;
+        if (neu < This->m_Unk4) {
+            ((void (*)(void *, s32, s32, s32))This->vtable->Unk41)(This, This->m_Unk5, neu, 1);
+        } else {
+            This->m_Unk6 = 0;
+        }
+    }
+}
+
+void func_80051784(class_413A8_t *This) {
+    s32 neu;
+
+    if (This->m_Unk17) {
+        neu = This->m_Unk6 - 1;
+        This->m_Unk6 = neu;
+        if (neu > 0) {
+            ((void (*)(void *, s32, s32, s32))This->vtable->Unk41)(This, This->m_Unk5, neu, 1);
+        } else {
+            This->m_Unk6 = This->m_Unk4;
+        }
+    }
+}
 
 void func_800517EC(class_413A8_t *This) {
     if (This->m_Unk17) {

@@ -29,11 +29,23 @@ void func_80017F98(base_class_t *This, base_class_t *Next) {
 }
 
 void func_80017FF0(base_class_t *This, base_class_t *Next) {
-    func_80018208(&This->m_Unk0);
+    func_80018208(&This->m_Unk0, Next);
     Next->vtable->Unk8(Next, This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/base_class", func_80018040);
+void func_80018040(base_class_t *This) {
+    void *cur;
+    void **curp;
+    void *list;
+
+    curp = &cur;
+    list = This->m_Unk0;
+    func_800183A0(curp, &list);
+    while (cur != NULL) {
+        This->vtable->Unk4(This, cur);
+        func_800183A0(curp, &list);
+    }
+}
 
 void func_800180BC(base_class_t *This, void **Unk2, void **Unk3) {
     if (!*Unk2) {
@@ -79,7 +91,28 @@ s32 func_800181AC(void **Unk1, void *Unk2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/base_class", func_80018208);
+void func_80018208(void **list, void *target) {
+    void *node;
+    void *prev;
+
+    node = *list;
+    prev = NULL;
+    if (node != NULL) {
+        do {
+            if (*((void **)node + 1) == target) {
+                if (prev != NULL) {
+                    *(void **)prev = *(void **)node;
+                } else {
+                    *list = *(void **)node;
+                }
+                memory_free_mem(node);
+                return;
+            }
+            prev = node;
+            node = *(void **)node;
+        } while (node != NULL);
+    }
+}
 
 void func_80018288(base_class_t *This) {
     base_class_vtable_t *vtable_1;
@@ -99,7 +132,17 @@ void func_80018288(base_class_t *This) {
   }
 }
 
-INCLUDE_ASM("asm/nonmatchings/base_class", func_800182CC);
+void func_800182CC(base_class_t *This, s32 Unk) {
+    void *cur;
+    void *list;
+
+    list = (void *)This->m_Unk1;
+    func_800183A0(&cur, &list);
+    while (cur != NULL) {
+        ((base_class_t *)cur)->vtable->Unk13(cur, This, Unk);
+        func_800183A0(&cur, &list);
+    }
+}
 
 void func_80018350(void) {
 }

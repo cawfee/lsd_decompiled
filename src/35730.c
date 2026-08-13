@@ -1,5 +1,10 @@
 #include "35730.h"
 
+#include <psx/libgpu.h>
+
+#include "171F0.h"
+#include "memory.h"
+
 extern class_35730_vtable_t **D_8006F514;
 
 class_35730_t *func_80044F30(u32 Unk1) {
@@ -13,7 +18,21 @@ class_35730_t *func_80044F30(u32 Unk1) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/35730", func_80044F90);
+void func_80044F90(class_35730_t *This, s32 Unk) {
+    void *unk_class;
+    s8 pad[0x20];
+
+    unk_class = func_80026CAC();
+    (*(void (**)(class_35730_t *))(unk_class + 8))(This);
+    This->vtable = func_800451A8();
+    This->m_Unk12 = 0;
+    This->m_Unk11_2 = 0;
+    if (Unk == 0) {
+        This->m_Unk11_1 = 1;
+        This->m_Unk9_2 = 0;
+        This->vtable->Unk24(This);
+    }
+}
 
 void func_8004500C(class_35730_t *This) {
     memory_free_mem(This->m_Unk12);

@@ -3,6 +3,10 @@
 
 extern class_43370_vtable_t **D_80087034;
 
+void func_80053EB4(class_43370_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
+void func_8005C76C(void);
+void func_80054D30(void);
+
 class_43370_t *func_80052B70(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     class_43370_t *allocated = (class_43370_t *) memory_allocate_mem(0x88);
 
@@ -68,7 +72,12 @@ void func_80052EBC(class_43370_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/43370", func_80052F10);
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053134);
+void func_80053134(class_43370_t *This) {
+    This->vtable->Unk32(This);
+    func_8005C76C();
+    func_80054D30();
+    (*(void (**)(s32))(*(s32 *)This->m_Unk20 + 0x48))(This->m_Unk20);
+}
 
 void func_800531A0(class_43370_t *This, s32 Unk1, s32 Unk2) {
     if (Unk2 == 2) {
@@ -80,9 +89,28 @@ INCLUDE_ASM("asm/nonmatchings/43370", func_800531CC);
 
 INCLUDE_ASM("asm/nonmatchings/43370", func_80053358);
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_800533F0);
+void func_800533F0(class_43370_t *This) {
+    if (This->m_Unk25) {
+        This->m_Unk6++;
+        if (This->m_Unk31) {
+            This->vtable->Unk51(This);
+        } else {
+            This->vtable->Unk34(This);
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053458);
+void func_80053458(class_43370_t *This) {
+    class_43370_vtable_t *vt;
+
+    vt = This->vtable;
+    if (This->m_Unk31) {
+        vt->Unk48(This);
+        vt->Unk52(This);
+    } else {
+        vt->Unk51(This);
+    }
+}
 
 void func_800534C0(void) {
 }
@@ -100,19 +128,67 @@ s32 func_8005393C(class_43370_t *This) {
   return func_800558F0(v1, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053984);
+void func_80053984(class_43370_t *This, s32 Unk2, s32 Unk3) {
+    if (This->m_Unk7 == 0) {
+        switch (Unk3) {
+            case 10:
+                This->vtable->Unk36(This);
+                break;
+            case 12:
+                This->vtable->Unk37(This);
+                break;
+            case 13:
+                This->vtable->Unk38(This);
+                break;
+            case 14:
+                This->vtable->Unk39(This);
+                break;
+            case 15:
+                This->vtable->Unk40(This);
+                break;
+            case 16:
+                This->vtable->Unk41(This);
+                break;
+            case 17:
+                This->vtable->Unk42(This);
+                break;
+        }
+    } else if (Unk3 >= 9) {
+        *(s32 *)(This->m_Unk14 + 0x44) = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/43370", func_80053ACC);
 
 INCLUDE_ASM("asm/nonmatchings/43370", func_80053BE8);
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053C94);
+void func_80053C94(class_43370_t *This) {
+    This->m_Unk7 = 6;
+    func_80053EB4(This, (*(s32 (**)(s32))(*(s32 *)This->m_Unk14 + 0x200))(This->m_Unk14), 0, 0x1E, 1);
+    (*(void (**)(s32))(*(s32 *)This->m_Unk14 + 0xFC))(This->m_Unk14);
+}
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053D18);
+void func_80053D18(class_43370_t *This) {
+    s32 sp18;
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053D9C);
+    This->m_Unk7 = 7;
+    (*(void (**)(s32, s32 *, s32))(*(s32 *)This->m_Unk14 + 0xF0))(This->m_Unk14, &sp18, -1);
+    func_80053EB4(This, sp18, 0, 5, 1);
+    (*(void (**)(s32))(*(s32 *)This->m_Unk14 + 0xFC))(This->m_Unk14);
+}
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80053E00);
+void func_80053D9C(class_43370_t *This) {
+    This->m_Unk7 = 8;
+    func_80053EB4(This, 0, 0, 6, 1);
+    (*(void (**)(s32, s32))(*(s32 *)This->m_Unk14 + 0xF4))(This->m_Unk14, 1);
+}
+
+void func_80053E00(class_43370_t *This) {
+    This->m_Unk7 = 0xA;
+    func_80053EB4(This, 0, 0, 6, 1);
+    (*(void (**)(s32, s32))(*(s32 *)This->m_Unk14 + 0x13C))(This->m_Unk14, 2);
+    (*(void (**)(s32, s32))(*(s32 *)This->m_Unk14 + 0xF4))(This->m_Unk14, 2);
+}
 
 void func_80053E84(class_43370_t *This) {
     This->vtable->Unk11(This, 11);
@@ -145,9 +221,19 @@ void func_80054200(class_43370_t *This) {
     This->m_Unk32 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_80054208);
+void func_80054208(class_43370_t *This) {
+    if (This->m_Unk32) {
+        This->vtable->Unk52(This);
+        This->vtable->Unk11(This, 0xD);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/43370", func_8005426C);
+void func_8005426C(class_43370_t *This) {
+    if (This->m_Unk32) {
+        This->vtable->Unk52(This);
+        This->vtable->Unk11(This, 0xC);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/43370", func_800542D0);
 

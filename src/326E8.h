@@ -3,6 +3,25 @@
 
 #include <common.h>
 
+typedef struct class_326E8_unk24 {
+    /* 0x00 */ u32 m_Unk24;
+    /* 0x04 */ s16 m_Unk25_lo;
+    /* 0x06 */ s16 m_Unk25_hi;
+    /* 0x08 */ u16 m_Unk26_lo;
+    /* 0x0A */ u16 m_Unk26_hi;
+    /* 0x0C */ u16 m_Unk27_tpage;
+    /* 0x0E */ u8  m_Unk27_b2;
+    /* 0x0F */ u8  m_Unk27_b3;
+    /* 0x10 */ u16 m_Unk28_lo;
+    /* 0x12 */ u16 m_Unk28_hi;
+    /* 0x14 */ u8  m_Unk29[4];
+    /* 0x18 */ u16 m_Unk30_lo;
+    /* 0x1A */ u16 m_Unk30_hi;
+    /* 0x1C */ s16 m_Unk31_lo;
+    /* 0x1E */ s16 m_Unk31_hi;
+    /* 0x20 */ s32 m_Unk32;
+} class_326E8_unk24_t;
+
 typedef struct class_326E8_vtable {
     /* 0x000 8006ee1c */ u32 value;
     /* 0x004 8006ee20 */ void (*Destroy)(void *);
@@ -79,15 +98,7 @@ typedef struct class_326E8 {
     /* 0x58 */ s32 m_Unk21;
     /* 0x5C */ s32 m_Unk22;
     /* 0x60 */ s32 m_Unk23;
-    /* 0x64 */ s32 m_Unk24;
-    /* 0x68 */ s32 m_Unk25;
-    /* 0x6C */ s32 m_Unk26;
-    /* 0x70 */ s32 m_Unk27;
-    /* 0x74 */ s32 m_Unk28;
-    /* 0x78 */ s8 m_Unk29[4];
-    /* 0x7C */ s32 m_Unk30;
-    /* 0x80 */ s32 m_Unk31;
-    /* 0x84 */ s32 m_Unk32;
+    /* 0x64 */ class_326E8_unk24_t m_Unk24;
     /* 0x88 */ s32 m_Unk33;
     /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
@@ -98,5 +109,6 @@ typedef struct class_326E8 {
 } class_326E8_t;
 
 class_326E8_vtable_t *func_800422BC(void);
+void func_8004208C(class_326E8_unk24_t *a1, s32 a2, u8 *a3, u8 *a4);
 
 #endif

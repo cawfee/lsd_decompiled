@@ -109,9 +109,30 @@ INCLUDE_ASM("asm/nonmatchings/D294", func_8001D008);
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D0EC);
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D1A4);
+class_D294_t *func_8001D1A4(class_D294_t *This) {
+    void *obj;
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D204);
+    obj = (void *)This->m_Unk2;
+    if (obj) {
+        (*(void (**)(void *, class_D294_t *))(*(s32 *)obj + 0x14))(obj, This);
+        *(s32 *)((u8 *)This->m_Unk4 + 0x48) = 0;
+        This->m_Unk2 = 0;
+    }
+    return This;
+}
+
+void func_8001D204(class_D294_t *This) {
+    void *obj;
+    s32 cont;
+
+    obj = NULL;
+    do {
+        ((void (*)(class_D294_t *, void **, s32 *))This->vtable->Unk21)(This, &obj, &cont);
+        if (obj != NULL) {
+            (*(void (**)(void *))(*(u32 *)obj + 0x50))(obj);
+        }
+    } while (cont != 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001D280);
 

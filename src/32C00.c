@@ -24,9 +24,29 @@ void func_800424A8(class_32C00_t *This) {
     base_class_get_vtable()->Cleanup(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/32C00", func_800424E0);
+void func_800183A0(void *Unk1, void **Unk2);
 
-INCLUDE_ASM("asm/nonmatchings/32C00", func_80042550);
+void func_800424E0(class_32C00_t *This, void *Unk) {
+    void **node;
+
+    node = (void **)This->m_Unk5;
+    if (node != NULL && Unk == node[1]) {
+        This->m_Unk5 = (s32)node[0];
+    }
+    base_class_get_vtable()->Unk8(This, Unk);
+}
+
+void func_80042550(class_32C00_t *This, s32 Unk) {
+    base_class_t *cur;
+
+    This->m_Unk5 = This->m_Unk1;
+    func_800183A0(&cur, (void **)&This->m_Unk5);
+    while (cur != NULL) {
+        cur->vtable->Unk13(cur, This, Unk);
+        func_800183A0(&cur, (void **)&This->m_Unk5);
+    }
+    This->m_Unk5 = 0;
+}
 
 void func_800425D8(class_32C00_t *This, s32 Unk) {
     This->m_Unk2 = Unk;

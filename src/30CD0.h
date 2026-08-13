@@ -20,7 +20,7 @@ typedef struct class_30CD0_vtable {
     /* 0x034 8006eaf4 */ void (*Unk12)(void *);
     /* 0x038 8006eaf8 */ void (*Unk13)(void *);
     /* 0x03C 8006eafc */ void (*Unk14)(void *);
-    /* 0x040 8006eb00 */ void (*Unk15)(void *);
+    /* 0x040 8006eb00 */ void (*Unk15)(void *, u32, u32, u32);
     /* 0x044 8006eb04 */ void (*Unk16)(void *);
     /* 0x048 8006eb08 */ void (*Unk17)(void *);
     /* 0x04C 8006eb0c */ void (*Unk18)(void *, s32, s32);
@@ -50,12 +50,12 @@ typedef struct class_30CD0_vtable {
     /* 0x0AC 8006eb6c */ void (*Unk42)(void *);
     /* 0x0B0 8006eb70 */ void (*Unk43)(void *);
     /* 0x0B4 8006eb74 */ void (*Unk44)(void *);
-    /* 0x0B8 8006eb78 */ void (*Unk45)(void *);
-    /* 0x0BC 8006eb7c */ void (*Unk46)(void *);
+    /* 0x0B8 8006eb78 */ void (*Unk45)(void *, s32, void *);
+    /* 0x0BC 8006eb7c */ void (*Unk46)(void *, s32);
     /* 0x0C0 8006eb80 */ void (*Unk47)(void *);
     /* 0x0C4 8006eb84 */ void (*Unk48)(void *);
     /* 0x0C8 8006eb88 */ void (*Unk49)(void *);
-    /* 0x0CC 8006eb8c */ void (*Unk50)(void *);
+    /* 0x0CC 8006eb8c */ void (*Unk50)(void *, s32);
     /* 0x0D0 8006eb90 */ void (*Unk51)(void *);
 } class_30CD0_vtable_t;
 
@@ -83,7 +83,7 @@ typedef struct class_30CD0 {
     /* 0x50 */ s32 m_Unk19;
     /* 0x54 */ s32 m_Unk20;
     /* 0x58 */ s32 m_Unk21;
-    /* 0x5C */ s32 m_Unk22;
+    /* 0x5C */ s16 m_Unk22[2];
     /* 0x60 */ s16 m_Unk23[2];
     /* 0x64 */ s32 m_Unk24;
     /* 0x68 */ s32 m_Unk25;

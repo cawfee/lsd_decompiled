@@ -5,9 +5,45 @@ extern entity_vtable_t g_ENTITY_VTABLE;
 
 extern s32 D_80089DCC;
 extern s32 D_80089DD8;
+extern s32 D_80089D48;
+extern s32 D_80089D78;
+extern s32 D_80089D90;
+extern s32 D_80089D9C;
+extern s32 D_80089DF0;
 extern s32 D_80089E38;
+extern s32 D_80089E80;
+extern s32 D_80089C58;
+extern s32 D_80089C64;
+extern s32 D_80089C70;
+extern s32 D_80089C7C;
+extern s32 D_80089C88;
+extern s32 D_80089C94;
+extern s32 D_80089CB8;
+extern s32 D_80089CE8;
+extern s32 D_80089CF4;
+extern s32 D_80089DA8;
+extern s32 D_80089CAC;
+extern s32 D_80089CA0;
+extern s32 D_80089D00;
+extern s32 D_80089D18;
+extern s32 D_80089D3C;
+extern s32 D_80089D54;
+extern s32 D_80089D60;
+extern s32 D_80089DB4;
+extern s32 D_80089DC0;
+extern s32 D_80089DE4;
+extern s32 D_80089DFC;
+extern s32 D_80089E14;
+extern s32 D_80089E20;
+extern s32 D_80089E2C;
+extern s32 D_80089E44;
+extern s32 D_80089E50;
+extern s32 D_80089E5C;
+extern s32 D_80089E74;
+extern s32 D_80089E8C;
 extern void *D_8008AC14;
 extern void *D_8008AC0C;
+extern void *D_8008AC1C;
 
 extern entity_prop_t g_ENTITY_TABLE[];
 
@@ -525,7 +561,20 @@ entity_vtable_t *entity_get_vtable() {
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E160);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E3C4);
+void func_8005E3C4(entity_t *This, s32 *arg1) {
+    arg1[4] = 0;
+    if (arg1[1] == 0) {
+        arg1[7] = 0x14;
+        arg1[12] = 0x14;
+        arg1[17] = 0x14;
+        (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 1);
+    }
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    This->vtable->Unk48(This, -0x5A, 0);
+    if (This->m_Unk62 == 0x1E) {
+        This->vtable->Unk11(This, 0xA);
+    }
+}
 
 void func_8005E480(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
@@ -540,9 +589,23 @@ void func_8005E480(entity_t *This, s32 *Unk) {
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005E4D0);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E694);
+void func_8005E694(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089DF0);
+    This->vtable->Unk46(This, &D_80089D78);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E6F0);
+void func_8005E6F0(entity_t *This, s32 *arg1) {
+    u32 temp;
+    s32 half;
+
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk31;
+    half = ((s32)(temp + (temp >> 31))) >> 1;
+    if ((arg1[1] % half) == 0) {
+        arg1[7] = 0xA;
+    }
+    This->vtable->Unk48(This, -0x1E, 0);
+}
 
 void func_8005E7A8(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
@@ -558,13 +621,98 @@ void func_8005E7A8(entity_t *This, s32 *Unk) {
   This->vtable->Unk48(This, -30, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005E7F8);
+void func_8005E7F8(entity_t *This, s32 *arg1) {
+    s32 *ptr;
+    s32 temp;
+    u32 utemp;
+    s32 half;
+
+    *(s16 *)&This->m_Unk17 = -0x14;
+    arg1[4] = This->vtable->Unk81(This);
+    utemp = This->m_Unk31;
+    half = ((s32)(utemp + (utemp >> 31))) >> 1;
+    ptr = NULL;
+    if ((arg1[1] % half) == 0) {
+        arg1[7] = 0xA;
+        arg1[8] = 1;
+    }
+    temp = This->m_Unk16;
+    if (temp == 0xB) {
+        temp = This->m_Unk62;
+        if (temp == 0xA8C) {
+            ptr = &D_80089C94;
+        }
+        if (temp == 0xC6C) {
+            ptr = &D_80089C88;
+        }
+        if (temp == 0xE10) {
+            ptr = &D_80089C94;
+        }
+        if ((u32)(temp - 0xD5D) < 0x78U) {
+            if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x100))(This->m_Unk36) != 0) {
+                This->m_Unk62 = 0;
+                This->m_Unk16 = 0xD;
+            }
+        }
+    } else if (temp == 0xC) {
+        if (This->m_Unk62 == 0x7BC) {
+            ptr = &D_80089C94;
+        }
+    } else if (temp == 0xD) {
+        *(s16 *)&This->m_Unk17 = -0x78;
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+        This->vtable->Unk17(This, 1, &D_80089DD8);
+        if (This->vtable->Unk80(This, This->m_Unk36) < 0x400) {
+            This->vtable->Unk11(This, 0xB);
+        }
+    }
+    if (This->m_Unk62 == 0x618) {
+        if (rand() & 1) {
+            ptr = &D_80089C88;
+            This->m_Unk16 = 0xB;
+        } else {
+            ptr = &D_80089C94;
+            This->m_Unk16 = 0xC;
+        }
+    }
+    if (ptr != NULL) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, ptr);
+    }
+    ((void (*)(void *, s32, s32))This->vtable->Unk51)(This, *(s16 *)&This->m_Unk17, 0);
+    if ((This->m_Unk16 != 0xC) && (This->m_Unk9 != 0)) {
+        This->vtable->Unk50(This, -0xC8, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005EA94);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005EBB4);
+void func_8005EBB4(entity_t *This, s32 *arg1) {
+    s32 temp;
+    s32 r;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005EC98);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = arg1[1];
+    if (temp == 0) {
+        arg1[7] = 0xC;
+        This->m_Unk16++;
+    } else if (temp >= (This->m_Unk31 - 1)) {
+        arg1[1] = -1;
+    }
+    if (This->m_Unk16 == 0x24) {
+        r = rand();
+        if (r == ((r / 3) * 3)) {
+            This->vtable->Unk11(This, 0xB);
+        }
+    }
+}
+
+void func_8005EC98(entity_t *This, s32 *Unk) {
+    Unk[4] = This->vtable->Unk81(This);
+    if (This->m_Unk32 == 0xA) {
+        Unk[7] = 0xD;
+    }
+    This->vtable->Unk48(This, -0xA, 0);
+}
 
 void func_8005ED10(entity_t *This, s32 *Unk) {
     if (!This->m_Unk62) {
@@ -579,11 +727,49 @@ void func_8005EF20(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DD8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005EF54);
+void func_8005EF54(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005EFF4);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = arg1[1];
+    if (temp == ((temp / 10) * 10)) {
+        arg1[7] = 0x11;
+    }
+    This->vtable->Unk48(This, -0x100, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F0D8);
+void func_8005EFF4(entity_t *This, s32 *arg1) {
+    s32 r;
+
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 7) * 7)) {
+            This->vtable->Unk17(This, 1, &D_80089E50);
+        }
+    }
+    if (!(arg1[1] & 3)) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 0x1C;
+    }
+    This->vtable->Unk48(This, -0x64, 0);
+}
+
+void func_8005F0D8(entity_t *This, s32 *arg1) {
+    u32 temp;
+    s32 half;
+    s32 rem;
+
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk31;
+    half = ((s32)(temp + (temp >> 31))) >> 1;
+    rem = arg1[1] % half;
+    if (rem == 0) {
+        arg1[7] = 0xA;
+    } else if (rem == 3) {
+        arg1[12] = 0xD;
+    }
+    This->vtable->Unk48(This, -0x1E, 1);
+}
 
 void func_8005F1A8(entity_t *This) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
@@ -591,74 +777,379 @@ void func_8005F1A8(entity_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F1D4);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F368);
+void func_8005F368(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    temp = arg1[1];
+    if (temp == ((temp / 15) * 15)) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 7;
+        arg1[8] = -2;
+    }
+    This->vtable->Unk17(This, 1, &D_80089DF0);
+    ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089CA0);
+    This->vtable->Unk48(This, -0x200, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005F454);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F544);
+void func_8005F544(entity_t *This, s32 *arg1) {
+    if ((arg1[1] % This->m_Unk31) == 0) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 0x1A;
+    }
+    ((void (*)(void *, s32, s32))This->vtable->Unk51)(
+        This, (This->m_Unk62 == 0x6E) ? -0x2D00 : -0x180, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F608);
+void func_8005F608(entity_t *This, s32 *arg1) {
+    s32 temp;
+    s32 temp_v1;
+
+    temp = arg1[1];
+    if (temp == ((temp / 70) * 70)) {
+        arg1[4] = 0;
+        arg1[7] = 0x1B;
+    }
+    This->vtable->Unk48(This, -0x80, 0);
+    temp_v1 = This->m_Unk62;
+    if (temp_v1 < 0x64) {
+        This->vtable->Unk50(This, 0x20, 0);
+    } else if (temp_v1 >= 0x12D) {
+        This->vtable->Unk50(This, -0x20, 0);
+    }
+}
 
 void func_8005F6D4(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F708);
+void func_8005F708(entity_t *This) {
+    if (This->m_Unk62 == 0) {
+        if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x200))(This->m_Unk36) == 7) {
+            This->vtable->Unk17(This, 1, &D_80089E74);
+            This->vtable->Unk50(This, -0x7800, 0);
+        }
+        This->m_Unk16 = rand() % 5;
+    }
+    if (This->m_Unk16 == 0) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089D18);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F800);
+void func_8005F800(entity_t *This) {
+    s32 temp;
+    s32 a1;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005F970);
+    if (This->m_Unk16 == 0) {
+        if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x200))(This->m_Unk36) == 1) {
+            This->m_Unk16 = 0xB;
+        } else {
+            This->m_Unk16 = 0xC;
+        }
+    }
+    if (This->m_Unk16 == 0xC) {
+        This->vtable->Unk17(This, 1, &D_80089DF0);
+        This->vtable->Unk50(This, -0x1E, 0);
+    } else {
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+        temp = This->m_Unk16;
+        if (temp == 0xB) {
+            This->vtable->Unk48(This, -0x64, 0);
+            temp = This->m_Unk62;
+            if ((u32)(temp - 0x55) < 0x1EU) {
+                This->vtable->Unk50(This, 0x50, 0);
+            } else if (temp == 0x78) {
+                This->m_Unk16 = 0xD;
+            }
+        } else if (temp == 0xD) {
+            ((void (*)(void *, s32))This->vtable->Unk45)(This, *(s32 *)((char *)This->m_Unk36 + 0x14) + 0x18);
+            This->vtable->Unk46(This, &D_80089DB4);
+        }
+    }
+}
+
+void func_8005F970(entity_t *This, s32 *arg1) {
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 1);
+    if ((arg1[1] % 10) < 3) {
+        arg1[4] = 0;
+        arg1[7] = 0xD;
+        arg1[12] = 0xD;
+        arg1[17] = 0xD;
+    }
+    if (This->m_Unk62 == This->m_Unk31) {
+        This->vtable->Unk75(This);
+        This->vtable->Unk11(This, 0xA);
+    }
+}
 
 void func_8005FA64(entity_t *This) {
     This->vtable->Unk48(This, -30, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005FA94);
+void func_8005FA94(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    if (This->m_Unk60 != 0) {
+        This->vtable->Unk17(This, 1, &D_80089DCC);
+    } else {
+        temp = arg1[1];
+        if (temp == ((temp / 30) * 30)) {
+            arg1[4] = 0;
+            arg1[7] = 3;
+        }
+    }
+    ((void (*)(void *, s32, s32))This->vtable->Unk51)(This, -0x1E, 0);
+    if (This->m_Unk9 != 0) {
+        This->vtable->Unk50(This, -0xC8, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FB6C);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FC58);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005FDFC);
+void func_8005FDFC(entity_t *This) {
+    if (This->m_Unk16 == 0) {
+        This->vtable->Unk17(This, 1, (rand() & 1) ? &D_80089DF0 : &D_80089E38);
+        This->m_Unk16 = 0xB;
+    }
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    if (This->vtable->Unk80(This, This->m_Unk36) < 0x7000) {
+        This->vtable->Unk48(This, 0x100, 0);
+    }
+}
 
 void func_8005FEC8(entity_t *This) {
     This->vtable->Unk50(This, -90, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8005FEF8);
+void func_8005FEF8(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    temp = arg1[1];
+    if (temp == ((temp / 120) * 120)) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_8005FF7C);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80060148);
+void func_80060148(entity_t *This, s32 *arg1) {
+    s32 *ptr;
+    s32 temp;
+    s32 temp_v1;
+
+    ptr = NULL;
+    temp = arg1[1];
+    if (temp == ((temp / 7) * 7)) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 3;
+        arg1[9] = 0x40;
+        arg1[10] = 0x40;
+    }
+    temp_v1 = This->m_Unk62;
+    if (temp_v1 == 0xC8) {
+        ptr = &D_80089C94;
+    } else if (temp_v1 == 0x190) {
+        ptr = &D_80089C7C;
+    } else if (temp_v1 == 0x258) {
+        ptr = &D_80089C88;
+    } else if (temp_v1 == 0x320) {
+        ptr = &D_80089C7C;
+        This->m_Unk62 = -1;
+    }
+    if (ptr != NULL) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, ptr);
+    }
+    ((void (*)(void *, s32, s32))This->vtable->Unk51)(This, -0x1E, 0);
+    if (This->m_Unk9 != 0) {
+        This->vtable->Unk50(This, -0xC8, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_800602AC);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800603C4);
+void func_800603C4(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    temp = This->m_Unk62;
+    if (temp < 0x14) {
+        This->vtable->Unk75(This);
+        This->vtable->Unk48(This, -0x1E, 0);
+    } else if (temp == 0x14) {
+        This->vtable->Unk74(This);
+        arg1[4] = 0;
+        arg1[7] = 5;
+    } else if ((temp % ((This->m_Unk31 * 3) + 0x14)) == 0) {
+        This->vtable->Unk75(This);
+        arg1[7] = -2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_800604DC);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800605D0);
+void func_800605D0(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80060710);
+    func_80060710(This);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk32;
+    if ((temp == 7) || (temp == 0x16)) {
+        arg1[7] = 3;
+    }
+    temp = This->m_Unk62;
+    if ((u32)(temp - 0x12C) < 0x14U) {
+        This->vtable->Unk48(This, -0x3C, 0);
+    } else if ((u32)(temp - 0x141) < 0x13U) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C70);
+    } else if (temp >= 0x141) {
+        ((void (*)(void *, s32, s32))This->vtable->Unk49)(
+            This, (rand() & 1) ? 0x80 : -0x80, 1);
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(
+            This, 0, (rand() & 3) ? &D_80089C70 : &D_80089C64);
+    }
+}
+
+void func_80060710(entity_t *This) {
+    s32 r;
+
+    if (This->m_Unk62 == 0) {
+        r = rand() % 10;
+        if (r >= 8) {
+            This->vtable->Unk17(This, 1, &D_80089E8C);
+        } else if (r >= 5) {
+            This->m_Unk16 = 0xA;
+        }
+    }
+    if ((This->m_Unk16 == 0xA) && (This->m_Unk62 >= 0xC9)) {
+        This->vtable->Unk46(This, &D_80089DC0);
+    }
+}
 
 void func_800607F8(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80060800);
+void func_80060800(entity_t *This, s32 *arg1) {
+    s32 rem;
+    s32 r;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8006090C);
+    if (This->m_Unk62 == 0) {
+        rem = (*(s32 (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x1A0))(This->m_Unk36, 0) % 3;
+        if (rem == 0) {
+            r = rand();
+            if (r == ((r / 3) * 3)) {
+                This->vtable->Unk17(This, 1, &D_80089E38);
+            }
+        } else if (rem == 1) {
+            This->vtable->Unk17(This, 1, &D_80089E38);
+        }
+    }
+    if (arg1[1] == 0) {
+        arg1[4] = 0;
+        arg1[7] = 0x12;
+    }
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+}
+
+void func_8006090C(entity_t *This) {
+    s32 temp;
+
+    if (This->m_Unk60 != 0) {
+        temp = This->m_Unk16;
+        if (temp == 0) {
+            This->m_Unk16 = 0xC;
+            This->m_Unk62 = 0;
+        } else if (temp == 0xC) {
+            if (This->m_Unk62 < 0x1E) {
+                if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x100))(This->m_Unk36) != 0) {
+                    (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 0);
+                    This->m_Unk62 = 0;
+                    This->m_Unk16 = 0xB;
+                }
+            } else {
+                This->vtable->Unk11(This, 0xB);
+                This->m_Unk16 = 0xA;
+            }
+        } else if (temp == 0xB) {
+            if (This->m_Unk62 == 0x64) {
+                This->vtable->Unk11(This, 0xC);
+            } else {
+                (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0xCC))(This->m_Unk36, -0x64, 0);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80060A4C);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80060B34);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80060CF0);
+void func_80060CF0(entity_t *This, s32 *arg1) {
+    s32 temp_a0;
+
+    if (This->m_Unk62 < (This->m_Unk31 * 5)) {
+        temp_a0 = This->m_Unk32;
+        if ((temp_a0 == 0xF) || (temp_a0 == 0x46)) {
+            arg1[4] = 0;
+            arg1[7] = 7;
+            arg1[12] = 7;
+            arg1[17] = 7;
+        }
+    } else {
+        This->vtable->Unk87(This);
+        This->m_Unk16 = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80060D80);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80060F38);
+void func_80060F38(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061070);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk62;
+    if (temp < 0xBC) {
+        if (temp == 0x54) {
+            ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C7C);
+        }
+        if (arg1[1] == ((arg1[1] / 20) * 20)) {
+            arg1[7] = 9;
+        }
+    } else if (temp < 0xC8) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C64);
+    } else {
+        This->vtable->Unk87(This);
+        arg1[12] = 0x1E;
+        This->m_Unk16 = 1;
+    }
+    ((void (*)(void *, s32, s32))This->vtable->Unk51)(This, -0x200, 0);
+}
+
+void func_80061070(entity_t *This, s32 *arg1) {
+    s32 var_s0;
+    s32 r;
+
+    var_s0 = This->m_Unk32;
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 3) * 3)) {
+            This->vtable->Unk17(This, 1, &D_80089E50);
+        }
+    }
+    arg1[4] = This->vtable->Unk81(This);
+    if (var_s0 >= 0x20) {
+        var_s0 -= 0x20;
+    }
+    if ((var_s0 == 9) || (var_s0 == 0x11) || (var_s0 == 0x17)) {
+        arg1[7] = 0x13;
+        if (var_s0 == 0x17) {
+            arg1[12] = 0x13;
+        }
+    }
+}
 
 void func_80061158(entity_t *This) {
     if ( !This->m_Unk62 ) {
@@ -672,7 +1163,32 @@ INCLUDE_ASM("asm/nonmatchings/entity", func_80061400);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061778);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061A90);
+void func_80061A90(entity_t *This, s32 *arg1) {
+    s32 r;
+    s32 temp;
+
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 10) * 10)) {
+            This->m_Unk16 = 0xC;
+        }
+    }
+    temp = arg1[1];
+    if (temp == ((temp / 10) * 10)) {
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 0xC;
+        arg1[8] = -1;
+    }
+    if (This->m_Unk62 == 0) {
+        if (rand() & 1) {
+            This->vtable->Unk50(This, 0x800, 0);
+        }
+    }
+    This->vtable->Unk48(This, -0x80, 0);
+    if ((This->m_Unk16 == 0xC) && (This->m_Unk62 == 0x12C)) {
+        (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk18 + 0x138))(This->m_Unk18, 1, 1);
+    }
+}
 
 void func_80061C04(entity_t *This, s32 *Unk) {
     if (This->m_Unk32 == 30) {
@@ -684,49 +1200,297 @@ void func_80061C04(entity_t *This, s32 *Unk) {
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80061C2C);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061E60);
+void func_80061E60(entity_t *This, s32 *arg1) {
+    s32 rem;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80061F30);
+    rem = arg1[1] % 300;
+    arg1[4] = This->vtable->Unk81(This);
+    if (rem < 0x14) {
+        arg1[7] = 5;
+        arg1[8] = -2;
+    } else if (rem == 0x16) {
+        arg1[7] = -2;
+    }
+    This->vtable->Unk48(This, -0xA, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8006204C);
+void func_80061F30(entity_t *This) {
+    s32 r;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800620C4);
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 3) * 3)) {
+            This->vtable->Unk17(This, 1, &D_80089DD8);
+            This->vtable->Unk50(This, -0x12C, 0);
+            ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 1, &D_80089C88);
+            This->m_Unk16 = 0xB;
+        }
+    }
+    if (This->m_Unk16 == 0xB) {
+        if (This->m_Unk62 == 0x7D0) {
+            ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C94);
+        }
+        This->vtable->Unk48(This, -0x14, 0);
+    }
+}
+
+void func_8006204C(entity_t *This, s32 *Unk) {
+    Unk[4] = This->vtable->Unk81(This);
+    if (Unk[1] == ((Unk[1] / 30) * 30)) {
+        Unk[7] = 0xD;
+    }
+}
+
+void func_800620C4(entity_t *This) {
+    s32 r;
+
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 3) * 3)) {
+            This->m_Unk16 = 0xB;
+        }
+    }
+    if (This->m_Unk16 == 0xB) {
+        if (This->m_Unk62 == 0x1F6) {
+            This->vtable->Unk50(This, 0x800, 0);
+            func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+        }
+        if (This->m_Unk62 >= 0x1F5) {
+            This->vtable->Unk48(This, -0x200, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_800621A8);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800623E8);
+void func_800623E8(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800624BC);
+    arg1[4] = This->vtable->Unk81(This);
+    if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+        arg1[7] = 0x19;
+        arg1[8] = -2;
+    }
+    if (!(arg1[1] & 3)) {
+        arg1[12] = 0x15;
+        arg1[13] = -1;
+    }
+    temp = arg1[1];
+    if (temp == ((temp / 200) * 200)) {
+        arg1[17] = 0xD;
+        arg1[18] = 1;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062570);
+void func_800624BC(entity_t *This) {
+    s32 a1;
+    s32 unk16;
+    entity_vtable_t *vt;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062660);
+    if ((This->m_Unk62 == 0) && (rand() & 1)) {
+        This->m_Unk16 = 0xB;
+    }
+    if (This->m_Unk62 == 0x12C) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C7C);
+    }
+    if (This->m_Unk62 < 0x258) {
+        unk16 = This->m_Unk16;
+        vt = This->vtable;
+        a1 = 0x100;
+        if (unk16 == 0) {
+            a1 = -0x100;
+        }
+        vt->Unk48(This, a1, 0);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062730);
+void func_80062570(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800628D4);
+    arg1[4] = This->vtable->Unk81(This);
+    if (arg1[1] == 0) {
+        arg1[7] = 0;
+        temp = rand() % 3;
+        ((void (*)(void *, s32, s32, s32))This->vtable->Unk49)(This, temp * 0xC800, 0, temp);
+    }
+    if (This->m_Unk62 >= 0x961) {
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    }
+    This->vtable->Unk48(This, -0x1E, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062970);
+void func_80062660(entity_t *This, s32 *arg1) {
+    arg1[4] = 0;
+    if (arg1[1] == 0) {
+        (*(void (**)(s32, s32, s32 *))(*(s32 *)This->m_Unk36 + 0x44))(This->m_Unk36, 1, &D_80089C88);
+        (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 1);
+        arg1[7] = 0x19;
+        arg1[12] = 0x19;
+        arg1[17] = 0x19;
+    } else if (arg1[1] == 0x14) {
+        arg1[12] = 0xD;
+    }
+    if (This->m_Unk62 == (This->m_Unk31 - 1)) {
+        This->vtable->Unk87(This);
+    }
+}
+
+void func_80062730(entity_t *This) {
+    u32 temp;
+    s32 half;
+    s32 unk62;
+
+    if (This->m_Unk62 == 0) {
+        (*(void (**)(s32, void **))(*(s32 *)(*(s32 *)((char *)This->m_Unk36 + 0x5C)) + 0x64))(
+            *(s32 *)((char *)This->m_Unk36 + 0x5C), (void **)&D_8008AC1C);
+        This->m_Unk16 = rand() % 3;
+        if (*(s32 *)((char *)(*(s32 *)((char *)This->m_Unk36 + 0x14)) + 0x20) < 0x262) {
+            This->m_Unk16 = 0;
+        }
+    }
+    if (This->m_Unk16 != 0) {
+        temp = This->m_Unk31;
+        half = ((s32)(temp + (temp >> 31))) >> 1;
+        if (half < This->m_Unk62) {
+            (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0xC4))(This->m_Unk36, 0x80, 0);
+        }
+        if (This->m_Unk62 == (This->m_Unk31 - 0x1E)) {
+            This->vtable->Unk11(This, 0xA);
+        }
+    } else {
+        unk62 = This->m_Unk62;
+        if ((u32)(unk62 - 0x14) < 0x64U) {
+            (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0xC4))(
+                This->m_Unk36, -((unk62 - 0x13) << 5), 1);
+            if (This->m_Unk62 == 0x55) {
+                (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0x134))(This->m_Unk36, 1, 1);
+            }
+        }
+    }
+}
+
+void func_800628D4(entity_t *This, s32 *arg1) {
+    if (arg1[1] == 0) {
+        arg1[4] = 0;
+        arg1[7] = 0x19;
+        arg1[12] = 0x19;
+        arg1[17] = 0x19;
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    }
+    if (This->m_Unk62 == This->m_Unk31) {
+        This->vtable->Unk75(This);
+        This->vtable->Unk11(This, 0xA);
+    }
+}
+
+void func_80062970(entity_t *This) {
+    if (This->m_Unk60 != 0) {
+        This->vtable->Unk74(This);
+        if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+            This->vtable->Unk75(This);
+            This->vtable->Unk17(This, 0, &D_80089DFC);
+        }
+    } else {
+        This->vtable->Unk75(This);
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C64);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80062A40);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80062C58);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062FAC);
+void func_80062FAC(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063094);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = arg1[1];
+    if (temp == ((temp / 10) * 10)) {
+        arg1[7] = 0x19;
+        arg1[8] = 2;
+    }
+    ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089CA0);
+    if ((This->m_Unk16 == 0) && (This->m_Unk60 != 0)) {
+        This->vtable->Unk11(This, 0xB);
+        This->m_Unk16 = 0xB;
+    }
+}
+
+void func_80063094(entity_t *This, s32 *arg1) {
+    if (This->m_Unk62 < This->m_Unk31) {
+        if (This->m_Unk32 != 0) {
+            if (This->m_Unk32 == 0x14) {
+                arg1[4] = 0;
+                arg1[7] = 0x10;
+            }
+        }
+    } else {
+        This->vtable->Unk75(This);
+        This->vtable->Unk46(This, &D_80089D54);
+    }
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80063144);
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_800634A8);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800636E4);
+void func_800636E4(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063784);
+    temp = This->m_Unk32;
+    if (temp == ((temp / 15) * 15)) {
+        arg1[7] = 0xC;
+        arg1[4] = 0;
+        arg1[8] = 2;
+    }
+    if (This->m_Unk62 == This->m_Unk31) {
+        arg1[7] = -2;
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+    }
+}
+
+void func_80063784(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk32;
+    if (temp < 0x28) {
+        arg1[7] = 0xC;
+        arg1[8] = -2;
+        arg1[17] = 5;
+        arg1[18] = -1;
+    } else if (temp == 0x28) {
+        arg1[7] = -2;
+        arg1[17] = -2;
+    } else if (temp == 0x2D) {
+        arg1[12] = 0x12;
+        arg1[13] = 1;
+    } else if (temp == 0x40) {
+        arg1[7] = 7;
+    } else if (temp == 0x59) {
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80063874);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063BC0);
+void func_80063BC0(entity_t *This, s32 *arg1) {
+    if (This->m_Unk62 < 0xA) {
+        This->vtable->Unk75(This);
+    } else if (This->m_Unk62 == 0xA) {
+        This->vtable->Unk74(This);
+    }
+    if (This->m_Unk32 == 0xA) {
+        func_80063CAC((entity_t *)arg1);
+    }
+    if (This->m_Unk62 == (This->m_Unk31 + 0xA)) {
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+    }
+}
 
 void func_80063C84(entity_t *This) {
     This->m_Unk3 = 0;
@@ -745,35 +1509,241 @@ void func_80063CAC(entity_t *This) {
     This->m_Unk16 = 3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063CC8);
+void func_80063CC8(entity_t *This, s32 *arg1) {
+    s32 temp_v0;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063D40);
+    temp_v0 = This->vtable->Unk81(This);
+    arg1[4] = temp_v0;
+    if (arg1[1] == 0) {
+        arg1[7] = 0x12;
+    }
+    if (arg1[1] >= (This->m_Unk31 - 1)) {
+        arg1[1] = -1;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063DC8);
+void func_80063D40(entity_t *This, s32 *arg1) {
+    arg1[4] = This->vtable->Unk81(This);
+    if (arg1[1] == (This->m_Unk31 / 2)) {
+        arg1[7] = 0x12;
+    }
+    if (arg1[1] >= (This->m_Unk31 - 1)) {
+        arg1[1] = -1;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063E68);
+void func_80063DC8(entity_t *This, s32 *arg1) {
+    s32 temp_v1;
+
+    temp_v1 = This->m_Unk62;
+    if (temp_v1 == 0x14) {
+        arg1[7] = 0x12;
+        arg1[4] = 0;
+        arg1[12] = 3;
+        return;
+    }
+    if (temp_v1 == This->m_Unk31) {
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+        if (rand() & 1) {
+            ((void (*)(void *, s32))This->vtable->Unk11)(This, 0xB);
+        }
+    }
+}
+
+void func_80063E68(entity_t *This, s32 *arg1) {
+    s32 v;
+
+    arg1[4] = This->vtable->Unk81(This);
+    if (arg1[1] == 0) {
+        if (rand() & 1) {
+            v = 2;
+        } else {
+            v = 1;
+        }
+        arg1[7] = v;
+        arg1[8] = 2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80063ED4);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064078);
+void func_80064078(entity_t *This, s32 *arg1) {
+    if (This->m_Unk30 == 0) {
+        if (This->m_Unk60 != 0) {
+            func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+            ((void (*)(void *, s32))This->vtable->Unk73)(This, 1);
+            (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 1);
+        } else if (This->m_Unk32 == 0) {
+            do {
+                This->m_Unk33 = ((s32 (*)(void *, s32, s32))This->vtable->Unk76)(This, This->m_Unk33, 0);
+                This->m_Unk32++;
+            } while (This->m_Unk32 < 0x18);
+        }
+    } else if (This->m_Unk32 == 0) {
+        arg1[4] = 0;
+        arg1[7] = 0x16;
+    } else if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+        arg1[4] = 0;
+        arg1[12] = 0x12;
+        This->vtable->Unk11(This, 0xA);
+    }
+    This->vtable->Unk17(This, 1, &D_80089DE4);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800641C0);
+void func_800641C0(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064294);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = arg1[1];
+    if (temp == ((temp / 10) * 10)) {
+        arg1[7] = 3;
+    }
+    if (This->m_Unk62 == This->m_Unk31) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, 1);
+    }
+    if (This->m_Unk30 == 1) {
+        This->vtable->Unk48(This, -0x80, 1);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064450);
+void func_80064294(entity_t *This, s32 *arg1) {
+    s32 temp;
+    s32 r;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800644E8);
+    if (This->m_Unk62 == 0) {
+        if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x200))(This->m_Unk36) != 7) {
+            This->m_Unk16 = 0xB;
+        }
+    }
+    arg1[4] = This->vtable->Unk81(This);
+    temp = arg1[1];
+    if (temp == ((temp / 10) * 10)) {
+        arg1[7] = 0xE;
+    }
+    if (This->m_Unk62 == This->m_Unk31) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, 1);
+        if ((This->m_Unk16 != 0) && !(rand() & 1)) {
+            This->vtable->Unk17(This, 1, &D_80089E38);
+            This->vtable->Unk50(This, 0x800, 0);
+        }
+        r = rand();
+        if (r == ((r / 3) * 3)) {
+            ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089C7C);
+        }
+    }
+    if (This->m_Unk30 != 0) {
+        This->vtable->Unk48(This, -0x80, 1);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064618);
+void func_80064450(entity_t *This) {
+    if (This->m_Unk62 == 0) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, 3);
+    } else if (This->m_Unk62 == This->m_Unk31) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, 1);
+    }
+    if (This->m_Unk30 == 1) {
+        ((void (*)(void *, s32, s32))This->vtable->Unk48)(This, -0x80, 0);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800646D8);
+void func_800644E8(entity_t *This, s32 *arg1) {
+    s32 temp;
+
+    temp = This->m_Unk62;
+    if (temp == 0) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, rand() % 4);
+        return;
+    }
+    if ((temp % This->m_Unk31) == 0) {
+        ((void (*)(void *, s32))This->vtable->Unk73)(This, rand() % 4);
+        arg1[4] = This->vtable->Unk81(This);
+        arg1[7] = 0x16;
+        arg1[8] = 2;
+        arg1[9] = 0x40;
+        arg1[10] = 0x20;
+    }
+}
+
+void func_80064618(entity_t *This) {
+    if (This->m_Unk60 != 0) {
+        if (func_8005D108(This, NULL, NULL, 0xA, 0) != NULL) {
+            ((void (*)(void *, s32, s32, s32))This->m_Class_305B0->vtable->Unk52)(
+                This->m_Class_305B0, This->m_Unk19, 7, 0);
+            This->vtable->Unk87(This);
+            (*(void (**)(s32))(*(s32 *)This->m_Unk36 + 0x21C))(This->m_Unk36);
+        }
+    }
+    This->vtable->Unk48(This, -0x1E, 1);
+}
+
+void func_800646D8(entity_t *This, s32 *arg1) {
+    s32 *ptr;
+    u32 utemp;
+    s32 half;
+    s32 unk62;
+
+    if (This->m_Unk62 == 0) {
+        This->vtable->Unk50(This, -0x200, 0);
+    }
+    arg1[4] = This->vtable->Unk81(This);
+    utemp = This->m_Unk31;
+    half = ((s32)(utemp + (utemp >> 31))) >> 1;
+    if (This->m_Unk32 == half) {
+        arg1[7] = 7;
+        arg1[8] = -2;
+        arg1[12] = 3;
+        arg1[13] = -2;
+    }
+    if (This->m_Unk62 >= 0x33) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089CAC);
+    }
+    if (This->m_Unk62 >= 0x30D) {
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+        unk62 = This->m_Unk62;
+        if (unk62 >= 0x790) {
+            ptr = &D_80089E14;
+        } else if (unk62 >= 0x78B) {
+            ptr = &D_80089DE4;
+        } else if (unk62 >= 0x786) {
+            ptr = &D_80089DD8;
+        } else if (unk62 >= 0x781) {
+            ptr = &D_80089DCC;
+        } else {
+            ptr = &D_80089E20;
+        }
+        This->vtable->Unk17(This, 1, ptr);
+        if (This->m_Unk62 < 0x7D0) {
+            This->vtable->Unk48(This, -0x40, 0);
+        } else {
+            This->m_Unk16 = 1;
+        }
+    } else {
+        This->vtable->Unk48(This, -0x100, 0);
+    }
+    if ((This->m_Unk60 != 0) && (This->m_Unk16 == 0)) {
+        This->m_Unk16 = 0xC;
+        (*(void (**)(s32, s32))(*(s32 *)This->m_Unk36 + 0x130))(This->m_Unk36, 1);
+        This->vtable->Unk11(This, 0xA);
+    }
+    if (This->m_Unk16 == 0xC) {
+        (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0xC4))(This->m_Unk36, 0x100, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80064928);
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064AA4);
+void func_80064AA4(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089DCC);
+    if ((u32)(This->m_Unk62 - 0xC9) < 0x63U) {
+        This->vtable->Unk50(This, -0x20, 0);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064B14);
+void func_80064B14(entity_t *This) {
+    This->vtable->Unk23(This, (rand() % 20) == 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80064B80);
 
@@ -782,13 +1752,87 @@ void func_80064CA4(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064CEC);
+void func_80064CEC(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089DD8);
+    This->vtable->Unk48(This, -0xA, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064D48);
+void func_80064D48(entity_t *This) {
+    This->vtable->Unk17(This, 1, &D_80089E44);
+    This->vtable->Unk75(This);
+    if ((This->m_Unk16 == 0) && (This->vtable->Unk80(This, This->m_Unk36) < 0x800)) {
+        This->m_Unk16 = 0xA;
+        This->m_Unk62 = 0;
+    }
+    if (This->m_Unk16 == 0xA) {
+        if (This->m_Unk62 < 0x2D) {
+            ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089D00);
+        }
+        if (This->m_Unk62 >= 0x1F5) {
+            This->m_Unk16 = 0;
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064E34);
+void func_80064E34(entity_t *This, s32 *arg1) {
+    s32 temp;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80064FBC);
+    if (This->m_Unk62 == 0) {
+        if ((*(s32 (**)(s32))(*(s32 *)This->m_Unk36 + 0x200))(This->m_Unk36) == 5) {
+            This->m_Unk16 = 0xB;
+        }
+    }
+    if ((This->m_Unk16 != 0) && (This->m_Unk62 >= 0x870)) {
+        temp = This->m_Unk62;
+        if ((u32)(temp - 0x870) < 0x191U) {
+            if (temp == 0x870) {
+                This->vtable->Unk75(This);
+                arg1[7] = -2;
+                arg1[12] = -2;
+                arg1[17] = -2;
+                return;
+            }
+            if ((u32)(temp - 0x9F6) < 0xAU) {
+                arg1[7] = 5;
+                arg1[8] = -2;
+                return;
+            }
+            if (temp == 0xA00) {
+                This->vtable->Unk74(This);
+                arg1[1] = 1;
+            }
+        } else if (temp >= 0xA03) {
+            if (temp >= 0xAF1) {
+                This->vtable->Unk50(This, -0x20, 0);
+            }
+            func_80064FBC(This, arg1, 0x1E1, 0xFA0, -0x3C);
+        }
+    } else {
+        func_80064FBC(This, arg1, 0x1E1, 0x884, -0x3C);
+    }
+}
+
+void func_80064FBC(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+    s32 temp;
+
+    arg1[4] = 0;
+    if (arg1[1] == 6) {
+        arg1[7] = 4;
+        arg1[12] = 4;
+        arg1[17] = 4;
+    }
+    temp = This->m_Unk62;
+    if (((temp >= arg2) && (temp <= (arg2 + 0x5B))) ||
+        ((temp >= (arg2 + 0x155)) && (temp <= (arg2 + 0x1B1))) ||
+        ((temp >= (arg2 + 0x2BA)) && (temp <= (arg2 + 0x317)))) {
+        ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 0, &D_80089D18);
+    }
+    This->vtable->Unk48(This, arg4, 0);
+    if (This->m_Unk62 == arg3) {
+        This->vtable->Unk87(This);
+        This->m_Unk16 = 1;
+    }
+}
 
 void func_800650D4(entity_t *This, void *Unk) {
     func_80060D80(This, Unk);
@@ -808,10 +1852,66 @@ void func_80065204(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DCC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80065238);
+void func_80065238(entity_t *This) {
+    s32 r;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_8006536C);
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        if (r == ((r / 5) * 5)) {
+            This->m_Unk16 = 0xB;
+        }
+    }
+    This->vtable->Unk75(This);
+    This->vtable->Unk48(This, 0x64, 0);
+    if (This->m_Unk62 == 0x3E8) {
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+    }
+    if ((This->m_Unk16 == 0xB) && (This->m_Unk62 >= 0x12D)) {
+        (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0x94))(This->m_Unk36, 0, 2);
+        (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk36 + 0x94))(This->m_Unk36, 0, 7);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_800654A0);
+void func_8006536C(entity_t *This, s32 *arg1) {
+    u32 temp;
+    s32 half;
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80065514);
+    if (((This->m_Unk62 == 0) && !(rand() & 3)) || (This->m_Unk62 == 0xE10)) {
+        This->vtable->Unk87(This);
+        This->m_Unk16 = 1;
+    }
+    This->vtable->Unk17(This, 1, &D_80089E44);
+    arg1[4] = This->vtable->Unk81(This);
+    temp = This->m_Unk31;
+    half = ((s32)(temp + (temp >> 31))) >> 1;
+    if ((arg1[1] % half) == 0) {
+        arg1[7] = 0xA;
+        arg1[8] = 1;
+    }
+    This->vtable->Unk48(This, -0xA, 0);
+}
+
+void func_800654A0(entity_t *This) {
+    func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+    This->vtable->Unk17(This, 1, &D_80089E80);
+    This->vtable->Unk48(This, -0x1E, 1);
+}
+
+void func_80065514(entity_t *This) {
+    u32 r;
+    s32 rem;
+
+    if (This->m_Unk62 == 0) {
+        r = rand();
+        rem = (s32)(r + (r >> 31)) >> 1;
+        This->m_Unk16 = 0xA + (s32)(r - (rem << 1));
+    }
+    This->vtable->Unk75(This);
+    if (This->m_Unk62 >= 0xC9) {
+        func_8001EACC(This, This->m_Unk36, 1, 0, 0);
+        if (This->m_Unk16 == 0xA) {
+            ((void (*)(void *, s32, s32))This->vtable->Unk51)(This, -0x200, 0);
+        }
+    }
+}

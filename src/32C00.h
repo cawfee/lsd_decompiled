@@ -41,6 +41,8 @@ typedef struct class_32C00 {
 } class_32C00_t;
 
 class_32C00_t *func_80042400(void);
+void func_800424E0(class_32C00_t *This, void *Unk);
+void func_80042550(class_32C00_t *This, s32 Unk);
 class_32C00_vtable_t *func_80042684(void);
 
 #endif

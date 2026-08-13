@@ -22,7 +22,18 @@ INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E6CC);
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E770);
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E7F4);
+void func_8003E7F4(renderer_t *This, void **Unk) {
+    s32 kind;
+
+    kind = *(u32 *)*Unk & 0xF;
+    if (kind == 4) {
+        This->m_Unk11 = 0;
+        This->m_Unk3 = 0;
+    } else if (kind == 1) {
+        This->m_Unk2 = 0;
+    }
+    base_class_get_vtable()->Unk4(This, Unk);
+}
 
 void func_8003E874(renderer_t *This) {
     This->m_Unk11 = 0;

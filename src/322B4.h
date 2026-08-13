@@ -107,6 +107,11 @@ typedef struct class_322B4 {
     /* 0xAC */ s32 m_Unk42;
 } class_322B4_t;
 
+class_322B4_t *func_80041AB4(s32 Unk1, u8 Unk2);
+void func_80041B20(class_322B4_t *This, s32 Unk1, u8 Unk2);
+void func_80041BAC(class_322B4_t *This, u8 Unk);
+void func_80041BDC(class_322B4_t *This, u8 Unk);
+u8 func_80041C28(class_322B4_t *This);
 class_322B4_vtable_t *func_80041C3C(void);
 
 #endif

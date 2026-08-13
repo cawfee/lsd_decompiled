@@ -105,10 +105,8 @@ typedef struct class_305B0 {
     /* 0x7C */ s32 m_Unk30;
     /* 0x80 */ s32 m_Unk31;
     /* 0x84 */ s32 m_Unk32;
-    /* 0x88 */ u16 m_Unk33;
-    /* 0x8A */ u16 m_Unk33_pad;
-    /* 0x8C */ u16 m_Unk34;
-    /* 0x8E */ u16 m_Unk34_pad;
+    /* 0x88 */ s32 m_Unk33;
+    /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
     /* 0x94 */ s32 m_Unk36;
     /* 0x98 */ s32 m_Unk37;

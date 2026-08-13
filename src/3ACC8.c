@@ -4,6 +4,14 @@
 extern class_3ACC8_vtable_t D_800866E8;
 
 extern s32 D_800869CC[];
+extern s32 D_8008699C;
+extern s32 D_800869A8;
+extern s32 D_800869B4;
+extern s32 D_800869C0;
+extern s32 D_8008A980;
+
+void func_8004D0D0(class_3ACC8_t *This, s32 *Unk);
+void func_8004D140(class_3ACC8_t *This, void *fn, s32 arg);
 
 class_3ACC8_t *func_8004A4C8(u32 Unk1, u32 Unk2) {
     class_3ACC8_t *allocated = (class_3ACC8_t *) memory_allocate_mem(0x1E8);
@@ -28,7 +36,16 @@ void func_8004A984(class_3ACC8_t *This, s32 **Unk2, s32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AA10);
+void func_8004AA10(class_3ACC8_t *This) {
+    This->m_Unk25 = 0;
+    This->m_Unk57 = 0;
+    This->m_Unk33 = 0;
+    This->vtable->Unk54(This, D_8008A980);
+    This->m_Unk114 = -1;
+    This->m_Unk115 = -1;
+    This->m_Unk116 = -1;
+    This->m_Unk117 = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004AA6C);
 
@@ -257,7 +274,18 @@ void func_8004CFB0(class_3ACC8_t *This, s32 Unk) {
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CFB8);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D028);
+void func_8004D028(class_3ACC8_t *This) {
+    s32 temp_v0;
+
+    if (This->m_Unk119 > 0) {
+        func_8004D140(This, func_8004D0D0, 0);
+        temp_v0 = This->m_Unk119 - 1;
+        This->m_Unk119 = temp_v0;
+        if (temp_v0 == 0) {
+            This->m_Unk119 = -1;
+        }
+    }
+}
 
 void func_8004D088(class_3ACC8_t *This) {
     if ( This->m_Unk119 )

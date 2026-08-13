@@ -75,7 +75,33 @@ void func_8003C3D0(class_2C694_t *This) {
 }
 
 // jump table
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C48C);
+void func_8003C48C(class_2C694_t *This, s32 Unk2, s32 Unk3) {
+    class_2C694_vtable_t *vtable;
+    void (*fn)(void *);
+
+    vtable = This->vtable;
+    if (This->m_HasIdleTimeout) {
+        switch (Unk3) {
+            case 18:
+                fn = vtable->Unk31;
+                goto do_call;
+            case 19:
+                fn = vtable->Unk32;
+                goto do_call;
+            case 33:
+                fn = vtable->Unk28;
+                goto do_call;
+            case 23:
+                fn = vtable->Unk30;
+                goto do_call;
+            case 25:
+                fn = vtable->Unk29;
+            do_call:
+                fn(This);
+                break;
+        }
+    }
+}
 
 void func_8003C51C(class_2C694_t *This, void **Unk2, s32 Unk3) {
     class_2C694_vtable_t *vtable;
@@ -109,69 +135,69 @@ void func_8003C51C(class_2C694_t *This, void **Unk2, s32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003C63C);
-// void func_8003C63C(class_2C694_t *This, s32 Unk2) {
-//     class_2C694_vtable_t *vtable;
+void func_8003C63C(class_2C694_t *This, s32 Unk2) {
+    class_2C694_vtable_t *vtable;
+    void (*fn)(void *);
 
-//     vtable = This->vtable;
-//     timer_get_vtable()->Unk23(This, Unk2);
+    vtable = This->vtable;
+    timer_get_vtable()->Unk23(This, Unk2);
 
-//     switch (Unk2) {
-//         case 4:
-//         case 7:
-//             This->m_TicksPassed = 0;
-//             This->m_HasIdleTimeout = 0;
-//             break;
+    switch (Unk2) {
+        case 5:
+            vtable->Unk56(This, (char *)(This->m_Unk18 + 16));
+            vtable->Unk59(This, *(s32 *)(This->m_Unk18 + 8), 0);
+            This->m_TicksPassed = 0;
+            This->m_HasIdleTimeout = 1;
+            break;
 
-//         case 5:
-//             vtable->Unk56(This, (char *)(This->m_Unk18 + 16));
-//             vtable->Unk59(This, *(u32 *)(This->m_Unk18 + 8), 0);
-//             This->m_TicksPassed = 0;
-//             This->m_HasIdleTimeout = 1;
-//             break;
+        case 6:
+            This->m_Unk13 = 1;
+            fn = vtable->Unk36;
+            goto do_call;
 
-//         case 6:
-//             This->m_Unk13 = 1;
-//             vtable->Unk36(This);
-//             break;
+        case 4:
+        case 7:
+            This->m_TicksPassed = 0;
+            This->m_HasIdleTimeout = 0;
+            break;
 
-//         case 8:
-//             This->m_TicksPassed = 0;
-//             break;
+        case 8:
+            This->m_TicksPassed = 0;
+            break;
 
-//         case 9:
-//         case 10:
-//         case 11:
-//         case 14:
-//         case 15:
-//         case 16:
-//         case 17:
-//             This->m_Unk7 = 5;
-//             This->m_TicksPassed = 0;
-
-//             switch (Unk2) {
-//                 case 11:
-//                     vtable->Unk35(This);
-//                     break;
-
-//                 case 15:
-//                     vtable->Unk66(This);
-//                     break;
-
-//                 case 17:
-//                     vtable->Unk67(This);
-//                     break;
-
-//                 default:
-//                     break;
-//             }
-
-//             break;
-
-//         default:
-//             break;
-//     }
-// }
+        case 9:
+        case 10:
+        case 11:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+            This->m_Unk7 = 5;
+            This->m_TicksPassed = 0;
+            if (Unk2 == 15) {
+                goto do15;
+            }
+            if (Unk2 < 16) {
+                if (Unk2 == 11) {
+                    goto do11;
+                }
+            } else if (Unk2 == 17) {
+                goto do17;
+            }
+            break;
+        do11:
+            fn = vtable->Unk35;
+            goto do_call;
+        do15:
+            fn = vtable->Unk66;
+            goto do_call;
+        do17:
+            fn = vtable->Unk67;
+        do_call:
+            fn(This);
+            break;
+    }
+}
 
 void func_8003C794(class_2C694_t *This, s32 Unk2) {
     This->m_TimeoutIdleTime = Unk2;
@@ -316,7 +342,11 @@ void func_8003CB30(class_2C694_t *This, s32 Unk) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003CB68);
+void func_8003CB68(class_2C694_t *This, s8 *Unk2, s8 *Unk3, s8 *Unk4) {
+    __builtin_memcpy((s8 *)&This->m_Unk35 + 0, Unk2, 3);
+    __builtin_memcpy((s8 *)&This->m_Unk35 + 3, Unk3, 3);
+    __builtin_memcpy((s8 *)&This->m_Unk35 + 6, Unk4, 3);
+}
 
 void func_8003CBB8(class_2C694_t *This, s32 Unk) {
     This->m_Unk32 = Unk;
@@ -516,7 +546,10 @@ s32 func_8003D5C0(class_2C694_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/2C694", func_8003D5CC);
 
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003D6D4);
+void func_8003D6D4(class_2C694_t *This) {
+    func_800183DC(This->m_Unk24[This->m_Unk21], This->m_Unk22[This->m_Unk21]);
+    memory_free_mem((void *)This->m_Unk24[This->m_Unk21]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2C694", func_8003D73C);
 

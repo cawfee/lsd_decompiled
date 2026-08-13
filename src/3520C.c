@@ -1,5 +1,8 @@
 #include "3520C.h"
 
+#include "34E8C.h"
+#include "171F0.h"
+
 extern class_3520C_vtable_t D_8006F40C;
 
 class_3520C_t *func_80044A0C(s32 Unk1) {
@@ -16,7 +19,24 @@ class_3520C_t *func_80044A0C(s32 Unk1) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3520C", func_80044A7C);
+class_3520C_t *func_80044A7C(class_3520C_t *This, s32 *pDword) {
+    class_34E8C_vtable_t *base_vtable;
+    class_3520C_vtable_t *new_vtable;
+
+    base_vtable = func_800449FC();
+    base_vtable->Construct(This, (s32)pDword, 0);
+
+    new_vtable = func_80044CC4();
+    This->vtable = new_vtable;
+
+    if (*pDword != 0) {
+        if (new_vtable->Unk24(This) != 0) {
+            return NULL;
+        }
+    }
+
+    return This;
+}
 
 void func_80044B04(class_3520C_t *This) {
     This->vtable->Unk30(This);

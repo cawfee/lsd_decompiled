@@ -75,7 +75,13 @@ void func_8003BDE4(void) {
 void func_8003BDEC(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/asset_player", func_8003BDF4);
+void func_8003BDF4(asset_player_t *This) {
+    if (This->m_Unk52) {
+        (*(void (**)(s32))(*(s32 *)This->m_Unk44 + 0x4C))(This->m_Unk44);
+    } else {
+        This->vtable->Unk23(This, 7);
+    }
+}
 
 void func_8003BE5C(asset_player_t *This, s32 Value) {
     This->m_Unk48 = Value;

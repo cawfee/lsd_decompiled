@@ -44,19 +44,19 @@ typedef struct dream_sys_vtable {
     /* 0x024 80087c00 */ void (*Unk8)(void *);
     /* 0x028 80087c04 */ void (*Unk9)(void *);
     /* 0x02C 80087c08 */ void (*Unk10)(void *);
-    /* 0x030 80087c0c */ void (*Unk11)(void *);
+    /* 0x030 80087c0c */ void (*Unk11)(void *, s32);
     /* 0x034 80087c10 */ void (*Unk12)(void *);
     /* 0x038 80087c14 */ void (*Unk13)(void *);
     /* 0x03C 80087c18 */ u32 pad;
-    /* 0x040 80087c1c */ void (*Unk15)(void *);
-    /* 0x044 80087c20 */ void (*Unk16)(void *, s32);
+    /* 0x040 80087c1c */ void (*Unk15)(void *); // dream_sys_unk15
+    /* 0x044 80087c20 */ void (*Unk16)(void *, s32, s32 *);
     /* 0x048 80087c24 */ void (*Unk17)(void *);
     /* 0x04C 80087c28 */ void (*Unk18)(void *);
-    /* 0x050 80087c2c */ void (*Unk19)(void *);
+    /* 0x050 80087c2c */ void (*Unk19)(void *); // func_80058A94
     /* 0x054 80087c30 */ void (*Unk20)(void *);
     /* 0x058 80087c34 */ void (*Unk21)(void *);
     /* 0x05C 80087c38 */ void (*Unk22)(void *, s32);
-    /* 0x060 80087c3c */ void (*Unk23)(void *);
+    /* 0x060 80087c3c */ void (*Unk23)(void *, s32);
     /* 0x064 80087c40 */ void (*Unk24)(void *);
     /* 0x068 80087c44 */ void (*Unk25)(void *);
     /* 0x06C 80087c48 */ void (*Unk26)(void *);
@@ -79,7 +79,7 @@ typedef struct dream_sys_vtable {
     /* 0x0B0 80087c8c */ u32 pad2;
     /* 0x0B4 80087c90 */ void (*Unk44)(void *);
     /* 0x0B8 80087c94 */ void (*Unk45)(void *);
-    /* 0x0BC 80087c98 */ void (*Unk46)(void *);
+    /* 0x0BC 80087c98 */ void (*Unk46)(void *, void *);
     /* 0x0C0 80087c9c */ void (*Unk47)(void *);
     /* 0x0C4 80087ca0 */ void (*Unk48)(void *);
     /* 0x0C8 80087ca4 */ void (*Unk49)(void *);
@@ -97,8 +97,8 @@ typedef struct dream_sys_vtable {
     /* 0x0F8 80087cd4 */ void (*Unk61)(void *);
     /* 0x0FC 80087cd8 */ void (*Unk62)(void *);
     /* 0x100 80087cdc */ void (*Unk63)(void *);
-    /* 0x104 80087ce0 */ void (*Unk64)(void *);
-    /* 0x108 80087ce4 */ void (*Unk65)(void *);
+    /* 0x104 80087ce0 */ s32 (*Unk64)(void *, s32); // dream_sys__get_set_dream_time_limit
+    /* 0x108 80087ce4 */ void (*Unk65)(void *, s32); // func_80059148
     /* 0x10C 80087ce8 */ void (*Unk66)(void *, s32);
     /* 0x110 80087cec */ void (*Unk67)(void *, void *);
     /* 0x114 80087cf0 */ void (*Unk68)(void *, texture_helper_t *);
@@ -133,11 +133,11 @@ typedef struct dream_sys_vtable {
     /* 0x188 80087d64 */ void (*Unk97)(void *, s32);
     /* 0x18C 80087d68 */ void (*Unk98)(void *);
     /* 0x190 80087d6c */ void (*Unk99)(void *);
-    /* 0x194 80087d70 */ void (*Unk100)(void *);
-    /* 0x198 80087d74 */ void (*Unk101)(void *);
+    /* 0x194 80087d70 */ void (*Unk100)(void *, s32 *); // func_8005A1F4
+    /* 0x198 80087d74 */ void (*Unk101)(void *); // dream_sys__init_new_game
     /* 0x19C 80087d78 */ void (*Unk102)(void *, void *);
     /* 0x1A0 80087d7c */ s32 (*Unk103)(void *, s32 *);
-    /* 0x1A4 80087d80 */ void (*Unk104)(void *);
+    /* 0x1A4 80087d80 */ s32 (*Unk104)(void *); // dream_sys__advance_day
     /* 0x1A8 80087d84 */ void (*Unk105)(void *);
     /* 0x1AC 80087d88 */ s32 (*Unk106)(void *);
     /* 0x1B0 80087d8c */ void *(*GetRegionCode)(
@@ -146,31 +146,31 @@ typedef struct dream_sys_vtable {
     /* 0x1B8 80087d94 */ void (*Unk109)(void *);
     /* 0x1BC 80087d98 */ void (*Unk110)(void *, void *);
     /* 0x1C0 80087d9c */ void (*Unk111)(void *);
-    /* 0x1C4 80087da0 */ void (*Unk112)(void *);
-    /* 0x1C8 80087da4 */ void (*Unk113)(void *);
-    /* 0x1CC 80087da8 */ void (*Unk114)(void *);
-    /* 0x1D0 80087dac */ void (*Unk115)(void *);
-    /* 0x1D4 80087db0 */ void (*Unk116)(void *);
+    /* 0x1C4 80087da0 */ void (*Unk112)(void *); // dream_sys__dynamic_link
+    /* 0x1C8 80087da4 */ s32 (*Unk113)(void *, s32); // dream_sys__static_wall_link
+    /* 0x1CC 80087da8 */ s32 (*Unk114)(void *, s32); // dream_sys__load_next_flashback
+    /* 0x1D0 80087dac */ s32 (*Unk115)(void *, s32); // func_8005A700
+    /* 0x1D4 80087db0 */ s32 (*Unk116)(void *, s32); // func_8005A7A0
     /* 0x1D8 80087db4 */ void (*Unk117)(void *);
     /* 0x1DC 80087db8 */ void (*Unk118)(void *);
-    /* 0x1E0 80087dbc */ void (*Unk119)(void *);
-    /* 0x1E4 80087dc0 */ void (*Unk120)(void *, void **, s32);
+    /* 0x1E0 80087dbc */ s32 (*Unk119)(void *);
+    /* 0x1E4 80087dc0 */ void (*Unk120)(void *, void *, s32); // dream_sys__process_chunk_change
     /* 0x1E8 80087dc4 */ void (*Unk121)(void *, void **, s32);
-    /* 0x1EC 80087dc8 */ void (*Unk122)(void *);
-    /* 0x1F0 80087dcc */ void (*Unk123)(void *);
-    /* 0x1F4 80087dd0 */ void (*Unk124)(void *);
-    /* 0x1F8 80087dd4 */ void (*Unk125)(void *);
-    /* 0x1FC 80087dd8 */ void (*Unk126)(void *, s8 *);
+    /* 0x1EC 80087dc8 */ void (*Unk122)(void *, dream_sys_mood_graph_point_t *, s32); // dream_sys__get_previous_day_mood
+    /* 0x1F0 80087dcc */ void (*Unk123)(void *, dream_sys_mood_graph_point_t *); // dream_sys__init_mood_contibutors
+    /* 0x1F4 80087dd0 */ void (*Unk124)(void *, void *); // dream_sys__log_chunk_mood
+    /* 0x1F8 80087dd4 */ void (*Unk125)(void *, dream_sys_mood_graph_point_t *); // dream_sys__log_instance_mood
+    /* 0x1FC 80087dd8 */ void (*Unk126)(void *, dream_sys_mood_graph_point_t *); // dream_sys__update_dream_chart
     /* 0x200 80087ddc */ void (*Unk127)(void *);
-    /* 0x204 80087de0 */ void (*Unk128)(void *);
-    /* 0x208 80087de4 */ void (*Unk129)(void *, s32 *, s32);
-    /* 0x20C 80087de8 */ void (*Unk130)(void *);
-    /* 0x210 80087dec */ void (*Unk131)(void *);
+    /* 0x204 80087de0 */ void (*Unk128)(void *, dream_sys_mood_graph_contrib_t *); // dream_sys__clear_mood_graph
+    /* 0x208 80087de4 */ void (*Unk129)(void *, dream_sys_mood_graph_contrib_t *, dream_sys_mood_graph_point_t *); // dream_sys__log_mood
+    /* 0x20C 80087de8 */ void (*Unk130)(void *, dream_sys_mood_graph_contrib_t *, dream_sys_mood_graph_point_t *); // dream_sys__get_mood_average
+    /* 0x210 80087dec */ void (*Unk131)(void *); // dream_sys__calc_unlock_score
     /* 0x214 80087df0 */ void (*Unk132)(void *);
-    /* 0x218 80087df4 */ void (*Unk133)(void *);
+    /* 0x218 80087df4 */ void (*Unk133)(void *, s32, s32); // dream_sys__flashback_saving
     /* 0x21C 80087df8 */ void (*Unk134)(void *);
-    /* 0x220 80087dfc */ void (*Unk135)(void *);
-    /* 0x224 80087e00 */ void (*Unk136)(void *);
+    /* 0x220 80087dfc */ void (*Unk135)(void *); // func_8005B904
+    /* 0x224 80087e00 */ void (*Unk136)(void *); // func_8005B990
     /* 0x228 80087e04 */ void (*Unk137)(void *, u32);
 } dream_sys_vtable_t;
 

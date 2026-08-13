@@ -6,6 +6,8 @@ extern class_477E4_vtable_t D_800878D4;
 extern s32 D_8008ABA4[];
 extern s32 D_8008ABA8[];
 
+void func_800573CC(class_477E4_t *This, s32 arg1, void *Unk);
+
 class_477E4_t *func_80056FE4() {
     class_477E4_t *allocated = (class_477E4_t *) memory_allocate_mem(0x58);
 
@@ -73,7 +75,16 @@ void func_800571E8(class_477E4_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_800571F8);
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057320);
+void func_80057320(class_477E4_t *This, u8 **Unk) {
+    u8 kind;
+
+    kind = **Unk;
+    if (kind == 0x34) {
+        ((void (*)(void *))This->vtable->Unk54)(This);
+    } else if (kind == 0x24) {
+        This->vtable->Unk55(This);
+    }
+}
 
 void func_80057384(class_477E4_t *This, void *Unk) {
     func_800573CC(This, 1, Unk);

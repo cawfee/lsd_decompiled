@@ -2,6 +2,7 @@
 #define LSD_TEXTURE_HELPER_H
 
 #include <common.h>
+#include <psx/libgs.h>
 
 typedef struct {
     u32 value;
@@ -47,27 +48,20 @@ typedef struct {
 } texture_helper_vtable_t;
 
 typedef struct texture_helper {
-    texture_helper_vtable_t *vtable;
-    s32 unk1;
-    s32 unk2;
-    s32 unk3;
-    s32 m_Image;
-    s32 unk5;
-    s32 unk6;
-    s32 unk7;
-    s32 unk8;
-    s32 unk9;
-    s32 unk10;
-    s32 unk11;
-    s32 unk12;
-    s32 unk13;
-    s32 unk14;
-    s32 unk15;
-    s32 unk16;
-    s32 unk17;
-    s32 m_MaybeLoaded; // Unchecked
-    s32 unk19;
-    s32 unk20;
+    /* 0x00 */ texture_helper_vtable_t *vtable;
+    /* 0x04 */ s32 unk1;
+    /* 0x08 */ s32 unk2;
+    /* 0x0C */ s32 unk3;
+    /* 0x10 */ s32 m_Image;
+    /* 0x14 */ s32 unk5;
+    /* 0x18 */ s32 unk6;
+    /* 0x1C */ s32 unk7;
+    /* 0x20 */ s32 unk8;
+    /* 0x24 */ s32 unk9;
+    /* 0x28 */ s32 unk10;
+    /* 0x2C */ gs_image_t m_TimInfo;
+    /* 0x48 */ s32 m_MaybeLoaded;
+    /* 0x4C */ s32 unk19;
 } texture_helper_t;
 
 texture_helper_t *texture_helper_create(const char *Unk1);
