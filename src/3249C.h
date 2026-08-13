@@ -83,11 +83,13 @@ typedef struct class_3249C {
     /* 0x60 */ s32 m_Unk23;
     /* 0x64 */ s32 m_Unk24;
     /* 0x68 */ s32 m_Unk25;
-    /* 0x6C */ s32 m_Unk26;
+    /* 0x6C */ u16 m_Unk26_0;
+    /* 0x6E */ u16 m_Unk26_1;
     /* 0x70 */ s32 m_Unk27;
     /* 0x74 */ s32 m_Unk28;
     /* 0x78 */ s32 m_Unk29;
-    /* 0x7C */ s32 m_Unk30;
+    /* 0x7C */ u16 m_Unk30_0;
+    /* 0x7E */ u16 m_Unk30_1;
     /* 0x80 */ s32 m_Unk31;
     /* 0x84 */ s32 m_Unk32;
     /* 0x88 */ s32 m_Unk33;

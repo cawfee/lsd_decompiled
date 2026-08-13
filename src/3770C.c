@@ -72,8 +72,18 @@ s32 func_80047240(class_3770C_t *This) {
     return 1;
 }
 
-// gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_8004728C);
+void func_8004728C(class_3770C_t *This) {
+    class_3770C_t *cur;
+
+    if (This->m_Unk10 != 0) {
+        cur = D_8008A950;
+        if (cur == This) {
+            cur->vtable->Unk20(cur);
+            cur->m_Unk10 = 0;
+            D_8008A950 = NULL;
+        }
+    }
+}
 
 // gp
 INCLUDE_ASM("asm/nonmatchings/3770C", func_800472EC);
@@ -107,13 +117,33 @@ void func_800475C8(void) {
 void func_800475D0(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800475D8);
+void func_800475D8(class_3770C_t *This) {
+    if (This->m_Unk11 == 0) {
+        if (D_8008A950 == This) {
+            do {
+            } while (CdControl(0xB, 0, 0) == 0);
+            This->m_Unk11 = 1;
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_80047638);
+void func_80047638(class_3770C_t *This) {
+    if ((This->m_Unk11 != 0) && (D_8008A950 == This)) {
+        do {
+
+        } while (CdControl(0xC, 0, 0) == 0);
+        This->m_Unk11 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3770C", func_80047694);
 
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800477B0);
+void func_800477B0(class_3770C_t *This, s32 Unk) {
+    if (This->m_Unk17) {
+        ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
+        ((void (*)(void *, s32))This->vtable->Unk27)(This, Unk);
+    }
+}
 
 void func_80047810(class_3770C_t *This) {
     if (This->m_Unk18) {

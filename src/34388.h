@@ -31,7 +31,7 @@ typedef struct class_34388_vtable {
     /* 0x060 8006f224 */ void (*Unk23)(void *);
     /* 0x064 8006f228 */ void (*Unk24)(void *);
     /* 0x068 8006f22c */ void (*Unk25)(void *);
-    /* 0x06C 8006f230 */ void (*Unk26)(void *);
+    /* 0x06C 8006f230 */ void (*Unk26)(void *, s32);
     /* 0x070 8006f234 */ void (*Unk27)(void *);
     /* 0x074 8006f238 */ void (*Unk28)(void *);
     /* 0x078 8006f23c */ void (*Unk29)(void *);

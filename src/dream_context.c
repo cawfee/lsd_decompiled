@@ -113,7 +113,53 @@ void func_80049EA4(void) {
 void func_80049EAC(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049EB4);
+void func_80049EB4(dream_context_t *This, s32 Unk2, s32 Unk3) {
+    s32 unk;
+    s32 unk4;
+    s16 sp10[4];
+    dream_sys_t *dream_sys;
+    dream_sys_vtable_t *vtable;
+
+    switch (Unk3) {
+        case 4:
+            (*(void (**)(s32, s32))(*(s32 *) This->m_Unk18 + 0x48))(This->m_Unk18, Unk2);
+            (*(void (**)(s32))(*(s32 *) This->m_Unk18 + 4))(This->m_Unk18);
+            if (((s32(*)(dream_sys_t *, s32))This->m_DreamSys->vtable->Unk109)(This->m_DreamSys, 0) == 0) {
+                This->m_DreamSys->vtable->Unk110(sp10, This->m_DreamSys);
+                unk4 = 2;
+                if (sp10[1] < 0) {
+                    unk4 = 1;
+                }
+                This->m_Unk9 = unk4;
+                goto block_4_join;
+            }
+            This->m_Unk9 = 3;
+        block_4_join:
+            ((void (*)(dream_context_t *, s32))This->vtable->Unk23)(This, 3);
+            break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 10:
+            This->m_Unk14 = 3;
+            break;
+        case 12:
+        case 13:
+            (*(void (**)(s32, s32))(*(s32 *) This->m_Unk18 + 0x48))(This->m_Unk18, Unk2);
+            (*(void (**)(s32))(*(s32 *) This->m_Unk18 + 4))(This->m_Unk18);
+            dream_sys = This->m_DreamSys;
+            vtable = dream_sys->vtable;
+            unk = 1;
+            if (Unk3 != 12) {
+                unk = 2;
+            }
+            ((s32(*)(dream_sys_t *, s32))vtable->Unk109)(dream_sys, unk);
+            This->m_Unk9 = 3;
+            ((void (*)(dream_context_t *, s32))This->vtable->Unk23)(This, 3);
+            break;
+    }
+}
 
 dream_context_vtable_t *dream_context_get_vtable(void) {
     return &g_DREAM_CONTEXT_VTABLE;

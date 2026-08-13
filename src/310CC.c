@@ -22,7 +22,10 @@ void func_80040A30(class_310CC_t *This) {
     func_80041C3C()->Cleanup(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/310CC", func_80040A88);
+void func_80040A88(class_310CC_t *This, s32 Unk) {
+    ((void (*)(void *, s32))This->vtable->Unk52)(This, 7);
+    ((void (*)(void *, s32))This->vtable->Unk50)(This, Unk);
+}
 
 INCLUDE_ASM("asm/nonmatchings/310CC", func_80040AE8);
 

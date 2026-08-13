@@ -169,23 +169,6 @@ s32 func_80026F00(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/171F0", frame_setup);
-// void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
-//     s32 result;
-//     s32 unk;
-//     s32 (*callback)(s32, s32, s32);
-
-//     unk = Unk1;
-//     callback = func_8002C468;
-
-//     if (D_8008A84C == 0x13) {
-//         callback = func_80027F18;
-//     }
-
-//     do {
-//         result = callback(Unk1, Unk2, Unk3);
-//         Unk1 = unk;
-//     } while (!result);
-// }
 
 s32 func_80026FAC(void) {
     if (D_8008A84C == 0x13) {

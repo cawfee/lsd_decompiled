@@ -57,7 +57,16 @@ INCLUDE_ASM("asm/nonmatchings/48768", func_80058228);
 
 INCLUDE_ASM("asm/nonmatchings/48768", func_80058308);
 
-INCLUDE_ASM("asm/nonmatchings/48768", func_80058390);
+s32 func_80058390(class_48768_t *This, void *Unk1, s32 Unk2) {
+    s32 var_v1;
+
+    func_8003DFBC()->Unk16(This, Unk1, Unk2);
+    var_v1 = 2;
+    if (This->m_Unk141 == 0) {
+        var_v1 = This->m_Unk13;
+    }
+    return var_v1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/48768", func_80058404);
 

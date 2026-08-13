@@ -26,5 +26,7 @@ typedef struct base_class {
 } base_class_t;
 
 base_class_vtable_t *base_class_get_vtable(void);
+void func_80018208(void **list, void *target);
+void func_800183A0(void *Unk1, void **Unk2);
 
 #endif

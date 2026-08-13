@@ -49,14 +49,17 @@ typedef struct class_354D4 {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s16 m_Unk9_1;
-    u16 m_Unk9_2;
-    /* 0x2C */ s32 m_Unk10;
-    /* 0x30 */ s32 m_Unk11;
+    /* 0x2A */ u16 m_Unk9_2;
+    /* 0x2C */ u8 m_Unk10_0;
+    /* 0x2D */ u8 m_Unk10_1;
+    /* 0x2E */ u16 m_Unk10_2;
+    /* 0x30 */ u16 m_Unk11_0;
+    /* 0x32 */ u16 m_Unk11_1;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
-    /* 0x40 */ s16 m_Unk15_1;
-    s16 m_Unk15_2;
+    /* 0x40 */ u16 m_Unk15_1;
+    /* 0x42 */ s16 m_Unk15_2;
     /* 0x44 */ s32 m_Unk16;
 } class_354D4_t;
 

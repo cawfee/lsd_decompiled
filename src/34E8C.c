@@ -30,7 +30,20 @@ void func_80044808(class_34E8C_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/34E8C", func_80044858);
 
-INCLUDE_ASM("asm/nonmatchings/34E8C", func_800448F8);
+void func_800448F8(class_34E8C_t *This) {
+    void *obj;
+
+    if (This->m_Unk12 != 0) {
+        obj = (void *)This->m_Unk11;
+        if (obj != NULL) {
+            (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
+        }
+        obj = (void *)This->m_Unk10;
+        if (obj != NULL) {
+            (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
+        }
+    }
+}
 
 s32 func_8004497C(class_34E8C_t *This) {
     return (*(s32 ( **)(s32))(*(s32 *)This->m_Unk11 + 120))(This->m_Unk11) & 0xFF;

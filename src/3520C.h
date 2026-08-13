@@ -29,7 +29,7 @@ typedef struct class_3520C_vtable {
     /* 0x058 8006f464 */ void (*Unk21)(void *);
     /* 0x05C 8006f468 */ void (*Unk22)(void *);
     /* 0x060 8006f46c */ void (*Unk23)(void *);
-    /* 0x064 8006f470 */ void (*Unk24)(void *);
+    /* 0x064 8006f470 */ s32 (*Unk24)(void *);
     /* 0x068 8006f474 */ void (*Unk25)(void *);
     /* 0x06C 8006f478 */ void (*Unk26)(void *);
     /* 0x070 8006f47c */ void (*Unk27)(void *);
