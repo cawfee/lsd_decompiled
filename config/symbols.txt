@@ -258,54 +258,54 @@ nullsub13 = 0x80026C80;
 nullsub25 = 0x8003B024;
 init_800269F0 = 0x800269F0;
 
-GetStageChunkFromMood = 0x8004950c;
-GetMoodFromStageChunk = 0x800495b8;
+get_stage_chunk_from_mood = 0x8004950c;
+get_mood_from_stage_chunk = 0x800495b8;
 
 
-DreamSys__TimerTick = 0x80058d94;
-DreamSys__WallLink = 0x80058fac;
-DreamSys__GetSetDreamTimeLimit = 0x80059328;
-DreamSys__InitNewGame = 0x8005a258;
-DreamSys__GetSetScreenShake = 0x8005a2d0;
-DreamSys__AdvanceDay = 0x8005a304;
-DreamSys__StartDay = 0x8005a368;
-DreamSys__EndDay = 0x8005a41c;
-DreamSys__GetCinematic = 0x8005a4e8;
-DreamSys__InitSpawnLoc = 0x8005a508;
-DreamSys__DynamicLink = 0x8005a580;
-DreamSys__StaticWallLink = 0x8005a5d8;
-DreamSys__LoadNextFlashback = 0x8005a63c;
-ExecuteLink = 0x8005a928;
-DreamSys__ProcessChunkChange = 0x8005afdc;
-DreamSys__InstanceEffectsOnJournal = 0x8005b03c;
-DreamSys__GetPreviousDayMood = 0x8005b1f4;
-DreamSys__InitMoodContibutors = 0x8005b2f4;
-DreamSys__LogChunkMood = 0x8005b3a4;
-DreamSys__LogInstanceMood = 0x8005b3f0;
-DreamSys__UpdateDreamChart = 0x8005b420;
-DreamSys__GetDreamColor = 0x8005b4e0;
-CalcDreamColor = 0x8005B518;
-DreamSys__ClearMoodGraph = 0x8005b5a4;
-DreamSys__LogMood = 0x8005b5b8;
-DreamSys__GetMoodAverage = 0x8005b5f0;
-CalcMoodAxis = 0x8005b66c;
-DreamSys__CalcUnlockScore = 0x8005b6e0;
-DreamSys__AddFlashback = 0x8005b74c;
-DreamSys__FlashbackSaving = 0x8005b81c;
-DreamSys__ResetFlashbackList = 0x8005B8FC;
+dream_sys__timer_tick = 0x80058d94;
+dream_sys__wall_link = 0x80058fac;
+dream_sys__get_set_dream_time_limit = 0x80059328;
+dream_sys__init_new_game = 0x8005a258;
+dream_sys__get_set_screen_shake = 0x8005a2d0;
+dream_sys__advance_day = 0x8005a304;
+dream_sys__start_day = 0x8005a368;
+dream_sys__end_day = 0x8005a41c;
+dream_sys__get_cinematic = 0x8005a4e8;
+dream_sys__init_spawn_loc = 0x8005a508;
+dream_sys__dynamic_link = 0x8005a580;
+dream_sys__static_wall_link = 0x8005a5d8;
+dream_sys__load_next_flashback = 0x8005a63c;
+execute_link = 0x8005a928;
+dream_sys__process_chunk_change = 0x8005afdc;
+dream_sys__instance_effects_on_journal = 0x8005b03c;
+dream_sys__get_previous_day_mood = 0x8005b1f4;
+dream_sys__init_mood_contibutors = 0x8005b2f4;
+dream_sys__log_chunk_mood = 0x8005b3a4;
+dream_sys__log_instance_mood = 0x8005b3f0;
+dream_sys__update_dream_chart = 0x8005b420;
+dream_sys__get_dream_color = 0x8005b4e0;
+calc_dream_color = 0x8005B518;
+dream_sys__clear_mood_graph = 0x8005b5a4;
+dream_sys__log_mood = 0x8005b5b8;
+dream_sys__get_mood_average = 0x8005b5f0;
+calc_mood_axis = 0x8005b66c;
+dream_sys__calc_unlock_score = 0x8005b6e0;
+dream_sys__add_flashback = 0x8005b74c;
+dream_sys__flashback_saving = 0x8005b81c;
+dream_sys__reset_flashback_list = 0x8005B8FC;
 
-InitNavChallengesArray = 0x8005ba50;
-CalcNavigationScore = 0x8005ba7c;
-GetRandomSpawnFromStage = 0x8005bb30;
-TestForStaticLink = 0x8005bcb4;
-Test4TunnelLinks = 0x8005bcf8;
-Test4InstantTeleporters = 0x8005bf74;
-Test4StaircaseNodes = 0x8005bfdc;
-GetStaticSpawn = 0x8005c150;
-GenerateInitialSpawn = 0x8005c28c;
-IsDaySpecial = 0x8005c438;
+init_nav_challenges_array = 0x8005ba50;
+calc_navigation_score = 0x8005ba7c;
+get_random_spawn_from_stage = 0x8005bb30;
+test_for_static_link = 0x8005bcb4;
+test_4_tunnel_links = 0x8005bcf8;
+test_4_instant_teleporters = 0x8005bf74;
+test_4_staircase_nodes = 0x8005bfdc;
+get_static_spawn = 0x8005c150;
+generate_initial_spawn = 0x8005c28c;
+is_day_special = 0x8005c438;
 
-SetTeleportsEnabled = 0x8005c6d8;
+set_teleports_enabled = 0x8005c6d8;
 
 // Low byte is dynamic effect, high byte is upper effect
 STG00_CHUNK_MOODS = 0x80086244; // type:s16 size:12
@@ -362,7 +362,7 @@ SPECIAL_DAYS = 0x80088ccc; // type:s16 size:84
 //Meaning unknown, gets compared against the current dream color.
 SPECIAL_COLORS = 0x80088d20; // type:s8 size:8
 
-Small__rand = 0x8008ac68;
+small__rand = 0x8008ac68;
 gpNavChallengesComplete = 0x8008acb4;
 gpDinamicLinkPenalty = 0x8008acb8;
 

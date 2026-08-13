@@ -57,20 +57,22 @@ segments:
       - [0x1764, rodata]
       - [0x17EC, rodata] # 2A0E0
       - [0x1818, rodata]
-      - [0x1890, rodata]
+      - [0x1890, .rodata, 2C694] # jtbl_80011090 + jtbl_800110D0
+      - [0x1908, rodata] # jtbl_80011108 / strings
       - [0x19DC, rodata]
-      - [0x1A90, rodata]
+      - [0x1A90, .rodata, 3249C]
+      - [0x1AA4, rodata]
       - [0x1B84, .rodata, utils/path_helper]
-      - [0x1BEC, .rodata, dream_context]
-      - [0x1C08, rodata]
-      - [0x1C0C, rodata]
+      - [0x1BEC, .rodata, dream_context] # strings + jtbl_8001140C (func_80049EB4)
       - [0x1C34, .rodata, main_menu]
       - [0x1D0C, rodata]
+      - [0x1D7C, .rodata, memory_card] # jtbl_8001157C (FBE4) + jtbl_80011594 (50034)
+      - [0x1DD0, rodata] # D_800115D0 / D_80011610 / D_8001161C
       - [0x1E28, rodata]
-      - [0x1EF4, rodata]
+      - [0x1EF4, .rodata, 4225C] # jtbl_800116F4 (func_800522DC)
+      - [0x1F4C, .rodata, 43370] # jtbl_8001174C (func_80053984)
       - [0x1F6C, .rodata, 48768]
-      - [0x1F88, rodata] # DreamSys
-      - [0x2048, rodata]
+      - [0x1F88, .rodata, dream_sys] # jtbl_80011788 (func_80058C58) + jtbl_80011848
       - [0x206C, rodata] # greyman
       - [0x20DC, c, main]
       - [0x2258, asm, psyq_2258]
