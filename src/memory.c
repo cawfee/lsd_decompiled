@@ -57,6 +57,7 @@ void memory_setup_manager(s32 *arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/memory", memory_allocate_mem);
 
+
 INCLUDE_ASM("asm/nonmatchings/memory", memory_free_mem);
 
 void nullsub3(void) {

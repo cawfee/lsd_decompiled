@@ -38,7 +38,21 @@ void func_8003BA58(asset_player_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5)
     func_8003DFBC()->Unk16(This, Unk2, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/asset_player", func_8003BAB4);
+s32 func_8003BAB4(asset_player_t *This) {
+    s32 result;
+    void *obj;
+
+    func_8003DFBC()->Unk18(This);
+    obj = (void *)This->m_Unk44;
+    This->m_Unk40 = 0;
+    (*(void (**)(void *, s32))(*(u32 *)obj + 0x6C))(obj, This->m_Unk47);
+    result = (*(s32 (**)(void *, s32, s32, s32, s32))(*(u32 *)This->m_Unk44 + 0x40))(
+        (void *)This->m_Unk44, This->m_Unk45, This->m_Unk46, This->m_Unk48, This->m_Unk49);
+    if (result != 0) {
+        result = ((s32 (*)(void *, s32))This->vtable->Unk26)(This, 0);
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/asset_player", func_8003BB5C);
 

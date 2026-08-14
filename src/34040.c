@@ -2,6 +2,8 @@
 
 #include <psx/libgs.h>
 
+extern void *func_80026CAC(void);
+
 extern class_34040_vtable_t D_8006F13C;
 
 class_34040_t *func_80043840(s32 Unk1) {
@@ -20,7 +22,21 @@ class_34040_t *func_80043840(s32 Unk1) {
 
 INCLUDE_ASM("asm/nonmatchings/34040", func_800438B0);
 
-INCLUDE_ASM("asm/nonmatchings/34040", func_80043954);
+void func_80043954(class_34040_t *This) {
+    void ***var_s0;
+    void **temp_a0;
+
+    var_s0 = (void ***)This->m_Unk10;
+    if (*var_s0 != NULL) {
+        do {
+            temp_a0 = *var_s0;
+            var_s0 = (void ***)((u8 *)var_s0 + 4);
+            (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
+        } while (*var_s0 != NULL);
+    }
+    memory_free_mem((void *)This->m_Unk10);
+    (*(void (**)(void *))((s32)func_80026CAC() + 0xC))(This);
+}
 
 INCLUDE_ASM("asm/nonmatchings/34040", func_800439EC);
 

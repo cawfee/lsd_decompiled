@@ -230,7 +230,34 @@ void func_80065DEC(class_55DD4_t *This, s32 Unk2) {
 
 INCLUDE_ASM("asm/nonmatchings/55DD4", func_80065E1C);
 
-INCLUDE_ASM("asm/nonmatchings/55DD4", func_80065F2C);
+void func_80065F2C(class_55DD4_t *This) {
+    void **list;
+    void **p;
+    s32 count;
+    void *obj;
+
+    list = This->m_Unk27;
+    if (list != NULL) {
+        if (This->m_Unk28 != 0) {
+            count = This->m_Unk26;
+            p = list;
+            goto loop_test;
+loop_body:
+            obj = *p;
+            p++;
+            (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
+            count = This->m_Unk26;
+loop_test:
+            This->m_Unk26 = count - 1;
+            if (count > 0) {
+                goto loop_body;
+            }
+            This->m_Unk25 = 0;
+        }
+    }
+    This->m_Unk28 = (u32)memory_free_mem((void *)This->m_Unk28);
+    This->m_Unk27 = memory_free_mem(This->m_Unk27);
+}
 
 INCLUDE_ASM("asm/nonmatchings/55DD4", func_80065FD8);
 

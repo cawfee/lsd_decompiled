@@ -2,11 +2,18 @@
 
 #include "base_class.h"
 
+extern s32 func_8001F3A4(s32);
+
+extern void *RotMatrix(s16 *, void *);
+
+extern void GsInitCoordinate2(void *, void *);
+
+
 // Maybe pad handling? unchecked
 
 extern class_D294_vtable_t **D_8006B5CC;
-extern s32 *D_8006B684;
-extern s32 *D_8006B690;
+extern s32 D_8006B684;
+extern s32 D_8006B690;
 
 class_D294_t *func_8001CA94() {
     class_D294_t *allocated = (class_D294_t *) memory_allocate_mem(0x44);
@@ -92,16 +99,15 @@ void func_8001CD60(class_D294_t *This, void **Unk2, s32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001CE30);
-// void func_8001CE30(class_D294_t *This) {
-//     This->m_Unk8 = 0;
-//     This->m_Unk3 = 0;
-
-//     GsInitCoordinate2(0, This->m_Unk4);
-//     This->vtable->Unk16(This, 1, D_8006B684);
-//     This->vtable->Unk17(This, 1, D_8006B690);
-//     *(u32 *)This->m_Unk4 = 1;
-// }
+s32 func_8001CE30(class_D294_t *This) {
+    This->m_Unk8 = 0;
+    This->m_Unk3 = 0;
+    GsInitCoordinate2(NULL, This->m_Unk4);
+    ((void (*)(void *, s32, s32 *))This->vtable->Unk16)(This, 1, &D_8006B684);
+    ((void (*)(void *, s32, s32 *))This->vtable->Unk17)(This, 1, &D_8006B690);
+    *(s32 *)This->m_Unk4 = 1;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001CEB4);
 
@@ -175,15 +181,56 @@ s32 func_8001D4AC(class_D294_t *This, s32 Unk) {
     return func_8001EDAC(&This->m_Unk3, 8, 1, Unk == 0) == 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D4DC);
+void *func_8001D4DC(class_D294_t *This, void *mtx, s32 negate) {
+    s16 ang[4];
+    u16 *src;
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D568);
+    src = *(u16 **)((u8 *)This->m_Unk4 + 0x44);
+    if (negate != 0) {
+        ang[0] = -src[8];
+        ang[1] = -src[9];
+        ang[2] = -src[10];
+    } else {
+        __builtin_memcpy(ang, src + 8, 8);
+    }
+    return RotMatrix(ang, mtx);
+}
+
+s32 func_8001D568(class_D294_t *This, s32 arg1) {
+    u8 buf[0x38];
+
+    if (arg1 < 4) {
+        if (arg1 >= 2) {
+            if (This->m_Unk7 != 0) {
+                if (func_8001F3A4(This->m_Unk7) != 0) {
+                    ((void (*)(void *, void *))This->vtable->Unk34)(This, buf);
+                    return ((s32 (*)(void *, void *, s32))This->vtable->Unk35)(This, buf, arg1);
+                }
+            }
+        }
+    }
+#ifdef NON_MATCHING
+    return 0;
+#endif
+}
 
 void func_8001D600(class_D294_t *This, s32 Unk) {
     func_8001F51C(This->m_Unk7, Unk);
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001D624);
+void func_8001D624(class_D294_t *This, s32 *arg1, s32 arg2) {
+    void *p;
+    class_D294_vtable_t *vt;
+
+    p = arg1 + 1;
+    func_8001EE04(p, p, *arg1 * 8, (u8 *)This->m_Unk4 + 0x24);
+    vt = This->vtable;
+    This->m_Unk9 = 0;
+    This->m_Unk10 = 0;
+    This->m_Unk11 = (s32)arg1;
+    ((void (*)(void *, s32))vt->Unk11)(This, arg2);
+    This->m_Unk11 = 0;
+}
 
 void func_8001D6A4(void) {
 }

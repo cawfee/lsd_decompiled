@@ -337,7 +337,20 @@ s32 func_8004EC5C(memory_card_t *This, u8 unused, s32 size) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004ECCC);
+s32 func_8004ECCC(memory_card_t *This, s32 unused, s32 size) {
+    char path[0x20];
+    s32 fd;
+    u32 blocks;
+
+    blocks = (u32)(size + 0x21FF) >> 13;
+    fd = open(func_8004F32C(path, This->m_Unk2, D_8008AAAC), (blocks << 16) | 0x200);
+    if (fd == -1) {
+        return 0;
+    }
+    close(fd);
+    delete(path);
+    return 1;
+}
 
 
 
@@ -420,7 +433,29 @@ void func_8004F3E4(memory_card_t *This) {
     func_8004F40C(This, TestEvent, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F40C);
+s32 func_8004F40C(memory_card_t *This, long (*fn)(unsigned long), s32 critical) {
+    s32 i;
+    s32 result;
+    u8 *cursor;
+
+    if (critical != 0) {
+        EnterCriticalSection();
+    }
+    i = 0;
+    cursor = (u8 *)This;
+    do {
+        result = fn(*(unsigned long *)(cursor + 0x14));
+        if (result == 0) {
+            break;
+        }
+        i++;
+        cursor += 4;
+    } while (i < 4);
+    if (critical != 0) {
+        ExitCriticalSection();
+    }
+    return result;
+}
 
 s32 func_8004F4A4(memory_card_t *This) {
     return func_8004F4C8(&This->m_Unk4, 4);

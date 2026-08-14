@@ -1,4 +1,7 @@
+\#include <psx/rand.h>
 #include "dream_sys.h"
+
+
 #include "477E4.h"
 #include "base_class.h"
 
@@ -22,19 +25,44 @@ extern s32 D_8008ABF0[];
 extern s32 gpNavChallengesComplete;
 extern s32 gpDinamicLinkPenalty;
 extern s32 D_8008ACBC;
+extern s32 D_8008ACC0;
 extern s32 D_8008ACC4;
 extern s32 D_8008ACC8;
+extern u8 *D_80088C84[];
+extern u8 *D_80088BDC[];
+extern u8 D_80088758[];
+extern s16 SPAWN_POS_ADJUST[];
+extern s32 D_80087E50[];
+extern s32 D_80087E5C[];
 extern s32 D_80087E80[];
 extern s32 D_80087EA4[];
 extern s32 D_80087E08[];
 extern s32 D_8008ABE0;
+extern u8 D_8008875C[];
+extern s8 D_80087E14[];
+extern s16 D_8008ABD0[];
+extern s32 D_80087EFC[];
 
 s32 test_for_static_link(s32 *Unk0, s32 Unk1, s32 Unk2);
-void execute_link(dream_sys_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
+s32 execute_link(dream_sys_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
+s32 test_4_tunnel_links(void *Unk0, s32 Unk1, s32 Unk2);
+void func_8001E6F8(void *This, void *out);
+s32 func_8005BD3C(void *a, void *b, void *c);
+s32 func_8005AF64(dream_sys_t *This, s16 *a, s16 *b);
+s32 func_8005BE28(s16 *arg0, s32 arg1);
 s32 calc_navigation_score(void);
 void helper_1_update_entity(s32 arg0, void *arg1);
 void init_nav_challenges_array(s32 *Unk1, s32 *Unk2);
 void *memset(void *s, int c, u32 n);
+
+typedef struct {
+    u8 m_data[8];
+    s16 m_hi;
+} dream_sys_fb_pkt10_t;
+
+typedef struct {
+    u8 m_data[12];
+} dream_sys_fb_pkt12_t;
 
 dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     dream_sys_t *allocated = (dream_sys_t *) memory_allocate_mem(0x928);
@@ -47,7 +75,22 @@ dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_construct);
+void dream_sys_construct(dream_sys_t *This, void *Unk1, s32 Unk2, s32 Unk3) {
+    func_80057C84()->Construct(This);
+    This->vtable = dream_sys_get_vtable();
+    This->m_Unk21 = Unk2;
+    This->m_Unk22 = Unk3;
+    This->m_Unk24 = 0;
+    This->m_Unk23 = (s32)Unk1;
+    This->vtable->Unk3(
+        This, (*(s32(**)(void *, s32))(*(u32 *)Unk1 + 0x80))(Unk1, 0));
+    This->vtable->Unk64(This, -1);
+    This->m_Unk27 = 1;
+    This->m_Unk26 = 0;
+    This->m_Unk541 = 1;
+    This->vtable->Unk101(This);
+    This->vtable->Unk15(This);
+}
 
 void dream_sys_unk15(dream_sys_t *This) {
     This->vtable->Unk23(This, 0);
@@ -62,7 +105,28 @@ void dream_sys_unk15(dream_sys_t *This) {
     This->m_Unk584 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_unk18);
+void dream_sys_unk18(dream_sys_t *This, void **arg1) {
+    s32 sp10[4];
+    u8 *slot;
+    s32 off;
+
+    ((void (*)(void **, void *, void *, void *))*(void **)((u8 *)*arg1 + 0xE4))(
+        arg1, sp10, This, (u8 *)This + 0x16C);
+    ((void (*)(void *, void **, void *))func_80057C84()->Unk18)(This, arg1, sp10);
+    This->vtable->Unk3(This, arg1);
+    if (This->m_Unk16 == 0xE) {
+        off = *(s32 *)((u8 *)This + 0x87C) * 0x24 + 0x470;
+        slot = (u8 *)This + off;
+        This->vtable->Unk16(This, 1, (s32 *)(slot + 0xE));
+        This->vtable->Unk64(This, *(s16 *)(slot + 0x1A) + 4);
+        *(s32 *)((u8 *)This + 0x87C) = *(s32 *)((u8 *)This + 0x87C) + 1;
+    }
+    if (This->m_Unk26 != 0) {
+        if (*(s32 *)((u8 *)This + 0x888) != 0) {
+            This->vtable->Unk16(This, 1, (s32 *)*(s32 *)((u8 *)This + 0x888));
+        }
+    }
+}
 
 void func_80058A94(dream_sys_t *This) {
     void **temp_a0;
@@ -77,7 +141,35 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058B08);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80058C58);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__timer_tick);
+s32 dream_sys__timer_tick(dream_sys_t *This, s32 arg1, s32 arg2) {
+    u32 tick;
+    s32 temp;
+
+    temp = 2;
+    if (arg2 == 2) {
+        tick = This->m_GameTick;
+        This->m_GameTick = tick + 1;
+        if (tick >= (u32)This->m_DreamTimeLimit) {
+            if (This->m_Unk25 != 0) {
+                temp = This->m_Unk16;
+                if ((temp != 0) || ((temp = This->vtable->Unk114(This, 0)) != 0)) {
+                    This->m_GameTick = 0;
+                    return temp;
+                }
+            } else {
+                This->vtable->Unk133(This, 0, 0x10);
+            }
+            This->vtable->Unk11(This, 0xA);
+            This->m_GameTick = 0;
+        } else {
+            This->vtable->Unk69(This);
+            This->vtable->Unk70(This);
+        }
+    }
+#ifdef NON_MATCHING
+    return temp;
+#endif
+}
 
 void func_80058E8C(dream_sys_t *This, void **Unk2, s32 Unk3) {
     func_80057C84()->Unk38(This, Unk2, Unk3);
@@ -95,7 +187,24 @@ void func_80058F18(dream_sys_t *This, void **Unk2, s32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__wall_link);
+void dream_sys__wall_link(dream_sys_t *This, s32 arg1, s32 arg2) {
+    void **obj;
+    void *pkt;
+
+    ((void (*)(void *, s32, s32))func_80057C84()->Unk55)(This, arg1, arg2);
+    if ((arg2 == 4) && (This->m_Unk16 == 0)) {
+        obj = (void **)This->m_Unk18;
+        pkt = ((void *(*)(void *, s32))(*(void **)((u8 *)*obj + 0xD4)))(obj, arg1);
+        *(dream_sys_fb_pkt10_t *)&This->m_Unk90 = *(dream_sys_fb_pkt10_t *)pkt;
+        if (This->vtable->Unk113(This, (s32)&This->m_Unk90) == 0) {
+            if (This->m_Unk72 != 0) {
+                This->vtable->Unk112(This);
+            }
+        }
+        This->vtable->Unk136(This);
+        This->vtable->Unk57(This);
+    }
+}
 
 void func_800590E0(void) {
 }
@@ -492,9 +601,48 @@ s32 *func_8005A350(dream_sys_t *This, s32 *Size) {
     return &This->m_Unk93;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__start_day);
+s32 is_day_special(void *arg0, s32 arg1);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__end_day);
+s32 dream_sys__start_day(dream_sys_t *This) {
+    s32 special;
+
+    This->m_Unk542 = 0;
+    This->m_GameTick = 0;
+    This->m_Unk546 = This->m_Unk95;
+    if (This->m_Unk25 != 0) {
+        ((void (*)(void *, s32))This->vtable->Unk114)(This, 1);
+    } else {
+        special = is_day_special((u8 *)This + 0x168, This->m_Unk95 + 1);
+        ((void (*)(void *, s32))This->vtable->Unk123)(This, special);
+        if (special != 0) {
+            return -1;
+        }
+        This->vtable->Unk111(This);
+    }
+    return This->m_NextMap;
+}
+
+s32 dream_sys__end_day(dream_sys_t *This, s32 arg1) {
+    s32 off;
+
+    This->m_Unk95 = This->m_Unk546;
+    if (This->m_Unk25 == 0) {
+        if (arg1 == 0) {
+            This->vtable->Unk131(This);
+            off = This->m_Unk95 * 2;
+            off += 0x190;
+            ((void (*)(void *, void *))This->vtable->Unk126)(This, (u8 *)This + off);
+            This->vtable->Unk104(This);
+            goto done;
+        }
+    }
+    if (arg1 == 2) {
+        This->vtable->Unk101(This);
+        This->m_Unk541 = 1;
+    }
+done:
+    return This->m_Unk25;
+}
 
 dream_sys_t *dream_sys__get_cinematic(dream_sys_t *This, void *Unk) {
     return (dream_sys_t *)__builtin_memcpy((char *)This, (char *)Unk + 0x168, 4);
@@ -537,15 +685,87 @@ s32 dream_sys__static_wall_link(dream_sys_t *This, s32 arg1) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__load_next_flashback);
+s32 dream_sys__load_next_flashback(dream_sys_t *This, s32 arg1) {
+    s32 idx;
+    s32 off;
+    u8 *slot;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A700);
+    idx = *(s32 *)((u8 *)This + 0x87C);
+    if (idx < This->m_Unk282) {
+        *(s32 *)((u8 *)This + 0x44) = 0xE;
+        off = idx * 0x24 + 0x470;
+        slot = (u8 *)This + off;
+        if (arg1 == 0) {
+            ((void (*)(void *, s32))This->vtable->Unk11)(This, 0xE);
+        }
+        This->m_Unk95 = *(s32 *)(slot + 0x20);
+        This->m_NextMap = *(s32 *)slot;
+        *(dream_sys_fb_pkt10_t *)((u8 *)This + 0x16C) = *(dream_sys_fb_pkt10_t *)(slot + 4);
+        return 1;
+    }
+    return 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A7A0);
+s32 func_8005A700(dream_sys_t *This, s32 arg1) {
+    s32 idx;
+    s32 buf[4];
+
+    if (This->m_Unk16 != 0) {
+        return 0;
+    }
+    idx = test_4_tunnel_links(&This->m_Unk90, arg1, This->m_NextMap);
+    if (idx < 0) {
+        return 0;
+    }
+    func_8001E6F8(This, buf);
+    if (func_8005BD3C(&This->m_Unk545, &This->m_Unk544, buf) == 0) {
+        return 0;
+    }
+    if (This->m_Unk41 == 0) {
+        return 0;
+    }
+    execute_link(This, idx, 0xF, 0);
+    return 1;
+}
+
+s32 func_8005A7A0(dream_sys_t *This, s32 arg1) {
+    s32 idx;
+
+    if (This->m_Unk16 != 0) {
+        return 0;
+    }
+    idx = func_8005BE90(&This->m_Unk90, This->m_NextMap, arg1, This->m_GameTick);
+    if (idx < 0) {
+        return 0;
+    }
+    This->m_Unk543 = (s32)func_8005BF48();
+    This->m_Unk544 = 0;
+    This->m_Unk545 = 0;
+    execute_link(This, idx, 0x10, 0);
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A82C);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", execute_link);
+s32 execute_link(dream_sys_t *This, s32 arg1, s32 arg2, s32 arg3) {
+    void *temp_a0;
+
+    This->m_Unk16 = arg2;
+    This->vtable->Unk11(This, arg2);
+    if (This->m_Unk16 == 0) {
+        return 0;
+    }
+    This->m_NextMap = arg1;
+    if (This->m_Unk25 != 0) {
+        This->m_GameTick = 0;
+    }
+    if (arg3 != 0) {
+        temp_a0 = (void *)This->m_Unk21;
+        (*(void (**)(void *, s32, s32, s32))(*(s32 *)temp_a0 + 0x80))(
+            temp_a0, 0x90, 0x6E, 0x6E);
+    }
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A9CC);
 
@@ -557,7 +777,19 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AD68);
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AE40);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005AF64);
+s32 func_8005AF64(dream_sys_t *This, s16 *a, s16 *b) {
+    s32 vec[3];
+    s32 t0;
+    s32 t1;
+
+    vec[0] = a[0] - b[0];
+    vec[1] = a[1] - b[1];
+    t0 = a[2];
+    t1 = b[2];
+    vec[1] = 0;
+    vec[2] = t0 - t1;
+    return ((s32(*)(dream_sys_t *, s32 *))This->vtable->Unk46)(This, vec);
+}
 
 s32 func_8005AFD0(dream_sys_t *This) {
     return This->m_NextMap;
@@ -573,9 +805,73 @@ void dream_sys__process_chunk_change(dream_sys_t *This, void *arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__instance_effects_on_journal);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__get_previous_day_mood);
+void dream_sys__get_previous_day_mood(dream_sys_t *This, s8 *out, s32 mode) {
+    s32 t0;
+    s32 t1;
+    s32 count;
+    s8 *p;
+    s32 i;
+    s32 a;
+    s32 b;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__init_mood_contibutors);
+    t0 = 0;
+    t1 = 0;
+    if (mode != 0) {
+        if (This->m_Unk94 != 0) {
+            goto last_day;
+        }
+        if (This->m_Unk95 == 0) {
+            goto store_both;
+        }
+    last_day:
+        {
+            void *row;
+            row = (u8 *)This + ((This->m_Unk95 - 1) << 1);
+            t1 = ((s8 *)row)[0x190];
+            t0 = ((s8 *)row)[0x191];
+            out[0] = t1;
+            out[1] = t0;
+            return;
+        }
+    }
+    count = 0x16D;
+    if (This->m_Unk94 == 0) {
+        count = This->m_Unk95;
+    }
+    if (count != 0) {
+        p = (s8 *)This + 0x190;
+        i = 0;
+        if (t0 < count) {
+            do {
+                i += 1;
+                a = p[0];
+                b = p[1];
+                p += 2;
+                t1 += a;
+                t0 += b;
+            } while (i < count);
+        }
+        t1 /= count;
+        t0 /= count;
+    }
+store_both:
+    out[0] = t1;
+    out[1] = t0;
+}
+
+void dream_sys__init_mood_contibutors(dream_sys_t *This, s32 arg1) {
+    void *p144;
+    void *p154;
+
+    p144 = (u8 *)This + 0x144;
+    This->vtable->Unk128(This, p144);
+    p154 = (u8 *)This + 0x154;
+    This->vtable->Unk128(This, p154);
+    if (arg1 != 0) {
+        ((void (*)(void *, void *, s32))This->vtable->Unk129)(This, p144, arg1);
+        ((void (*)(void *, void *, s32))This->vtable->Unk129)(This, p154, arg1);
+    }
+}
 
 void dream_sys__log_chunk_mood(dream_sys_t *This, void *CurrentPosition) {
     dream_sys_mood_graph_point_t *point = get_mood_from_stage_chunk(This->m_NextMap, CurrentPosition);
@@ -586,7 +882,18 @@ void dream_sys__log_instance_mood(dream_sys_t *This, dream_sys_mood_graph_point_
     This->vtable->Unk129(This, &This->m_Unk84, Source);
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__update_dream_chart);
+void dream_sys__update_dream_chart(dream_sys_t *This, dream_sys_mood_graph_point_t *out) {
+    dream_sys_mood_graph_point_t sp10;
+    dream_sys_mood_graph_point_t sp12;
+
+    This->vtable->Unk130(This, (dream_sys_mood_graph_contrib_t *)&This->m_Unk80, &sp10);
+    This->vtable->Unk130(This, (dream_sys_mood_graph_contrib_t *)&This->m_Unk84, &sp12);
+    if (This->m_Unk87 == 0) {
+        sp12.value = sp10.value;
+    }
+    out->axis.dynamic = (s8)((sp10.axis.dynamic + sp12.axis.dynamic) / 2);
+    out->axis.upper = (s8)((sp10.axis.upper + sp12.axis.upper) / 2);
+}
 
 s32 dream_sys__get_dream_color(dream_sys_t *This) {
     dream_sys_mood_graph_point_t current_mood;
@@ -595,7 +902,35 @@ s32 dream_sys__get_dream_color(dream_sys_t *This) {
     return calc_dream_color(&current_mood);
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", calc_dream_color);
+s32 calc_dream_color(u16 *arg0) {
+    s8 *p;
+    s32 i;
+    u16 local;
+    s8 v;
+    s8 *table;
+    s32 idx;
+
+    p = (s8 *)&local;
+    i = 0;
+    local = *arg0;
+    do {
+        v = *p;
+        if (v >= 4) {
+            *p = 2;
+        } else if (v < -3) {
+            *p = 0;
+        } else {
+            *p = 1;
+        }
+        i += 1;
+        p += 1;
+    } while (i < 2);
+    v = ((s8 *)&local)[0];
+    table = D_80087E14;
+    idx = v * 3;
+    v = ((s8 *)&local)[1];
+    return *(table + idx + v);
+}
 
 void dream_sys__clear_mood_graph(dream_sys_t *This, dream_sys_mood_graph_contrib_t *Contrib) {
     Contrib->last_mood.value = 0;
@@ -651,9 +986,46 @@ void dream_sys__calc_unlock_score(dream_sys_t *This) {
     This->m_Unk96 = This->m_Unk97 + This->m_Unk98;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__add_flashback);
+void dream_sys__add_flashback(dream_sys_t *This, s32 arg1, void *arg2, void *arg3, s32 arg4,
+                              s32 arg5, s32 arg6) {
+    s32 count;
+    s32 idx;
+    u8 *slot;
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys__flashback_saving);
+    count = *(s32 *)((u8 *)This + 0x46C);
+    slot = (u8 *)This + 0x470;
+    if (count < 0xA) {
+        *(s32 *)((u8 *)This + 0x46C) = count + 1;
+        idx = count * 9;
+    } else {
+        idx = ((u32)*(s32 *)((u8 *)This + 0x24) % 9) * 9;
+    }
+    slot += idx * 4;
+    *(s32 *)slot = arg1;
+    *(dream_sys_fb_pkt10_t *)(slot + 4) = *(dream_sys_fb_pkt10_t *)arg2;
+    *(dream_sys_fb_pkt12_t *)(slot + 0xE) = *(dream_sys_fb_pkt12_t *)arg3;
+    *(s16 *)(slot + 0x1C) = arg4;
+    *(s16 *)(slot + 0x1A) = arg5;
+    *(s32 *)(slot + 0x20) = arg6;
+}
+
+void dream_sys__flashback_saving(dream_sys_t *This, s32 arg1, s32 arg2) {
+    s32 r;
+    s32 temp;
+    void **obj;
+    s32 sp20[4];
+
+    if (This->m_Unk18 != 0) {
+        r = rand();
+        if (r % 3 == 0) {
+            obj = (void **)This->m_Unk18;
+            temp = (*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x10C))(obj, 0, 0);
+            func_8001E6F8(This, sp20);
+            ((void (*)(void *, s32, s32, void *, s32, s32, s32))This->vtable->Unk132)(
+                This, This->m_NextMap, temp, sp20, arg1, arg2, This->m_Unk95);
+        }
+    }
+}
 
 void dream_sys__reset_flashback_list(dream_sys_t *This) {
     This->m_Unk282 = 0;
@@ -697,7 +1069,31 @@ void init_nav_challenges_array(s32 *Unk1, s32 *Unk2) {
     gpDinamicLinkPenalty = Unk2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", calc_navigation_score);
+s32 calc_navigation_score(void) {
+    s32 score;
+    s32 addend;
+    s8 *var_v1;
+    s8 *temp_a1;
+
+    score = 0;
+    addend = 0xF4240;
+    var_v1 = (s8 *)gpNavChallengesComplete;
+    temp_a1 = var_v1 + 0x1E;
+    do {
+        if (*var_v1 != 0) {
+            score += addend;
+        }
+        var_v1 += 1;
+    } while ((s32)var_v1 < (s32)temp_a1);
+    if (score > 0x01C9C37F) {
+        score = 0x02FAF080;
+    }
+    score -= *(s32 *)gpDinamicLinkPenalty * 0x2B10;
+    if (score < 0) {
+        score = 0;
+    }
+    return score;
+}
 
 s32 func_8005BB14(s32 Unk) {
     return STAGE_TIME_LIMITS[Unk];
@@ -709,13 +1105,27 @@ s32 test_for_static_link(s32 *Unk0, s32 Unk1, s32 Unk2) {
     return get_static_spawn(Unk0, Unk1, Unk2, LEN_STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_SPAWNS, 1);
 }
 
-void test_4_tunnel_links(s32 Unk0, s32 Unk1, s32 Unk2) {
-    get_static_spawn(Unk0, Unk1, Unk2, D_800889F0, &D_80088980, &D_80088820, 1);
+s32 test_4_tunnel_links(void *Unk0, s32 Unk1, s32 Unk2) {
+    return get_static_spawn(Unk0, Unk1, Unk2, D_800889F0, &D_80088980, &D_80088820, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BD3C);
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BE28);
+s32 func_8005BE28(s16 *arg0, s32 arg1) {
+    s16 diff;
+    s16 wrapped;
+    u16 *table;
+
+    table = (u16 *)((u8 *)D_8008875C + ((arg1 & 0xFF) * 0xC));
+    diff = arg0[2] - table[0];
+    wrapped = diff;
+    if (diff >= 0xB5) {
+        wrapped = diff - 0x168;
+    } else if (diff < -0xB4) {
+        wrapped = diff + 0x168;
+    }
+    return ((u16)(wrapped + 0x2C)) < 0x59U;
+}
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BE90);
 
@@ -753,7 +1163,21 @@ s32 test_4_staircase_nodes(s32 Unk1, s32 Unk2, s32 Unk3) {
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005C02C);
+s32 func_8005C02C(void **arg0, void **arg1, s16 *arg2) {
+    u8 temp_s0;
+
+    temp_s0 = D_80088C84[D_8008ACBC][D_8008ACC0];
+    if (func_8005BE28(arg2, temp_s0) != 0) {
+        if (arg1 != NULL) {
+            *arg1 = (void *)(D_80088758 + temp_s0 * 0xC);
+        }
+        if (arg0 != NULL) {
+            *arg0 = (void *)(D_80088758 + D_80088BDC[D_8008ACC4][D_8008ACC8] * 0xC);
+        }
+        return 1;
+    }
+    return 0;
+}
 
 s8 func_8005C118(void) {
     return ((s8 *)D_80088BA4[D_8008ACC4])[D_8008ACC8 * 6 + 5];

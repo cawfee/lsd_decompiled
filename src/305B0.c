@@ -1,4 +1,5 @@
 #include "305B0.h"
+#include "30CD0.h"
 
 extern class_305B0_vtable_t g_CLASS_305B0_VTABLE;
 
@@ -16,7 +17,20 @@ class_305B0_t *class_305B0_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/305B0", class_305B0_construct);
+void class_305B0_construct(class_305B0_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
+    class_30CD0_vtable_t *parent;
+    void *color;
+
+    parent = func_800408BC();
+    if (Unk2 != 0) {
+        color = (u8 *)&D_8006EA90 + (Unk2 * 3);
+    } else {
+        color = &D_8006EAA8;
+    }
+    parent->Construct(This, Unk1, (u32)color, Unk3);
+    This->vtable = class_305B0_get_vtable();
+    This->vtable->Unk15(This, Unk2);
+}
 
 void func_8003FED8(class_305B0_t *This, s32 Unk2) {
     This->m_Unk27 = Unk2;
@@ -75,7 +89,16 @@ s32 func_800403F8(class_305B0_t *This) {
     return (s32 *)((s8 *)D_8006EA90 + 3 * This->m_Unk29);
 }
 
-INCLUDE_ASM("asm/nonmatchings/305B0", func_8004042C);
+void func_8004042C(class_305B0_t *This, u16 *a, s32 *b) {
+    if (This->m_Unk2 != 0) {
+        This->m_Unk33 = (u16)This->m_Unk23_1;
+        This->m_Unk34 = (u16)This->m_Unk23_2;
+        __builtin_memcpy(&This->m_Unk35, &This->m_Unk19, 8);
+        This->m_Unk23_1 = a[0];
+        This->m_Unk23_2 = a[2];
+        __builtin_memcpy(&This->m_Unk19, b, 8);
+    }
+}
 
 void func_80040490(class_305B0_t *This) {
     __builtin_memcpy(&This->m_Unk19, &This->m_Unk35, 8);
