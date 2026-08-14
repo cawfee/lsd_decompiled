@@ -22,9 +22,39 @@ void func_80051C74(class_4225C_t *This) {
     This->m_Unk19 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_80051C84);
+void func_80051C84(class_4225C_t *This) {
+    s32 temp_a0;
+    s32 var_s0;
+    s32 pad[2];
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_80051D1C);
+    var_s0 = 0;
+    if (This->m_Unk3 > 0) {
+        do {
+            temp_a0 = ((s32 *)This->m_Unk5)[var_s0];
+            var_s0 += 1;
+            memory_free_mem((void *)temp_a0);
+        } while (var_s0 < This->m_Unk3);
+    }
+    memory_free_mem((void *)This->m_Unk6);
+    memory_free_mem((void *)This->m_Unk5);
+    base_class_get_vtable()->Cleanup(This);
+}
+
+void func_80051D1C(class_4225C_t *This, void **Unk) {
+    s32 kind;
+
+    if (Unk != NULL) {
+        base_class_get_vtable()->Unk3(This, Unk);
+        kind = *(u32 *)*Unk & 0xF;
+        if (kind == 2) {
+            This->m_Unk12 = (s32)Unk;
+            return;
+        }
+        if (kind == 5) {
+            This->m_Unk13 = (s32)Unk;
+        }
+    }
+}
 
 void func_80051DA0(class_4225C_t *This, void **Unk) {
     s32 kind;
@@ -77,7 +107,28 @@ void func_8005217C(class_4225C_t *This) {
   This->m_Unk14 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_800521D4);
+void func_800521D4(class_4225C_t *This, s32 arg1) {
+    This->m_Unk11 = 0;
+    if (arg1 < 2) {
+        goto end;
+    }
+    if (arg1 < 4) {
+        goto case_2_3;
+    }
+    if (arg1 == 4) {
+        goto case_4;
+    }
+    goto end;
+case_2_3:
+    ((void (*)(void *, s32))This->vtable->Unk4)(This, This->m_Unk12);
+    This->vtable->Unk17(This);
+    This->m_Unk10 = arg1;
+    goto end;
+case_4:
+    ((void (*)(void *, s32))This->vtable->Unk11)(This, This->m_Unk10);
+end:
+    ;
+}
 
 void func_8005227C(class_4225C_t *This) {
     s32 unk10;
@@ -163,7 +214,25 @@ void func_80052498(class_4225C_t *This) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_800524F8);
+void func_800524F8(class_4225C_t *This) {
+    s32 unk9;
+    s32 unk7;
+
+    if (This->m_Unk19 != 0) {
+        if (!((This->m_Unk9 - 1) < 0)) {
+            unk7 = This->m_Unk7;
+            if ((This->m_Unk9 - unk7) > 0) {
+                ((void (*)(void *, s32, s32))This->vtable->Unk37)(This, 0, 1);
+                return;
+            }
+            This->m_Unk7 = unk7 - 1;
+            unk9 = This->m_Unk9;
+            This->m_Unk9 = unk9 - 1;
+            ((void (*)(void *, s32, s32, s32, s32))This->vtable->Unk36)(
+                This, unk7 - 1, This->m_Unk8, unk9 - 1, 1);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/4225C", func_80052598);
 

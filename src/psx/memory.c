@@ -48,4 +48,32 @@ s8 *bzero(s8 *arg0, s32 arg1) {
     return var_v0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/psx/memory", memcmp);
+s32 memcmp(u8 *arg0, u8 *arg1, s32 arg2) {
+    u8 temp_v0;
+    u8 temp_v1;
+
+    if (arg0 == NULL) {
+        return 0;
+    }
+    arg2 -= 1;
+    if ((arg1 == NULL) || (arg2 < 0)) {
+        return 0;
+    }
+loop:
+    temp_v1 = *arg1;
+    arg1 += 1;
+    temp_v0 = *arg0;
+    arg0 += 1;
+    if (temp_v0 != temp_v1) {
+        goto check;
+    }
+    arg2 -= 1;
+    if (arg2 >= 0) {
+        goto loop;
+    }
+check:
+    if (arg2 < 0) {
+        return 0;
+    }
+    return *arg0 - *arg1;
+}

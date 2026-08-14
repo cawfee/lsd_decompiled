@@ -2,6 +2,10 @@
 #include <psx/libspu.h>
 
 #include "3770C.h"
+
+extern long CdControlF(unsigned char, unsigned char *);
+extern long CdRead2(long);
+extern void StSetStream(unsigned long, unsigned long, unsigned long, void *, void *);
 #include "base_class.h"
 
 // CD related class?
@@ -86,7 +90,22 @@ void func_8004728C(class_3770C_t *This) {
 }
 
 // gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800472EC);
+void func_80047388(class_3770C_t *This);
+
+void func_800472EC(class_3770C_t *This, void *arg1) {
+    if (This->m_Unk10 != 2) {
+        if (D_8008A950 == This) {
+            if (This->m_Unk20 != 0) {
+                CdSyncCallback((void *)func_80047388);
+                CdControlF(0x15, arg1);
+            } else {
+                do {
+                } while (CdControl(0x15, arg1, 0) == 0);
+            }
+            This->m_Unk10 = 1;
+        }
+    }
+}
 
 void func_80047388(class_3770C_t *This) {
     if ((D_8008A950 != NULL) && ((u8) This == 2)) {
@@ -99,10 +118,44 @@ void func_80047388(class_3770C_t *This) {
 }
 
 // gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800473E4);
+void func_800473E4(class_3770C_t *This, s32 arg1, s32 arg2) {
+    s32 mode;
+
+    if (This->m_Unk10 == 1) {
+        if (D_8008A950 == This) {
+            mode = 0x140;
+            if (This->m_Unk12 < 4) {
+                mode = 0x1C0;
+            }
+            if (arg2 != 0) {
+                This->m_Unk15 = arg2;
+            }
+            This->m_Unk21 = 0;
+            StSetStream(0, arg1, -1, NULL, NULL);
+            This->vtable->Unk24(This);
+            do {
+                while (CdControl(2, (unsigned char *)This + 0xC, 0) == 0) {
+                }
+            } while (CdRead2(mode) == 0);
+            This->vtable->Unk25(This);
+            This->m_Unk10 = 2;
+        }
+    }
+}
 
 // gp
-INCLUDE_ASM("asm/nonmatchings/3770C", func_800474C8);
+void func_800474C8(class_3770C_t *This) {
+    if (This->m_Unk10 == 2) {
+        if (D_8008A950 == This) {
+            This->vtable->Unk24(This);
+            This->vtable->Unk29(This);
+            This->vtable->Unk28(This);
+            do {
+            } while (CdControl(9, 0, 0) == 0);
+            This->m_Unk10 = 4;
+        }
+    }
+}
 
 void func_80047574(class_3770C_t *This) {
     if ((This->m_Unk10 == 4) && (D_8008A950 == This)) {

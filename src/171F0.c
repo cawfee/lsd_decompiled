@@ -5,9 +5,18 @@
 #include "memory.h"
 
 extern class_171F0_vtable_t **D_8006D430;
+extern void *D_8006D4AC[];
 
 static s32 D_8008A84C = 0x13;
+extern s32 D_8008A850;
 extern s32 D_8008A854;
+extern char *strcat(char *, char *);
+s32 func_80027F18(s32, s32, s32);
+void func_80027FD8(s32);
+void func_80027FE4(s32);
+s32 func_80027FF0(void);
+s32 func_80027FFC(s32, s32);
+s32 func_8002C468(s32, s32);
 
 s32 init_800269F0(class_171F0_t *This) {
     This->m_Unk7_1 = 0;
@@ -108,7 +117,30 @@ s32 *func_80026CE8(s32 *Data, s32 Unk1, s32 Unk2, s32 Unk3) {
     return Data;
 }
 
-INCLUDE_ASM("asm/nonmatchings/171F0", func_80026CFC);
+void func_80026CFC(s32 arg0) {
+    void *(**cursor)(void);
+    void *vt;
+    void *cur;
+    void *(*fn)(void);
+
+    cursor = (void *(**)(void))D_8006D4AC;
+    D_8008A84C = arg0;
+    if (arg0 == 0x13) {
+        vt = (void *)func_80027E68();
+    } else {
+        vt = (void *)class_1CBB8_get_vtable();
+    }
+    cur = (void *)func_80026C9C();
+    goto loop_test;
+    do {
+        fn = *cursor;
+        cursor++;
+        cur = fn();
+loop_test:
+        func_80026D88(cur, vt);
+        fn = *cursor;
+    } while (fn != NULL);
+}
 
 void func_80026D88(s32 *Dest, s32 *Src) {
     Dest[16] = Src[16];
@@ -168,7 +200,16 @@ s32 func_80026F00(void) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/171F0", frame_setup);
+void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
+    s32 (*fn)(s32, s32, s32);
+
+    fn = (s32 (*)(s32, s32, s32))func_8002C468;
+    if (D_8008A84C == 0x13) {
+        fn = (s32 (*)(s32, s32, s32))func_80027F18;
+    }
+    do {
+    } while (fn(Unk1, Unk2, Unk3) == 0);
+}
 
 s32 func_80026FAC(void) {
     if (D_8008A84C == 0x13) {
@@ -186,7 +227,18 @@ s32 func_80026FE8(void) {
     return func_8002C478();
 }
 
-INCLUDE_ASM("asm/nonmatchings/171F0", func_80027024);
+s32 func_80027024(s32 arg0, s32 arg1) {
+    s32 temp;
+
+    if (D_8008A84C == 0x13) {
+        D_8008A850 = 1;
+        func_80027FD8(arg0);
+        temp = func_80027FF0();
+        func_80027FE4(temp + arg1);
+        return func_80027FFC(arg0 + (temp * 0x1C), arg1);
+    }
+    return 1;
+}
 
 void set_data_folder(s32 Value) {
     D_8008A854 = Value;
@@ -196,4 +248,12 @@ s32 func_800270B8() {
     return D_8008A854;
 }
 
-INCLUDE_ASM("asm/nonmatchings/171F0", func_800270C4);
+s8 *func_800270C4(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3) {
+    *dest = 0;
+    if (arg2 != NULL) {
+        strcat(dest, arg2);
+    }
+    strcat(dest, arg1);
+    strcat(dest, arg3);
+    return dest;
+}

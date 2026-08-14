@@ -6,7 +6,11 @@ extern class_477E4_vtable_t D_800878D4;
 extern s32 D_8008ABA4[];
 extern s32 D_8008ABA8[];
 
-void func_800573CC(class_477E4_t *This, s32 arg1, void *Unk);
+void func_800573CC(class_477E4_t *This, s32 set, void *Unk);
+class_477E4_t *func_80057B54(class_477E4_t *This, s32 Unk1, s16 *Unk2);
+s32 func_80057784(class_477E4_t *This, void *a, void *b, void *c, s32 d);
+s32 func_80057954(class_477E4_t *This, void *a, s32 b, s32 c, void *d, void *e);
+s32 func_80057A18(class_477E4_t *This, void *a, void *b, void *c, void *d);
 
 class_477E4_t *func_80056FE4() {
     class_477E4_t *allocated = (class_477E4_t *) memory_allocate_mem(0x58);
@@ -94,7 +98,21 @@ void func_800573A8(class_477E4_t *This, void *Unk) {
     func_800573CC(This, 0, Unk);
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800573CC);
+void func_800573CC(class_477E4_t *This, s32 set, void *Unk) {
+    s32 *obj;
+    s32 *vec;
+
+    obj = (s32 *)This->m_Unk4;
+    vec = (s32 *)Unk;
+    if (set != 0) {
+        __builtin_memcpy(obj + 6, vec, 0xC);
+    } else {
+        obj[6] += vec[0];
+        obj[7] += vec[1];
+        obj[8] += vec[2];
+    }
+    *(s32 *)This->m_Unk4 = 0;
+}
 
 void func_80057444(class_477E4_t *This, s16 *Unk) {
     s32 unk_struct[4];
@@ -115,7 +133,18 @@ void func_800574FC(class_477E4_t *This, s32 Unk1, s32 Unk2) {
     func_80057534(This, (char *) D_8008ABA4 + 2, Unk1, Unk2, 8);
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057534);
+void func_80057534(class_477E4_t *This, s16 *out, s16 val, s32 flag, s32 mode) {
+    s32 *mode_p;
+
+    mode_p = &mode;
+    *out = val;
+    This->m_Unk17_1 = val;
+    ((void (*)(void *, void *))This->vtable->Unk47)(This, D_8008ABA4);
+    *out = 0;
+    if (flag != 0) {
+        ((void (*)(void *, s32))This->vtable->Unk33)(This, *mode_p);
+    }
+}
 
 void func_800575B0(class_477E4_t *This, s32 Unk1, s32 Unk2) {
 func_80057618(This, This->vtable->Unk48, Unk1, Unk2);
@@ -135,7 +164,33 @@ void func_80057618(class_477E4_t *This, void (*Fnc)(s32, s32, s32), s32 Unk1, s3
     func_80057668(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057668);
+s32 func_80057668(class_477E4_t *This) {
+    u8 sp18[0x30];
+    u8 sp48[0x30];
+    u8 sp78[0x10];
+    u8 sp88[0x10];
+    void *obj;
+    s32 pos;
+    s32 found;
+
+    obj = (void *)This->m_Unk18;
+    if (obj != NULL) {
+        pos = This->m_Unk4 + 0x18;
+        if (((s32 (*)(void *, void *, s32))(*(u32 *)(*(u32 *)obj + 0x110)))(obj, sp18, pos) == 0) {
+            found = func_80057954(
+                This, sp88, pos, func_80057784(This, sp48, sp78, sp18, 1), sp48, sp78);
+            This->m_Unk9 = found;
+            if (found != 0) {
+                This->vtable->Unk46(This, sp88);
+                ((void (*)(void *, s32))This->vtable->Unk33)(This, -1);
+                return 1;
+            }
+            ((void (*)(void *, s32))This->vtable->Unk33)(This, -2);
+            return 0;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057784);
 
@@ -150,7 +205,14 @@ class_477E4_t *func_80057B54(class_477E4_t *This, s32 Unk1, s16 *Unk2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057B90);
+void func_80057B90(class_477E4_t *This, void **Unk2, s32 Unk3) {
+    func_8001E57C()->Unk38(This, Unk2, Unk3);
+    if (Unk3 < 9) {
+        if (Unk3 >= 5) {
+            ((void (*)(void *, void **, s32))This->vtable->Unk39)(This, Unk2, Unk3);
+        }
+    }
+}
 
 void func_80057C14(class_477E4_t *This, s32 Unk2, s32 Unk3) {
     func_8001E57C()->Unk38(This, Unk2, Unk3);

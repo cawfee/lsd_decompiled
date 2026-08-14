@@ -367,7 +367,20 @@ s32 func_8003CBC0(class_2C694_t *This) {
     return to_call;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2C694", func_8003CC2C);
+s32 func_8003CC2C(class_2C694_t *This) {
+    u8 buf[8];
+    u32 v;
+    u8 *c;
+
+    v = This->m_TicksPassed * This->m_Unk32;
+    c = (u8 *)&This->m_Unk35;
+    buf[0] = v + c[0];
+    buf[1] = v + c[1];
+    buf[2] = v + c[2];
+    This->vtable->Unk56(This, (char *)buf);
+    (*(void (**)(void *, s32, u8 *))(*(u32 *)This->m_Unk29 + 0xB8))(This->m_Unk29, 1, buf);
+    return ((u8)v >= 0x81u);
+}
 
 s32 func_8003CCDC(class_2C694_t *This) {
     s32 (*fp)(void);

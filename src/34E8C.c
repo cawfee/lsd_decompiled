@@ -1,5 +1,8 @@
 #include "34E8C.h"
 
+void func_80026CE8(void *, void *, s32, s32);
+s32 func_800451B8(void *);
+
 extern class_34E8C_vtable_t D_8006F384;
 
 class_34E8C_t *func_8004468C(s32 Unk1) {
@@ -28,7 +31,30 @@ void func_80044808(class_34E8C_t *This) {
   This->vtable->Unk29(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/34E8C", func_80044858);
+s32 func_80044858(class_34E8C_t *This) {
+    s32 buf[4];
+    void *base;
+    s32 v0;
+
+    if (This->m_Unk12 != 0) {
+        base = (void *)This->m_Unk3;
+        func_80026CE8(buf, (u8 *)base + *(s32 *)((u8 *)base + 8), 0, 1);
+        v0 = func_80043840(buf);
+        This->m_Unk10 = v0;
+        if (v0 != 0) {
+            buf[0] = This->m_Unk3 + 0xC;
+            v0 = func_800451B8(buf);
+            This->m_Unk11 = v0;
+            if (v0 != 0) {
+                return 0;
+            }
+            This->m_Unk11 = 0;
+        }
+        ((void (*)(void *))This->vtable->Unk30)(This);
+        return 1;
+    }
+    return 0;
+}
 
 void func_800448F8(class_34E8C_t *This) {
     void *obj;

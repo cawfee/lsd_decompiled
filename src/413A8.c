@@ -28,9 +28,35 @@ void func_80050CE8(class_413A8_t *This) {
     base_class_get_vtable()->Cleanup(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80050D30);
+void func_80050D30(class_413A8_t *This, void **Unk) {
+    s32 kind;
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80050DB4);
+    if (Unk != NULL) {
+        base_class_get_vtable()->Unk3(This, Unk);
+        kind = *(u32 *)*Unk & 0xF;
+        if (kind == 2) {
+            This->m_Unk12 = (s32)Unk;
+            return;
+        }
+        if (kind == 5) {
+            This->m_Unk13 = (s32)Unk;
+        }
+    }
+}
+
+void func_80050DB4(class_413A8_t *This, void **Unk) {
+    s32 kind;
+
+    if (Unk != NULL) {
+        kind = *(u32 *)*Unk & 0xF;
+        if (kind == 2) {
+            This->m_Unk12 = 0;
+        } else if (kind == 5) {
+            This->m_Unk13 = 0;
+        }
+        base_class_get_vtable()->Unk4(This, Unk);
+    }
+}
 
 void func_80050E34(class_413A8_t *This) {
     This->m_Unk12 = 0;
@@ -39,7 +65,17 @@ void func_80050E34(class_413A8_t *This) {
     base_class_get_vtable()->Unk5(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80050E78);
+void func_80050E78(class_413A8_t *This, void **Unk1, s32 Unk2) {
+    s32 kind;
+
+    ((void (*)(void *, void **, s32))base_class_get_vtable()->Unk13)(This, Unk1, Unk2);
+    kind = *(u32 *)*Unk1 & 0xF;
+    if (kind == 2) {
+        ((void (*)(void *, void **, s32))This->vtable->Unk22)(This, Unk1, Unk2);
+    } else if (kind == 5) {
+        ((void (*)(void *, void **, s32))This->vtable->Unk21)(This, Unk1, Unk2);
+    }
+}
 
 void func_80050F28(class_413A8_t *This, char *Unk1, s32 Unk2) {
     This->m_Unk2 = Unk2;
@@ -56,7 +92,18 @@ void func_80050F28(class_413A8_t *This, char *Unk1, s32 Unk2) {
 
 INCLUDE_ASM("asm/nonmatchings/413A8", func_80050F98);
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80051174);
+void func_80051174(class_413A8_t *This) {
+    s32 obj;
+
+    obj = This->m_Unk17;
+    if (obj != 0) {
+        This->m_Unk17 = (*(s32 (**)(s32))(*(s32 *)obj + 4))(obj);
+        obj = This->m_Unk16;
+        (*(void (**)(s32))(*(s32 *)obj + 4))(obj);
+        obj = This->m_Unk15;
+        (*(void (**)(s32))(*(s32 *)obj + 4))(obj);
+    }
+}
 
 void func_80051200(class_413A8_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     This->vtable->Unk3(This, Unk1);
@@ -72,7 +119,28 @@ void func_80051270(class_413A8_t *This) {
     This->m_Unk14 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_800512C8);
+void func_800512C8(class_413A8_t *This, s32 arg1) {
+    This->m_Unk11 = 0;
+    if (arg1 < 2) {
+        goto end;
+    }
+    if (arg1 < 4) {
+        goto case_2_3;
+    }
+    if (arg1 == 4) {
+        goto case_4;
+    }
+    goto end;
+case_2_3:
+    ((void (*)(void *, s32))This->vtable->Unk4)(This, This->m_Unk12);
+    This->vtable->Unk17(This);
+    This->m_Unk10 = arg1;
+    goto end;
+case_4:
+    ((void (*)(void *, s32))This->vtable->Unk11)(This, This->m_Unk10);
+end:
+    ;
+}
 
 void func_80051370(class_413A8_t *This) {
     s32 unk10;
@@ -174,7 +242,22 @@ void func_80051814(class_413A8_t *This) {
   }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80051858);
+void func_80051858(class_413A8_t *This) {
+    s32 i;
+
+    if (This->m_Unk17 != 0) {
+        i = This->m_Unk3 - 1;
+        This->m_Unk6 = 0;
+        if (!(i < 0)) {
+            do {
+                This->m_Unk5 = i;
+                ((void (*)(void *, s32, s32, s32))This->vtable->Unk41)(This, i, This->m_Unk6, 0);
+                i -= 1;
+            } while (i >= 0);
+        }
+        This->vtable->Unk40(This, This->m_Unk5, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/413A8", func_800518F4);
 

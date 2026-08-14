@@ -1,9 +1,15 @@
 #include "renderer.h"
 #include "base_class.h"
+#include "305B0.h"
+#include "D294.h"
 
 #include <psx/libgte.h>
 
 extern renderer_vtable_t *g_RENDERER_VTABLE;
+extern s32 D_8008A904;
+extern s32 D_8008A90C;
+
+class_D294_t *func_8001CA94(void);
 
 renderer_t *renderer_create(void) {
     renderer_t *memory = (renderer_t *) memory_allocate_mem(0xBC);
@@ -16,11 +22,48 @@ renderer_t *renderer_create(void) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E628);
+extern s32 D_8008A904;
+extern s32 D_8008A90C;
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E6CC);
+void func_8003E628(renderer_t *This) {
+    class_305B0_t *temp_v0;
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E770);
+    base_class_get_vtable()->Construct(This);
+    This->vtable = renderer_get_vtable();
+    This->m_Unk2 = 0;
+    This->m_Unk3 = 0;
+    This->m_Unk42 = (s32)func_8001CA94();
+    temp_v0 = class_305B0_create((s32)&D_8008A90C, 0, 0);
+    This->m_Unk43 = (s32)temp_v0;
+    temp_v0->vtable->Unk18(temp_v0, (entity_t *)This->m_Unk42, (s32)&D_8008A904);
+    This->vtable->Unk15(This);
+}
+
+void func_8003E6CC(renderer_t *This) {
+    void *temp_a0;
+
+    This->vtable->Unk35(This);
+    This->vtable->Unk28(This);
+    temp_a0 = (void *)This->m_Unk42;
+    (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
+    ((void (*)(void *, s32))This->vtable->Unk41)(This, 0);
+    base_class_get_vtable()->Cleanup(This);
+}
+
+void func_8003E770(renderer_t *This, void **arg1) {
+    s32 temp_v1;
+
+    base_class_get_vtable()->Unk3(This, arg1);
+    temp_v1 = *(s32 *)*arg1 & 0xF;
+    if (temp_v1 == 4) {
+        This->m_Unk3 = (s32)arg1;
+        This->m_Unk11 = ((s32 *)arg1)[5];
+        return;
+    }
+    if (temp_v1 == 1) {
+        This->m_Unk2 = (s32)arg1;
+    }
+}
 
 void func_8003E7F4(renderer_t *This, void **Unk) {
     s32 kind;
@@ -148,7 +191,24 @@ INCLUDE_ASM("asm/nonmatchings/renderer", func_8003EEC0);
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F04C);
 
-INCLUDE_ASM("asm/nonmatchings/renderer", func_8003F1A8);
+s32 func_8003F1A8(renderer_t *This, void *obj) {
+    void *old;
+
+    if (This->m_Unk3 == 0) {
+        old = (void *)This->m_Unk43;
+        if (old != 0) {
+            (*(void (**)(void *))(*(u32 *)old + 4))(old);
+        }
+        This->m_Unk43 = (s32)obj;
+        if (obj != 0) {
+            return ((s32 (*)(void *, s32, void *))(*(u32 *)(*(u32 *)obj + 0x4C)))(
+                obj, This->m_Unk42, &D_8008A904);
+        }
+    }
+#ifdef NON_MATCHING
+    return This->m_Unk3;
+#endif
+}
 
 s32 func_8003F230(renderer_t *This) {
     return This->m_Unk43;

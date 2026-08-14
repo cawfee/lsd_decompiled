@@ -51,7 +51,22 @@ const char **get_sound_types_paths(void) {
     return &g_SOUND_TYPES;
 }
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", get_random_sound_type);
+const char *get_random_sound_type(s32 *Length) {
+    u32 idx;
+    const char **paths;
+    s32 override;
+    s32 off;
+
+    idx = (u32)get_seeded_random(0, (s32)Length) % 7u;
+    paths = get_sound_types_paths();
+    override = D_8008A964;
+    if (override != 0) {
+        off = (override - 1) * 4;
+    } else {
+        off = idx * 4;
+    }
+    return *(const char **)((u8 *)paths + off);
+}
 
 // Only 1 SE exists in the list
 const char **get_se_paths(void) {
@@ -71,13 +86,45 @@ const char *func_80048E80(s32 Arg) {
     return func_80048E2C(Arg);
 }
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048EA0);
+const char *func_80048EA0(s32 arg0, s32 seed_arg, s32 count) {
+    s32 mod;
+    s32 idx;
+
+    count = count - 1;
+    count = count % 40;
+    mod = (count / 10) + 1;
+    idx = get_seeded_random(0, seed_arg) % mod;
+    return func_80048E80(arg0) + (idx * 0x1C);
+}
 
 const char *func_80048F60(s32 Arg) {
     return func_80048E2C(Arg) + 0x70;
 }
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_80048F84);
+const char *func_80048F84(s32 arg0, s32 unused) {
+    u32 idx;
+    const char *path;
+    s32 override;
+    s32 off;
+
+    idx = (u32)get_seeded_random(0, unused) % 5u;
+    if (arg0 == 9) {
+        if (idx == 2) {
+            idx = 3;
+        }
+        if (D_8008A968 == 3) {
+            D_8008A968 = 4;
+        }
+    }
+    path = func_80048F60(arg0);
+    override = D_8008A968;
+    if (override != 0) {
+        off = (override - 1) * 7;
+    } else {
+        off = (s32)idx * 7;
+    }
+    return (const char *)((u8 *)path + off * 4);
+}
 
 const char *func_8004903C(s32 Arg) {
     return func_80048E2C(Arg) + 0xFC;
@@ -107,7 +154,18 @@ const char *get_opening_movie_path(s32 *arg0) {
     return get_path_table(0) + 0x3D40;
 }
 
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", func_8004913C);
+const char *func_8004913C(s32 *out, s32 unused) {
+    s32 dur;
+    u32 idx;
+    const char *path;
+
+    idx = (u32)get_seeded_random(0, unused) % 7u;
+    path = get_opening_movie_path(&dur);
+    if (out != NULL) {
+        *out = idx + dur;
+    }
+    return path + (idx * 0x1C);
+}
 
 // Get the first and only movie path
 const char *get_ending_movie_path(s32 *DurationMaybe) {
@@ -166,7 +224,25 @@ const char *get_special_movie_path(s32 *DurationMaybe, s32 Index) {
 }
 
 // Takes in flags on a special day to play an event movie, or to play a special day movie
-INCLUDE_ASM("asm/nonmatchings/utils/path_helper", get_special_day_movie);
+const char *get_special_day_movie(s32 *out, s32 packed) {
+    s32 dur;
+    const char *path;
+    s32 val;
+
+    if (*(s16 *)&packed >= 0) {
+        path = get_special_movie_path(&dur, *(s16 *)&packed);
+        if (out != NULL) {
+            if (((u16 *)&packed)[1] < 2U) {
+                val = ((s16 *)&packed)[1] + dur;
+            } else {
+                val = -1;
+            }
+            *out = val;
+        }
+        return path + (((s16 *)&packed)[1] * 0x1C);
+    }
+    return get_event_movie_path(out, ((s16 *)&packed)[1]);
+}
 
 s32 get_movie_duration_maybe(s32 Index) {
     return D_80086170[Index];

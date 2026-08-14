@@ -1,5 +1,6 @@
 #include "dream_context.h"
 #include "3A930.h"
+#include "43370.h"
 #include "bgm.h"
 #include "dream_sys.h"
 #include "memory.h"
@@ -105,7 +106,16 @@ void func_80049C50(dream_context_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049CA8);
 
-INCLUDE_ASM("asm/nonmatchings/dream_context", func_80049E20);
+void func_80049E20(dream_context_t *This, s32 Unk) {
+    void **obj;
+
+    This->m_Unk18 = (s32)func_80052B70(This->m_Unk12, This->m_Unk15, (s32)This->m_TextureHelper,
+                                         This->m_Unk17, Unk);
+    ((void (*)(void *, s32))This->vtable->Unk3)(This, This->m_Unk18);
+    obj = (void **)This->m_Unk18;
+    (*(void (**)(void **, void *, void *))(*(u32 *)obj + 0x44))(obj, This->m_GraphicsCtx, This->m_DreamSys);
+    This->m_Unk14 = 2;
+}
 
 void func_80049EA4(void) {
 }

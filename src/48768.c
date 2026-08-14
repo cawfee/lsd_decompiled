@@ -55,7 +55,22 @@ void func_800581C4(class_48768_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/48768", func_80058228);
 
-INCLUDE_ASM("asm/nonmatchings/48768", func_80058308);
+void func_80058308(class_48768_t *This) {
+    s32 i;
+    u8 *cursor;
+    void *obj;
+
+    i = 0;
+    cursor = (u8 *)This;
+    memory_free_mem(This->m_Unk143);
+    do {
+        obj = *(void **)(cursor + 0xA8);
+        cursor += 4;
+        i++;
+        (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
+    } while (i < 100);
+    func_8003DFBC()->Unk54(This);
+}
 
 s32 func_80058390(class_48768_t *This, void *Unk1, s32 Unk2) {
     s32 var_v1;

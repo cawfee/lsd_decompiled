@@ -4,14 +4,16 @@
 extern class_3ACC8_vtable_t D_800866E8;
 
 extern s32 D_800869CC[];
-extern s32 D_8008699C;
-extern s32 D_800869A8;
-extern s32 D_800869B4;
-extern s32 D_800869C0;
+extern s32 D_80086904[];
+extern s32 D_80086990[3];
+extern s32 D_8008699C[3];
+extern s32 D_800869A8[3];
+extern s32 D_800869B4[3];
+extern s32 D_800869C0[3];
 extern s32 D_8008A980;
 
 void func_8004D0D0(class_3ACC8_t *This, s32 *Unk);
-void func_8004D140(class_3ACC8_t *This, void *fn, s32 arg);
+void func_8004D140(class_3ACC8_t *This, void (*arg1)(s32, s32), void (*arg2)(s32, s32));
 
 class_3ACC8_t *func_8004A4C8(u32 Unk1, u32 Unk2) {
     class_3ACC8_t *allocated = (class_3ACC8_t *) memory_allocate_mem(0x1E8);
@@ -119,7 +121,24 @@ void func_8004B344(class_3ACC8_t *This, s32 Unk) {
   This->m_Unk25 = Unk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B38C);
+s32 func_8004B44C(void *, void *, s32, void *, void *);
+
+typedef struct {
+    u8 m_data[8];
+    s16 m_hi;
+} func_8004B38C_pkt_t;
+
+s32 func_8004B38C(class_3ACC8_t *This, void *arg1, s32 arg2, void *arg3) {
+    s8 sp18[0x10];
+
+    This->m_Unk26 = arg2;
+    *(func_8004B38C_pkt_t *)&This->m_Unk46 = *(func_8004B38C_pkt_t *)arg3;
+    return ((s32 (*)(void *, s32, void *, void *))This->vtable->Unk61)(
+        This,
+        func_8004B44C(arg1, sp18, This->m_Unk25, &This->m_Unk20, arg3),
+        sp18,
+        D_80086904);
+}
 
 void func_8004B418(class_3ACC8_t *This, s32 Unk2, s32 Unk3) {
     s8 unk[16];
@@ -171,11 +190,34 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BE54);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C0AC);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C158);
+void *func_8004C158(class_3ACC8_t *This, s32 arg1, s32 *arg2) {
+    s32 temp_v1;
+    void *var_v0;
+
+    temp_v1 = *(s32 *)(This->m_Unk26 + 0x14) + 0x18;
+    if (arg2 != NULL) {
+        *arg2 = temp_v1;
+    }
+    if ((arg1 == 0) ||
+        (((s32(*)(void *, s32, s32))This->vtable->Unk67)(This, arg1, temp_v1) == 0)) {
+        var_v0 = (u8 *)This + 0xBC;
+    } else {
+        var_v0 = NULL;
+    }
+    return var_v0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C1C0);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C368);
+s16 func_8004C368(class_3ACC8_t *This, s8 *out, s32 val) {
+    s16 d;
+
+    d = *(s16 *)This->m_Unk25;
+    *out = val % d;
+    d = *(s16 *)This->m_Unk25;
+    out[1] = val / d;
+    return d;
+}
 
 s32 func_8004C3F0(class_3ACC8_t *This, s8 *Unk) {
     func_8004C368(This, Unk, *(s16 *)(*(s32 *)(This->m_Unk110 + 4) + 48));
@@ -248,7 +290,24 @@ s32 func_8004C5D0(class_3ACC8_t *This, s32 Unk) {
     return -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C620);
+void func_8004C6A8(class_3ACC8_t *, s32, s16);
+void func_8004CC74(class_3ACC8_t *);
+void func_8004CE24(class_3ACC8_t *, s32);
+
+void func_8004C620(class_3ACC8_t *This) {
+    s32 doubled;
+
+    if (This->m_Unk109 != 0) {
+        doubled = This->m_Unk29_1 * 2;
+        func_8004CE24(This, 0);
+        if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+            func_8004C6A8(This, doubled, This->m_Unk29_2);
+        } else {
+            func_8004CC74(This);
+        }
+        func_8004CE24(This, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C6A8);
 
@@ -304,7 +363,23 @@ void func_8004D108(class_3ACC8_t *This, s32 *Unk) {
     (*(void ( **)(s32 *, s32, s32 *))(*Unk + 72))(Unk, 1, & D_800869CC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D140);
+void func_8004D140(class_3ACC8_t *This, void (*arg1)(s32, s32), void (*arg2)(s32, s32)) {
+    s32 i;
+    s32 off;
+    s32 ptr;
+
+    i = 0;
+    off = 0xEC;
+    do {
+        ptr = (s32)This + off;
+        if (arg2 != NULL) {
+            arg2((s32)This, ptr);
+        }
+        func_8004D1D0((s32)This, arg1, (void *)ptr);
+        i += 1;
+        off += 0x1C;
+    } while (i < 7);
+}
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004D1D0);
 

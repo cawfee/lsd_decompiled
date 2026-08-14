@@ -6,10 +6,15 @@
 #include "base_class.h"
 #include "sound_engine.h"
 
+extern char D_80010FEC[];
+
 // also sound related class
 
 extern bgm_vtable_t **g_BGM_VTABLE;
-// static s32 D_8008A8D8 = 0;
+extern s32 D_8008A8D8;
+
+void *func_80020C5C(void);
+void func_8003AE18(s16);
 
 bgm_t *bgm_create(u32 Unk1, u32 Unk2, u32 Unk3) {
     bgm_t *allocated = (bgm_t *) memory_allocate_mem(0x24);
@@ -22,42 +27,40 @@ bgm_t *bgm_create(u32 Unk1, u32 Unk2, u32 Unk3) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/bgm", bgm_construct);
-// void func_8003995C(bgm_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
-//     base_class_get_vtable()->Construct(This);
-//     This->vtable = bgm_get_vtable();
+void bgm_construct(bgm_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
+    base_class_get_vtable()->Construct(This);
+    This->vtable = bgm_get_vtable();
 
-//     This->m_SoundEngine = 0;
-//     This->m_Unk3 = 0;
-//     This->m_SeqAccess = 0;
-//     This->m_IsOpened = 0;
-//     This->m_Unk6_1 = 0;
-//     This->m_Unk6_2 = 0;
-//     This->m_Unk7 = Unk4;
+    This->m_SoundEngine = 0;
+    This->m_Unk3 = 0;
+    This->m_SeqAccess = 0;
+    *(u16 *)((u8 *)This + 0x1A) = 0;
+    This->m_Unk6_1 = 0;
+    This->m_Unk6_2 = 0;
+    This->m_Unk7 = Unk4;
 
-//     D_8008A8D8 = 1;
-//     This->vtable->Unk22(This, Unk3);
-//     This->vtable->Unk23(This, Unk2);
-//     This->vtable->Unk3(This, func_80020C5C());
-// }
+    D_8008A8D8 = 1;
+    This->vtable->Unk22(This, Unk3);
+    This->vtable->Unk23(This, Unk2);
+    This->vtable->Unk3(This, func_80020C5C());
+}
 
-INCLUDE_ASM("asm/nonmatchings/bgm", bgm_cleanup);
-// void bgm_cleanup(bgm_t *This) {
-//     D_8008A8D8 = 0;
-//     This->vtable->Unk17(This);
-//     func_8003AE18(This->m_SeqAccess);
+void bgm_cleanup(bgm_t *This) {
+    D_8008A8D8 = 0;
+    This->vtable->Unk17(This);
+    func_8003AE18(This->m_SeqAccess);
 
-//     if (This->m_SoundEngine) {
-//         This->m_SoundEngine->vtable->Destruct(This->m_SoundEngine);
-//     }
+    if (This->m_SoundEngine) {
+        This->m_SoundEngine->vtable->Destruct(This->m_SoundEngine);
+    }
 
-//     if (This->m_Unk3) {
-//         (*(void ( **)(s32))(*(u32 *)This->m_Unk3 + 4))(This->m_Unk3);
-//     }
+    if (This->m_Unk3) {
+        (*(void (**)(s32))(*(u32 *)This->m_Unk3 + 4))(This->m_Unk3);
+    }
 
-//     This->vtable->Unk4(This, func_80020C5C());
-//     base_class_get_vtable()->Cleanup(This);
-// }
+    This->vtable->Unk4(This, func_80020C5C());
+    base_class_get_vtable()->Cleanup(This);
+}
 
 void bgm_unk13(bgm_t *This, s32 **Unk2, s32 Unk3) {
     base_class_get_vtable()->Unk13(This, Unk2, Unk3);
@@ -75,35 +78,34 @@ void bgm_unk15(bgm_t *This, s32 Unk2, s32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/bgm", bgm_handle_monitor_event);
-// s32 bgm_handle_monitor_event(bgm_t *This) {
-//     s32 unk1; // $a1
-//   s32 v4; // $v1
-//   s16 v5; // $v0
+s32 bgm_handle_monitor_event(bgm_t *This) {
+    sound_engine_t *engine;
+    s32 unk3;
+    s16 seq;
 
-//   unk1 = This->m_SoundEngine;
-//   if ( unk1 )
-//   {
-//     v4 = This->m_Unk3;
-//     if ( v4 )
-//     {
-//       if ( *(u16 *)(unk1 + 88) )
-//       {
-//         if ( *(u32 *)(v4 + 44) )
-//         {
-//           v5 = SsSeqOpen(*(u32 *)(v4 + 16), *(s16 *)(unk1 + 84));
-//           This->m_SeqAccess = v5;
-//           if ( v5 == -1 )
-//             printf("Seq Open error in WBgmHandleMonitorEvent\0");
-//           SsSeqSetVol(This->m_SeqAccess, 52, 52);
-//           This->m_IsOpened = 2;
-//             return 1;
-//         }
-//       }
-//     }
-//   }
-//   return 0;
-// }
+    engine = This->m_SoundEngine;
+    if (engine == NULL) {
+        return 0;
+    }
+    unk3 = This->m_Unk3;
+    if (unk3 == 0) {
+        return 0;
+    }
+    if (*(u16 *)((u8 *)engine + 0x58) == 0) {
+        return 0;
+    }
+    if (*(s32 *)(unk3 + 0x2C) == 0) {
+        return 0;
+    }
+    seq = SsSeqOpen(*(u32 *)(unk3 + 0x10), *(s16 *)((u8 *)engine + 0x54));
+    This->m_SeqAccess = seq;
+    if (seq == -1) {
+        printf(D_80010FEC);
+    }
+    SsSeqSetVol(This->m_SeqAccess, 0x34, 0x34);
+    *(u16 *)((u8 *)This + 0x1A) = 2;
+    return 1;
+}
 
 void bgm_unk16(bgm_t *This) {
     if (!This->m_Unk6_2) {
