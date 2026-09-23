@@ -5,7 +5,7 @@
 
 typedef struct class_3ACC8_vtable {
     /* 0x000 800866e8 */ u32 value;
-    /* 0x004 800866ec */ void (*Destroy)(void *);
+    /* 0x004 800866ec */ void *(*base_class_destructor)(void *);
     /* 0x008 800866f0 */ void (*Construct)(void *, s32, s32);
     /* 0x00C 800866f4 */ void (*Cleanup)(void *);
     /* 0x010 800866f8 */ void (*Unk3)(void *);
@@ -16,7 +16,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x024 8008670c */ void (*Unk8)(void *);
     /* 0x028 80086710 */ void (*Unk9)(void *);
     /* 0x02C 80086714 */ void (*Unk10)(void *);
-    /* 0x030 80086718 */ void (*Unk11)(void *);
+    /* 0x030 80086718 */ void (*Unk11)(void *, s32);
     /* 0x034 8008671c */ void (*Unk12)(void *);
     /* 0x038 80086720 */ void (*Unk13)(void *);
     /* 0x03C 80086724 */ void (*Unk14)(void *);
@@ -38,7 +38,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x07C 80086764 */ void (*Unk30)(void *);
     /* 0x080 80086768 */ void (*Unk31)(void *);
     /* 0x084 8008676c */ void (*Unk32)(void *);
-    /* 0x088 80086770 */ void (*Unk33)(void *);
+    /* 0x088 80086770 */ void (*Unk33)(void *, s32, void *, s32);
     /* 0x08C 80086774 */ void (*Unk34)(void *);
     /* 0x090 80086778 */ void (*Unk35)(void *);
     /* 0x094 8008677c */ void (*Unk36)(void *);
@@ -50,7 +50,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x0AC 80086794 */ void (*Unk42)(void *);
     /* 0x0B0 80086798 */ void (*Unk43)(void *);
     /* 0x0B4 8008679c */ void (*Unk44)(void *);
-    /* 0x0B8 800867a0 */ void (*Unk45)(void *);
+    /* 0x0B8 800867a0 */ void *(*Unk45)(void *, s32);
     /* 0x0BC 800867a4 */ void (*Unk46)(void *);
     /* 0x0C0 800867a8 */ void (*Unk47)(void *);
     /* 0x0C4 800867ac */ void (*Unk48)(void *);
@@ -66,20 +66,20 @@ typedef struct class_3ACC8_vtable {
     /* 0x0EC 800867d4 */ void (*Unk58)(void *);
     /* 0x0F0 800867d8 */ void (*Unk59)(void *);
     /* 0x0F4 800867dc */ void (*Unk60)(void *);
-    /* 0x0F8 800867e0 */ void (*Unk61)(void *);
+    /* 0x0F8 800867e0 */ void (*Unk61)(void *, s32, void *, s32);
     /* 0x0FC 800867e4 */ void (*Unk62)(void *);
     /* 0x100 800867e8 */ void (*Unk63)(void *, s32 **, s32);
     /* 0x104 800867ec */ void (*Unk64)(void *);
-    /* 0x108 800867f0 */ void (*Unk65)(void *);
-    /* 0x10C 800867f4 */ void (*Unk66)(void *);
-    /* 0x110 800867f8 */ void (*Unk67)(void *);
+    /* 0x108 800867f0 */ void (*Unk65)(void *, void *);
+    /* 0x10C 800867f4 */ s32 (*Unk66)(void *, void *, s32);
+    /* 0x110 800867f8 */ s32 (*Unk67)(void *, void *, s32);
     /* 0x114 800867fc */ void (*Unk68)(void *);
-    /* 0x118 80086800 */ void (*Unk69)(void *);
+    /* 0x118 80086800 */ void *(*Unk69)(void *, s32);
     /* 0x11C 80086804 */ void (*Unk70)(void *);
     /* 0x120 80086808 */ void (*Unk71)(void *);
-    /* 0x124 8008680c */ void (*Unk72)(void *);
+    /* 0x124 8008680c */ s32 (*Unk72)(void *, s32);
     /* 0x128 80086810 */ void (*Unk73)(void *);
-    /* 0x12C 80086814 */ void (*Unk74)(void *);
+    /* 0x12C 80086814 */ void (*Unk74)(void *, void *, s32);
     /* 0x130 80086818 */ void (*Unk75)(void *);
     /* 0x134 8008681c */ void (*Unk76)(void *);
     /* 0x138 80086820 */ void (*Unk77)(void *);
@@ -127,8 +127,10 @@ typedef struct class_3ACC8 {
     /* 0x84 */ s32 m_Unk32;
     /* 0x88 */ s32 m_Unk33;
     /* 0x8C */ s32 m_Unk34;
-    /* 0x90 */ s32 m_Unk35;
-    /* 0x94 */ s32 m_Unk36;
+    /* 0x90 */ s16 m_Unk35_1;
+    /* 0x92 */ s16 m_Unk35_2;
+    /* 0x94 */ s16 m_Unk36_1;
+    /* 0x96 */ s16 m_Unk36_2;
     /* 0x98 */ s32 m_Unk37;
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;

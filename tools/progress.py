@@ -2,6 +2,8 @@ import os
 import re
 import subprocess
 
+import decomp_lib as dl
+
 from rich.console import Console
 from rich.progress import Progress, TextColumn, BarColumn
 from rich.table import Table
@@ -11,7 +13,7 @@ BUILD_DIR = "build"
 NON_MATCHING_DIR = "asm/nonmatchings"
 BUILD_SRC_DIR = f"{BUILD_DIR}/src"
 
-OBJDUMP = "mips-linux-gnu-objdump"
+OBJDUMP = dl.find_objdump()
 TEXT_SIZE_RE = re.compile(r"\.text\s+([0-9a-fA-F]{8})")
 FUNCTIONS_RE = re.compile(r"([0-9a-fA-F]{8})\s+<(.+)>:")
 

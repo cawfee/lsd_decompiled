@@ -5,7 +5,7 @@
 
 typedef struct class_3DA54_vtable {
     /* 0x000 800869d8 */ u32 value;
-    /* 0x004 800869dc */ void (*Destroy)(void *);
+    /* 0x004 800869dc */ void *(*base_class_destructor)(void *);
     /* 0x008 800869e0 */ void (*Construct)(void *);
     /* 0x00C 800869e4 */ void (*Cleanup)(void *);
     /* 0x010 800869e8 */ void (*Unk3)(void *);

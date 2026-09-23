@@ -9,7 +9,7 @@ class_FA50_t *class_FA50_create(s32 Unk1) {
     class_FA50_t *allocated = (class_FA50_t *) memory_allocate_mem(0x24);
 
     if (allocated) {
-        class_FA50_get_vtable()->Construct(allocated, Unk1);
+        class_FA50_get_vtable()->class_FA50_construct(allocated, Unk1);
         return allocated;
     }
 
@@ -17,7 +17,7 @@ class_FA50_t *class_FA50_create(s32 Unk1) {
 }
 
 void class_FA50_construct(class_FA50_t *This, void *Unk2) {
-    base_class_get_vtable()->Construct(This);
+    base_class_get_vtable()->base_class_construct(This);
     This->vtable = class_FA50_get_vtable();
 
     This->m_Unk3 = Unk2;

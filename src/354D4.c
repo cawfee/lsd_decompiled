@@ -17,7 +17,7 @@ void func_80044D40(class_354D4_t *arg0, s32 arg1, s32 arg2) {
     s32 pad[8];
     void **v5;
 
-    v5 = (void **)func_80026CAC();
+    v5 = (void **)get_file_driver();
     ((void (*)(class_354D4_t *))v5[2])(arg0);
     arg0->vtable = func_80044F20();
     arg0->m_Unk14 = arg2;
@@ -32,7 +32,7 @@ void func_80044D40(class_354D4_t *arg0, s32 arg1, s32 arg2) {
 
 void func_80044DC8(class_354D4_t *This) {
     memory_free_mem(This->m_Unk13);
-  (*(void ( **)(class_354D4_t *))((s32) func_80026CAC() + 12))(This);
+  (*(void ( **)(class_354D4_t *))((s32) get_file_driver() + 12))(This);
 }
 
 void func_80044E10(class_354D4_t *This) {
@@ -70,7 +70,7 @@ void func_80044E64(class_354D4_t *This) {
             return;
         }
     }
-    This->vtable->Unk22(This);
+    This->vtable->file_buf_release(This);
 }
 
 class_354D4_vtable_t *func_80044F20(void) {

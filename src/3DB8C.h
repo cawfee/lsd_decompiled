@@ -5,7 +5,7 @@
 
 typedef struct class_3DB8C_vtable {
     /* 0x000 80086aa0 */ u32 value;
-    /* 0x004 80086aa4 */ void (*Destroy)(void *);
+    /* 0x004 80086aa4 */ void (*base_class_destructor)(void *);
     /* 0x008 80086aa8 */ void (*Construct)(void *);
     /* 0x00C 80086aac */ void (*Cleanup)(void *);
     /* 0x010 80086ab0 */ void (*Unk3)(void *);

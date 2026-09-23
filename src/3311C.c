@@ -17,7 +17,7 @@ class_3311C_t *func_8004291C(s32 Unk1) {
 }
 
 void func_8004297C(class_3311C_t *This, s32 Unk) {
-    base_class_get_vtable()->Construct(This);
+    base_class_get_vtable()->base_class_construct(This);
     This->vtable = func_80042A7C();
     This->vtable->Unk15(This, Unk);
 }

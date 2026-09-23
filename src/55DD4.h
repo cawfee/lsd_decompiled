@@ -5,9 +5,9 @@
 
 typedef struct class_55DD4_vtable {
     /* 0x000 8008a6c4 */ u32 value;
-    /* 0x004 8008a6c8 */ void (*Destroy)(void *);
-    /* 0x008 8008a6cc */ void *(*Construct)(void *, s32, s32);
-    /* 0x00C 8008a6d0 */ void (*Cleanup)(void *);
+    /* 0x004 8008a6c8 */ void (*base_class_destructor)(void *);
+    /* 0x008 8008a6cc */ void *(*class_55DD4_construct)(void *, s32, s32);
+    /* 0x00C 8008a6d0 */ void (*class_55DD4_cleanup)(void *);
     /* 0x010 8008a6d4 */ void (*Unk3)(void *, s32);
     /* 0x014 8008a6d8 */ void (*Unk4)(void *, s32);
     /* 0x018 8008a6dc */ void (*Unk5)(void *);

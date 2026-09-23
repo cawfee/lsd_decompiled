@@ -5,7 +5,7 @@
 
 typedef struct class_354D4_vtable {
     /* 0x000 8006f498 */ u32 value;
-    /* 0x004 8006f49c */ void (*Destroy)(void *);
+    /* 0x004 8006f49c */ void (*init_800269F0)(void *);
     /* 0x008 8006f4a0 */ void (*Construct)(void *, s32, void *);
     /* 0x00C 8006f4a4 */ void (*Cleanup)(void *);
     /* 0x010 8006f4a8 */ void (*Unk3)(void *);
@@ -27,7 +27,7 @@ typedef struct class_354D4_vtable {
     /* 0x050 8006f4e8 */ void (*Unk19)(void *);
     /* 0x054 8006f4ec */ void (*Unk20)(void *);
     /* 0x058 8006f4f0 */ void (*Unk21)(void *);
-    /* 0x05C 8006f4f4 */ void (*Unk22)(void *);
+    /* 0x05C 8006f4f4 */ void (*file_buf_release)(void *);
     /* 0x060 8006f4f8 */ void (*Unk23)(void *);
     /* 0x064 8006f4fc */ void (*Unk24)(void *);
     /* 0x068 8006f500 */ void (*Unk25)(void *);

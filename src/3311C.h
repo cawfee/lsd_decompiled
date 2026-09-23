@@ -5,9 +5,9 @@
 
 typedef struct class_3311C_vtable {
     /* 0x000 8006f06c */ u32 value;
-    /* 0x004 8006f070 */ void (*Destroy)(void *);
+    /* 0x004 8006f070 */ void (*base_class_destructor)(void *);
     /* 0x008 8006f074 */ void (*Construct)(void *, s32);
-    /* 0x00C 8006f078 */ void (*Cleanup)(void *);
+    /* 0x00C 8006f078 */ void (*base_class_cleanup)(void *);
     /* 0x010 8006f07c */ void (*Unk3)(void *);
     /* 0x014 8006f080 */ void (*Unk4)(void *);
     /* 0x018 8006f084 */ void (*Unk5)(void *);

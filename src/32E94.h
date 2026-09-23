@@ -5,7 +5,7 @@
 
 typedef struct class_32E94_vtable {
     /* 0x000 8006efac */ u32 value;
-    /* 0x004 8006efb0 */ void (*Destroy)(void *);
+    /* 0x004 8006efb0 */ void (*base_class_destructor)(void *);
     /* 0x008 8006efb4 */ void (*Construct)(void *);
     /* 0x00C 8006efb8 */ void (*Cleanup)(void *);
     /* 0x010 8006efbc */ void (*Unk3)(void *, void *);

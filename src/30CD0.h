@@ -5,7 +5,7 @@
 
 typedef struct class_30CD0_vtable {
     /* 0x000 8006eac0 */ u32 value;
-    /* 0x004 8006eac4 */ void (*Destroy)(void *);
+    /* 0x004 8006eac4 */ void (*base_class_destructor)(void *);
     /* 0x008 8006eac8 */ void (*Construct)(void *, u32, u32, u32);
     /* 0x00C 8006eacc */ void (*Cleanup)(void *);
     /* 0x010 8006ead0 */ void (*Unk3)(void *);

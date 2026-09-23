@@ -5,7 +5,7 @@
 
 typedef struct class_413A8_vtable {
     /* 0x000 80086ed0 */ u32 value;
-    /* 0x004 80086ed4 */ void (*Destroy)(void *);
+    /* 0x004 80086ed4 */ void (*base_class_destructor)(void *);
     /* 0x008 80086ed8 */ void (*Construct)(void *, char *, s32);
     /* 0x00C 80086edc */ void (*Cleanup)(void *);
     /* 0x010 80086ee0 */ void (*Unk3)(void *, s32);

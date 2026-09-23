@@ -1,5 +1,5 @@
 #include "main_menu.h"
-#include "2C694.h"
+#include "ui_screen.h"
 
 extern main_menu_vtable_t g_MAIN_MENU_VTABLE;
 
@@ -63,14 +63,14 @@ void func_8004D578(main_menu_t *This, dream_sys_t *DreamSys) {
     char *font_icon_path = &g_FONT_ICON_PATH;
     func_8003DFBC()->Construct(This, font_icon_path, "ETC\\ETCSE", 0);
     This->vtable = main_menu_get_vtable();
-    This->m_SoundEngine->vtable->Unk23(This->m_SoundEngine, -1);
+    This->m_Sound->vtable->func_8002CBF4(This->m_Sound, -1);
     This->m_DreamSys = DreamSys;
     This->m_MemoryCard = 0;
     This->m_RegionCode = DreamSys->vtable->GetRegionCode(DreamSys, &This->m_RegionCodeParam);
-    func_8004D6AC(DreamSys->vtable->Unk103(DreamSys, 0));
+    write_day_digits(DreamSys->vtable->get_day_number(DreamSys, 0));
 
     This->vtable->Unk53(This, font_icon_path);
-    This->vtable->Unk15(This, DreamSys);
+    This->vtable->show_title(This, DreamSys);
 }
 
 void func_8004D678(main_menu_t *This, s32 Vtable) {
@@ -84,7 +84,7 @@ void func_8004D678(main_menu_t *This, s32 Vtable) {
     *(u32 *) (*(u32 *) (Vtable + 24) + 4) = is_enabled;
 }
 
-void func_8004D6AC(s32 Value) {
+void write_day_digits(s32 Value) {
     func_8004109C(g_NUMBERS, Value, 3, 0);
 
     __builtin_memcpy(g_DAY_STR + 0x12, g_NUMBERS, 6);
@@ -92,7 +92,7 @@ void func_8004D6AC(s32 Value) {
 
 void func_8004D704(main_menu_t *This) {
     if (This->m_MemoryCard) {
-        This->m_MemoryCard->vtable->Destroy(This->m_MemoryCard);
+        This->m_MemoryCard->vtable->base_class_destructor(This->m_MemoryCard);
         This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
     }
 
@@ -108,7 +108,7 @@ void func_8004D788(main_menu_t *This, void **Unk2, s32 Unk3) {
     }
 }
 
-void func_8004D814(main_menu_t *This) {
+void show_title(main_menu_t *This) {
     This->m_Unk12 = 0;
     This->m_Unk10 = 400;
     This->vtable->Unk52(This, "ETC\\TITLE.TIM", 0);
@@ -151,7 +151,7 @@ void func_8004D90C(main_menu_t *This, s32 Unk) {
 
 // TODO messy function
 void func_8004D9D4(main_menu_t *This) {
-    class_2C694_vtable_t *obj_from_bc;
+    ui_screen_vtable_t *obj_from_bc;
     int m_Unk21_val;
     void (*method_to_call_ptr)(main_menu_t *);
 
@@ -195,11 +195,11 @@ L_case1_Unk59_Unk36: {
 }
 
 L_case2_Unk75:
-    method_to_call_ptr = This->vtable->Unk75;
+    method_to_call_ptr = This->vtable->write_save;
     goto L_common_call_point;
 
 L_case3_Unk76:
-    method_to_call_ptr = This->vtable->Unk76;
+    method_to_call_ptr = This->vtable->read_save;
     goto L_common_call_point;
 
 L_case4_setUnk13_Unk36: {
@@ -222,13 +222,13 @@ void func_8004DABC(main_menu_t *This) {
 
     func_8003DFBC()->Unk36(This);
     unk = *(u32 *) (This->m_Unk23 + 20);
-    This->m_DreamSys->vtable->Unk102(This->m_DreamSys, &unk);
+    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, &unk);
 }
 
 void func_8004DB18(main_menu_t *This, void *Unk) {
     s32 len;
     void *mem;
-    class_310CC_t *unk_class;
+    text_line_t *unk_class;
 
     if (Unk) {
         if (This->m_DreamSys->vtable->Unk106(This->m_DreamSys)) {
@@ -249,15 +249,11 @@ void func_8004DB18(main_menu_t *This, void *Unk) {
 }
 
 void func_8004DC08(main_menu_t *This) {
-    This->m_Unk43->vtable->Destroy(This->m_Unk43);
+    This->m_Unk43->vtable->base_class_destructor(This->m_Unk43);
     func_8003DFBC()->Unk54(This);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DC64);
-// void func_8004DC64(main_menu_t *This, s32 Unk) {
-//     func_8003DFBC()->Unk55(This, Unk);
-//     This->m_Unk43->vtable->Unk18(This->m_Unk43, Unk, &D_8008A9B4);
-// }
 
 void func_8004DCD0(main_menu_t *This, char *Unk_arg_s0) {
     u8 local_buf[3];
@@ -323,24 +319,24 @@ INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DE08);
 
 //     func_8004D678(This, This->m_Unk18, This->m_DreamSys);
 //     This->vtable->Unk55(This, (void *)This->m_Unk4);
-//     This->m_DreamSys->vtable->Unk102(This->m_DreamSys, unk);
+//     This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, unk);
 
 //     This->m_Unk21 = 5;
 //     This->vtable->Unk23(This, 11);
 //     This->vtable->Unk70(This, unk[0], 1);
 //     This->vtable->Unk23(This, 15);
 //     This->vtable->Unk59(This, unk_value, 0);
-//     This->m_DreamSys->vtable->Unk102(This->m_DreamSys, unk);
+//     This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, unk);
 //  }
 
-void func_8004DF64(main_menu_t *This, s32 Unk) {
+void attach_memory_card(main_menu_t *This, s32 Unk) {
     if (!This->m_MemoryCard) {
-        This->m_TextureHelper = texture_helper_create("CARD\\FILEICN1.TIM\0", Unk);
+        This->m_TextureHelper = tim_image_create("CARD\\FILEICN1.TIM\0", Unk);
         This->m_MemoryCard = memory_card_create(1, 0);
     }
 
     This->m_MemoryCard->vtable->Unk26(This->m_MemoryCard, D_80011454, &D_80086D6C, *(u32 *) (This->m_Unk2 + 4),
-                                      This->m_Unk3, This->m_Unk4, This->m_SoundEngine);
+                                      This->m_Unk3, This->m_Unk4, This->m_Sound);
 
     This->vtable->Unk3(This, (s32) This->m_MemoryCard);
     This->vtable->Unk4(This, *(void **) (This->m_Unk2 + 4));
@@ -354,7 +350,7 @@ void func_8004E054(main_menu_t *This) {
     This->m_MemoryCard->vtable->Unk27(This->m_MemoryCard);
 }
 
-void func_8004E0E4(main_menu_t *This) {
+void write_save(main_menu_t *This) {
     dream_sys_t *dream_sys_obj;
     u32 title_ptr; // points to ETC\TITLE.TIM
     void (*func_ptr)(dream_sys_t *, s32 *);
@@ -363,10 +359,10 @@ void func_8004E0E4(main_menu_t *This) {
 
     dream_sys_obj = This->m_DreamSys;
     title_ptr = *(u32 *) ((char *) This->m_Unk23 + 0x14);
-    func_ptr = dream_sys_obj->vtable->Unk102;
+    func_ptr = dream_sys_obj->vtable->dream_sys__get_set_screen_shake;
     unk_struct[0] = title_ptr;
     func_ptr(dream_sys_obj, &unk_struct[0]);
-    This->vtable->Unk73(This);
+    This->vtable->attach_memory_card(This);
 
     if (This->m_DreamSys->vtable->Unk106(This->m_DreamSys)) {
         *(u8 *) D_8008AA10 = 0;
@@ -376,8 +372,8 @@ void func_8004E0E4(main_menu_t *This) {
                                       This->m_RegionCode, This->m_RegionCodeParam);
 }
 
-void func_8004E1C4(main_menu_t *This) {
-    This->vtable->Unk73(This);
+void read_save(main_menu_t *This) {
+    This->vtable->attach_memory_card(This);
 
     This->m_MemoryCard->vtable->Unk28(This->m_MemoryCard, D_8008AA10, g_DAY_STR, This->m_RegionCode,
                                       This->m_RegionCodeParam);

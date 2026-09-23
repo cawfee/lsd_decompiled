@@ -5,7 +5,7 @@
 extern base_class_vtable_t **g_BASE_CLASS_VTABLE;
 
 s32 base_class_destructor(base_class_t *This) {
-    This->vtable->Cleanup(This);
+    This->vtable->base_class_cleanup(This);
     memory_free_mem(This);
     return 0;
 }

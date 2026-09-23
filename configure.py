@@ -1,3 +1,4 @@
+import glob
 import os
 import shlex
 import sys
@@ -73,7 +74,6 @@ if NON_MATCHING:
 
 # Sources
 asm_auto_targets = [
-    "asm/1145C.s",
     "asm/179D8.s",
     "asm/1D718.s",
     "asm/2A85C.s",
@@ -101,7 +101,6 @@ asm_auto_targets = [
     "asm/44CE4.s",
     "asm/4775C.s",
     "asm/4cd08.s",
-    "asm/8BDC.s",
     "asm/ED8C.s",
     "asm/FB94.s",
     "asm/psyq_libgs_110.s",
@@ -246,27 +245,27 @@ c_targets = [
     "src/timer.c",
     "src/game_flow.c",
     "src/memory_card.c",
-    "src/texture_helper.c",
-    "src/asset_player.c",
+    "src/tim_image.c",
+    "src/movie_screen.c",
     "src/renderer.c",
     "src/stage_grid.c",
     "src/D294.c",
     "src/FA50.c",
-    "src/gs_helper.c",
+    "src/display.c",
     "src/1C92C.c",
-    "src/2C694.c",
+    "src/ui_screen.c",
     "src/305B0.c",
     "src/30CD0.c",
-    "src/310CC.c",
+    "src/text_line.c",
     "src/322B4.c",
     "src/3249C.c",
     "src/326E8.c",
-    "src/32ACC.c",
-    "src/32C00.c",
+    "src/seq_file.c",
+    "src/frame_phase.c",
     "src/32E94.c",
     "src/3311C.c",
     "src/33808.c",
-    "src/34040.c",
+    "src/tmd_model.c",
     "src/34684.c",
     "src/349B4.c",
     "src/34E8C.c",
@@ -275,17 +274,17 @@ c_targets = [
     "src/35730.c",
     "src/359B8.c",
     "src/39094.c",
-    "src/dream_context.c",
-    "src/3A930.c",
+    "src/dream_session.c",
+    "src/scene.c",
     "src/3DA54.c",
     "src/3DB8C.c",
     "src/413A8.c",
     "src/4225C.c",
-    "src/43370.c",
+    "src/map_scene.c",
     "src/46B20.c",
     "src/477E4.c",
     "src/48494.c",
-    "src/48768.c",
+    "src/graph_screen.c",
     "src/entity.c",
     "src/55DD4.c",
     "src/base_class.c",
@@ -294,18 +293,20 @@ c_targets_g8 = [
     "src/34388.c",
     "src/main.c",
     "src/memory.c",
-    "src/utils/path_helper.c",
+    "src/utils/cd_paths.c",
     "src/main_menu.c",
-    "src/171F0.c",
+    "src/file_buf.c",
     "src/bgm.c",
-    "src/sound_engine.c",
-    "src/2B78C.c",
+    "src/sound.c",
+    "src/system.c",
     "src/dream_sys.c",
     "src/1CBB8.c",
-    "src/35C38.c",
+    "src/mdec_movie.c",
     "src/3ACC8.c",
-    "src/3770C.c",
-    "src/16334.c",
+    "src/str_stream.c",
+    "src/pad.c",
+    "src/1145C.c",
+    "src/8BDC.c",
 ]
 cpp_targets = []
 clean_files = [
@@ -411,6 +412,16 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.rule("checksha", command="sha1sum --check $in", description="CHECK $in")
     n.newline()
 
+    DECOMP_GUARD_STAMP = BUILD_DIR + "/decomp_guard.ok"
+    n.rule(
+        "decomp_guard",
+        command=f"$python {shlex.quote(os.path.join(TOOLS_DIR, 'decomp_guard.py'))} --stamp $out",
+        description="DECOMP_GUARD",
+    )
+    n.newline()
+
+    src_c_files = glob.glob("src/**/*.c", recursive=True)
+
     n.build([LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS], "splat", SPLAT_CONFIG)
     n.newline()
 
@@ -476,8 +487,9 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.build("clean", "clean_custom")
     n.newline()
 
-    # Check hash
-    n.build("check", "checksha", EXE_HASH, implicit=EXE)
+    # Check hash (decomp_guard runs first — blocks near_miss + forbidden asm)
+    n.build(DECOMP_GUARD_STAMP, "decomp_guard", implicit=src_c_files)
+    n.build("check", "checksha", EXE_HASH, implicit=[EXE, DECOMP_GUARD_STAMP])
     n.newline()
 
     # n.build("test", "cplus", "tests/test.cpp")

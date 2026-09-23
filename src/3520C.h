@@ -5,7 +5,7 @@
 
 typedef struct class_3520C_vtable {
     /* 0x000 8006f40c */ u32 value;
-    /* 0x004 8006f410 */ void (*Destroy)(void *);
+    /* 0x004 8006f410 */ void (*init_800269F0)(void *);
     /* 0x008 8006f414 */ s32 (*Construct)(void *, s32);
     /* 0x00C 8006f418 */ void (*Cleanup)(void *);
     /* 0x010 8006f41c */ void (*Unk3)(void *);
@@ -27,7 +27,7 @@ typedef struct class_3520C_vtable {
     /* 0x050 8006f45c */ void (*Unk19)(void *);
     /* 0x054 8006f460 */ void (*Unk20)(void *);
     /* 0x058 8006f464 */ void (*Unk21)(void *);
-    /* 0x05C 8006f468 */ void (*Unk22)(void *);
+    /* 0x05C 8006f468 */ void (*file_buf_release)(void *);
     /* 0x060 8006f46c */ void (*Unk23)(void *);
     /* 0x064 8006f470 */ s32 (*Unk24)(void *);
     /* 0x068 8006f474 */ void (*Unk25)(void *);

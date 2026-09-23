@@ -2,9 +2,9 @@
 
 #include <psx/kernel.h>
 
-#include "16634.h"
+#include "pad.h"
 #include "game_flow.h"
-#include "gs_helper.h"
+#include "display.h"
 #include "memory.h"
 
 // data
@@ -25,7 +25,7 @@ static game_flow_t *g_GAME_FLOW;
 
 void main(int argc, const char **argv) {
     void *manager;
-    gs_helper_t *gs_helper;
+    display_t *display;
 
     SetMem(2);
     manager = memory_create_manager(0x166C00, 0);
@@ -34,9 +34,9 @@ void main(int argc, const char **argv) {
     memory_set_manager(manager);
     g_GAME_FLOW = game_flow_create(&g_GAME_CONFIG);
 
-    gs_helper = gs_helper_create();
-    g_GAME_FLOW->vtable->Init(g_GAME_FLOW, gs_helper, func_80025B34(0, 0));
-    g_GAME_FLOW->vtable->ExecutePhases(g_GAME_FLOW);
+    display = display_create();
+    g_GAME_FLOW->vtable->game_flow_init(g_GAME_FLOW, display, pad_create(0, 0));
+    g_GAME_FLOW->vtable->game_flow_execute_phases(g_GAME_FLOW);
 }
 
 // NOLINTBEGIN

@@ -10,7 +10,7 @@ class_305B0_t *class_305B0_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     class_305B0_t *allocated = (class_305B0_t *) memory_allocate_mem(0xA0);
 
     if (allocated) {
-        class_305B0_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);
+        class_305B0_get_vtable()->class_305B0_construct(allocated, Unk1, Unk2, Unk3);
         return allocated;
     }
 
@@ -79,7 +79,37 @@ INCLUDE_ASM("asm/nonmatchings/305B0", func_800400B0);
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040154);
 
-INCLUDE_ASM("asm/nonmatchings/305B0", func_800402F0);
+void func_800402F0(class_305B0_t *This, s32 arg1) {
+    class_305B0_vtable_t *vt;
+    s32 state;
+    s32 which;
+
+    state = This->m_Unk26;
+    vt = This->vtable;
+    if (state != 0) {
+        if (state == 1) {
+            which = 5;
+            if (This->m_Unk37 == 0) {
+                vt->Unk23(This, 0);
+                vt->Unk24(This, 0);
+            }
+        } else {
+            which = 6;
+            if (This->m_Unk37 != 0) {
+                if (This->m_Unk29 == 0xF) {
+                    vt->Unk45(This, 1, D_8006EAA8);
+                }
+                vt->Unk24(This, 0);
+            }
+        }
+        vt->Unk4(This, arg1);
+        if (This->m_Unk28 < 0) {
+            This->m_Unk28 = -This->m_Unk28;
+        }
+        This->m_Unk26 = 0;
+        vt->Unk11(This, which);
+    }
+}
 
 s32 func_800403F8(class_305B0_t *This) {
     if (This->m_Unk29 == 15) {

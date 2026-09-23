@@ -35,7 +35,7 @@ extern s32 D_8008AA94;
 extern char D_8008AAB4[]; /* "CARD\\" */
 extern char D_8008AABC[]; /* ".TIM" */
 
-#include "texture_helper.h"
+#include "tim_image.h"
 
 typedef struct class_3249C class_3249C_t;
 class_3249C_t *func_80041C9C(void *, void *, s32);
@@ -52,7 +52,7 @@ memory_card_t *memory_card_create(u32 Unk1, u32 Unk2) {
     memory_card_t *allocated = (memory_card_t *) memory_allocate_mem(0x84);
 
     if (allocated) {
-        memory_card_get_vtable()->Construct(allocated, Unk1, Unk2);
+        memory_card_get_vtable()->memory_card_on_construct(allocated, Unk1, Unk2);
         return allocated;
     }
 
@@ -70,7 +70,7 @@ void memory_card_state_reset(memory_card_t *This) {
 }
 
 void func_8004E40C(memory_card_t *This) {
-    base_class_get_vtable()->Cleanup(This);
+    base_class_get_vtable()->base_class_cleanup(This);
 }
 
 void func_8004E444(memory_card_t *This, void *Unk) {
@@ -296,7 +296,7 @@ char *func_8004EADC(memory_card_t *This, char *buf, char *prefix, char **suffixe
         do {
             strcpy(buf, prefix);
             strcat(buf, *var_s0);
-            if (((s32(*)(void *, s32, char *))This->vtable->Unk20)(This, 0, buf) == 0) {
+            if (This->vtable->Unk20(This, 0, buf) == 0) {
                 return buf;
             }
             var_s0 += 1;
@@ -314,7 +314,7 @@ s32 func_8004EB88(memory_card_t *This, s32 *vals, char **out, char *prefix, char
         do {
             strcpy(buf, prefix);
             strcat(buf, *suffixes);
-            if (((s32(*)(void *, s32, char *))This->vtable->Unk20)(This, *vals, buf) != 0) {
+            if (This->vtable->Unk20(This, *vals, buf) != 0) {
                 count += 1;
                 vals += 1;
                 *out = *suffixes;
@@ -524,7 +524,7 @@ void func_8004F638(memory_card_t *This, s32 a1, s32 a2, s32 a3, s32 a4) {
     if (func_8004F9D8(This) != 0) {
         func_8004F810(This);
         func_8004F704(This);
-        temp_v0 = ((s32(*)(void *, s32, s32, s32, s32))This->vtable->Unk22)(
+        temp_v0 = This->vtable->Unk22(
             This, This->m_Unk13, This->m_Unk14, This->m_Unk11, This->m_Unk12);
         This->m_Unk10 = temp_v0;
         if (temp_v0 != 0) {
@@ -537,7 +537,7 @@ void func_8004F638(memory_card_t *This, s32 a1, s32 a2, s32 a3, s32 a4) {
             state = 0xD;
             This->m_Unk10 = 0xF;
         }
-        ((void (*)(void *, s32))This->vtable->Unk30)(This, state);
+        This->vtable->Unk30(This, state);
     }
 }
 
@@ -595,7 +595,53 @@ s32 func_8004F9D8(memory_card_t *This);
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F8A4);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F9D8);
+s32 func_8004F9D8(memory_card_t *This) {
+    s32 slot0;
+    s32 slot1;
+    s32 slot2;
+    s32 flag;
+    s32 mode;
+
+    This->vtable->Unk16(This);
+    flag = This->vtable->Unk18(This, &slot0, &slot1, &slot2);
+    This->vtable->Unk17(This);
+    if (flag == 0) {
+        goto mode2;
+    }
+    if (slot1 != 0) {
+        goto recheck;
+    }
+    if (slot2 != 0) {
+        return 1;
+    }
+recheck:
+    if (flag != 0) {
+        goto chain;
+    }
+mode2:
+    mode = 2;
+    goto done;
+chain:
+    if (slot0 != 0) {
+        mode = 3;
+        goto done;
+    }
+    if (slot1 != 0) {
+        mode = 4;
+        goto done;
+    }
+    if (slot2 != 0) {
+        goto done;
+    }
+    if (This->m_Unk8 == 1) {
+        mode = 5;
+    } else {
+        mode = 6;
+    }
+done:
+    This->vtable->Unk30(This, mode);
+    return 0;
+}
 
 s32 func_8004FB04(memory_card_t *This, void *Unk, s32 a2) {
     memory_card_vtable_t *vtable;
@@ -605,16 +651,16 @@ s32 func_8004FB04(memory_card_t *This, void *Unk, s32 a2) {
     base_class_get_vtable()->Unk13(This, Unk, a2);
     unk = **(s32 **)Unk;
     if ((unk & 0xF) == 2) {
-        return ((s32(*)(void *, void *, s32))vtable->Unk33)(This, Unk, a2);
+        return vtable->Unk33(This, Unk, a2);
     }
     if ((unk & 0xF) == 5) {
-        return ((s32(*)(void *, void *, s32))vtable->Unk37)(This, Unk, a2);
+        return vtable->Unk37(This, Unk, a2);
     }
     if ((unk & 0xFF) == 16) {
-        return ((s32(*)(void *, void *, s32))vtable->Unk40)(This, Unk, a2);
+        return vtable->Unk40(This, Unk, a2);
     }
     if ((unk & 0xFF) == 32) {
-        return ((s32(*)(void *, void *, s32))vtable->Unk43)(This, Unk, a2);
+        return vtable->Unk43(This, Unk, a2);
     }
     return 0x20;
 }
@@ -636,14 +682,14 @@ void func_8004FBE4(memory_card_t *This, s32 Unk) {
     if (This->m_Unk9 == Unk) {
         state = 0x17;
     }
-    ((void (*)(void *, s32))vtable->Unk11)(This, state);
+    vtable->Unk11(This, state);
     vtable->Unk32(This);
-    ((void (*)(void *, s32))vtable->Unk31)(This, state);
+    vtable->Unk31(This, state);
     This->m_Unk22 = 0;
 
     switch (state) {
         case 19:
-            result = ((s32(*)(void *))vtable->Unk19)(This);
+            result = vtable->Unk19(This);
             state = 8;
             if (result) {
                 state = 0x11;
@@ -651,16 +697,16 @@ void func_8004FBE4(memory_card_t *This, s32 Unk) {
             goto call_unk30;
         case 20:
             if (*(u8 *)This->m_Unk15 == 0) {
-                ((void (*)(void *, s32, s32, s32))vtable->Unk21)(This, This->m_Unk15, This->m_Unk11,
+                vtable->Unk21(This, This->m_Unk15, This->m_Unk11,
                                                                   This->m_Unk12);
             }
-            result = ((s32(*)(void *, s32, s32, u32, s32, s32, s32))vtable->Unk25)(
+            result = vtable->Unk25(
                 This, This->m_Unk15, This->m_Unk16, *(u8 *)&This->m_Unk18, This->m_Unk19, This->m_Unk20,
                 This->m_Unk21);
             state = 0xC;
             goto check_result;
         case 21:
-            result = ((s32(*)(void *, s32, s32, s32))vtable->Unk24)(This, This->m_Unk15, This->m_Unk20,
+            result = vtable->Unk24(This, This->m_Unk15, This->m_Unk20,
                                                                     This->m_Unk21);
             state = 0x10;
         check_result:
@@ -706,7 +752,7 @@ void func_8004FE24(memory_card_t *This, s32 idx) {
     char path[0x20];
     char *pathp;
     char *name;
-    texture_helper_t *tex;
+    tim_image_t *tex;
     void *obj;
 
     if (idx < 0x11) {
@@ -718,7 +764,7 @@ void func_8004FE24(memory_card_t *This, s32 idx) {
                 strcat(pathp, D_8008AAB4);
                 strcat(pathp, name);
                 strcat(pathp, D_8008AABC);
-                tex = texture_helper_create(pathp);
+                tex = tim_image_create(pathp);
                 tex->vtable->Unk14(tex);
                 obj = func_80041C9C(tex, &D_80086EC4, 0);
                 This->m_Unk27 = (s32)obj;
@@ -773,7 +819,7 @@ void func_80050034(memory_card_t *This) {
         case 4:
         case 10:
         case 14:
-            ((void (*)(void *, s32))vtable->Unk34)(This, 0);
+            vtable->Unk34(This, 0);
             if (This->m_Unk9 == 0xE) {
                 strcpy((char *)This->m_Unk15, (char *)This->m_Unk11);
                 strcat((char *)This->m_Unk15,
@@ -782,17 +828,17 @@ void func_80050034(memory_card_t *This) {
                        *(char **)(This->m_Unk13 + (This->m_Unk31 * 4)));
             }
             if (This->m_Unk8 == 2) {
-                ((void (*)(void *, s32, s32, s32, s32, s32, s32, s32))vtable->Unk29)(
+                vtable->Unk29(
                     This, This->m_Unk15, This->m_Unk16, This->m_Unk17, *(u8 *)&This->m_Unk18,
                     This->m_Unk19, This->m_Unk20, This->m_Unk21);
             } else if (This->m_Unk8 == 1) {
-                ((void (*)(void *, s32, s32, s32, s32))vtable->Unk28)(
+                vtable->Unk28(
                     This, This->m_Unk15, This->m_Unk16, This->m_Unk20, This->m_Unk21);
             }
             break;
         case 6:
-            ((void (*)(void *, s32))vtable->Unk34)(This, 0);
-            ((void (*)(void *, s32))vtable->Unk30)(This, 7);
+            vtable->Unk34(This, 0);
+            vtable->Unk30(This, 7);
             break;
         case 3:
         case 5:
@@ -801,8 +847,8 @@ void func_80050034(memory_card_t *This) {
         case 12:
         case 13:
         case 16:
-            ((void (*)(void *, s32))vtable->Unk34)(This, 0x10);
-            ((void (*)(void *, s32))vtable->Unk30)(This, 0x17);
+            vtable->Unk34(This, 0x10);
+            vtable->Unk30(This, 0x17);
             break;
     }
 }
@@ -813,13 +859,30 @@ void func_800501F0(memory_card_t *This) {
         case 6:
         case 0xA:
         case 0xE:
-            ((void (*)(void *, s32))This->vtable->Unk34)(This, 0x10);
-            ((void (*)(void *, s32))This->vtable->Unk30)(This, 0x17);
+            This->vtable->Unk34(This, 0x10);
+            This->vtable->Unk30(This, 0x17);
             break;
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_80050280);
+void func_80050280(memory_card_t *This) {
+    if (This->m_Unk9 == 7) {
+        if (This->m_Unk22++ < 6) {
+            return;
+        }
+        This->vtable->Unk30(This, 0x13);
+    } else if (This->m_Unk9 == 0xB) {
+        if (This->m_Unk22++ < 6) {
+            return;
+        }
+        This->vtable->Unk30(This, 0x14);
+    } else if (This->m_Unk9 == 0xF) {
+        if (This->m_Unk22++ < 6) {
+            return;
+        }
+        This->vtable->Unk30(This, 0x15);
+    }
+}
 
 void func_80050340(memory_card_t *This) {
     void *obj;
@@ -860,14 +923,14 @@ void func_800504D0(memory_card_t *This, s32 unused, s32 Unk) {
     (void)unused;
     switch (Unk) {
         case 2:
-            ((void (*)(void *))This->vtable->Unk39)(This);
-            ((void (*)(void *, s32, s32, s32, s32, s32, s32, s32))This->vtable->Unk29)(
+            This->vtable->Unk39(This);
+            This->vtable->Unk29(
                 This, This->m_Unk15, This->m_Unk16, This->m_Unk17, *(u8 *)&This->m_Unk18, This->m_Unk19,
                 This->m_Unk20, This->m_Unk21);
             break;
         case 3:
-            ((void (*)(void *))This->vtable->Unk39)(This);
-            ((void (*)(void *, s32))This->vtable->Unk30)(This, 0x17);
+            This->vtable->Unk39(This);
+            This->vtable->Unk30(This, 0x17);
             break;
     }
 }

@@ -1,5 +1,7 @@
 #include "34E8C.h"
 
+#include "file_buf.h"
+
 void func_80026CE8(void *, void *, s32, s32);
 s32 func_800451B8(void *);
 
@@ -23,11 +25,11 @@ INCLUDE_ASM("asm/nonmatchings/34E8C", func_800446FC);
 
 void func_800447B4(class_34E8C_t *This) {
     This->vtable->Unk30(This);
-  (*(void ( **)(class_34E8C_t *))((s32) func_80026CAC() + 12))(This);
+  (*(void ( **)(class_34E8C_t *))((s32) get_file_driver() + 12))(This);
 }
 
 void func_80044808(class_34E8C_t *This) {
-  (*(void ( **)(class_34E8C_t *))((s32) func_80026CAC() + 100))(This);
+  (*(void ( **)(class_34E8C_t *))((s32) get_file_driver() + 100))(This);
   This->vtable->Unk29(This);
 }
 
@@ -39,7 +41,7 @@ s32 func_80044858(class_34E8C_t *This) {
     if (This->m_Unk12 != 0) {
         base = (void *)This->m_Unk3;
         func_80026CE8(buf, (u8 *)base + *(s32 *)((u8 *)base + 8), 0, 1);
-        v0 = func_80043840(buf);
+        v0 = tmd_create(buf);
         This->m_Unk10 = v0;
         if (v0 != 0) {
             buf[0] = This->m_Unk3 + 0xC;

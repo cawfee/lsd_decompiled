@@ -5,7 +5,7 @@
 
 typedef struct class_3249C_vtable {
     /* 0x000 8006ed4c */ u32 value;
-    /* 0x004 8006ed50 */ void (*Destroy)(void *);
+    /* 0x004 8006ed50 */ void (*base_class_destructor)(void *);
     /* 0x008 8006ed54 */ void (*Construct)(void *, s32, s32, s32);
     /* 0x00C 8006ed58 */ void (*Cleanup)(void *);
     /* 0x010 8006ed5c */ void (*Unk3)(void *);
@@ -23,7 +23,7 @@ typedef struct class_3249C_vtable {
     /* 0x040 8006ed8c */ void (*Unk15)(void *);
     /* 0x044 8006ed90 */ void (*Unk16)(void *);
     /* 0x048 8006ed94 */ void (*Unk17)(void *);
-    /* 0x04C 8006ed98 */ void (*Unk18)(void *);
+    /* 0x04C 8006ed98 */ void (*Unk18)(void *, void *, void *);
     /* 0x050 8006ed9c */ void (*Unk19)(void *);
     /* 0x054 8006eda0 */ void (*Unk20)(void *);
     /* 0x058 8006eda4 */ void (*Unk21)(void *);

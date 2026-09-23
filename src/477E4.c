@@ -77,7 +77,53 @@ void func_800571E8(class_477E4_t *This) {
     This->m_Unk20 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_800571F8);
+extern s32 func_8001F3A4(s32);
+extern void func_8001F66C(void *, s32, s32, s32);
+
+void func_800571F8(class_477E4_t *This, s32 arg1) {
+    u8 buf[0x38];
+    s32 height;
+    s32 nonneg;
+    s32 adjusted;
+    void **obj;
+
+    ((void (*)(void *, s32))func_8001E57C()->Unk33)(This, arg1);
+    if (arg1 >= 9) {
+        return;
+    }
+    if (arg1 < 5) {
+        return;
+    }
+    if (This->m_Unk7 == 0) {
+        return;
+    }
+    if (func_8001F3A4(This->m_Unk7) == 0) {
+        return;
+    }
+    This->vtable->Unk34(This, buf);
+    if (arg1 != 5) {
+        s32 same;
+        same = arg1 == 7;
+        height = This->m_Unk17_1;
+        nonneg = ~height;
+        nonneg = (u32)nonneg >> 31;
+        if (height >= 0) {
+            adjusted = height + This->m_Unk20;
+        } else {
+            adjusted = height - This->m_Unk20;
+        }
+        func_8001F66C(buf, same, nonneg, adjusted);
+    }
+    This->vtable->Unk35(This, buf, arg1);
+    obj = (void **)This->m_Unk9;
+    if (obj == 0) {
+        return;
+    }
+    if (*(u8 *)obj[0] != 0x34) {
+        return;
+    }
+    ((void (*)(void **))(*(void **)((u8 *)obj[0] + 0xE8)))(obj);
+}
 
 void func_80057320(class_477E4_t *This, u8 **Unk) {
     u8 kind;
@@ -194,7 +240,30 @@ s32 func_80057668(class_477E4_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057784);
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057954);
+s32 func_80057954(class_477E4_t *This, void *arg1, s32 arg2, s32 count, void *arg4, void *arg5) {
+    s32 i;
+    void **list;
+    u8 *rec;
+    void *obj;
+    s32 result;
+
+    i = 0;
+    rec = arg4;
+    list = (void **)arg5;
+    while (i < count) {
+        obj = *list;
+        i++;
+        if (*(s16 *)(*(s32 *)((u8 *)obj + 4) + 0x2C) != 0) {
+            result = func_80057A18(This, arg1, (void *)arg2, rec, obj);
+            if (result != 0) {
+                return result;
+            }
+        }
+        rec += 0xC;
+        list++;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/477E4", func_80057A18);
 

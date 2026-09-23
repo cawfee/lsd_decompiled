@@ -5,7 +5,7 @@
 
 typedef struct class_4225C_vtable {
     /* 0x000 80086f88 */ u32 value;
-    /* 0x004 80086f8c */ void (*Destroy)(void *);
+    /* 0x004 80086f8c */ void (*base_class_destructor)(void *);
     /* 0x008 80086f90 */ void (*Construct)(void *, s32, s32);
     /* 0x00C 80086f94 */ void (*Cleanup)(void *);
     /* 0x010 80086f98 */ void (*Unk3)(void *);
@@ -28,7 +28,7 @@ typedef struct class_4225C_vtable {
     /* 0x054 80086fdc */ void (*Unk20)(void *);
     /* 0x058 80086fe0 */ void (*Unk21)(void *);
     /* 0x05C 80086fe4 */ void (*Unk22)(void *);
-    /* 0x060 80086fe8 */ void (*Unk23)(void *);
+    /* 0x060 80086fe8 */ void (*Unk23)(void *, s32);
     /* 0x064 80086fec */ void (*Unk24)(void *);
     /* 0x068 80086ff0 */ void (*Unk25)(void *);
     /* 0x06C 80086ff4 */ void (*Unk26)(void *);
@@ -41,8 +41,8 @@ typedef struct class_4225C_vtable {
     /* 0x088 80087010 */ void (*Unk33)(void *);
     /* 0x08C 80087014 */ void (*Unk34)(void *);
     /* 0x090 80087018 */ void (*Unk35)(void *);
-    /* 0x094 8008701c */ void (*Unk36)(void *);
-    /* 0x098 80087020 */ void (*Unk37)(void *);
+    /* 0x094 8008701c */ void (*Unk36)(void *, s32, s32, s32, s32);
+    /* 0x098 80087020 */ void (*Unk37)(void *, s32, s32);
     /* 0x09C 80087024 */ void (*Unk38)(void *);
     /* 0x0A0 80087028 */ void (*Unk39)(void *);
 } class_4225C_vtable_t;

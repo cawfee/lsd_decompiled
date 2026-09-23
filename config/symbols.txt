@@ -787,34 +787,34 @@ get_special_day_movie = 0x80049334;
 get_data_folder = 0x80048CF0;
 
 // Texture Helper?
-g_TEXTURE_HELPER_VTABLE = 0x8006E558;
-texture_helper_get_vtable = 0x8003B614;
-texture_helper_create = 0x8003B39C;
-texture_helper_get_tim_info = 0x8003B5F0;
-texture_helper_set_loaded = 0x8003B5E4;
+g_TIM_IMAGE_VTABLE = 0x8006E558;
+tim_image_get_vtable = 0x8003B614;
+tim_image_create = 0x8003B39C;
+tim_get_info = 0x8003B5F0;
+tim_image_set_loaded = 0x8003B5E4;
 
 // Sound engine?
-g_SOUND_ENGINE_VTABLE = 0x8006DA34;
-sound_engine_get_vtable = 0x8002CC0C;
-sound_engine_create = 0x8002C480;
-sound_engine_mute = 0x8002CB58;
-sound_engine_unmute = 0x8002CB9C;
+g_SOUND_VTABLE = 0x8006DA34;
+sound_get_vtable = 0x8002CC0C;
+sound_create = 0x8002C480;
+sound_mute = 0x8002CB58;
+sound_unmute = 0x8002CB9C;
 
 // GS Helper?
-g_GS_HELPER_VTABLE = 0x8006C070;
-gs_helper_get_vtable = 0x80020C4C;
-gs_helper_create = 0x800206E0;
-gs_helper_set_vblanks = 0x80020B4C;
-gs_helper_get_vblanks = 0x80020B68;
-gs_helper_set_vsync_callback = 0x80020C44;
-gs_helper_reset_vsync_count = 0x8002089C;
-gs_helper_init_gs = 0x800207DC;
-gs_helper_reset = 0x80020784;
-gs_helper_swap_disp_buffer = 0x800208B8;
-gs_helper_get_active_buffer = 0x800208D8;
-gs_helper_copy_unk = 0x80020970;
-gs_helper_do_vsync_internal = 0x80020A74;
-gs_helper_do_vsync = 0x8002085C;
+g_DISPLAY_VTABLE = 0x8006C070;
+display_get_vtable = 0x80020C4C;
+display_create = 0x800206E0;
+display_set_vblanks = 0x80020B4C;
+display_get_vblanks = 0x80020B68;
+display_set_vsync_callback = 0x80020C44;
+display_reset_vsync_count = 0x8002089C;
+display_init_gs = 0x800207DC;
+display_reset = 0x80020784;
+display_swap_disp_buffer = 0x800208B8;
+display_get_active_buffer = 0x800208D8;
+display_copy_unk = 0x80020970;
+display_do_vsync_internal = 0x80020A74;
+display_do_vsync = 0x8002085C;
 
 // Base cpp class functions
 g_BASE_CLASS_VTABLE = 0x8006B58C;
@@ -830,13 +830,13 @@ main_menu_get_vtable = 0x8004E2D0;
 main_menu_create = 0x8004D518;
 
 // Dream context?
-g_DREAM_CONTEXT_VTABLE = 0x800865C8;
-dream_context_get_vtable = 0x8004A060;
-dream_context_create = 0x80049608;
-dream_context_construct = 0x80049684;
-dream_context_cleanup = 0x80049830;
-dream_context_execute_dream = 0x80049A1C;
-dream_context_on_tick = 0x80049958;
+g_DREAM_SESSION_VTABLE = 0x800865C8;
+dream_session_get_vtable = 0x8004A060;
+dream_session_create = 0x80049608;
+dream_session_construct = 0x80049684;
+dream_session_cleanup = 0x80049830;
+dream_session_execute = 0x80049A1C;
+dream_session_on_tick = 0x80049958;
 
 // Timer?
 g_TIMER_VTABLE = 0x8006E878;
@@ -852,11 +852,11 @@ g_MEMORY_MANAGER_MAIN = 0x8008A808;
 g_GAME_FLOW = 0x8008AC20;
 
 // Asset Player? TODO change name
-g_ASSET_PLAYER_VTABLE = 0x8006E5F8;
-asset_player_create = 0x8003B854;
-asset_player_construct = 0x8003B8E4;
-asset_player_cleanup = 0x8003B9DC;
-asset_player_get_vtable = 0x8003BE84;
+g_MOVIE_SCREEN_VTABLE = 0x8006E5F8;
+movie_screen_create = 0x8003B854;
+movie_screen_construct = 0x8003B8E4;
+movie_screen_cleanup = 0x8003B9DC;
+movie_screen_get_vtable = 0x8003BE84;
 
 // Stage Grid
 g_STAGE_GRID_DIMENSIONS = 0x800861D4;
@@ -906,18 +906,18 @@ bgm_construct = 0x8003995C;
 bgm_cleanup = 0x80039A34;
 bgm_unk13 = 0x80039B04;
 bgm_unk15 = 0x80039B90;
-bgm_handle_monitor_event = 0x80039C04;
-bgm_unk16 = 0x80039CBC;
-bgm_unk17 = 0x80039D14;
-bgm_unk18 = 0x80039D68;
-bgm_unk19 = 0x80039DB0;
-bgm_unk20 = 0x80039DF4;
+seq_open = 0x80039C04;
+seq_play = 0x80039CBC;
+seq_stop = 0x80039D14;
+seq_pause = 0x80039D68;
+seq_resume = 0x80039DB0;
+seq_set_vol = 0x80039DF4;
 bgm_unk21 = 0x8006E4E4;
 bgm_unk22 = 0x80039E7C;
 bgm_unk23 = 0x80039F64;
 bgm_set_crescendo = 0x80039E24;
 
-// Class 2B78C
+// Class app
 g_CD_INIT = 0x8008a8dc;
 
 // Class FA50
@@ -962,3 +962,35 @@ helper_1_set_entity = 0x8002CC34;
 renderer_create = 0x8003E5D8;
 renderer_get_vtable = 0x8003F24C;
 g_RENDERER_VTABLE = 0x8006E8E4;
+destroy_list = 0x800183DC;
+display_load_image = 0x800208F8;
+display_store_image = 0x800209A0;
+display_get_screen_size = 0x80020C08;
+get_display = 0x80020C5C;
+set_display = 0x80020C68;
+pad_create = 0x80025B34;
+run_screen = 0x80026518;
+play_special_reel = 0x8002658C;
+file_buf_get_vtable = 0x80026C9C;
+get_file_driver = 0x80026CAC;
+file_buf_load = 0x80026B08;
+file_buf_release = 0x80026C20;
+sound_construct = 0x8002C4E0;
+sound_close = 0x8002C638;
+tim_construct = 0x8003B3FC;
+tmd_create = 0x80043840;
+tmd_map = 0x80043B18;
+open_map = 0x80049E20;
+on_link_code = 0x80049EB4;
+scene_run = 0x8004A2C4;
+write_day_digits = 0x8004D6AC;
+show_title = 0x8004D814;
+attach_memory_card = 0x8004DF64;
+write_save = 0x8004E0E4;
+read_save = 0x8004E1C4;
+map_scene_create = 0x80052B70;
+graph_screen_create = 0x80057F68;
+show_graph = 0x80058078;
+set_move_from_pad = 0x80058C58;
+reset_motion_for_link = 0x800591B4;
+get_day_number = 0x8005A2E4;

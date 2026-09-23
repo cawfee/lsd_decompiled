@@ -5,7 +5,7 @@
 
 typedef struct class_34E8C_vtable {
     /* 0x000 8006f384 */ u32 value;
-    /* 0x004 8006f388 */ void (*Destroy)(void *);
+    /* 0x004 8006f388 */ void (*init_800269F0)(void *);
     /* 0x008 8006f38c */ s32 (*Construct)(void *, s32, s32);
     /* 0x00C 8006f390 */ void (*Cleanup)(void *);
     /* 0x010 8006f394 */ void (*Unk3)(void *);
@@ -27,7 +27,7 @@ typedef struct class_34E8C_vtable {
     /* 0x050 8006f3d4 */ void (*Unk19)(void *);
     /* 0x054 8006f3d8 */ void (*Unk20)(void *);
     /* 0x058 8006f3dc */ void (*Unk21)(void *);
-    /* 0x05C 8006f3e0 */ void (*Unk22)(void *);
+    /* 0x05C 8006f3e0 */ void (*file_buf_release)(void *);
     /* 0x060 8006f3e4 */ void (*Unk23)(void *);
     /* 0x064 8006f3e8 */ s32 (*Unk24)(void *);
     /* 0x068 8006f3ec */ void (*Unk25)(void *);
@@ -36,7 +36,7 @@ typedef struct class_34E8C_vtable {
     /* 0x074 8006f3f8 */ void (*Unk28)(void *);
     /* 0x078 8006f3fc */ void (*Unk29)(void *);
     /* 0x07C 8006f400 */ void (*Unk30)(void *);
-    /* 0x080 8006f404 */ void (*Unk31)(void *);
+    /* 0x080 8006f404 */ s32 (*Unk31)(void *, void *, s32 *);
     /* 0x084 8006f408 */ void (*Unk32)(void *);
     /* 0x088 8006f40c */ void (*Unk33)(void *);
 } class_34E8C_vtable_t;

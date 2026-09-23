@@ -33,7 +33,7 @@ Debian based systems:
 
 ```bash
 sudo apt update
-sudo apt install python3 python3-pip git build-essential gcc-mipsel-linux-gnu binutils-mipsel-linux-gnu
+sudo apt install python3 python3-pip git build-essential ninja-build gcc-mipsel-linux-gnu binutils-mipsel-linux-gnu
 pip3 install -r requirements.txt
 ```
 
@@ -47,14 +47,23 @@ Expected hash of the executable:
 
 ### 4. Building
 
+On Windows, open this checkout from an Ubuntu WSL terminal. The generated build
+uses Linux paths and cannot run from PowerShell.
+
 ```bash
 python3 configure.py setup  # First time only
 python3 configure.py
-ninja split
-ninja check
+python3 tools/quiet_ninja.py split
+python3 tools/quiet_ninja.py check
 ```
 
 If successful, the hash of the built executable will pass the check.
+
+## Decompilation workflow
+
+For the measured, agent-friendly matching loop—source-derived state, codegen
+example search, isolated mutation labs, and the promotion checks—see
+[the decompilation guide](docs/agent-guide.md) and [tool reference](tools/README.md).
 
 ## Special Thanks
 

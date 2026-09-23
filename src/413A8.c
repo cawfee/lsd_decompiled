@@ -1,6 +1,10 @@
 #include "413A8.h"
+#include "text_line.h"
+#include "322B4.h"
+#include "3249C.h"
 #include "base_class.h"
 #include "memory.h"
+#include "tim_image.h"
 
 extern class_413A8_vtable_t D_80086ED0;
 
@@ -25,7 +29,7 @@ void func_80050CD8(class_413A8_t *This) {
 
 void func_80050CE8(class_413A8_t *This) {
     memory_free_mem(This->m_Unk9);
-    base_class_get_vtable()->Cleanup(This);
+    base_class_get_vtable()->base_class_cleanup(This);
 }
 
 void func_80050D30(class_413A8_t *This, void **Unk) {
@@ -90,7 +94,51 @@ void func_80050F28(class_413A8_t *This, char *Unk1, s32 Unk2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/413A8", func_80050F98);
+extern s8 D_80011610[];
+extern s8 D_8001161C[];
+extern s8 D_8008AAE8[];
+extern s8 D_8008AAF0[];
+extern s32 D_80086F7C;
+extern s8 D_8008AACC[];
+extern s8 D_8008AAD4[];
+extern s8 D_8008AAC8[];
+extern s8 D_8008AADC[];
+
+s8 *func_800270C4(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3);
+
+void func_80050F98(class_413A8_t *This, void *arg1) {
+    s8 buf[32];
+    s8 *path_a;
+    s8 *path_b;
+    tim_image_t *tex;
+    tim_image_t *tex2;
+    class_3249C_t *panel;
+    text_line_t *label;
+    class_322B4_t *icon;
+
+    if ((arg1 == NULL) || (This->m_Unk17 != 0)) {
+        return;
+    }
+    path_a = D_8008AAE8;
+    path_b = D_8008AAF0;
+    tex = tim_image_create((char *)func_800270C4(buf, D_80011610, path_a, path_b));
+    tex->vtable->Unk14(tex);
+    This->m_Unk17 = (s32)func_80041C9C((s32)tex, (s32)&D_80086F7C, 0);
+    tex->vtable->Destruct(tex);
+    panel = (class_3249C_t *)*(s32 volatile *)&This->m_Unk17;
+    panel->vtable->Unk18(panel, arg1, D_8008AACC);
+    tex2 = tim_image_create((char *)func_800270C4(buf, D_8001161C, path_a, path_b));
+    tex2->vtable->Unk14(tex2);
+    This->m_Unk16 = (s32)func_800408CC((s32)tex2, This->m_Unk3, This->m_Unk9);
+    This->m_Unk15 = (s32)func_80041AB4((s32)tex2, 0x5F);
+    tex2->vtable->Destruct(tex2);
+    label = (text_line_t *)*(s32 volatile *)&This->m_Unk16;
+    label->vtable->Unk18(label, (s32)arg1, D_8008AAD4);
+    label = (text_line_t *)*(s32 volatile *)&This->m_Unk16;
+    label->vtable->Unk45(label, (char *)D_8008AAC8);
+    icon = (class_322B4_t *)*(s32 volatile *)&This->m_Unk15;
+    icon->vtable->Unk18(icon, arg1, D_8008AADC);
+}
 
 void func_80051174(class_413A8_t *This) {
     s32 obj;

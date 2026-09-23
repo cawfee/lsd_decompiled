@@ -3,9 +3,9 @@
 
 typedef struct base_class_vtable {
     /* 0x000 8006b58c */ u32 value;
-    /* 0x004 8006b590 */ void (*Destroy)(void *);
-    /* 0x008 8006b594 */ void (*Construct)(void *);
-    /* 0x00C 8006b598 */ void (*Cleanup)(void *);
+    /* 0x004 8006b590 */ void *(*base_class_destructor)(void *);
+    /* 0x008 8006b594 */ void (*base_class_construct)(void *);
+    /* 0x00C 8006b598 */ void (*base_class_cleanup)(void *);
     /* 0x010 8006b59c */ void (*Unk3)(void *, void *);
     /* 0x014 8006b5a0 */ void (*Unk4)(void *, void *);
     /* 0x018 8006b5a4 */ void (*Unk5)(void *);
@@ -27,6 +27,7 @@ typedef struct base_class {
 
 base_class_vtable_t *base_class_get_vtable(void);
 void func_80018208(void **list, void *target);
+s32 destroy_list(base_class_t **arr, s32 n);
 void func_800183A0(void *Unk1, void **Unk2);
 
 #endif

@@ -5,9 +5,9 @@
 
 typedef struct timer_vtable {
     /* 0x000 8006e878 */ u32 value;
-    /* 0x004 8006e87c */ void (*Destroy)(void *);
-    /* 0x008 8006e880 */ void (*Construct)(void *);
-    /* 0x00C 8006e884 */ void (*Cleanup)(void *);
+    /* 0x004 8006e87c */ void (*base_class_destructor)(void *);
+    /* 0x008 8006e880 */ void (*timer_create)(void *);
+    /* 0x00C 8006e884 */ void (*base_class_cleanup)(void *);
     /* 0x010 8006e888 */ void (*Unk3)(void *, s32);
     /* 0x014 8006e88c */ void (*Unk4)(void *, s32);
     /* 0x018 8006e890 */ void (*Unk5)(void *);
@@ -20,14 +20,14 @@ typedef struct timer_vtable {
     /* 0x034 8006e8ac */ void (*Unk12)(void *);
     /* 0x038 8006e8b0 */ void (*Unk13)(void *);
     /* 0x03C 8006e8b4 */ u32 pad;
-    /* 0x040 8006e8b8 */ void (*Unk15)(void *);
+    /* 0x040 8006e8b8 */ void (*timer_reset)(void *);
     /* 0x044 8006e8bc */ void (*Unk16)(void *, s32, s32);
     /* 0x048 8006e8c0 */ void (*Unk17)(void *);
     /* 0x04C 8006e8c4 */ void (*Unk18)(void *, s32, s32, s32);
     /* 0x050 8006e8c8 */ void (*Unk19)(void *);
     /* 0x054 8006e8cc */ void (*Unk20)(void *, void **, s32);
     /* 0x058 8006e8d0 */ void (*Unk21)(void *, void **, s32);
-    /* 0x05C 8006e8d4 */ void (*Increment)(void *, void **, s32);
+    /* 0x05C 8006e8d4 */ void (*timer_increment)(void *, void **, s32);
     /* 0x060 8006e8d8 */ void (*Unk23)(void *, s32);
     /* 0x064 8006e8dc */ void (*Unk24)(void *);
     /* 0x068 8006e8e0 */ void (*Unk25)(void *);
@@ -35,13 +35,12 @@ typedef struct timer_vtable {
 
 typedef struct timer {
     /* 0x00 */ timer_vtable_t *vtable;
-    // TODO real count unknown
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
     /* 0x0C */ s32 m_Unk2;
-    /* 0x10 */ s32 m_Unk3;
-    /* 0x14 */ s32 m_Unk4;
-    /* 0x18 */ s32 m_Unk5;
+    /* 0x10 */ void *m_Unk3;
+    /* 0x14 */ void *m_Unk4;
+    /* 0x18 */ void *m_Unk5;
     /* 0x1C */ s32 m_TicksPassed;
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;

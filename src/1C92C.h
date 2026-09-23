@@ -3,9 +3,9 @@
 
 typedef struct class_1C92C_vtable {
     /* 0x000 8006d940 */ u32 value;
-    /* 0x004 8006d944 */ void (*Destroy)(void *);
-    /* 0x008 8006d948 */ void (*Construct)(void *, s32);
-    /* 0x00C 8006d94c */ void (*Cleanup)(void *);
+    /* 0x004 8006d944 */ void (*init_800269F0)(void *);
+    /* 0x008 8006d948 */ void (*class_1C92C_construct)(void *, s32);
+    /* 0x00C 8006d94c */ void (*class_1C92C_cleanup)(void *);
     /* 0x010 8006d950 */ void (*Unk3)(void *);
     /* 0x014 8006d954 */ void (*Unk4)(void *);
     /* 0x018 8006d958 */ void (*Unk5)(void *);
@@ -25,14 +25,14 @@ typedef struct class_1C92C_vtable {
     /* 0x050 8006d990 */ void (*Unk19)(void *);
     /* 0x054 8006d994 */ void (*Unk20)(void *);
     /* 0x058 8006d998 */ void (*Unk21)(void *);
-    /* 0x05C 8006d99c */ void (*Unk22)(void *);
+    /* 0x05C 8006d99c */ void (*file_buf_release)(void *);
     /* 0x060 8006d9a0 */ void (*Unk23)(void *);
-    /* 0x064 8006d9a4 */ void (*Unk24)(void *);
+    /* 0x064 8006d9a4 */ void (*class_1C92C_unk24)(void *);
     /* 0x068 8006d9a8 */ void (*Unk25)(void *);
     /* 0x06C 8006d9ac */ void (*Unk26)(void *, s32);
     /* 0x070 8006d9b0 */ void (*Unk27)(void *);
     /* 0x074 8006d9b4 */ void (*Unk28)(void *);
-    /* 0x078 8006d9b8 */ void (*Unk29)(void *);
+    /* 0x078 8006d9b8 */ void (*class_1C92C_unk29)(void *);
 } class_1C92C_vtable_t;
 
 typedef struct class_1C92C {
