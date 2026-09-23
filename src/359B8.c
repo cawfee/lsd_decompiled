@@ -36,7 +36,7 @@ class_359B8_t *func_80045228(class_359B8_t *This, s32 *pDword) {
 }
 
 void func_800452AC(class_359B8_t *This) {
-    func_800183DC((s32 *)(This->m_Unk3 + 8), *(s32 *)(This->m_Unk3 + 4));
+    destroy_list((s32 *)(This->m_Unk3 + 8), *(s32 *)(This->m_Unk3 + 4));
   func_800441A4()->Cleanup(This);
 }
 
@@ -61,7 +61,7 @@ s32 func_800452FC(class_359B8_t *This) {
                 do {
                     entries--;
                     obj = (class_34684_t *)*entries;
-                    obj->vtable->Destroy(obj);
+                    obj->vtable->init_800269F0(obj);
                 } while (--i != 0);
             }
             return 1;

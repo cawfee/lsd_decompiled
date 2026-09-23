@@ -5,7 +5,7 @@
 
 typedef struct class_477E4_vtable {
     /* 0x000 800878d4 */ u32 value;
-    /* 0x004 800878d8 */ void (*Destroy)(void *);
+    /* 0x004 800878d8 */ void (*base_class_destructor)(void *);
     /* 0x008 800878dc */ s32 (*Construct)(void *);
     /* 0x00C 800878e0 */ void (*Cleanup)(void *);
     /* 0x010 800878e4 */ void (*Unk3)(void *);
@@ -38,9 +38,9 @@ typedef struct class_477E4_vtable {
     /* 0x07C 80087950 */ void (*Unk30)(void *);
     /* 0x080 80087954 */ void (*Unk31)(void *);
     /* 0x084 80087958 */ void (*Unk32)(void *);
-    /* 0x088 8008795c */ void (*Unk33)(void *);
-    /* 0x08C 80087960 */ void (*Unk34)(void *);
-    /* 0x090 80087964 */ void (*Unk35)(void *);
+    /* 0x088 8008795c */ void (*Unk33)(void *, s32);
+    /* 0x08C 80087960 */ void (*Unk34)(void *, void *);
+    /* 0x090 80087964 */ void (*Unk35)(void *, void *, s32);
     /* 0x094 80087968 */ void (*Unk36)(void *);
     /* 0x098 8008796c */ void (*Unk37)(void *);
     /* 0x09C 80087970 */ void (*Unk38)(void *, void **, s32);
@@ -50,7 +50,7 @@ typedef struct class_477E4_vtable {
     /* 0x0AC 80087980 */ void (*Unk42)(void *);
     /* 0x0B0 80087984 */ void (*Unk43)(void *);
     /* 0x0B4 80087988 */ void (*Unk44)(void *);
-    /* 0x0B8 8008798c */ void (*Unk45)(void *);
+    /* 0x0B8 8008798c */ void (*Unk45)(void *, void *);
     /* 0x0BC 80087990 */ void (*Unk46)(void *, void *);
     /* 0x0C0 80087994 */ void (*Unk47)(void *);
     /* 0x0C4 80087998 */ void (*Unk48)(void *);

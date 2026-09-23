@@ -5,7 +5,7 @@
 
 typedef struct class_33808_vtable {
     /* 0x000 8006f0b8 */ u32 value;
-    /* 0x004 8006f0bc */ void (*Destroy)(void *);
+    /* 0x004 8006f0bc */ void (*init_800269F0)(void *);
     /* 0x008 8006f0c0 */ void (*Construct)(void *, s32);
     /* 0x00C 8006f0c4 */ void (*Cleanup)(void *);
     /* 0x010 8006f0c8 */ void (*Unk3)(void *);
@@ -27,7 +27,7 @@ typedef struct class_33808_vtable {
     /* 0x050 8006f108 */ void (*Unk19)(void *);
     /* 0x054 8006f10c */ void (*Unk20)(void *);
     /* 0x058 8006f110 */ void (*Unk21)(void *);
-    /* 0x05C 8006f114 */ void (*Unk22)(void *);
+    /* 0x05C 8006f114 */ void (*file_buf_release)(void *);
     /* 0x060 8006f118 */ void (*Unk23)(void *);
     /* 0x064 8006f11c */ void (*Unk24)(void *);
     /* 0x068 8006f120 */ void (*Unk25)(void *);
@@ -39,6 +39,15 @@ typedef struct class_33808_vtable {
     /* 0x080 8006f138 */ void (*Unk31)(void *);
     /* 0x084 8006f13c */ void (*Unk32)(void *);
 } class_33808_vtable_t;
+
+typedef struct class_33808_slot {
+    /* 0x00 */ u16 unk0;
+    /* 0x02 */ u16 unk1;
+    /* 0x04 */ u8 unk4[6];
+    /* 0x0A */ s16 unkA;
+    /* 0x0C */ s8 rgb[3];
+    /* 0x0F */ s8 pad;
+} class_33808_slot_t;
 
 typedef struct class_33808 {
     /* 0x00 */ class_33808_vtable_t *vtable;
@@ -57,22 +66,7 @@ typedef struct class_33808 {
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
-    /* 0x40 */ s32 m_Unk15;
-    /* 0x44 */ s32 m_Unk16;
-    /* 0x48 */ s32 m_Unk17;
-    /* 0x4C */ s32 m_Unk18;
-    /* 0x50 */ s32 m_Unk19;
-    /* 0x54 */ s32 m_Unk20;
-    /* 0x58 */ s32 m_Unk21;
-    /* 0x5C */ s32 m_Unk22;
-    /* 0x60 */ s32 m_Unk23;
-    /* 0x64 */ s32 m_Unk24;
-    /* 0x68 */ s32 m_Unk25;
-    /* 0x6C */ s32 m_Unk26;
-    /* 0x70 */ s32 m_Unk27;
-    /* 0x74 */ s32 m_Unk28;
-    /* 0x78 */ s32 m_Unk29;
-    /* 0x7C */ s32 m_Unk30;
+    /* 0x40 */ class_33808_slot_t m_Slots[4];
     /* 0x80 */ s32 m_Unk31;
     /* 0x84 */ s32 m_Unk32;
 } class_33808_t;

@@ -24,7 +24,7 @@ typedef struct class_326E8_unk24 {
 
 typedef struct class_326E8_vtable {
     /* 0x000 8006ee1c */ u32 value;
-    /* 0x004 8006ee20 */ void (*Destroy)(void *);
+    /* 0x004 8006ee20 */ void (*base_class_destructor)(void *);
     /* 0x008 8006ee24 */ void (*Construct)(void *, s32, s32, s32, s32, s32);
     /* 0x00C 8006ee28 */ void (*Cleanup)(void *);
     /* 0x010 8006ee2c */ void (*Unk3)(void *);

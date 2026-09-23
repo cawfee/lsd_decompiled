@@ -1,7 +1,7 @@
 #include "3520C.h"
 
 #include "34E8C.h"
-#include "171F0.h"
+#include "file_buf.h"
 
 extern class_3520C_vtable_t D_8006F40C;
 
@@ -50,7 +50,7 @@ void func_80044B58(class_3520C_t *This) {
 INCLUDE_ASM("asm/nonmatchings/3520C", func_80044B88);
 
 s32 func_80044C58(class_3520C_t *This) {
-    s32 result = func_800183DC((s32 *)(This->m_Unk3 + 8), This->m_Unk13);
+    s32 result = destroy_list((s32 *)(This->m_Unk3 + 8), This->m_Unk13);
     This->m_Unk13 = 0;
     return result;
 }

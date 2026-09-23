@@ -5,7 +5,7 @@
 
 typedef struct class_322B4_vtable {
     /* 0x000 8006ec74 */ u32 value;
-    /* 0x004 8006ec78 */ void (*Destroy)(void *);
+    /* 0x004 8006ec78 */ void (*base_class_destructor)(void *);
     /* 0x008 8006ec7c */ void (*Construct)(void *, s32, u8);
     /* 0x00C 8006ec80 */ void (*Cleanup)(void *);
     /* 0x010 8006ec84 */ void (*Unk3)(void *);
@@ -23,7 +23,7 @@ typedef struct class_322B4_vtable {
     /* 0x040 8006ecb4 */ void (*Unk15)(void *, u8);
     /* 0x044 8006ecb8 */ void (*Unk16)(void *);
     /* 0x048 8006ecbc */ void (*Unk17)(void *);
-    /* 0x04C 8006ecc0 */ void (*Unk18)(void *);
+    /* 0x04C 8006ecc0 */ void (*Unk18)(void *, void *, void *);
     /* 0x050 8006ecc4 */ void (*Unk19)(void *);
     /* 0x054 8006ecc8 */ void (*Unk20)(void *);
     /* 0x058 8006eccc */ void (*Unk21)(void *);

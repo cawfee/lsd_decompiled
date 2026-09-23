@@ -5,7 +5,7 @@
 
 typedef struct class_48494_vtable {
     /* 0x000 800879c4 */ u32 value;
-    /* 0x004 800879c8 */ void (*Destroy)(void *);
+    /* 0x004 800879c8 */ void (*base_class_destructor)(void *);
     /* 0x008 800879cc */ void (*Construct)(void *, s32, s32, s32);
     /* 0x00C 800879d0 */ void (*Cleanup)(void *);
     /* 0x010 800879d4 */ void (*Unk3)(void *);

@@ -1,5 +1,6 @@
 #include "55DD4.h"
 #include "477E4.h"
+#include "34E8C.h"
 
 // Entity object related class? constructed by entity.
 
@@ -9,7 +10,7 @@ class_55DD4_t *class_55DD4_create(s32 Unk1, s32 Unk2) {
     class_55DD4_t *allocated = (class_55DD4_t *) memory_allocate_mem(0x98);
 
     if (allocated) {
-        if (class_55DD4_get_vtable()->Construct(allocated, Unk1, Unk2)) {
+        if (class_55DD4_get_vtable()->class_55DD4_construct(allocated, Unk1, Unk2)) {
             return allocated;
         }
 
@@ -49,7 +50,7 @@ void func_80065790(class_55DD4_t *This, u16 **Unk2, s32 Unk3) {
     func_80057C84()->Unk13(This, Unk2, Unk3);
 
     if (**Unk2 == 0x5F03 && Unk3 == 1 && !This->m_Unk23) {
-        This->vtable->Destroy(This);
+        This->vtable->base_class_destructor(This);
     }
 }
 
@@ -130,7 +131,7 @@ void func_80065B80(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
     }
 
     if (Unk3 == 4) {
-        This->vtable->Destroy(This);
+        This->vtable->base_class_destructor(This);
     }
 }
 
@@ -228,7 +229,60 @@ void func_80065DEC(class_55DD4_t *This, s32 Unk2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/55DD4", func_80065E1C);
+extern class_477E4_t *func_80056FE4(void);
+
+s32 func_80065E1C(class_55DD4_t *This) {
+    struct {
+        s32 index;
+        char dummy[12];
+    } loc;
+    class_34E8C_t *obj;
+    s32 i;
+    s32 count;
+    void **slot;
+    void *mem;
+
+    if (&loc.dummy[0] == &loc.dummy[11]) {
+    }
+    obj = (class_34E8C_t *)This->m_Unk22;
+    count = obj->vtable->Unk31(obj, NULL, &loc.index) & 0xFF;
+    mem = memory_allocate_mem(count * 4);
+    This->m_Unk27 = mem;
+    if (mem == NULL) {
+        goto alloc_fail;
+    }
+    mem = memory_allocate_mem(count);
+    This->m_Unk28 = (u32)mem;
+    if (mem == NULL) {
+        goto alloc_fail;
+    }
+    obj = (class_34E8C_t *)This->m_Unk22;
+    obj->vtable->Unk31(obj, mem, &loc.index);
+    slot = This->m_Unk27;
+    i = 0;
+    This->m_Unk26 = 0;
+    if (count != 0) {
+        do {
+            void *item;
+
+            item = func_80056FE4();
+            *slot = item;
+            slot += 1;
+            if (item == NULL) {
+                goto loop_fail;
+            }
+            This->m_Unk26 += 1;
+            i += 1;
+        } while (i < count);
+    }
+    This->m_Unk25 = (s32)This->m_Unk27[loc.index];
+    return 0;
+alloc_fail:
+    This->m_Unk28 = 0;
+loop_fail:
+    func_80065F2C(This);
+    return 1;
+}
 
 void func_80065F2C(class_55DD4_t *This) {
     void **list;
@@ -259,7 +313,35 @@ loop_test:
     This->m_Unk27 = memory_free_mem(This->m_Unk27);
 }
 
-INCLUDE_ASM("asm/nonmatchings/55DD4", func_80065FD8);
+void func_80065FD8(class_55DD4_t *This) {
+    s32 neu;
+
+    This->m_Unk8 += 1;
+    if (This->m_Unk34) {
+        ((void (*)(void))This->m_Unk29)();
+    }
+    if (This->m_Unk35 != 0) {
+        if (This->m_Unk31 >= 2) {
+            This->m_Unk33 = ((s32 (*)(void *, s32, s32))This->vtable->Unk76)(This, This->m_Unk33, 0);
+            neu = This->m_Unk32 + 1;
+            This->m_Unk32 = neu;
+            if (neu >= This->m_Unk31) {
+                This->m_Unk32 = 0;
+                This->m_Unk33 =
+                    (s32) (*(void **) ((char *) (*(
+                                       void **) ((char *) ((char *) (*(
+                                                               void **) ((char *) (*(void **) ((char *) This->m_Unk22 +
+                                                                                               0x30)) +
+                                                                         0x10)) +
+                                                           This->m_Unk30 * 4) +
+                                                 0x8)) +
+                                       0x10)) +
+                    8;
+            }
+        }
+    }
+    *(s32 *)This->m_Unk4 = 0;
+}
 
 void func_800660BC(class_55DD4_t *This, u8 Unk2) {
     switch (Unk2) {
@@ -353,6 +435,37 @@ void func_800662B4(class_55DD4_t *This) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/55DD4", func_800662BC);
+// vtable is missing from This
+// void *func_800662BC(void *This, void *arg1, s32 Unk) {
+//     register void *s1 asm("s1");
+//     register void *a1_reg asm("a1");
+//     register s32 s3 asm("s3");
+//     register u16 s2 asm("s2");
+//     register u32 s0 asm("s0");
+//     void *(*fn)(void *, void *, s32);
+//
+//     s1 = This;
+//     a1_reg = arg1;
+//     s3 = Unk;
+//     s2 = *(u16 *)((char *)a1_reg + 2);
+//     a1_reg = (char *)a1_reg + 8;
+//     s0 = 0;
+//     if (s2 == 0) {
+//         goto epilogue;
+//     }
+//     s0 = 1;
+//     fn = (void *(*)(void *, void *, s32))(*(s32 *)((char *)(*(void **)s1) + 0x138));
+// loop:
+//     a1_reg = fn(s1, a1_reg, s3);
+//     if (s0 < s2) {
+//         s0 += 1;
+//         goto loop;
+//     }
+//     s0 += 1;
+//     s0 -= 1;
+// epilogue:
+//     return a1_reg;
+// }
 
 INCLUDE_ASM("asm/nonmatchings/55DD4", func_80066340);
 

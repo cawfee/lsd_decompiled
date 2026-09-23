@@ -5,7 +5,7 @@
 
 typedef struct class_D294_vtable {
     /* 0x000 8006b5cc */ u32 value;
-    /* 0x004 8006b5d0 */ void (*Destroy)(void *);
+    /* 0x004 8006b5d0 */ void (*base_class_destructor)(void *);
     /* 0x008 8006b5d4 */ void *(*Construct)(void *);
     /* 0x00C 8006b5d8 */ void (*Cleanup)(void *);
     /* 0x010 8006b5dc */ void (*Unk3)(void *, void **);
@@ -16,7 +16,7 @@ typedef struct class_D294_vtable {
     /* 0x024 8006b5f0 */ void (*Unk8)(void *);
     /* 0x028 8006b5f4 */ void (*Unk9)(void *);
     /* 0x02C 8006b5f8 */ void (*Unk10)(void *);
-    /* 0x030 8006b5fc */ void (*Unk11)(void *);
+    /* 0x030 8006b5fc */ void (*Unk11)(void *, s32);
     /* 0x034 8006b600 */ void (*Unk12)(void *);
     /* 0x038 8006b604 */ void (*Unk13)(void *, s32 **, s32);
     /* 0x03C 8006b608 */ void (*Unk14)(void *);
@@ -26,7 +26,7 @@ typedef struct class_D294_vtable {
     /* 0x04C 8006b618 */ void (*Unk18)(void *);
     /* 0x050 8006b61c */ void (*Unk19)(void *);
     /* 0x054 8006b620 */ void (*Unk20)(void *);
-    /* 0x058 8006b624 */ void (*Unk21)(void *);
+    /* 0x058 8006b624 */ void (*Unk21)(void *, void **, s32 *);
     /* 0x05C 8006b628 */ void (*Unk22)(void *, s32);
     /* 0x060 8006b62c */ void (*Unk23)(void *);
     /* 0x064 8006b630 */ void (*Unk24)(void *);
@@ -37,10 +37,10 @@ typedef struct class_D294_vtable {
     /* 0x078 8006b644 */ void (*Unk29)(void *);
     /* 0x07C 8006b648 */ void (*Unk30)(void *);
     /* 0x080 8006b64c */ void (*Unk31)(void *);
-    /* 0x084 8006b650 */ void (*Unk32)(void *);
+    /* 0x084 8006b650 */ void (*Unk32)(void *, void *, s32);
     /* 0x088 8006b654 */ void (*Unk33)(void *);
-    /* 0x08C 8006b658 */ void (*Unk34)(void *);
-    /* 0x090 8006b65c */ void (*Unk35)(void *);
+    /* 0x08C 8006b658 */ void (*Unk34)(void *, void *);
+    /* 0x090 8006b65c */ s32 (*Unk35)(void *, void *, s32);
     /* 0x094 8006b660 */ void (*Unk36)(void *, void **, s32);
     /* 0x098 8006b664 */ void (*Unk37)(void *, void **, s32);
     /* 0x09C 8006b668 */ void (*Unk38)(void *, void **, s32);

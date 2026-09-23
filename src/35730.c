@@ -2,7 +2,7 @@
 
 #include <psx/libgpu.h>
 
-#include "171F0.h"
+#include "file_buf.h"
 #include "memory.h"
 
 extern class_35730_vtable_t **D_8006F514;
@@ -22,7 +22,7 @@ void func_80044F90(class_35730_t *This, s32 Unk) {
     void *unk_class;
     s8 pad[0x20];
 
-    unk_class = func_80026CAC();
+    unk_class = get_file_driver();
     (*(void (**)(class_35730_t *))(unk_class + 8))(This);
     This->vtable = func_800451A8();
     This->m_Unk12 = 0;
@@ -37,7 +37,7 @@ void func_80044F90(class_35730_t *This, s32 Unk) {
 void func_8004500C(class_35730_t *This) {
     memory_free_mem(This->m_Unk12);
   memory_free_mem(This->m_Unk10);
-  (*(void ( **)(class_35730_t *))((s32) func_80026CAC() + 12))(This);
+  (*(void ( **)(class_35730_t *))((s32) get_file_driver() + 12))(This);
 }
 
 void func_80045060(class_35730_t *This) {
@@ -50,7 +50,63 @@ void func_80045060(class_35730_t *This) {
   }
 }
 
-INCLUDE_ASM("asm/nonmatchings/35730", func_800450B4);
+typedef struct {
+    /* 0x0 */ u8 u;
+    /* 0x1 */ u8 v;
+    /* 0x2 */ u16 clut;
+    /* 0x4 */ u16 pad;
+    /* 0x6 */ u16 tpage;
+} atlas_cell_t;
+
+void func_800450B4(class_35730_t *This) {
+    atlas_cell_t *cell;
+    void *mem;
+    s32 x;
+    s32 u;
+    s32 v;
+    s32 tpage;
+    s32 limit;
+    s32 i;
+
+    if (This->m_Unk11_1 == 0) {
+        return;
+    }
+    x = 0x280;
+    v = 0;
+    u = 0;
+    tpage = GetTPage(2, 0, 0x280, 0) & 0xFFFF;
+    mem = memory_allocate_mem(0x960);
+    This->m_Unk10 = (s32)mem;
+    if (mem == NULL) {
+        return;
+    }
+    i = 0;
+    cell = (atlas_cell_t *)mem;
+    limit = 0x12C;
+    do {
+        cell->u = u;
+        u += 0x10;
+        x += 0x10;
+        cell->tpage = tpage;
+        cell->v = v;
+        cell->clut = 0;
+        cell->pad = 0;
+        if (x >= 0x3C0) {
+            u = 0;
+            x = 0x280;
+            v += 0x10;
+        }
+        if ((x & 0x3F) == 0) {
+            tpage = x >> 6;
+            if (v >= 0x100) {
+                tpage += 0x10;
+            }
+            u = 0;
+        }
+        i++;
+        cell++;
+    } while (i < limit);
+}
 
 class_35730_vtable_t *func_800451A8(void) {
     return &D_8006F514;

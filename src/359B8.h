@@ -5,7 +5,7 @@
 
 typedef struct class_359B8_vtable {
     /* 0x000 8006f590 */ u32 value;
-    /* 0x004 8006f594 */ void (*Destroy)(void *);
+    /* 0x004 8006f594 */ void (*init_800269F0)(void *);
     /* 0x008 8006f598 */ s32 (*Construct)(void *, s32 *);
     /* 0x00C 8006f59c */ void (*Cleanup)(void *);
     /* 0x010 8006f5a0 */ void (*Unk3)(void *);
@@ -27,7 +27,7 @@ typedef struct class_359B8_vtable {
     /* 0x050 8006f5e0 */ void (*Unk19)(void *);
     /* 0x054 8006f5e4 */ void (*Unk20)(void *);
     /* 0x058 8006f5e8 */ void (*Unk21)(void *);
-    /* 0x05C 8006f5ec */ void (*Unk22)(void *);
+    /* 0x05C 8006f5ec */ void (*file_buf_release)(void *);
     /* 0x060 8006f5f0 */ void (*Unk23)(void *);
     /* 0x064 8006f5f4 */ s32 (*Unk24)(void *);
     /* 0x068 8006f5f8 */ void (*Unk25)(void *);

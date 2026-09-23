@@ -5,7 +5,7 @@
 
 typedef struct class_46B20_vtable {
     /* 0x000 800876fc */ u32 value;
-    /* 0x004 80087700 */ void (*Destroy)(void *);
+    /* 0x004 80087700 */ void (*base_class_destructor)(void *);
     /* 0x008 80087704 */ void *(*Construct)(void *, s32, s32, s32, s32);
     /* 0x00C 80087708 */ void (*Cleanup)(void *);
     /* 0x010 8008770c */ void (*Unk3)(void *);

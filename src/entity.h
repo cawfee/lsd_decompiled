@@ -4,11 +4,13 @@
 #include "305B0.h"
 #include "common.h"
 
+typedef struct dream_sys dream_sys_t;
+
 typedef struct entity_vtable {
     /* 0x000 80089ad4 */ u32 value;
-    /* 0x004 80089ad8 */ void (*Destroy)(void *);
-    /* 0x008 80089adc */ void *(*Construct)(void *, s32, s32, s32);
-    /* 0x00C 80089ae0 */ void (*Cleanup)(void *);
+    /* 0x004 80089ad8 */ void (*base_class_destructor)(void *);
+    /* 0x008 80089adc */ void *(*entity_construct)(void *, s32, s32, s32);
+    /* 0x00C 80089ae0 */ void (*entity_cleanup)(void *);
     /* 0x010 80089ae4 */ void (*Unk3)(void *);
     /* 0x014 80089ae8 */ void (*Unk4)(void *);
     /* 0x018 80089aec */ void (*Unk5)(void *);
@@ -22,7 +24,7 @@ typedef struct entity_vtable {
     /* 0x038 80089b0c */ void (*Unk13)(void *);
     /* 0x03C 80089b10 */ s32 dummy1;
     /* 0x040 80089b14 */ void (*Unk15)(void *);
-    /* 0x044 80089b18 */ void (*Unk16)(void *);
+    /* 0x044 80089b18 */ void (*Unk16)(void *, s32, s32 *);
     /* 0x048 80089b1c */ void (*Unk17)(void *, s32, s32 *);
     /* 0x04C 80089b20 */ void (*Unk18)(void *);
     /* 0x050 80089b24 */ void (*Unk19)(void *);
@@ -51,13 +53,13 @@ typedef struct entity_vtable {
     /* 0x0AC 80089b80 */ void (*Unk42)(void *);
     /* 0x0B0 80089b84 */ s32 dummy2;
     /* 0x0B4 80089b88 */ void (*Unk44)(void *);
-    /* 0x0B8 80089b8c */ void (*Unk45)(void *);
+    /* 0x0B8 80089b8c */ void (*Unk45)(void *, s32);
     /* 0x0BC 80089b90 */ void (*Unk46)(void *, s32 *);
     /* 0x0C0 80089b94 */ void (*Unk47)(void *);
     /* 0x0C4 80089b98 */ void (*Unk48)(void *, s32, s32);
-    /* 0x0C8 80089b9c */ void (*Unk49)(void *);
+    /* 0x0C8 80089b9c */ void (*Unk49)(void *, s32, s32, s32);
     /* 0x0CC 80089ba0 */ void (*Unk50)(void *, s32, s32);
-    /* 0x0D0 80089ba4 */ void (*Unk51)(void *);
+    /* 0x0D0 80089ba4 */ void (*Unk51)(void *, s32, s32);
     /* 0x0D4 80089ba8 */ void (*Unk52)(void *);
     /* 0x0D8 80089bac */ void (*Unk53)(void *);
     /* 0x0DC 80089bb0 */ void (*Unk54)(void *);
@@ -79,19 +81,19 @@ typedef struct entity_vtable {
     /* 0x11C 80089bf0 */ void (*Unk70)(void *);
     /* 0x120 80089bf4 */ void (*Unk71)(void *);
     /* 0x124 80089bf8 */ void (*Unk72)(void *);
-    /* 0x128 80089bfc */ void (*Unk73)(void *);
+    /* 0x128 80089bfc */ void (*Unk73)(void *, s32);
     /* 0x12C 80089c00 */ void (*Unk74)(void *);
     /* 0x130 80089c04 */ void (*Unk75)(void *);
-    /* 0x134 80089c08 */ void (*Unk76)(void *);
-    /* 0x138 80089c0c */ void (*Unk77)(void *);
+    /* 0x134 80089c08 */ s32 (*Unk76)(void *, s32, s32);
+    /* 0x138 80089c0c */ void (*Unk77)(void *, s32, s32);
     /* 0x13C 80089c10 */ void (*Unk78)(void *);
     /* 0x140 80089c14 */ void (*Unk79)(void *);
-    /* 0x144 80089c18 */ s32 (*Unk80)(void *, s32);
+    /* 0x144 80089c18 */ s32 (*entity_get_distance)(void *, void *);
     /* 0x148 80089c1c */ s32 (*Unk81)(void *);
-    /* 0x14C 80089c20 */ void (*Unk82)(void *);
-    /* 0x150 80089c24 */ void (*Unk83)(void *);
-    /* 0x154 80089c28 */ void (*Unk84)(void *);
-    /* 0x158 80089c2c */ void (*Unk85)(void *);
+    /* 0x14C 80089c20 */ void (*entity_get_mood_effect)(void *);
+    /* 0x150 80089c24 */ void (*entity_get_unlock_effect)(void *);
+    /* 0x154 80089c28 */ void (*entity_get_link_stage)(void *);
+    /* 0x158 80089c2c */ void (*entity_get_event_video)(void *);
     /* 0x15C 80089c30 */ void (*Unk86)(void *);
     /* 0x160 80089c34 */ void (*Unk87)(void *);
     /* 0x164 80089c38 */ void (*Unk88)(void *, s32);
@@ -142,7 +144,7 @@ typedef struct entity {
     /* 0x88 */ s32 m_Unk33;
     /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
-    /* 0x94 */ s32 m_Unk36;
+    /* 0x94 */ dream_sys_t *m_Unk36;
     /* 0x98 */ s32 m_EntityID;
     /* 0x9C */ s32 m_EntityContext;
     /* 0xA0 */ s32 m_Unk39;

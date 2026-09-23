@@ -1,6 +1,8 @@
 #include "46B20.h"
 #include "477E4.h"
 
+#include <psx/rand.h>
+
 extern class_46B20_vtable_t D_800876FC;
 
 class_46B20_t *func_80056320(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
@@ -86,7 +88,55 @@ void func_800567D4(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) 
     This->vtable->Unk17(This, 1, Unk4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46B20", func_80056858);
+extern s32 D_800877EC[];
+extern s32 D_800877F8[];
+void func_8001E770(void *obj, s32 arg);
+class_477E4_t *func_80056FE4(void);
+
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} func_80056858_vec_t;
+
+void func_80056858(class_46B20_t *This, s32 arg1) {
+    func_80056858_vec_t local;
+    class_477E4_t **slot;
+    s32 mode;
+    s32 *scale;
+    s32 *table;
+    s32 i;
+    s16 *half;
+    class_477E4_t *obj;
+
+    mode = This->m_Unk26;
+    if (mode == 0) {
+        return;
+    }
+    local = *(func_80056858_vec_t *)D_800877EC;
+    slot = (class_477E4_t **)&This->m_Unk30;
+    i = 0;
+    table = D_800877F8;
+    scale = table + mode;
+    do {
+        if (mode < 3) {
+            half = (s16 *)This->m_Unk25;
+            local.x += half[0] * scale[0];
+        } else {
+            local.y += scale[0];
+        }
+        if (arg1 != 0) {
+            obj = *slot;
+            obj->vtable->Unk45(obj, &local);
+        } else {
+            *slot = func_80056FE4();
+            func_8001E770(*slot, This->m_Unk7);
+            func_800567D4((class_46B20_t *)*slot, (s32)This, (s32)&local, This->m_Unk24, This->m_Unk25);
+        }
+        i += 1;
+        slot += 1;
+    } while (i < 2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/46B20", func_800569A8);
 
@@ -97,7 +147,7 @@ void func_80056B8C(class_46B20_t *This) {
     m_Unk26 = This->m_Unk26;
     p_m_Unk30 = &This->m_Unk30;
     if (m_Unk26) {
-        func_800183DC(p_m_Unk30, 2);
+        destroy_list(p_m_Unk30, 2);
     }
 }
 
@@ -109,17 +159,33 @@ void func_80056DF0(void) {
 }
 
 void func_80056DF8(class_46B20_t *This) {
-    func_800183DC(&This->m_Unk32, 5);
+    destroy_list(&This->m_Unk32, 5);
 }
 
 void func_80056E1C(class_46B20_t *This) {
     func_80056D18(This, 0, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/46B20", func_80056E44);
+extern s32 D_8008788C[];
+
+void func_80056E44(class_46B20_t *This) {
+    class_46B20_t **slot;
+    s32 i;
+    s32 which;
+
+    slot = (class_46B20_t **)&This->m_Unk33;
+    i = 0;
+    do {
+        i++;
+        which = (s32)&D_8008788C[((u32)rand() % 6) * 3];
+        slot[0]->vtable->Unk17(slot[0], 1, which);
+        slot[0]->m_Unk32 = (rand() % 360) << 12;
+        slot++;
+    } while (i < 4);
+}
 
 void func_80056F28(class_46B20_t *This) {
-    func_800183DC(&This->m_Unk32, 5);
+    destroy_list(&This->m_Unk32, 5);
 }
 
 class_46B20_vtable_t *func_80056F4C(void) {

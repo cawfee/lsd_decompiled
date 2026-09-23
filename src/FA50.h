@@ -5,9 +5,9 @@
 
 typedef struct class_FA50_vtable {
     /* 0x000 8006bea0 */ u32 value;
-    /* 0x004 8006bea4 */ void (*Destroy)(void *);
-    /* 0x008 8006bea8 */ void (*Construct)(void *, s32);
-    /* 0x00C 8006beac */ void (*Cleanup)(void *);
+    /* 0x004 8006bea4 */ void (*base_class_destructor)(void *);
+    /* 0x008 8006bea8 */ void (*class_FA50_construct)(void *, s32);
+    /* 0x00C 8006beac */ void (*base_class_cleanup)(void *);
     /* 0x010 8006beb0 */ void (*Unk3)(void *);
     /* 0x014 8006beb4 */ void (*Unk4)(void *);
     /* 0x018 8006beb8 */ void (*Unk5)(void *);

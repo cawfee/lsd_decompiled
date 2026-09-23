@@ -5,7 +5,7 @@
 
 typedef struct renderer_vtable {
     /* 0x000 8006e8e4 */ u32 value;
-    /* 0x004 8006e8e8 */ void (*Destroy)(void *);
+    /* 0x004 8006e8e8 */ void (*base_class_destructor)(void *);
     /* 0x008 8006e8ec */ void (*Construct)(void *);
     /* 0x00C 8006e8f0 */ void (*Cleanup)(void *);
     /* 0x010 8006e8f4 */ void (*Unk3)(void *);
@@ -44,7 +44,7 @@ typedef struct renderer_vtable {
     /* 0x094 8006e978 */ void (*Unk36)(void *);
     /* 0x098 8006e97c */ void (*Unk37)(void *);
     /* 0x09C 8006e980 */ void (*Unk38)(void *);
-    /* 0x0A0 8006e984 */ void (*Unk39)(void *);
+    /* 0x0A0 8006e984 */ void (*Unk39)(void *, s32);
     /* 0x0A4 8006e988 */ void (*Unk40)(void *, s32);
     /* 0x0A8 8006e98c */ void (*Unk41)(void *);
     /* 0x0AC 8006e990 */ void (*Unk42)(void *);

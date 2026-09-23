@@ -14,7 +14,7 @@ class_34684_t *func_80043E84(s32 Unk1) {
 }
 
 void func_80043EE4(class_34684_t *This, s32 *Unk) {
-    void *unk_class = func_80026CAC();
+    void *unk_class = get_file_driver();
     (*(void (**)(class_34684_t *))(unk_class + 8))(This);
 
     This->vtable = func_800441A4();
@@ -29,7 +29,7 @@ void func_80043EE4(class_34684_t *This, s32 *Unk) {
 }
 
 void func_80043F78(class_34684_t *This) {
-    void *unk = func_80026CAC();
+    void *unk = get_file_driver();
     (*(void (**)(class_34684_t *))(unk + 12))(This);
 }
 

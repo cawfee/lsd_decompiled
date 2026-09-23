@@ -1,15 +1,15 @@
 #ifndef LSD_GAME_FLOW_H
 #define LSD_GAME_FLOW_H
 
-#include "16634.h"
-#include "dream_context.h"
+#include "pad.h"
+#include "dream_session.h"
 #include "dream_sys.h"
-#include "gs_helper.h"
+#include "display.h"
 
 typedef struct game_flow_vtable {
     /* 0x000 8006d3c8 */ u32 value;
-    /* 0x004 8006d3cc */ void (*Destroy)(void *);
-    /* 0x008 8006d3d0 */ void (*Construct)(void *, void *);
+    /* 0x004 8006d3cc */ void (*base_class_destructor)(void *);
+    /* 0x008 8006d3d0 */ void (*game_flow_on_construct)(void *, void *);
     /* 0x00C 8006d3d4 */ void (*Cleanup)(void *);
     /* 0x010 8006d3d8 */ void (*Unk3)(void *, void *);
     /* 0x014 8006d3dc */ void (*Unk4)(void *, void *);
@@ -23,16 +23,16 @@ typedef struct game_flow_vtable {
     /* 0x034 8006d3fc */ void (*Unk12)(void *);
     /* 0x038 8006d400 */ void (*Unk13)(void *, void *, void *);
     /* 0x03C 8006d404 */ u32 pad;
-    /* 0x040 8006d408 */ void (*GetDayBasedSeed)(void *);
-    /* 0x044 8006d40c */ void (*Init)(void *, gs_helper_t *, class_16634_t *);
+    /* 0x040 8006d408 */ void (*game_flow_get_day_rand)(void *);
+    /* 0x044 8006d40c */ void (*game_flow_init)(void *, display_t *, pad_t *);
     /* 0x048 8006d410 */ void (*Unk17)(void *);
-    /* 0x04C 8006d414 */ void (*ExecutePhases)(void *);
-    /* 0x050 8006d418 */ void (*DisplayLogoSequence)(void *);
-    /* 0x054 8006d41c */ void (*PlayIntroMovie)(void *);
-    /* 0x058 8006d420 */ s32 (*ExecMainMenu)(void *);
+    /* 0x04C 8006d414 */ void (*game_flow_execute_phases)(void *);
+    /* 0x050 8006d418 */ void (*game_flow_display_logo_sequence)(void *);
+    /* 0x054 8006d41c */ void (*game_flow_play_intro_movie)(void *);
+    /* 0x058 8006d420 */ s32 (*game_flow_execute_main_menu)(void *);
     /* 0x05C 8006d424 */ void (*Menu_Unused)(void *);
-    /* 0x060 8006d428 */ s32 (*ExecDreamSession)(void *);
-    /* 0x064 8006d42c */ void (*PlayEndingMovie)(void *);
+    /* 0x060 8006d428 */ s32 (*game_flow_execute_dream)(void *);
+    /* 0x064 8006d42c */ void (*game_flow_play_ending_movie)(void *);
 } game_flow_vtable_t;
 
 typedef struct game_flow {

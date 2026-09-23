@@ -3,15 +3,15 @@
 
 #include <common.h>
 
-#include "310CC.h"
+#include "text_line.h"
 #include "dream_sys.h"
 #include "memory_card.h"
-#include "sound_engine.h"
-#include "texture_helper.h"
+#include "sound.h"
+#include "tim_image.h"
 
 typedef struct main_menu_vtable {
     /* 0x000 80086b60 */ u32 value;
-    /* 0x004 80086b64 */ void (*Unk0)(void *);
+    /* 0x004 80086b64 */ void (*base_class_destructor)(void *);
     /* 0x008 80086b68 */ void (*Construct)(void *, s32);
     /* 0x00C 80086b6c */ void (*Unk2)(void *);
     /* 0x010 80086b70 */ void (*Unk3)(void *, void *);
@@ -26,8 +26,8 @@ typedef struct main_menu_vtable {
     /* 0x034 80086b94 */ void (*Unk12)(void *);
     /* 0x038 80086b98 */ void (*Unk13)(void *);
     /* 0x03C 80086b9c */ u32 pad1;
-    /* 0x040 80086ba0 */ void (*Unk15)(void *, dream_sys_t *);
-    /* 0x044 80086ba4 */ void (*Unk16)(void *);
+    /* 0x040 80086ba0 */ void (*show_title)(void *, dream_sys_t *);
+    /* 0x044 80086ba4 */ void (*Run)(void *);
     /* 0x048 80086ba8 */ void (*Unk17)(void *);
     /* 0x04C 80086bac */ void (*Unk18)(void *);
     /* 0x050 80086bb0 */ void (*Unk19)(void *);
@@ -84,10 +84,10 @@ typedef struct main_menu_vtable {
     /* 0x11C 80086c7c */ void (*Unk70)(void *, s32, s32);
     /* 0x120 80086c80 */ void (*Unk71)(void *);
     /* 0x124 80086c84 */ void (*Unk72)(void *, s32);
-    /* 0x128 80086c88 */ void (*Unk73)(void *);
+    /* 0x128 80086c88 */ void (*attach_memory_card)(void *);
     /* 0x12C 80086c8c */ void (*Unk74)(void *, void *);
-    /* 0x130 80086c90 */ void (*Unk75)(void *);
-    /* 0x134 80086c94 */ void (*Unk76)(void *);
+    /* 0x130 80086c90 */ void (*write_save)(void *);
+    /* 0x134 80086c94 */ void (*read_save)(void *);
     /* 0x138 80086c98 */ void (*Unk77)(void *, void **, s32);
 } main_menu_vtable_t;
 
@@ -110,7 +110,7 @@ typedef struct main_menu {
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ s32 m_Unk15;
     /* 0x44 */ s32 m_Unk16;
-    /* 0x48 */ sound_engine_t *m_SoundEngine;
+    /* 0x48 */ sound_t *m_Sound;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
     /* 0x54 */ s32 m_Unk20;
@@ -134,9 +134,9 @@ typedef struct main_menu {
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ dream_sys_t *m_DreamSys;
-    /* 0xA8 */ texture_helper_t *m_TextureHelper;
+    /* 0xA8 */ tim_image_t *m_TextureHelper;
     /* 0xAC */ memory_card_t *m_MemoryCard;
-    /* 0xB0 */ class_310CC_t *m_Unk43;
+    /* 0xB0 */ text_line_t *m_Unk43;
     /* 0xB4 */ s32 m_Unk44;
     /* 0xB8 */ s32 m_Unk45;
     /* 0xBC */ char *m_RegionCode;    // Points to J01, probably a struct
