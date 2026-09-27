@@ -52,7 +52,6 @@ typedef struct class_32E94_vtable {
     /* 0x0B4 8006f060 */ void (*Unk44)(void *);
     /* 0x0B8 8006f064 */ void *(*Unk45)(void *, int);
     /* 0x0BC 8006f068 */ void (*Unk46)(void *);
-    /* 0x0C0 8006f06c */ void (*Unk47)(void *);
 } class_32E94_vtable_t;
 
 typedef struct class_32E94 {

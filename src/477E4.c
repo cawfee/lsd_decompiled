@@ -219,7 +219,7 @@ s32 func_80057668(class_477E4_t *This) {
     s32 pos;
     s32 found;
 
-    obj = (void *)This->m_Unk18;
+    obj = This->m_Unk18;
     if (obj != NULL) {
         pos = This->m_Unk4 + 0x18;
         if (((s32 (*)(void *, void *, s32))(*(u32 *)(*(u32 *)obj + 0x110)))(obj, sp18, pos) == 0) {

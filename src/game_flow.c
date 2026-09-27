@@ -14,24 +14,24 @@
 #include "utils/cd_paths.h"
 
 
-void game_flow_on_construct(game_flow_t *, game_config_t *);
-void nullsub25(void);
+void game_flow_on_construct(void *, void *);
+void nullsub25(void *);
 s32 game_flow_get_day_rand(void);
-void game_flow_init(game_flow_t *, display_t *, pad_t *);
-void func_8003B108(void);
-void game_flow_execute_phases(game_flow_t *);
-void game_flow_display_logo_sequence(game_flow_t *);
-void game_flow_play_intro_movie(game_flow_t *);
-s32 game_flow_execute_main_menu(game_flow_t *);
-void nullsub12(void);
-s32 game_flow_execute_dream(game_flow_t *);
-void game_flow_play_ending_movie(game_flow_t *);
+void game_flow_init(void *, display_t *, pad_t *);
+void func_8003B108(void *);
+void game_flow_execute_phases(void *);
+void game_flow_display_logo_sequence(void *);
+void game_flow_play_intro_movie(void *);
+s32 game_flow_execute_main_menu(void *);
+void nullsub12(void *);
+s32 game_flow_execute_dream(void *);
+void game_flow_play_ending_movie(void *);
 
 game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     0x1F60,
     base_class_destructor,
-    (void (*)(void *, void *))game_flow_on_construct,
-    (void (*)(void *))nullsub25,
+    game_flow_on_construct,
+    nullsub25,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -45,15 +45,15 @@ game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     base_class_on_notify,
     0,
     (void (*)(void *))game_flow_get_day_rand,
-    (void (*)(void *, display_t *, pad_t *))game_flow_init,
-    (void (*)(void *))func_8003B108,
-    (void (*)(void *))game_flow_execute_phases,
-    (void (*)(void *))game_flow_display_logo_sequence,
-    (void (*)(void *))game_flow_play_intro_movie,
-    (s32 (*)(void *))game_flow_execute_main_menu,
-    (void (*)(void *))nullsub12,
-    (s32 (*)(void *))game_flow_execute_dream,
-    (void (*)(void *))game_flow_play_ending_movie,
+    game_flow_init,
+    func_8003B108,
+    game_flow_execute_phases,
+    game_flow_display_logo_sequence,
+    game_flow_play_intro_movie,
+    game_flow_execute_main_menu,
+    nullsub12,
+    game_flow_execute_dream,
+    game_flow_play_ending_movie,
 };
 
 game_flow_t *game_flow_create(game_config_t *Config) {
@@ -201,7 +201,7 @@ void play_special_reel(game_flow_t *This) {
     }
 }
 
-void nullsub12(void) {
+void nullsub12(void *) {
 }
 
 s32 game_flow_execute_dream(game_flow_t *This) {

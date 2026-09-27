@@ -34,7 +34,7 @@ void func_80043954(tmd_model_t *This) {
             (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
         } while (*var_s0 != NULL);
     }
-    memory_free_mem((void *)This->m_Unk10);
+    memory_free_mem(This->m_Unk10);
     (*(void (**)(void *))((s32)get_file_driver() + 0xC))(This);
 }
 

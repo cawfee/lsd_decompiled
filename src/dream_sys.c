@@ -1455,8 +1455,8 @@ void dream_sys__calc_unlock_score(dream_sys_t *This) {
     temp_a0 = This->m_Unk98;
     if (temp_a0 < 0) {
         This->m_Unk98 = 0;
-    } else if (temp_a0 > 0x02FAF080) {
-        This->m_Unk98 = 0x02FAF080;
+    } else if (temp_a0 > 50000000) {
+        This->m_Unk98 = 50000000;
     }
     This->m_Unk96 = This->m_Unk97 + This->m_Unk98;
 }
@@ -1577,17 +1577,17 @@ s32 calc_navigation_score(void) {
     s8 *temp_a1;
 
     score = 0;
-    addend = 0xF4240;
+    addend = 1000000;
     var_v1 = (s8 *)gpNavChallengesComplete;
-    temp_a1 = var_v1 + 0x1E;
+    temp_a1 = var_v1 + 30;
     do {
         if (*var_v1 != 0) {
             score += addend;
         }
         var_v1 += 1;
     } while ((s32)var_v1 < (s32)temp_a1);
-    if (score > 0x01C9C37F) {
-        score = 0x02FAF080;
+    if (score > 29999999) {
+        score = 50000000;
     }
     score -= *(s32 *)gpDinamicLinkPenalty * 0x2B10;
     if (score < 0) {

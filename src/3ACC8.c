@@ -191,7 +191,7 @@ void func_8004ADD8(class_3ACC8_t *This, s32 **arg1, s32 arg2) {
     case 6:
     case 7:
     case 8:
-        p = (s32 *)This->m_Unk57;
+        p = This->m_Unk57;
         if (p != NULL && *p != 0) {
             do {
                 if (*p == **arg1) {

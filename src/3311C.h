@@ -23,7 +23,6 @@ typedef struct class_3311C_vtable {
     /* 0x040 8006f0ac */ void (*Unk15)(void *, s32);
     /* 0x044 8006f0b0 */ void (*Unk16)(void *);
     /* 0x048 8006f0b4 */ void (*Unk17)(void *);
-    /* 0x04C 8006f0b8 */ void (*Unk18)(void *);
 } class_3311C_vtable_t;
 
 typedef struct class_3311C {

@@ -4,17 +4,17 @@
 #include <psx/libgs.h>
 
 
-void class_FA50_construct(class_FA50_t *, void *);
-void func_8001F314(class_FA50_t *, class_FA50_t *);
-void func_8001F33C(class_FA50_t *);
+void class_FA50_construct(void *, s32);
+void func_8001F314(void *);
+void func_8001F33C(void *);
 s32 func_8001F360(class_FA50_t *, s32);
-void func_8001F37C(void);
+void func_8001F37C(void *);
 void func_8001F394(class_FA50_t *);
 
 class_FA50_vtable_t g_CLASS_FA50_VTABLE = {
-    0x09,
+    0x9,
     base_class_destructor,
-    (void (*)(void *, s32))class_FA50_construct,
+    class_FA50_construct,
     base_class_cleanup,
     base_class_attach,
     base_class_detach,
@@ -28,10 +28,10 @@ class_FA50_vtable_t g_CLASS_FA50_VTABLE = {
     base_class_nop,
     base_class_on_notify,
     0,
-    (void (*)(void *))func_8001F314,
-    (void (*)(void *))func_8001F33C,
+    func_8001F314,
+    func_8001F33C,
     (void (*)(void *))func_8001F360,
-    (void (*)(void *))func_8001F37C,
+    func_8001F37C,
 };
 
 class_FA50_t *class_FA50_create(s32 Unk1) {
@@ -68,7 +68,7 @@ s32 func_8001F360(class_FA50_t *This, s32 Unk2) {
     return temp + This->m_Unk2;
 }
 
-void func_8001F37C(void) {
+void func_8001F37C(void *) {
 }
 
 class_FA50_vtable_t *class_FA50_get_vtable() {

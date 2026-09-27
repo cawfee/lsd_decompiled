@@ -39,7 +39,7 @@ s32 func_80044858(class_34E8C_t *This) {
     s32 v0;
 
     if (This->m_Unk12 != 0) {
-        base = (void *)This->m_Unk3;
+        base = This->m_Unk3;
         func_80026CE8(buf, (u8 *)base + *(s32 *)((u8 *)base + 8), 0, 1);
         v0 = tmd_create(buf);
         This->m_Unk10 = v0;
@@ -66,7 +66,7 @@ void func_800448F8(class_34E8C_t *This) {
         if (obj != NULL) {
             (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
         }
-        obj = (void *)This->m_Unk10;
+        obj = This->m_Unk10;
         if (obj != NULL) {
             (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
         }

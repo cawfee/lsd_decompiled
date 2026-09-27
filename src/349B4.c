@@ -29,8 +29,8 @@ void func_80044294(class_349B4_t *This, u8 *arg1, s32 arg2) {
         This->m_Unk18_1 = arg1[0x2D] * *(u16*)(arg1 + 0x30);
     } else if (arg2 == 1) {
         This->m_Unk16 = 0x02000000;
-        This->m_Unk18_0 = 0x140;
-        This->m_Unk18_1 = 0xF0;
+        This->m_Unk18_0 = 320;
+        This->m_Unk18_1 = 240;
     }
 
     This->m_Unk17_0 = 0;

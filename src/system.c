@@ -7,18 +7,18 @@ static s32 g_CD_INIT = 0;
 extern s32 D_8008A8E0[];
 
 
-void func_8003AF8C(system_t *, s32);
-void nullsub25(void);
-void func_8003B02C(system_t *, const s32 *, s32);
-void game_flow_init_graphics(game_flow_t *, display_t *, pad_t *);
-void func_8003B108(void);
-void game_flow_execute_phases(game_flow_t *);
+void func_8003AF8C(void *, s32);
+void nullsub25(void *);
+void func_8003B02C(void *, s32 *, s32);
+void game_flow_init_graphics(void *, display_t *, pad_t *, u32);
+void func_8003B108(void *);
+void game_flow_execute_phases(void *);
 
 system_vtable_t D_8006E4F0 = {
     0x60,
     base_class_destructor,
-    (void (*)(void *, s32))func_8003AF8C,
-    (void (*)(void *))nullsub25,
+    func_8003AF8C,
+    nullsub25,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -31,10 +31,10 @@ system_vtable_t D_8006E4F0 = {
     base_class_nop,
     base_class_on_notify,
     NULL,
-    (void (*)(void *, s32 *, s32))func_8003B02C,
-    (void (*)(void *, display_t *, pad_t *, u32))game_flow_init_graphics,
-    (void (*)(void *))func_8003B108,
-    (void (*)(void *))game_flow_execute_phases,
+    func_8003B02C,
+    game_flow_init_graphics,
+    func_8003B108,
+    game_flow_execute_phases,
     NULL,
     NULL,
     NULL,
@@ -57,7 +57,7 @@ void func_8003AF8C(system_t *This, s32 Unk) {
     This->vtable->Unk15(This, &D_8008A8E0, 0);
 }
 
-void nullsub25(void) {
+void nullsub25(void *) {
 }
 
 void func_8003B02C(system_t *This, const s32 *src, s32 val) {
@@ -82,7 +82,7 @@ void game_flow_init_graphics(game_flow_t *This, display_t *GsHelper, pad_t *Cls1
     }
 }
 
-void func_8003B108(void) {
+void func_8003B108(void *) {
 }
 
 // The main game loop

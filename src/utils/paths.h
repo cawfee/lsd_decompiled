@@ -9,8 +9,8 @@
 static char *g_SOUND_TYPES[7] = { "SND\\AMBIENT", "SND\\CARTOON", "SND\\ELECTRO", "SND\\ETHNOVA",
                                   "SND\\HUMAN",   "SND\\LOVELY",  "SND\\STANDERD" };
 
-static s16 D_800819E8[14] = { 0x10,  0x1E,  0x2D,  0x5A,  0x163, 0x18A, 0x1B1,
-                              0x1C0, 0x1CE, 0x1DA, 0x1E5, 0x1F1, 0x206, 0x223 };
+static s16 D_800819E8[14] = { 16,  30,  45,  90,  355, 394, 433,
+                              448, 462, 474, 485, 497, 518, 547 };
 
 static char g_STRING_TABLE[LSD_PATH_COUNT][LSD_PATH_LEN] = {
     "SND\\AMBIENT.VH",     "SND\\AMBIENT.VB",     "SND\\CARTOON.VH",     "SND\\CARTOON.VB",     "SND\\ELECTRO.VH",

@@ -66,8 +66,8 @@ dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
     (void (*)(void *))on_link_code,
 };
 
-s32 D_80086650[3] = { 0, 0xFFFFFB50, 0 };
-s32 D_8008665C[3] = { 0, 0xFFFFFB50, 0x2710 };
+s32 D_80086650[3] = { 0, -1200, 0 };
+s32 D_8008665C[3] = { 0, -1200, 10000 };
 
 dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 EnableSomething) {
     dream_session_t *allocated = (dream_session_t *) memory_allocate_mem(0x50);

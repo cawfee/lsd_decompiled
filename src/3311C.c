@@ -3,7 +3,32 @@
 
 #include <psx/libgs.h>
 
-extern class_3311C_vtable_t D_8006F06C;
+void func_8004297C(void *, s32);
+void func_800429E0(void *, s32);
+void func_800429E8(void *);
+void func_80042A2C(void *);
+
+class_3311C_vtable_t D_8006F06C = {
+    0x6,
+    (void (*)(void *))base_class_destructor,
+    func_8004297C,
+    (void (*)(void *))base_class_cleanup,
+    (void (*)(void *))base_class_attach,
+    (void (*)(void *))base_class_detach,
+    (void (*)(void *))base_class_detach_all,
+    (void (*)(void *))base_class_iter_children,
+    (void (*)(void *))base_class_add_parent,
+    (void (*)(void *))base_class_remove_parent,
+    (void (*)(void *))base_class_clear_parents,
+    (void (*)(void *))base_class_iter_parents,
+    (void (*)(void *))base_class_notify,
+    (void (*)(void *))base_class_nop,
+    (void (*)(void *))base_class_on_notify,
+    NULL,
+    func_800429E0,
+    func_800429E8,
+    func_80042A2C,
+};
 
 class_3311C_t *func_8004291C(s32 Unk1) {
     class_3311C_t *allocated = (class_3311C_t *) memory_allocate_mem(0x20);

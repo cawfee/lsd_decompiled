@@ -6,71 +6,71 @@
 s32 *func_8003DFCC(void);
 s32 func_80045438(s32, s32, s32);
 
-void movie_screen_construct(movie_screen_t *, s32, s32, s32, s32 *);
-void movie_screen_cleanup(movie_screen_t *);
-void func_8003E030(void);
-void func_8003BA38(void);
-void func_8003BA58(void);
-void func_8003E280(void);
-void func_8003BAB4(void);
-void func_8003C3D0(void);
-void func_8003E418(void);
-void func_8003C48C(void);
-void func_8003BB5C(void);
-void func_8003BC14(void);
-void func_8003E538(void);
-void func_8003E578(void);
-void func_8003BCF4(void);
-void func_8003C7B4(void);
-void func_8003C7F4(void);
-void func_8003BD10(void);
-void func_8003C8D0(void);
-void func_8003BD74(void);
-void func_8003BDAC(void);
-void func_8003BDE4(void);
-void func_8003BDEC(void);
-void func_8003CA1C(void);
-void func_8003BDF4(void);
-void func_8003CAEC(void);
-void func_8003CAF8(void);
-void func_8003CB30(void);
-void func_8003CB68(void);
-void func_8003CBB8(void);
-void func_8003CBC0(void);
-void func_8003CC2C(void);
-void func_8003CCDC(void);
-void func_8003CD48(void);
-void func_8003CDE0(void);
-void func_8003CE98(void);
-void func_8003D050(void);
-void func_8003D194(void);
-void func_8003D2CC(void);
-void func_8003D3B0(void);
-void func_8003D444(void);
-void func_8003D4DC(void);
-void func_8003D5C0(void);
-void func_8003D5CC(void);
-void func_8003D6D4(void);
-void func_8003D73C(void);
-void func_8003D980(void);
-void func_8003DA10(void);
-void func_8003DAD4(void);
-void func_8003DCAC(void);
-void func_8003DDC8(void);
-void func_8003DE30(void);
-void func_8003DE9C(void);
-void func_8003DFA0(void);
-void func_8003BE5C(void);
-void func_8003BE64(void);
-void func_8003BE6C(void);
-void func_8003BE74(void);
-void func_8003BE7C(void);
+void movie_screen_construct(void *);
+void movie_screen_cleanup(void *);
+void func_8003E030(void *);
+void func_8003BA38(void *);
+void func_8003BA58(void *);
+void func_8003E280(void *);
+void func_8003BAB4(void *);
+void func_8003C3D0(void *);
+void func_8003E418(void *);
+void func_8003C48C(void *);
+void func_8003BB5C(void *);
+void func_8003BC14(void *);
+void func_8003E538(void *);
+void func_8003E578(void *);
+void func_8003BCF4(void *);
+void func_8003C7B4(void *);
+void func_8003C7F4(void *);
+void func_8003BD10(void *);
+void func_8003C8D0(void *);
+void func_8003BD74(void *);
+void func_8003BDAC(void *);
+void func_8003BDE4(void *);
+void func_8003BDEC(void *);
+void func_8003CA1C(void *);
+void func_8003BDF4(void *);
+void func_8003CAEC(void *);
+void func_8003CAF8(void *);
+void func_8003CB30(void *);
+void func_8003CB68(void *);
+void func_8003CBB8(void *);
+void func_8003CBC0(void *);
+void func_8003CC2C(void *);
+void func_8003CCDC(void *);
+void func_8003CD48(void *);
+void func_8003CDE0(void *);
+void func_8003CE98(void *);
+void func_8003D050(void *);
+void func_8003D194(void *);
+void func_8003D2CC(void *);
+void func_8003D3B0(void *);
+void func_8003D444(void *);
+void func_8003D4DC(void *);
+void func_8003D5C0(void *);
+void func_8003D5CC(void *);
+void func_8003D6D4(void *);
+void func_8003D73C(void *);
+void func_8003D980(void *);
+void func_8003DA10(void *);
+void func_8003DAD4(void *);
+void func_8003DCAC(void *);
+void func_8003DDC8(void *);
+void func_8003DE30(void *);
+void func_8003DE9C(void *);
+void func_8003DFA0(void *);
+void func_8003BE5C(void *);
+void func_8003BE64(void *);
+void func_8003BE6C(void *);
+void func_8003BE74(void *);
+void func_8003BE7C(void *);
 
 movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
     0x1130,
     base_class_destructor,
-    (void (*)(void *))movie_screen_construct,
-    (void (*)(void *))movie_screen_cleanup,
+    movie_screen_construct,
+    movie_screen_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -81,70 +81,70 @@ movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    (void (*)(void *))func_8003E030,
+    func_8003E030,
     NULL,
-    (void (*)(void *))func_8003BA38,
-    (void (*)(void *))func_8003BA58,
-    (void (*)(void *))func_8003E280,
-    (void (*)(void *))func_8003BAB4,
-    (void (*)(void *))func_8003C3D0,
-    (void (*)(void *))func_8003E418,
-    (void (*)(void *))func_8003C48C,
-    (void (*)(void *))func_8003BB5C,
-    (void (*)(void *))func_8003BC14,
-    (void (*)(void *))func_8003E538,
-    (void (*)(void *))func_8003E578,
-    (void (*)(void *))func_8003BCF4,
-    (void (*)(void *))func_8003C7B4,
-    (void (*)(void *))func_8003C7F4,
-    (void (*)(void *))func_8003BD10,
-    (void (*)(void *))func_8003C8D0,
-    (void (*)(void *))func_8003BD74,
-    (void (*)(void *))func_8003BDAC,
-    (void (*)(void *))func_8003BDE4,
-    (void (*)(void *))func_8003BDEC,
-    (void (*)(void *))func_8003CA1C,
-    (void (*)(void *))func_8003BDF4,
-    (void (*)(void *))func_8003CAEC,
-    (void (*)(void *))func_8003CAF8,
-    (void (*)(void *))func_8003CB30,
-    (void (*)(void *))func_8003CB68,
-    (void (*)(void *))func_8003CBB8,
-    (void (*)(void *))func_8003CBC0,
-    (void (*)(void *))func_8003CC2C,
-    NULL,
-    NULL,
-    NULL,
-    (void (*)(void *))func_8003CCDC,
-    (void (*)(void *))func_8003CD48,
+    func_8003BA38,
+    func_8003BA58,
+    func_8003E280,
+    func_8003BAB4,
+    func_8003C3D0,
+    func_8003E418,
+    func_8003C48C,
+    func_8003BB5C,
+    func_8003BC14,
+    func_8003E538,
+    func_8003E578,
+    func_8003BCF4,
+    func_8003C7B4,
+    func_8003C7F4,
+    func_8003BD10,
+    func_8003C8D0,
+    func_8003BD74,
+    func_8003BDAC,
+    func_8003BDE4,
+    func_8003BDEC,
+    func_8003CA1C,
+    func_8003BDF4,
+    func_8003CAEC,
+    func_8003CAF8,
+    func_8003CB30,
+    func_8003CB68,
+    func_8003CBB8,
+    func_8003CBC0,
+    func_8003CC2C,
     NULL,
     NULL,
     NULL,
-    (void (*)(void *))func_8003CDE0,
-    (void (*)(void *))func_8003CE98,
-    (void (*)(void *))func_8003D050,
-    (void (*)(void *))func_8003D194,
-    (void (*)(void *))func_8003D2CC,
-    (void (*)(void *))func_8003D3B0,
-    (void (*)(void *))func_8003D444,
-    (void (*)(void *))func_8003D4DC,
-    (void (*)(void *))func_8003D5C0,
-    (void (*)(void *))func_8003D5CC,
-    (void (*)(void *))func_8003D6D4,
-    (void (*)(void *))func_8003D73C,
-    (void (*)(void *))func_8003D980,
-    (void (*)(void *))func_8003DA10,
-    (void (*)(void *))func_8003DAD4,
-    (void (*)(void *))func_8003DCAC,
-    (void (*)(void *))func_8003DDC8,
-    (void (*)(void *))func_8003DE30,
-    (void (*)(void *))func_8003DE9C,
-    (void (*)(void *))func_8003DFA0,
-    (void (*)(void *))func_8003BE5C,
-    (void (*)(void *))func_8003BE64,
-    (void (*)(void *))func_8003BE6C,
-    (void (*)(void *))func_8003BE74,
-    (void (*)(void *))func_8003BE7C,
+    func_8003CCDC,
+    func_8003CD48,
+    NULL,
+    NULL,
+    NULL,
+    func_8003CDE0,
+    func_8003CE98,
+    func_8003D050,
+    func_8003D194,
+    func_8003D2CC,
+    func_8003D3B0,
+    func_8003D444,
+    func_8003D4DC,
+    func_8003D5C0,
+    func_8003D5CC,
+    func_8003D6D4,
+    func_8003D73C,
+    func_8003D980,
+    func_8003DA10,
+    func_8003DAD4,
+    func_8003DCAC,
+    func_8003DDC8,
+    func_8003DE30,
+    func_8003DE9C,
+    func_8003DFA0,
+    func_8003BE5C,
+    func_8003BE64,
+    func_8003BE6C,
+    func_8003BE74,
+    func_8003BE7C,
 };
 
 movie_screen_t *movie_screen_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
@@ -276,10 +276,10 @@ void func_8003BDAC(movie_screen_t *This) {
     func_8003DFBC()->Unk32(This);
 }
 
-void func_8003BDE4(void) {
+void func_8003BDE4(void *) {
 }
 
-void func_8003BDEC(void) {
+void func_8003BDEC(void *) {
 }
 
 void func_8003BDF4(movie_screen_t *This) {

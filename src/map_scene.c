@@ -183,7 +183,7 @@ other:
         goto check;
     }
     two = 2;
-    link = (s32 *)This->m_Unk19;
+    link = This->m_Unk19;
     vt = arg1->vtable;
     if (link[5] != two) {
         picked = link[6];

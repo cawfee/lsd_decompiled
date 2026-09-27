@@ -167,7 +167,7 @@ class_D294_t *func_8001D0EC(class_D294_t *This, void *arg1, s32 *arg2) {
 class_D294_t *func_8001D1A4(class_D294_t *This) {
     void *obj;
 
-    obj = (void *)This->m_Unk2;
+    obj = This->m_Unk2;
     if (obj) {
         (*(void (**)(void *, class_D294_t *))(*(s32 *)obj + 0x14))(obj, This);
         *(s32 *)((u8 *)This->m_Unk4 + 0x48) = 0;

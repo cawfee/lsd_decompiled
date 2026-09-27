@@ -4,8 +4,6 @@
 // #define STRINGIFY_(x) #x
 // #define STRINGIFY(x) STRINGIFY_(x)
 
-#define SECTION(x) __attribute__((section(x)))
-
 #ifndef PERMUTER
 
 #ifndef INCLUDE_ASM

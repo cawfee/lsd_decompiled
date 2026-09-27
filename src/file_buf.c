@@ -6,12 +6,12 @@
 
 
 s32 init_800269F0(file_buf_t *);
-void func_80026A50(file_buf_t *);
-void func_80026AB4(file_buf_t *);
-void file_buf_load(file_buf_t *, s32);
-void file_buf_release(file_buf_t *);
-void nullsub13(void);
-void func_80026C88(file_buf_t *);
+void func_80026A50(void *);
+void func_80026AB4(void *);
+void file_buf_load(void *);
+void file_buf_release(void *);
+void nullsub13(void *);
+void func_80026C88(void *);
 
 void *class_1C92C_get_vtable(void);
 void *tim_image_get_vtable(void);
@@ -31,8 +31,8 @@ void *func_80044CC4(void);
 file_buf_vtable_t D_8006D430 = {
     3,
     (void (*)(void *))init_800269F0,
-    (void (*)(void *))func_80026A50,
-    (void (*)(void *))func_80026AB4,
+    func_80026A50,
+    func_80026AB4,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -51,10 +51,10 @@ file_buf_vtable_t D_8006D430 = {
     NULL,
     NULL,
     NULL,
-    (void (*)(void *))file_buf_load,
-    (void (*)(void *))file_buf_release,
-    (void (*)(void *))nullsub13,
-    (void (*)(void *))func_80026C88,
+    file_buf_load,
+    file_buf_release,
+    nullsub13,
+    func_80026C88,
     NULL,
     NULL,
     NULL,
@@ -152,7 +152,7 @@ void file_buf_release(file_buf_t *This) {
     }
 }
 
-void nullsub13(void) {
+void nullsub13(void *) {
 }
 
 void func_80026C88(file_buf_t *This) {

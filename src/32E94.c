@@ -8,6 +8,96 @@
 extern class_32E94_vtable_t **D_8006EFAC;
 class_3311C_t *func_8004291C(s32 Unk1);
 
+void func_800426E4(void *);
+void func_80042790(void *);
+void func_80042814(void *);
+void func_80042820(void *);
+s32 func_80042828(class_32E94_t *, int);
+void func_8004283C(void *);
+void func_8001CC48(void *, void *);
+void func_8001CCB4(void *);
+void func_8001CD20(void *);
+void func_8001CD60(void *);
+void func_8001CEB4(void *);
+void func_8001D008(void *);
+void func_8001D0EC(void *);
+void func_8001D1A4(void *);
+void func_8001D204(void *);
+void func_8001D280(void *);
+void func_8001D33C(void *);
+void func_8001D344(void *);
+void func_8001D374(void *);
+void func_8001D3A0(void *);
+void func_8001D3CC(void *);
+void func_8001D3F8(void *);
+void func_8001D424(void *);
+void func_8001D450(void *);
+void func_8001D480(void *);
+void func_8001D4AC(void *);
+void func_8001D4DC(void *);
+void func_8001D568(void *);
+void func_8001D600(void *);
+void func_8001D624(void *);
+void func_8001D6A4(void *);
+void func_8001D6AC(void *);
+void func_8001D714(void *);
+void func_8001D950(void *);
+void func_8001DA28(void *);
+void func_8001DDF4(void *);
+void func_8001E49C(void *);
+void func_8001E4A4(void *);
+
+class_32E94_vtable_t D_8006EFAC = {
+    0x14,
+    (void (*)(void *))base_class_destructor,
+    func_800426E4,
+    func_80042790,
+    func_8001CC48,
+    func_8001CCB4,
+    func_8001CD20,
+    (void (*)(void *))base_class_iter_children,
+    (void (*)(void *))base_class_add_parent,
+    (void (*)(void *))base_class_remove_parent,
+    (void (*)(void *))base_class_clear_parents,
+    (void (*)(void *))base_class_iter_parents,
+    (void (*)(void *))base_class_notify,
+    (void (*)(void *))base_class_nop,
+    func_8001CD60,
+    NULL,
+    func_80042814,
+    func_8001CEB4,
+    func_8001D008,
+    func_8001D0EC,
+    func_8001D1A4,
+    func_8001D204,
+    func_8001D280,
+    func_8001D33C,
+    func_8001D344,
+    func_8001D374,
+    func_8001D3A0,
+    func_8001D3CC,
+    func_8001D3F8,
+    func_8001D424,
+    func_8001D450,
+    func_8001D480,
+    func_8001D4AC,
+    func_8001D4DC,
+    func_8001D568,
+    func_8001D600,
+    func_8001D624,
+    func_8001D6A4,
+    func_8001D6AC,
+    func_80042820,
+    func_8001D714,
+    func_8001D950,
+    func_8001DA28,
+    func_8001DDF4,
+    func_8001E49C,
+    func_8001E4A4,
+    (void (*)(void *))func_80042828,
+    func_8004283C,
+};
+
 class_32E94_t *func_80042694() {
     class_32E94_t *allocated = (class_32E94_t *) memory_allocate_mem(0x54);
 

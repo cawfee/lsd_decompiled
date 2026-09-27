@@ -1,6 +1,46 @@
 #include "354D4.h"
 
-extern class_354D4_vtable_t D_8006F498;
+void func_80044D40(void *, s32, void *);
+void func_80044DC8(base_class_t *);
+void func_80044E10(void *);
+void func_80044E64(void *);
+s32 init_800269F0(void *);
+void file_buf_release(void *);
+void nullsub13(void *);
+
+class_354D4_vtable_t D_8006F498 = {
+    0x203,
+    (base_class_t *(*)(base_class_t *))init_800269F0,
+    func_80044D40,
+    func_80044DC8,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    file_buf_release,
+    nullsub13,
+    func_80044E10,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    func_80044E64,
+};
 
 class_354D4_t *func_80044CD4(s32 Unk1, void *Unk2) {
     class_354D4_t *allocated = (class_354D4_t *) memory_allocate_mem(0x44);
@@ -60,7 +100,7 @@ void func_80044E64(class_354D4_t *This) {
         This->m_Unk10_1 = 0x10;
         This->m_Unk11_0 = 0xF;
         if ((This->m_Unk13 = (s32)memory_allocate_mem(count << 1)) != 0) {
-            mem = (s16 *)This->m_Unk13;
+            mem = This->m_Unk13;
             i = 0;
             if (count != 0) {
                 do {

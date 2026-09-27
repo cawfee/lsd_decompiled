@@ -5,7 +5,47 @@
 #include "file_buf.h"
 #include "memory.h"
 
-extern class_35730_vtable_t **D_8006F514;
+void func_80044F90(void *, s32);
+void func_8004500C(base_class_t *);
+void func_80045060(void *);
+void func_800450B4(void *);
+s32 init_800269F0(void *);
+void file_buf_release(void *);
+void nullsub13(void *);
+
+class_35730_vtable_t D_8006F514 = {
+    0x303,
+    (base_class_t *(*)(base_class_t *))init_800269F0,
+    func_80044F90,
+    func_8004500C,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    file_buf_release,
+    nullsub13,
+    func_80045060,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    func_800450B4,
+};
 
 class_35730_t *func_80044F30(u32 Unk1) {
     class_35730_t *allocated = (class_35730_t *) memory_allocate_mem(0x38);

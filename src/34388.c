@@ -5,19 +5,19 @@
 #include "file_buf.h"
 #include "tim_image.h"
 
-void func_80043BE8(class_34388_t *, s32);
-void func_80043C60(class_34388_t *);
-void func_80043CB8(class_34388_t *);
-void func_80043DFC(class_34388_t *);
+void func_80043BE8(void *, s32);
+void func_80043C60(void *);
+void func_80043CB8(void *);
+void func_80043DFC(void *);
 s32 init_800269F0(void *);
 void file_buf_release(void *);
-void nullsub13(void);
+void nullsub13(void *);
 
 class_34388_vtable_t D_8006F1C4 = {
-    0x0C03,
+    0xC03,
     (void (*)(void *))init_800269F0,
-    (void (*)(void *, s32))func_80043BE8,
-    (void (*)(void *))func_80043C60,
+    func_80043BE8,
+    func_80043C60,
     (void (*)(void *))base_class_attach,
     (void (*)(void *))base_class_detach,
     (void (*)(void *))base_class_detach_all,
@@ -37,14 +37,14 @@ class_34388_vtable_t D_8006F1C4 = {
     NULL,
     NULL,
     NULL,
-    (void (*)(void *))file_buf_release,
-    (void (*)(void *))nullsub13,
-    (void (*)(void *))func_80043CB8,
+    file_buf_release,
+    nullsub13,
+    func_80043CB8,
     NULL,
     NULL,
     NULL,
     NULL,
-    (void (*)(void *))func_80043DFC,
+    func_80043DFC,
 };
 
 s16 D_8008A934[2] = { 3, 0 };

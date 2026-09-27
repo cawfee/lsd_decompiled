@@ -7,29 +7,29 @@ s32 D_8008A8B0 = 0;
 s32 D_8008A8B4 = 0;
 
 s32 init_800269F0(file_buf_t *);
-void file_buf_release(file_buf_t *);
-void nullsub13(void);
-void func_80026C88(file_buf_t *);
+void file_buf_release(void *);
+void nullsub13(void *);
+void func_80026C88(void *);
 
-void class_1CBB8_construct(void);
-void class_1CBB8_cleanup(void);
-void class_1CBB8_unk15(void);
-void class_1CBB8_unk16(void);
-void class_1CBB8_unk17(void);
-void class_1CBB8_unk18(void);
-void class_1CBB8_unk19(void);
+void class_1CBB8_construct(void *);
+void class_1CBB8_cleanup(void *);
+void class_1CBB8_unk15(void *);
+void class_1CBB8_unk16(void *);
+void class_1CBB8_unk17(void *);
+void class_1CBB8_unk18(void *);
+void class_1CBB8_unk19(void *);
 s32 class_1CBB8_unk20(void);
-void class_1CBB8_unk21(void);
-void class_1CBB8_unk25(void);
-void class_1CBB8_unk26(void);
-void class_1CBB8_unk27(void);
-void class_1CBB8_unk28(void);
+void class_1CBB8_unk21(void *);
+void class_1CBB8_unk25(void *);
+void class_1CBB8_unk26(void *);
+void class_1CBB8_unk27(void *);
+void class_1CBB8_unk28(void *);
 
 class_1CBB8_vtable_t g_CLASS_1CBB8_VTABLE = {
     0x23,
     (void (*)(void *))init_800269F0,
-    (void (*)(void *))class_1CBB8_construct,
-    (void (*)(void *))class_1CBB8_cleanup,
+    class_1CBB8_construct,
+    class_1CBB8_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -42,66 +42,66 @@ class_1CBB8_vtable_t g_CLASS_1CBB8_VTABLE = {
     base_class_nop,
     base_class_on_notify,
     NULL,
-    (void (*)(void *))class_1CBB8_unk15,
-    (void (*)(void *))class_1CBB8_unk16,
-    (void (*)(void *))class_1CBB8_unk17,
-    (void (*)(void *))class_1CBB8_unk18,
-    (void (*)(void *))class_1CBB8_unk19,
+    class_1CBB8_unk15,
+    class_1CBB8_unk16,
+    class_1CBB8_unk17,
+    class_1CBB8_unk18,
+    class_1CBB8_unk19,
     (void (*)(void *))class_1CBB8_unk20,
-    (void (*)(void *))class_1CBB8_unk21,
-    (void (*)(void *))file_buf_release,
-    (void (*)(void *))nullsub13,
-    (void (*)(void *))func_80026C88,
-    (void (*)(void *))class_1CBB8_unk25,
-    (void (*)(void *))class_1CBB8_unk26,
-    (void (*)(void *))class_1CBB8_unk27,
-    (void (*)(void *))class_1CBB8_unk28,
+    class_1CBB8_unk21,
+    file_buf_release,
+    nullsub13,
+    func_80026C88,
+    class_1CBB8_unk25,
+    class_1CBB8_unk26,
+    class_1CBB8_unk27,
+    class_1CBB8_unk28,
 };
 
 s32 func_8002C3B8(void) {
     return 0;
 }
 
-void class_1CBB8_construct(void) {
+void class_1CBB8_construct(void *) {
 }
 
-void class_1CBB8_cleanup(void) {
+void class_1CBB8_cleanup(void *) {
 }
 
-void class_1CBB8_unk15(void) {
+void class_1CBB8_unk15(void *) {
     s8 pad[0x40];
 }
 
-void class_1CBB8_unk16(void) {
+void class_1CBB8_unk16(void *) {
     s8 pad[0x40];
 }
 
-void class_1CBB8_unk17(void) {
+void class_1CBB8_unk17(void *) {
 }
 
-void class_1CBB8_unk18(void) {
+void class_1CBB8_unk18(void *) {
 }
 
-void class_1CBB8_unk19(void) {
+void class_1CBB8_unk19(void *) {
 }
 
 s32 class_1CBB8_unk20(void) {
     return 0;
 }
 
-void class_1CBB8_unk21(void) {
+void class_1CBB8_unk21(void *) {
 }
 
-void class_1CBB8_unk25(void) {
+void class_1CBB8_unk25(void *) {
 }
 
-void class_1CBB8_unk26(void) {
+void class_1CBB8_unk26(void *) {
 }
 
-void class_1CBB8_unk27(void) {
+void class_1CBB8_unk27(void *) {
 }
 
-void class_1CBB8_unk28(void) {
+void class_1CBB8_unk28(void *) {
 }
 
 class_1CBB8_vtable_t *class_1CBB8_get_vtable(void) {

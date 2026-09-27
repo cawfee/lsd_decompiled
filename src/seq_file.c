@@ -4,18 +4,18 @@
 #include "file_buf.h"
 
 s32 init_800269F0(void *);
-void nullsub13(void);
+void nullsub13(void *);
 void file_buf_release(void *);
 
-void func_8004232C(seq_file_t *, unsigned char *);
-void func_800423A8(seq_file_t *);
-void func_800423E4(seq_file_t *);
+void func_8004232C(void *, s32);
+void func_800423A8(base_class_t *);
+void func_800423E4(void *);
 
 seq_file_vtable_t D_8006EED8 = {
-    0x00000B03,
+    0xB03,
     (base_class_t *(*)(base_class_t *))init_800269F0,
-    (void (*)(void *, s32))func_8004232C,
-    (void (*)(base_class_t *))func_800423A8,
+    func_8004232C,
+    func_800423A8,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -36,8 +36,8 @@ seq_file_vtable_t D_8006EED8 = {
     NULL,
     NULL,
     file_buf_release,
-    (void (*)(void *))nullsub13,
-    (void (*)(void *))func_800423E4,
+    nullsub13,
+    func_800423E4,
     NULL,
     NULL,
     NULL,

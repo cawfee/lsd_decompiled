@@ -163,17 +163,19 @@ static u32 D_8008A9CC = 0xFFFF;
 
 static s32 D_80086D14[6][2] = { { 8, -3 }, { 8, 9 }, { 8, 21 }, { 8, 33 }, { 8, 45 }, { 8, 57 } };
 
-static char *g_FONT_ICON_PATH SECTION(".data") = "ETC\\FONTICON.TIM";
+/* 4-entry table: only the first TIM path is used; the trailing NULLs make the
+ * object 16 bytes so it lands in .data (the original build kept it there). */
+static char *g_FONT_ICON_PATH[4] = { "ETC\\FONTICON.TIM" };
 
-static const void *D_80086D54[9] = { (void *) 0,  (void *) 0,    (void *) 0,  (void *) 0x80505050, (void *) 0x80,
-                                     &D_80086CE0, &g_MENU_ITEMS, &D_80086D14, &D_80086CC4 };
+static const void *D_80086D54[6] = { (void *) 0x80505050, (void *) 0x80, &D_80086CE0,
+                                     &g_MENU_ITEMS,      &D_80086D14,     &D_80086CC4 };
 
 static char *D_80011454 = "BISLPS-01556";
 
 static char *D_80086D6C[16] = { "-01", "-02", "-03", "-04", "-05", "-06", "-07", "-08",
                                 "-09", "-10", "-11", "-12", "-13", "-14", "-15", NULL };
 
-static u32 D_80086DAC[6] = { 0, 0x140, 0xF0, 0xF00000, 0x140, 0xF0 };
+static u32 D_80086DAC[6] = { 0, 320, 240, 0xF00000, 320, 240 };
 
 static char *D_8008AA10 = "BISLPS-01556xxx";
 

@@ -39,7 +39,7 @@ u32 func_800434DC(class_33808_t *This) {
     u32 result;
     char pad[8];
 
-    table = (u32 *)This->m_Unk3;
+    table = This->m_Unk3;
     counter = 0;
     count = table[0];
     max = 0;

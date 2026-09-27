@@ -6,9 +6,9 @@
 #include "base_class.h"
 #include "memory_card.h"
 
-extern memory_card_vtable_t *g_MEMORY_CARD_VTABLE;
-extern s32 D_80086E78;
-s32 D_8008AA30 SECTION(".sdata") = 0;
+extern memory_card_vtable_t g_MEMORY_CARD_VTABLE;
+extern s32 D_80086E78[4];
+s32 D_8008AA30 = 0;
 extern char D_8008AA9C[]; /* "bu10:" */
 extern char D_8008AAA4[]; /* "bu00:" */
 extern char D_8008AAAC[]; /* "TEMP" */
@@ -30,8 +30,8 @@ extern char *strcpy(char *, char *);
 extern void *func_80050BA8(s32, s32);
 extern void *func_80051A5C(s32, s32);
 extern char *D_80086E80[];
-extern s32 D_80086EC4;
-extern s32 D_8008AA94;
+extern s32 D_80086EC4[];
+extern s32 D_8008AA94[];
 extern char D_8008AAB4[]; /* "CARD\\" */
 extern char D_8008AABC[]; /* ".TIM" */
 
@@ -160,7 +160,7 @@ s32 func_8004E5E4(memory_card_t *arg0) {
     EnterCriticalSection();
     var_s2 = 0;
     var_s1 = arg0;
-    var_s0 = &D_80086E78;
+    var_s0 = D_80086E78;
     do {
         temp_a1 = *var_s0;
         var_s1->m_Unk4 = OpenEvent(0xF4000001, temp_a1, 0x2000, 0);
@@ -491,7 +491,7 @@ s32 func_8004F4C8(s32 *events, s32 count) {
 
     var_s4 = events;
     var_s3 = count;
-    var_s5 = &D_80086E78;
+    var_s5 = D_80086E78;
     do {
         var_s0 = 0;
         if (var_s3 > 0) {
@@ -782,10 +782,10 @@ void func_8004FE24(memory_card_t *This, s32 idx) {
                 strcat(pathp, D_8008AABC);
                 tex = tim_image_create(pathp);
                 tex->vtable->Unk14(tex);
-                obj = func_80041C9C(tex, &D_80086EC4, 0);
+                obj = func_80041C9C(tex, D_80086EC4, 0);
                 This->m_Unk27 = (s32)obj;
                 tex->vtable->Destruct(tex);
-                (*(void (**)(void *, s32, s32 *))(*(u32 *)obj + 0x4C))(obj, This->m_Unk25, &D_8008AA94);
+                (*(void (**)(void *, s32, s32 *))(*(u32 *)obj + 0x4C))(obj, This->m_Unk25, D_8008AA94);
             }
         }
     }

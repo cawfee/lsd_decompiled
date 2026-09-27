@@ -18,12 +18,12 @@ typedef enum {
 } dream_sys_move_state_t;
 
 typedef union {
-    s16 value;
-
     struct {
         s8 dynamic;
         s8 upper;
     } axis;
+
+    s16 value;
 } dream_sys_mood_graph_point_t;
 
 typedef struct {

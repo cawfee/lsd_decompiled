@@ -1,42 +1,42 @@
 #include "frame_phase.h"
 #include "base_class.h"
 
-void func_80042450(frame_phase_t *);
-void func_800424A8(frame_phase_t *);
-void func_800424E0(frame_phase_t *, void *);
-void func_80042550(frame_phase_t *, s32);
-void func_800425D8(frame_phase_t *, s32);
-void func_800425EC(frame_phase_t *);
+void func_80042450(void *);
+void func_800424A8(base_class_t *);
+void func_800424E0(base_class_t *, base_class_t *);
+void func_80042550(base_class_t *, s32);
+void func_800425D8(void *, s32);
+void func_800425EC(void *);
 s32 func_8004264C(frame_phase_t *);
-void func_80042658(frame_phase_t *);
-void func_80042664(frame_phase_t *);
+void func_80042658(void *);
+void func_80042664(void *);
 s32 func_8004266C(frame_phase_t *);
-void func_80042678(frame_phase_t *);
+void func_80042678(void *);
 
 frame_phase_vtable_t D_8006EF50 = {
-    0x00000005,
+    0x5,
     base_class_destructor,
-    (void (*)(void *))func_80042450,
-    (void (*)(base_class_t *))func_800424A8,
+    func_80042450,
+    func_800424A8,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
     base_class_iter_children,
     base_class_add_parent,
-    (void (*)(base_class_t *, base_class_t *))func_800424E0,
+    func_800424E0,
     base_class_clear_parents,
     base_class_iter_parents,
-    (void (*)(base_class_t *, s32))func_80042550,
+    func_80042550,
     base_class_nop,
     base_class_on_notify,
     NULL,
-    (void (*)(void *, s32))func_800425D8,
-    (void (*)(void *))func_800425EC,
+    func_800425D8,
+    func_800425EC,
     (void (*)(void *))func_8004264C,
-    (void (*)(void *))func_80042658,
-    (void (*)(void *))func_80042664,
+    func_80042658,
+    func_80042664,
     (void (*)(void *))func_8004266C,
-    (void (*)(void *))func_80042678,
+    func_80042678,
 };
 
 frame_phase_t *func_80042400(void) {

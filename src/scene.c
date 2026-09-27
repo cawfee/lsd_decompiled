@@ -3,26 +3,26 @@
 #include "base_class.h"
 #include "timer.h"
 
-void func_8004A19C(scene_t *, void *, sound_vtable_t *);
-void func_8004A228(scene_t *);
-void func_8003E030(void);
-void func_8004A294(void);
+void func_8004A19C(void *, s32, s32);
+void func_8004A228(void *);
+void func_8003E030(void *, void **, s32);
+void func_8004A294(void *);
 s32 scene_run(scene_t *, s32, s32);
-void func_8004A324(void);
-void func_8003E418(void);
-void func_8004A35C(void);
-void func_8004A364(void);
-void func_8004A3EC(void);
-void func_8003E538(void);
-void func_8003E578(void);
-void func_8004A458(void);
-void func_8004A478(void);
+void func_8004A324(void *);
+void func_8003E418(void *, void *, s32);
+void func_8004A35C(void *);
+void func_8004A364(void *);
+void func_8004A3EC(void *, s32);
+void func_8003E538(void *);
+void func_8003E578(void *);
+void func_8004A458(void *, s32);
+void func_8004A478(void *);
 
 scene_vtable_t D_80086668 = {
     0x230,
     base_class_destructor,
-    (void (*)(void *, s32, s32))func_8004A19C,
-    (void (*)(void *))func_8004A228,
+    func_8004A19C,
+    func_8004A228,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -33,21 +33,21 @@ scene_vtable_t D_80086668 = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    (void (*)(void *, void **, s32))func_8003E030,
+    func_8003E030,
     NULL,
-    (void (*)(void *))func_8004A294,
+    func_8004A294,
     (void (*)(void *, void *, s32))scene_run,
-    (void (*)(void *))func_8004A324,
+    func_8004A324,
     NULL,
     NULL,
-    (void (*)(void *, void *, s32))func_8003E418,
-    (void (*)(void *))func_8004A35C,
-    (void (*)(void *))func_8004A364,
-    (void (*)(void *, s32))func_8004A3EC,
-    (void (*)(void *))func_8003E538,
-    (void (*)(void *))func_8003E578,
-    (void (*)(void *, s32))func_8004A458,
-    (void (*)(void *))func_8004A478,
+    func_8003E418,
+    func_8004A35C,
+    func_8004A364,
+    func_8004A3EC,
+    func_8003E538,
+    func_8003E578,
+    func_8004A458,
+    func_8004A478,
     NULL,
     NULL,
     NULL,
@@ -100,7 +100,7 @@ void func_8004A324(scene_t *This) {
     timer_get_vtable()->Unk17(This);
 }
 
-void func_8004A35C(void) {
+void func_8004A35C(void *) {
 }
 
 void func_8004A364(scene_t *This, void **Unk2, void *Unk3) {
