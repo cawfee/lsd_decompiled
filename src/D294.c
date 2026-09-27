@@ -41,7 +41,7 @@ void *func_8001CAF4(class_D294_t *This) {
         *((u32 *) This->m_Unk4 + 17) = buffer;
 
         if (buffer) {
-            base_class_get_vtable()->base_class_construct(This);
+            base_class_get_vtable()->Construct(This);
             This->vtable = func_8001E57C();
             This->m_Unk7 = 0;
             This->m_Unk5 = 0;
@@ -63,11 +63,11 @@ void func_8001CBA4(class_D294_t *This) {
     This->vtable->Unk22(This, 0);
     memory_free_mem(*((void **) This->m_Unk4 + 17));
     memory_free_mem(This->m_Unk4);
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_8001CC48(class_D294_t *This, void **Unk) {
-    base_class_get_vtable()->Unk3(This, Unk);
+    base_class_get_vtable()->Attach(This, Unk);
 
     if ((*(u32 *) *Unk & 0xF) == 9) {
         func_8001E770(This, Unk);
@@ -79,17 +79,17 @@ void func_8001CCB4(class_D294_t *This, void **Unk) {
         func_8001E7B0(This);
     }
 
-    base_class_get_vtable()->Unk4(This, Unk);
+    base_class_get_vtable()->Detach(This, Unk);
 }
 
 void func_8001CD20(class_D294_t *This) {
     func_8001E7B0(This);
-    base_class_get_vtable()->Unk5(This);
+    base_class_get_vtable()->DetachAll(This);
 }
 
 void func_8001CD60(class_D294_t *This, void **Unk2, s32 Unk3) {
     u32 value;
-    base_class_get_vtable()->Unk13(This, Unk2, Unk3);
+    base_class_get_vtable()->OnNotify(This, Unk2, Unk3);
 
     value = *(u32 *) *Unk2 & 0xF;
 
@@ -196,7 +196,7 @@ void func_8001D280(class_D294_t *This, void **arg1, s32 *arg2) {
         if (*arg1 == NULL) {
             *arg2 = This->m_Unk0;
         }
-        func_800183A0(arg1, (void **)arg2);
+        linked_list_next(arg1, (linked_list_node_t **)arg2);
         temp = *arg1;
         if (temp != NULL && ((**(u32 **)temp) & 0xF) == 4 && *(void **)((u8 *)temp + 0xC) == This) {
             break;
@@ -294,7 +294,7 @@ void func_8001D624(class_D294_t *This, s32 *arg1, s32 arg2) {
     This->m_Unk9 = 0;
     This->m_Unk10 = 0;
     This->m_Unk11 = (s32)arg1;
-    vt->Unk11(This, arg2);
+    vt->Notify(This, arg2);
     This->m_Unk11 = 0;
 }
 

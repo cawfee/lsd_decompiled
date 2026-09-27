@@ -117,7 +117,7 @@ class_305B0_t *func_8005D108(entity_t *This, void *Unk2, void *Unk3, s32 Unk4, s
 
 void entity_cleanup(entity_t *This) {
     if (This->m_Class_305B0) {
-        This->m_Class_305B0->vtable->base_class_destructor(This->m_Class_305B0);
+        This->m_Class_305B0->vtable->Destroy(This->m_Class_305B0);
     }
 
     if (This->m_Unk64) {
@@ -191,7 +191,7 @@ void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
                     Unk3 = 11;
                 }
             }
-            This->vtable->Unk11(This, Unk3);
+            This->vtable->Notify(This, Unk3);
         }
     }
 }
@@ -316,7 +316,7 @@ void func_8005DA3C(entity_t *This) {
 
 void func_8005DAAC(entity_t *This, s32 Value) {
     if (Value) {
-        This->vtable->Unk11(This, 9);
+        This->vtable->Notify(This, 9);
     }
     This->m_Unk60 = Value;
 }
@@ -496,7 +496,7 @@ void func_8005DF9C(entity_t *This, s32 Unk2) {
 
         if (val) {
             if (func_8005E02C(This, val << 9)) {
-                This->vtable->Unk11(This, 10);
+                This->vtable->Notify(This, 10);
             }
         }
     }
@@ -634,7 +634,7 @@ void func_8005E3C4(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
     This->vtable->Unk48(This, -0x5A, 0);
     if (This->m_Unk62 == 0x1E) {
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
 }
 
@@ -752,7 +752,7 @@ void func_8005E7F8(entity_t *This, s32 *arg1) {
         func_8001EACC(This, This->m_Unk36, 1, 0, 0);
         This->vtable->Unk17(This, 1, &D_80089DD8);
         if (This->vtable->entity_get_distance(This, This->m_Unk36) < 0x400) {
-            This->vtable->Unk11(This, 0xB);
+            This->vtable->Notify(This, 0xB);
         }
     }
     if (This->m_Unk62 == 0x618) {
@@ -794,7 +794,7 @@ void func_8005EA94(entity_t *This) {
         count = This->m_Unk62;
         This->m_Unk62 = count + 1;
         if (count == 0x12C) {
-            This->vtable->Unk11(This, 0xC);
+            This->vtable->Notify(This, 0xC);
         }
     }
 }
@@ -814,7 +814,7 @@ void func_8005EBB4(entity_t *This, s32 *arg1) {
     if (This->m_Unk16 == 0x24) {
         r = rand();
         if (r == ((r / 3) * 3)) {
-            This->vtable->Unk11(This, 0xB);
+            This->vtable->Notify(This, 0xB);
         }
     }
 }
@@ -1091,7 +1091,7 @@ void func_8005F970(entity_t *This, s32 *arg1) {
     }
     if (This->m_Unk62 == This->m_Unk31) {
         This->vtable->Unk75(This);
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
 }
 
@@ -1387,12 +1387,12 @@ void func_8006090C(entity_t *This) {
                     This->m_Unk16 = 0xB;
                 }
             } else {
-                This->vtable->Unk11(This, 0xB);
+                This->vtable->Notify(This, 0xB);
                 This->m_Unk16 = 0xA;
             }
         } else if (temp == 0xB) {
             if (This->m_Unk62 == 0x64) {
-                This->vtable->Unk11(This, 0xC);
+                This->vtable->Notify(This, 0xC);
             } else {
                 This->m_Unk36->vtable->Unk50(This->m_Unk36, -0x64, 0);
             }
@@ -1454,7 +1454,7 @@ void func_80060B34(entity_t *This, s32 *arg1) {
                     This->m_Unk16 = 0xB;
                 }
             } else {
-                This->vtable->Unk11(This, 0xA);
+                This->vtable->Notify(This, 0xA);
             }
         } else if (This->m_Unk16 == 0xB) {
             dream_sys_t *sys;
@@ -1468,7 +1468,7 @@ void func_80060B34(entity_t *This, s32 *arg1) {
             }
             vt->Unk45(*(dream_sys_t *volatile *)&This->m_Unk36, link);
             if (This->m_Unk62 == 0x64) {
-                This->vtable->Unk11(This, 0xA);
+                This->vtable->Notify(This, 0xA);
             }
         }
     }
@@ -1609,7 +1609,7 @@ void func_80061198(entity_t *This, s32 *arg1) {
                     This->m_Class_305B0->vtable->Unk52(This->m_Class_305B0, This->m_Unk19, 4, 0);
                 }
                 if (rand() & 1) {
-                    This->vtable->Unk11(This, 0xB);
+                    This->vtable->Notify(This, 0xB);
                 }
             }
             return;
@@ -1688,7 +1688,7 @@ void func_80061400(entity_t *This, s32 *arg1) {
             }
             vt->Unk49(dream, step, 0);
         } else if (tick == 0x1F4) {
-            This->vtable->Unk11(This, 0xC);
+            This->vtable->Notify(This, 0xC);
         }
         state = This->m_Unk16;
     }
@@ -1775,7 +1775,7 @@ void func_80061778(entity_t *This, s32 *arg1) {
 func_80061778_near:
     if (This->vtable->entity_get_distance(This, This->m_Unk36) < 0x200) {
         This->vtable->Unk87(This);
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
 }
 
@@ -1863,7 +1863,7 @@ func_80061C2C_state:
         } else {
             choice = 0xB;
         }
-        This->vtable->Unk11(This, choice);
+        This->vtable->Notify(This, choice);
     }
 }
 
@@ -2069,7 +2069,7 @@ void func_80062730(entity_t *This) {
             This->m_Unk36->vtable->Unk48(This->m_Unk36, 0x80, 0);
         }
         if (This->m_Unk62 == (This->m_Unk31 - 0x1E)) {
-            This->vtable->Unk11(This, 0xA);
+            This->vtable->Notify(This, 0xA);
         }
     } else {
         unk62 = This->m_Unk62;
@@ -2092,7 +2092,7 @@ void func_800628D4(entity_t *This, s32 *arg1) {
     }
     if (This->m_Unk62 == This->m_Unk31) {
         This->vtable->Unk75(This);
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
 }
 
@@ -2153,6 +2153,106 @@ void func_80062A40(entity_t *This, s32 *arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/entity", func_80062C58);
 
+/*
+Best typed attempt; kept commented out pending a matching source promotion.
+
+extern s32 D_80089D0C;
+s32 D_8008ACCC;
+
+void func_80062C58(entity_t *This, s32 *arg1) {
+    s32 *var_a2_2;
+    s32 temp_a0;
+    s32 temp_a0_2;
+    s32 temp_a1;
+    s32 temp_a2;
+    s32 temp_s1;
+    s32 temp_v0;
+    s32 var_s1;
+    u32 temp_v1;
+    u32 var_a2;
+    s32 var_a1;
+
+    if (arg1[1] == 0) {
+        D_8008ACCC = 0;
+        temp_s1 = rand() % 3;
+        if (temp_s1 == 1) {
+            This->m_Unk16 = 0xB;
+        }
+        if (temp_s1 == 2) {
+            This->m_Unk16 = 0xC;
+        }
+    }
+    arg1[4] = This->vtable->Unk81(This);
+    if ((This->m_Unk35 != 0) && !(arg1[1] & 3)) {
+        arg1[7] = 0x1C;
+    }
+    temp_v1 = This->m_Unk31;
+    temp_a1 = This->m_Unk62;
+    var_a2 = temp_v1;
+    if (temp_a1 == (temp_v1 - 1)) {
+        This->m_Unk62 = -1;
+    } else {
+        temp_a0 = (s32) (temp_v1 + (temp_v1 >> 0x1F)) >> 1;
+        if ((s32) temp_v1 < 0) {
+            var_a2 = temp_v1 + 3;
+        }
+        temp_a2 = (s32) var_a2 >> 2;
+        if (temp_a1 < (temp_a0 + temp_a2)) {
+            if (temp_a1 < temp_a0) {
+                if (temp_a1 < temp_a2) {
+                    goto end_movement;
+                }
+                This->vtable->Unk75(This);
+                var_a1 = -0x6E;
+                goto call_movement;
+            }
+            if (temp_a1 == temp_a0) {
+                arg1[7] = 0x10;
+            }
+            var_a1 = 0x6E;
+            goto call_movement;
+        } else {
+            This->vtable->Unk74(This);
+        }
+    }
+
+call_movement:
+    This->vtable->Unk48(This, var_a1, 0);
+
+end_movement:
+    if ((This->m_Unk16 == 0xB) && (arg1[1] == 0x1FE)) {
+        This->vtable->Unk50(This, -0x17C, 0);
+        This->vtable->Unk16(This, 0, &D_80089D0C);
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+        D_8008ACCC = 1;
+    } else if (This->m_Unk16 >= 0xC) {
+        temp_a0_2 = arg1[1];
+        if ((temp_a0_2 >= 0x14A) && (((temp_a0_2 / 60) * 0x3C) == (temp_a0_2 - 0x1E))) {
+            var_s1 = 0;
+            if (rand() & 1) {
+                var_a2_2 = &D_80089E50;
+                temp_v0 = This->m_Unk16;
+                This->m_Unk16 = 0xD;
+                var_s1 = -(temp_v0 == 0xC) & 0x190;
+            } else {
+                var_a2_2 = &D_80089E14;
+                if (This->m_Unk16 == 0xD) {
+                    var_s1 = -0x190;
+                }
+                This->m_Unk16 = 0xC;
+            }
+            This->vtable->Unk17(This, 1, var_a2_2);
+            This->vtable->Unk50(This, var_s1, 0);
+        }
+    }
+    if ((arg1[1] == 0x208) && (D_8008ACCC != 0)) {
+        This->vtable->Unk90(This);
+        This->m_Unk16 = 1;
+    }
+}
+*/
+
 void func_80062FAC(entity_t *This, s32 *arg1) {
     s32 temp;
 
@@ -2164,7 +2264,7 @@ void func_80062FAC(entity_t *This, s32 *arg1) {
     }
     This->vtable->Unk16(This, 0, &D_80089CA0);
     if ((This->m_Unk16 == 0) && (This->m_Unk60 != 0)) {
-        This->vtable->Unk11(This, 0xB);
+        This->vtable->Notify(This, 0xB);
         This->m_Unk16 = 0xB;
     }
 }
@@ -2215,7 +2315,7 @@ void func_800634A8(entity_t *This, s32 *arg1) {
             This->vtable->Unk48(This, -0x28, 0);
         }
         if (This->m_Unk62 == 0x28) {
-            This->vtable->Unk11(This, 0xA);
+            This->vtable->Notify(This, 0xA);
         }
     } else if (This->m_Unk16 == 0xB) {
         This->vtable->Unk75(This);
@@ -2326,7 +2426,7 @@ void func_80063874(entity_t *This, entity_t *arg1) {
         }
         func_80063CAC(arg1);
         This->m_Unk36->vtable->Unk16(This->m_Unk36, 1, &D_80089C7C);
-        This->vtable->Unk11(This, (rand() % 5) != 0 ? 0xA : 0xC);
+        This->vtable->Notify(This, (rand() % 5) != 0 ? 0xA : 0xC);
         This->m_Unk16 = 0xE;
         return;
     }
@@ -2410,7 +2510,7 @@ void func_80063DC8(entity_t *This, s32 *arg1) {
         This->vtable->Unk90(This);
         This->m_Unk16 = 1;
         if (rand() & 1) {
-            This->vtable->Unk11(This, 0xB);
+            This->vtable->Notify(This, 0xB);
         }
     }
 }
@@ -2452,7 +2552,7 @@ void func_80063ED4(entity_t *This, s32 *arg1) {
         This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
     }
     if (This->m_Unk62 == 0x32) {
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     } else if (This->m_Unk62 == 0xC) {
         arg1[4] = 0;
         arg1[7] = 0x15;
@@ -2478,7 +2578,7 @@ void func_80064078(entity_t *This, s32 *arg1) {
     } else if (This->m_Unk32 == (This->m_Unk31 - 1)) {
         arg1[4] = 0;
         arg1[12] = 0x12;
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
     This->vtable->Unk17(This, 1, &D_80089DE4);
 }
@@ -2617,7 +2717,7 @@ void func_800646D8(entity_t *This, s32 *arg1) {
     if ((This->m_Unk60 != 0) && (This->m_Unk16 == 0)) {
         This->m_Unk16 = 0xC;
         This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
-        This->vtable->Unk11(This, 0xA);
+        This->vtable->Notify(This, 0xA);
     }
     if (This->m_Unk16 == 0xC) {
         This->m_Unk36->vtable->Unk48(This->m_Unk36, 0x100, 0);
@@ -2647,7 +2747,7 @@ check16:
     if (This->m_Unk62 != 0x3A2) {
         goto tail;
     }
-    This->vtable->Unk11(This, 0xA);
+    This->vtable->Notify(This, 0xA);
     goto tail;
 other:
     count = This->m_Unk62;

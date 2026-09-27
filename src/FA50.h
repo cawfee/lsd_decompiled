@@ -2,23 +2,24 @@
 #define LSD_FA50_H
 
 #include "common.h"
+#include "base_class.h"
 
 typedef struct class_FA50_vtable {
-    /* 0x000 8006bea0 */ u32 value;
-    /* 0x004 8006bea4 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006bea0 */ u32 type_id;
+    /* 0x004 8006bea4 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006bea8 */ void (*class_FA50_construct)(void *, s32);
-    /* 0x00C 8006beac */ void (*base_class_cleanup)(void *);
-    /* 0x010 8006beb0 */ void (*Unk3)(void *);
-    /* 0x014 8006beb4 */ void (*Unk4)(void *);
-    /* 0x018 8006beb8 */ void (*Unk5)(void *);
-    /* 0x01C 8006bebc */ void (*Unk6)(void *);
-    /* 0x020 8006bec0 */ void (*Unk7)(void *);
-    /* 0x024 8006bec4 */ void (*Unk8)(void *);
-    /* 0x028 8006bec8 */ void (*Unk9)(void *);
-    /* 0x02C 8006becc */ void (*Unk10)(void *);
-    /* 0x030 8006bed0 */ void (*Unk11)(void *);
-    /* 0x034 8006bed4 */ void (*Unk12)(void *);
-    /* 0x038 8006bed8 */ void (*Unk13)(void *);
+    /* 0x00C 8006beac */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006beb0 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006beb4 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006beb8 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006bebc */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006bec0 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006bec4 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006bec8 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006becc */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006bed0 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006bed4 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006bed8 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006bedc */ u32 dummy;
     /* 0x040 8006bee0 */ void (*Unk15)(void *);
     /* 0x044 8006bee4 */ void (*Unk16)(void *);

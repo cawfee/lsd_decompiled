@@ -8,7 +8,7 @@
 
 extern memory_card_vtable_t *g_MEMORY_CARD_VTABLE;
 extern s32 D_80086E78;
-extern s32 D_8008AA30;
+s32 D_8008AA30 SECTION(".sdata") = 0;
 extern char D_8008AA9C[]; /* "bu10:" */
 extern char D_8008AAA4[]; /* "bu00:" */
 extern char D_8008AAAC[]; /* "TEMP" */
@@ -59,7 +59,23 @@ memory_card_t *memory_card_create(u32 Unk1, u32 Unk2) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", memory_card_on_construct);
+void memory_card_on_construct(memory_card_t *This, s32 arg1, s32 arg2) {
+    memory_card_vtable_t *vt;
+    s32 prev;
+
+    base_class_get_vtable()->Construct(This);
+    vt = memory_card_get_vtable();
+    prev = D_8008AA30;
+    This->vtable = vt;
+    D_8008AA30 = prev + 1;
+    if (prev == 0) {
+        InitCARD(arg1);
+        StartCARD();
+        _bu_init();
+    }
+    memory_card_state_reset(This);
+    This->vtable->Unk15(This, arg2);
+}
 
 void memory_card_state_reset(memory_card_t *This) {
     This->m_Unk23 = 0;
@@ -70,14 +86,14 @@ void memory_card_state_reset(memory_card_t *This) {
 }
 
 void func_8004E40C(memory_card_t *This) {
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_8004E444(memory_card_t *This, void *Unk) {
     s32 unk;
 
     if (Unk) {
-        base_class_get_vtable()->Unk3(This, Unk);
+        base_class_get_vtable()->Attach(This, Unk);
 
         unk = **(s32 **) Unk;
 
@@ -117,7 +133,7 @@ void func_8004E4E8(memory_card_t *This, void *Unk) {
             }
         }
 
-        base_class_get_vtable()->Unk4(This, Unk);
+        base_class_get_vtable()->Detach(This, Unk);
     }
 }
 
@@ -127,7 +143,7 @@ void func_8004E588(memory_card_t *This) {
     This->m_Unk25 = 0;
     This->m_Unk29 = 0;
     This->m_Unk30 = 0;
-    base_class_get_vtable()->Unk5(This);
+    base_class_get_vtable()->DetachAll(This);
 }
 
 void func_8004E5D4(memory_card_t *This, s32 Count) {
@@ -498,8 +514,8 @@ void func_8004F55C(memory_card_t *This, s32 a1, s32 a2, void *a3, void *a4, s32 
     This->m_Unk13 = 0;
     This->m_Unk25 = a5;
     This->m_Unk26 = a6;
-    This->vtable->Unk3(This, a3);
-    This->vtable->Unk3(This, a4);
+    This->vtable->Attach(This, a3);
+    This->vtable->Attach(This, a4);
     This->m_Unk27 = 0;
     This->m_Unk9 = 0;
     This->m_Unk8 = 0;
@@ -508,8 +524,8 @@ void func_8004F55C(memory_card_t *This, s32 a1, s32 a2, void *a3, void *a4, s32 
 void func_8004F5DC(memory_card_t *This) {
   This->m_Unk26 = 0;
   This->m_Unk25 = 0;
-  This->vtable->Unk4(This, This->m_Unk23);
-  This->vtable->Unk4(This, This->m_Unk24);
+  This->vtable->Detach(This, This->m_Unk23);
+  This->vtable->Detach(This, This->m_Unk24);
 }
 
 void func_8004F638(memory_card_t *This, s32 a1, s32 a2, s32 a3, s32 a4) {
@@ -648,7 +664,7 @@ s32 func_8004FB04(memory_card_t *This, void *Unk, s32 a2) {
     s32 unk;
 
     vtable = This->vtable;
-    base_class_get_vtable()->Unk13(This, Unk, a2);
+    base_class_get_vtable()->OnNotify(This, Unk, a2);
     unk = **(s32 **)Unk;
     if ((unk & 0xF) == 2) {
         return vtable->Unk33(This, Unk, a2);
@@ -682,7 +698,7 @@ void func_8004FBE4(memory_card_t *This, s32 Unk) {
     if (This->m_Unk9 == Unk) {
         state = 0x17;
     }
-    vtable->Unk11(This, state);
+    vtable->Notify(This, state);
     vtable->Unk32(This);
     vtable->Unk31(This, state);
     This->m_Unk22 = 0;
@@ -892,7 +908,7 @@ void func_80050340(memory_card_t *This) {
             This->m_Unk29 = func_80050BA8((This->m_Unk17 * 2) + This->m_Unk16, 1);
             This->m_Unk28 = 1;
         }
-        This->vtable->Unk3(This, This->m_Unk29);
+        This->vtable->Attach(This, This->m_Unk29);
         obj = This->m_Unk29;
         (*(void (**)(void *, s32))(*(u32 *) obj + 0x44))(obj, This->m_Unk25);
         obj = This->m_Unk29;
@@ -943,7 +959,7 @@ void func_800505A8(memory_card_t *This) {
             This->m_Unk30 = func_80051A5C(This->m_Unk13, 1);
             This->m_Unk28 = 1;
         }
-        This->vtable->Unk3(This, This->m_Unk30);
+        This->vtable->Attach(This, This->m_Unk30);
         obj = This->m_Unk30;
         (*(void (**)(void *, s32))(*(u32 *) obj + 0x44))(obj, This->m_Unk25);
         obj = This->m_Unk30;

@@ -3,27 +3,29 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct class_30CD0_vtable {
-    /* 0x000 8006eac0 */ u32 value;
-    /* 0x004 8006eac4 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006eac0 */ u32 type_id;
+    /* 0x004 8006eac4 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006eac8 */ void (*Construct)(void *, u32, u32, u32);
-    /* 0x00C 8006eacc */ void (*Cleanup)(void *);
-    /* 0x010 8006ead0 */ void (*Unk3)(void *);
-    /* 0x014 8006ead4 */ void (*Unk4)(void *);
-    /* 0x018 8006ead8 */ void (*Unk5)(void *);
-    /* 0x01C 8006eadc */ void (*Unk6)(void *);
-    /* 0x020 8006eae0 */ void (*Unk7)(void *);
-    /* 0x024 8006eae4 */ void (*Unk8)(void *);
-    /* 0x028 8006eae8 */ void (*Unk9)(void *);
-    /* 0x02C 8006eaec */ void (*Unk10)(void *);
-    /* 0x030 8006eaf0 */ void (*Unk11)(void *);
-    /* 0x034 8006eaf4 */ void (*Unk12)(void *);
-    /* 0x038 8006eaf8 */ void (*Unk13)(void *);
+    /* 0x00C 8006eacc */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006ead0 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006ead4 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006ead8 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006eadc */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006eae0 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006eae4 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006eae8 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006eaec */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006eaf0 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006eaf4 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006eaf8 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006eafc */ void (*Unk14)(void *);
     /* 0x040 8006eb00 */ void (*Unk15)(void *, u32, u32, u32);
     /* 0x044 8006eb04 */ void (*Unk16)(void *);
     /* 0x048 8006eb08 */ void (*Unk17)(void *);
-    /* 0x04C 8006eb0c */ void (*Unk18)(void *, s32, s32);
+    /* 0x04C 8006eb0c */ void (*Unk18)(void *, s32, s32 *);
     /* 0x050 8006eb10 */ void (*Unk19)(void *);
     /* 0x054 8006eb14 */ void (*Unk20)(void *);
     /* 0x058 8006eb18 */ void (*Unk21)(void *);
@@ -52,7 +54,7 @@ typedef struct class_30CD0_vtable {
     /* 0x0B4 8006eb74 */ void (*Unk44)(void *);
     /* 0x0B8 8006eb78 */ void (*Unk45)(void *, s32, void *);
     /* 0x0BC 8006eb7c */ void (*Unk46)(void *, s32);
-    /* 0x0C0 8006eb80 */ void (*Unk47)(void *);
+    /* 0x0C0 8006eb80 */ void (*Unk47)(void *, s32 *);
     /* 0x0C4 8006eb84 */ void (*Unk48)(void *);
     /* 0x0C8 8006eb88 */ void (*Unk49)(void *);
     /* 0x0CC 8006eb8c */ void (*Unk50)(void *, s32);

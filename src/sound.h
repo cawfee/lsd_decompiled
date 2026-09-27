@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct sound_vtable {
-    /* 0x000 8006da34 */ u32 value;
-    /* 0x004 8006da38 */ void (*init_800269F0)(void *);
+    /* 0x000 8006da34 */ u32 type_id;
+    /* 0x004 8006da38 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006da3c */ void (*sound_construct)(void *, s32);
     /* 0x00C 8006da40 */ void (*sound_close)(void *);
-    /* 0x010 8006da44 */ void (*func_80017F98)(void *, void *);
-    /* 0x014 8006da48 */ void (*func_80017FF0)(void *, void *);
-    /* 0x018 8006da4c */ void (*func_80018040)(void *);
-    /* 0x01C 8006da50 */ void (*func_800180BC)(void *, void *, void **);
-    /* 0x020 8006da54 */ void (*func_800180FC)(void *, void *);
-    /* 0x024 8006da58 */ void (*func_8001811C)(void *, void *);
-    /* 0x028 8006da5c */ void (*func_8001813C)(void *);
-    /* 0x02C 8006da60 */ void (*func_8001816C)(void *, void *, void **);
-    /* 0x030 8006da64 */ void (*func_800182CC)(void *);
-    /* 0x034 8006da68 */ void (*func_80018350)(void *);
-    /* 0x038 8006da6c */ void (*func_80018358)(void *, void *, void *);
+    /* 0x010 8006da44 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006da48 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006da4c */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006da50 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006da54 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006da58 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006da5c */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006da60 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006da64 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006da68 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006da6c */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006da70 */ u32 _pad;
     /* 0x040 8006da74 */ u32 pad2;
     /* 0x044 8006da78 */ void (*Unk1)(void *);

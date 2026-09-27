@@ -38,14 +38,14 @@ void func_80051C84(class_4225C_t *This) {
     }
     memory_free_mem((void *)This->m_Unk6);
     memory_free_mem((void *)This->m_Unk5);
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_80051D1C(class_4225C_t *This, void **Unk) {
     s32 kind;
 
     if (Unk != NULL) {
-        base_class_get_vtable()->Unk3(This, Unk);
+        base_class_get_vtable()->Attach(This, Unk);
         kind = *(u32 *)*Unk & 0xF;
         if (kind == 2) {
             This->m_Unk12 = (s32)Unk;
@@ -67,7 +67,7 @@ void func_80051DA0(class_4225C_t *This, void **Unk) {
         } else if (kind == 5) {
             This->m_Unk13 = 0;
         }
-        base_class_get_vtable()->Unk4(This, Unk);
+        base_class_get_vtable()->Detach(This, Unk);
     }
 }
 
@@ -75,13 +75,13 @@ void func_80051E20(class_4225C_t *This) {
     This->m_Unk12 = 0;
   This->m_Unk13 = 0;
   This->m_Unk19 = 0;
-  base_class_get_vtable()->Unk5(This);
+  base_class_get_vtable()->DetachAll(This);
 }
 
 void func_80051E64(class_4225C_t *This, void **Unk1, s32 Unk2) {
     s32 kind;
 
-    ((void (*)(void *, void **, s32))base_class_get_vtable()->Unk13)(This, Unk1, Unk2);
+    ((void (*)(void *, void **, s32))base_class_get_vtable()->OnNotify)(This, Unk1, Unk2);
     kind = *(u32 *)*Unk1 & 0xF;
     if (kind == 2) {
         ((void (*)(void *, void **, s32))This->vtable->Unk22)(This, Unk1, Unk2);
@@ -106,15 +106,15 @@ void func_800520A0(class_4225C_t *This) {
 }
 
 void func_80052110(class_4225C_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
-    ((void (*)(void *, s32))This->vtable->Unk3)(This, Unk1);
-    ((void (*)(void *, s32))This->vtable->Unk3)(This, Unk2);
+    ((void (*)(void *, s32))This->vtable->Attach)(This, Unk1);
+    ((void (*)(void *, s32))This->vtable->Attach)(This, Unk2);
     This->m_Unk14 = Unk3;
     This->m_Unk10 = 0;
 }
 
 void func_8005217C(class_4225C_t *This) {
-    This->vtable->Unk4(This, This->m_Unk12);
-  This->vtable->Unk4(This, This->m_Unk13);
+    This->vtable->Detach(This, This->m_Unk12);
+  This->vtable->Detach(This, This->m_Unk13);
   This->m_Unk14 = 0;
 }
 
@@ -131,12 +131,12 @@ void func_800521D4(class_4225C_t *This, s32 arg1) {
     }
     goto end;
 case_2_3:
-    ((void (*)(void *, s32))This->vtable->Unk4)(This, This->m_Unk12);
+    ((void (*)(void *, s32))This->vtable->Detach)(This, This->m_Unk12);
     This->vtable->Unk17(This);
     This->m_Unk10 = arg1;
     goto end;
 case_4:
-    ((void (*)(void *, s32))This->vtable->Unk11)(This, This->m_Unk10);
+    ((void (*)(void *, s32))This->vtable->Notify)(This, This->m_Unk10);
 end:
     ;
 }
@@ -270,12 +270,52 @@ void func_80052598(class_4225C_t *This) {
     }
 }
 
+void func_800529FC(class_4225C_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
+char *func_8005292C(class_4225C_t *This, char *dest, s32 arg2, s32 arg3, char *base);
+text_line_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3);
+
+extern s32 D_8008AB00;
+extern s32 D_8008AB04;
+extern s32 D_8008AB0C;
+
+/*
+void func_80052644(class_4225C_t *This, s32 arg1, s32 arg2, s32 arg3, char *arg4,
+                    s32 arg5) {
+    s32 count;
+    s32 index;
+    text_line_t **slot;
+    text_line_t *line;
+    char text[0x20];
+    s32 coords[2];
+
+    if (This->m_Unk19 != 0) {
+        coords[0] = D_8008AB00;
+        coords[1] = D_8008AB04;
+        count = This->m_Unk3;
+        slot = (text_line_t **)&This->m_Unk15;
+        if (count >= 5) {
+            count = 4;
+        }
+        index = 0;
+        if (count > 0) {
+            do {
+                func_8005292C(This, text, index, arg3, arg4);
+                line = func_800408CC(arg2, 0x1A, (s32)text);
+                *slot = line;
+                line->vtable->Unk18(line, arg1, coords);
+                slot[0]->vtable->Unk45(slot[0], (char *)&D_8008AB0C);
+                coords[1] += 0xA;
+                slot += 1;
+                index += 1;
+            } while (index < count);
+        }
+        func_800529FC(This, arg3, (s32)arg4, arg5, 1);
+    }
+}
+*/
 INCLUDE_ASM("asm/nonmatchings/4225C", func_80052644);
 
 INCLUDE_ASM("asm/nonmatchings/4225C", func_8005278C);
-
-void func_800529FC(class_4225C_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
-char *func_8005292C(class_4225C_t *This, char *dest, s32 arg2, s32 arg3, char *base);
 
 void func_8005281C(class_4225C_t *This, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 count;
@@ -339,7 +379,6 @@ char *func_8005292C(class_4225C_t *This, char *dest, s32 arg2, s32 arg3, char *b
     return dest;
 }
 
-extern s32 D_8008AB0C;
 extern s32 D_8008AB10;
 
 void func_800529FC(class_4225C_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {

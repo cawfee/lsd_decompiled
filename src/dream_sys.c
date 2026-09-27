@@ -24,6 +24,7 @@ extern s16 STAGE_TIME_LIMITS[];
 extern s16 *STAGE_SPAWNPOINTS[];
 extern u8 LEN_STAGE_SPAWNPOINTS[];
 extern s32 D_8008ABE4;
+extern s32 D_8008ABE8;
 extern s32 D_8008ABF0[];
 extern s32 gpNavChallengesComplete;
 extern s32 gpDinamicLinkPenalty;
@@ -64,7 +65,7 @@ s32 func_8005AF64(dream_sys_t *This, s16 *a, s16 *b);
 s32 func_8005BE28(s16 *arg0, s32 arg1);
 s32 get_random_spawn_from_stage(void *dst, s32 chunk, s32 tick);
 s32 calc_navigation_score(void);
-void helper_1_update_entity(s32 arg0, void *arg1);
+void helper_1_update_entity(sound_t *This, void *Ctx);
 void init_nav_challenges_array(s32 *Unk1, s32 *Unk2);
 void *memset(void *s, int c, u32 n);
 
@@ -104,7 +105,7 @@ void dream_sys_construct(dream_sys_t *This, void *Unk1, s32 Unk2, s32 Unk3) {
     This->m_Unk22 = Unk3;
     This->m_Unk24 = 0;
     This->m_Unk23 = (s32)Unk1;
-    This->vtable->Unk3(
+    This->vtable->Attach(
         This, (*(s32(**)(void *, s32))(*(u32 *)Unk1 + 0x80))(Unk1, 0));
     This->vtable->dream_sys__get_set_dream_time_limit(This, -1);
     This->m_Unk27 = 1;
@@ -135,7 +136,7 @@ void dream_sys_unk18(dream_sys_t *This, void **arg1) {
     ((void (*)(void **, void *, void *, void *))*(void **)((u8 *)*arg1 + 0xE4))(
         arg1, sp10, This, (u8 *)This + 0x16C);
     ((void (*)(void *, void **, void *))func_80057C84()->Unk18)(This, arg1, sp10);
-    This->vtable->Unk3(This, arg1);
+    This->vtable->Attach(This, arg1);
     if (This->m_Unk16 == 0xE) {
         off = *(s32 *)((u8 *)This + 0x87C) * 0x24 + 0x470;
         slot = (u8 *)This + off;
@@ -155,7 +156,7 @@ void func_80058A94(dream_sys_t *This) {
 
     temp_a0 = (void **)This->m_Unk18;
     ((void (*)(void **))(*(void **)((s8 *)*temp_a0 + 0xF0)))(temp_a0);
-    This->vtable->Unk4(This, (void *)This->m_Unk18);
+    This->vtable->Detach(This, (void *)This->m_Unk18);
     func_80057C84()->Unk19(This);
 }
 
@@ -278,7 +279,7 @@ s32 dream_sys__timer_tick(dream_sys_t *This, s32 arg1, s32 arg2) {
             } else {
                 This->vtable->dream_sys__flashback_saving(This, 0, 0x10);
             }
-            This->vtable->Unk11(This, 0xA);
+            This->vtable->Notify(This, 0xA);
             This->m_GameTick = 0;
         } else {
             This->vtable->Unk69(This);
@@ -876,16 +877,19 @@ void func_8005A1EC(dream_sys_t *This, s32 Value) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1F4);
-// void func_8005A1F4(void *This, s32 *arg1) {
-//     s32 v1;
-//     s32 a0;
+// Best attempt under -O2: 25/25, div-by-20 keeps the sign in v0 and mfhi in v1.
+// The stub wants the sign in v1 and mfhi in v0. -fno-schedule-insns swaps those
+// registers but leaves the sign shift after mfhi.
+// void func_8005A1F4(dream_sys_t *This, s32 *arg1) {
+//     s32 mode;
+//     s32 value;
 //
-//     v1 = arg1[0];
-//     if (v1 != 1) {
+//     mode = arg1[0];
+//     if (mode != 1) {
 //         return;
 //     }
-//     a0 = arg1[1];
-//     if (a0 == ((a0 / 20) * 20)) {
+//     value = arg1[1];
+//     if (value == (value / 20) * 20) {
 //         arg1[7] = 9;
 //         arg1[8] = -1;
 //         return;
@@ -1051,7 +1055,7 @@ s32 dream_sys__load_next_flashback(dream_sys_t *This, s32 arg1) {
         off = idx * 0x24 + 0x470;
         slot = (u8 *)This + off;
         if (arg1 == 0) {
-            ((void (*)(void *, s32))This->vtable->Unk11)(This, 0xE);
+            ((void (*)(void *, s32))This->vtable->Notify)(This, 0xE);
         }
         This->m_Unk95 = *(s32 *)(slot + 0x20);
         This->m_NextMap = *(s32 *)slot;
@@ -1106,7 +1110,7 @@ s32 execute_link(dream_sys_t *This, s32 arg1, s32 arg2, s32 arg3) {
     void *temp_a0;
 
     This->m_Unk16 = arg2;
-    This->vtable->Unk11(This, arg2);
+    This->vtable->Notify(This, arg2);
     if (This->m_Unk16 == 0) {
         return 0;
     }
@@ -1596,7 +1600,37 @@ s32 func_8005BB14(s32 Unk) {
     return STAGE_TIME_LIMITS[Unk];
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", get_random_spawn_from_stage);
+s32 get_random_spawn_from_stage(void *dst, s32 chunk, s32 tick) {
+    s32 six;
+    s32 selected;
+    u8 *spawn;
+    u8 idx;
+    s32 len;
+    s32 r;
+
+    (void)tick;
+    six = 6;
+    if (chunk >= 0) {
+        selected = rand() % six;
+        if (selected == chunk) {
+            selected += 1;
+            if (selected >= 6) {
+                selected = 0;
+            }
+        }
+    } else {
+        selected = -chunk;
+    }
+    r = rand();
+    len = LEN_STAGE_SPAWNPOINTS[selected];
+    spawn = (u8 *)STAGE_SPAWNPOINTS[selected] + (r % len) * 6;
+    *(dream_sys_pkt4_t *)dst = *(dream_sys_pkt4_t *)spawn;
+    idx = spawn[4];
+    *(dream_sys_pkt6_t *)((u8 *)dst + 4) =
+        *(dream_sys_pkt6_t *)((u8 *)SPAWN_POS_ADJUST + idx * 6);
+    *(s32 *)gpDinamicLinkPenalty += 1;
+    return selected;
+}
 
 s32 test_for_static_link(s32 *Unk0, s32 Unk1, s32 Unk2) {
     return get_static_spawn(Unk0, Unk1, Unk2, LEN_STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_TRIGGERS, &STAGE_PERMALINK_SPAWNS, 1);
@@ -1638,7 +1672,51 @@ s32 func_8005BE28(s16 *arg0, s32 arg1) {
     return ((u16)(wrapped + 0x2C)) < 0x59U;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005BE90);
+s32 func_8005BE90(void *dst, s32 map, void *arg2, s32 tick) {
+    s32 result;
+
+    if (map == 3) {
+        goto shared;
+    }
+    if (map == 1) {
+        goto shared;
+    }
+    if (map == 5) {
+        goto case5;
+    }
+    if (map == 9) {
+        goto shared;
+    }
+    if (map != 0xC) {
+        return -1;
+    }
+shared:
+    if (map != 5) {
+        goto check9;
+    }
+case5:
+    if (*(s16 *)((u8 *)arg2 + 6) < -0xFFF) {
+        goto do_spawn;
+    }
+    if (*(s32 *)arg2 == D_8008ABE8) {
+        goto do_spawn;
+    }
+    return -1;
+check9:
+    if (map != 9) {
+        goto do_spawn;
+    }
+    if (*(s16 *)((u8 *)arg2 + 6) < 0x800) {
+        return -1;
+    }
+do_spawn:
+    if ((tick & 1) != 0) {
+        map = -0xC;
+    }
+    result = get_random_spawn_from_stage(dst, map, tick);
+    D_8008ACC4 = result;
+    return result;
+}
 
 s32 *func_8005BF48(void) {
     s32 *out = NULL;

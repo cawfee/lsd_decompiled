@@ -75,6 +75,21 @@ void func_8004001C(class_305B0_t *This, s32 Value) {
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040024);
 
+/*
+void func_800400B0(class_305B0_t *This) {
+    s32 temp;
+
+    if (This->m_Unk26 == 0) {
+        temp = ((s32 (*)(class_305B0_t *))This->vtable->Unk54)(This);
+        if (This->m_Unk37 != 0) {
+            This->m_Unk31 -= 1;
+        } else {
+            This->vtable->Unk45(This, 1, (s32 *)((u8 *)D_8006EAA8 + (temp * 3)));
+        }
+        This->m_Unk26 = 2;
+    }
+}
+*/
 INCLUDE_ASM("asm/nonmatchings/305B0", func_800400B0);
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040154);
@@ -102,12 +117,12 @@ void func_800402F0(class_305B0_t *This, s32 arg1) {
                 vt->Unk24(This, 0);
             }
         }
-        vt->Unk4(This, arg1);
+        vt->Detach(This, arg1);
         if (This->m_Unk28 < 0) {
             This->m_Unk28 = -This->m_Unk28;
         }
         This->m_Unk26 = 0;
-        vt->Unk11(This, which);
+        vt->Notify(This, which);
     }
 }
 

@@ -40,17 +40,17 @@ void func_8003BF10(ui_screen_t *This, s32 Unk2, s32 Unk3, sound_t *Unk4) {
 }
 
 void func_8003C008(ui_screen_t *This) {
-    This->m_Unk29->vtable->base_class_destructor(This->m_Unk29);
-    This->m_Unk30->vtable->init_800269F0(This->m_Unk30);
-    This->m_Unk31->vtable->init_800269F0(This->m_Unk31);
+    This->m_Unk29->vtable->Destroy(This->m_Unk29);
+    This->m_Unk30->vtable->Destroy(This->m_Unk30);
+    This->m_Unk31->vtable->Destroy(This->m_Unk31);
     if (This->m_Unk16) {
-        This->m_Unk17->vtable->init_800269F0(This->m_Unk17);
+        This->m_Unk17->vtable->Destroy(This->m_Unk17);
     }
     if (This->m_Unk27) {
         This->m_Unk28->vtable->Destruct(This->m_Unk28);
     }
     This->vtable->Unk54(This);
-    timer_get_vtable()->base_class_cleanup(This);
+    timer_get_vtable()->Cleanup(This);
 }
 
 extern char D_8006E860[];

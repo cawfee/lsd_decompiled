@@ -1,7 +1,147 @@
 #include "main_menu.h"
+#include "base_class.h"
 #include "ui_screen.h"
 
-extern main_menu_vtable_t g_MAIN_MENU_VTABLE;
+void func_8004D578(void);
+void func_8004D704(void);
+void func_8004D788(void);
+void show_title(void);
+void func_8003C1DC(void);
+void func_8003E280(void);
+void func_8003C238(void);
+void func_8004D898(void);
+void func_8003E418(void);
+void func_8003C48C(void);
+void func_8003C51C(void);
+void func_8004D90C(void);
+void func_8003E538(void);
+void func_8003E578(void);
+void func_8003C794(void);
+void func_8003C7B4(void);
+void func_8003C7F4(void);
+void func_8003C858(void);
+void func_8003C8D0(void);
+void func_8003C944(void);
+void func_8003C9B0(void);
+void func_8004D9D4(void);
+void func_8004DABC(void);
+void func_8003CAEC(void);
+void func_8003CAF8(void);
+void func_8003CB30(void);
+void func_8003CB68(void);
+void func_8003CBB8(void);
+void func_8003CBC0(void);
+void func_8003CC2C(void);
+void func_8003CCDC(void);
+void func_8003CD48(void);
+void func_8003CDE0(void);
+void func_8004DB18(void);
+void func_8004DC08(void);
+void func_8004DC64(void);
+void func_8004DCD0(void);
+void func_8003D3B0(void);
+void func_8003D444(void);
+void func_8003D4DC(void);
+void func_8003D5C0(void);
+void func_8003D5CC(void);
+void func_8003D6D4(void);
+void func_8003D73C(void);
+void func_8003D980(void);
+void func_8003DA10(void);
+void func_8003DAD4(void);
+void func_8003DCAC(void);
+void func_8003DDC8(void);
+void func_8003DE30(void);
+void func_8003DE9C(void);
+void func_8003DFA0(void);
+void func_8004DE08(void);
+void attach_memory_card(void);
+void func_8004E054(void);
+void write_save(void);
+void read_save(void);
+void func_8004E230(void);
+
+main_menu_vtable_t g_MAIN_MENU_VTABLE = {
+    0x1F130,
+    base_class_destructor,
+    (void (*)(void *))func_8004D578,
+    (void (*)(void *))func_8004D704,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(void *))func_8004D788,
+    0,
+    (void (*)(void *))show_title,
+    (void (*)(void *))func_8003C1DC,
+    (void (*)(void *))func_8003E280,
+    (void (*)(void *))func_8003C238,
+    (void (*)(void *))func_8004D898,
+    (void (*)(void *))func_8003E418,
+    (void (*)(void *))func_8003C48C,
+    (void (*)(void *))func_8003C51C,
+    (void (*)(void *))func_8004D90C,
+    (void (*)(void *))func_8003E538,
+    (void (*)(void *))func_8003E578,
+    (void (*)(void *))func_8003C794,
+    (void (*)(void *))func_8003C7B4,
+    (void (*)(void *))func_8003C7F4,
+    (void (*)(void *))func_8003C858,
+    (void (*)(void *))func_8003C8D0,
+    (void (*)(void *))func_8003C944,
+    (void (*)(void *))func_8003C9B0,
+    0,
+    0,
+    (void (*)(void *))func_8004D9D4,
+    (void (*)(void *))func_8004DABC,
+    (void (*)(void *))func_8003CAEC,
+    (void (*)(void *))func_8003CAF8,
+    (void (*)(void *))func_8003CB30,
+    (void (*)(void *))func_8003CB68,
+    (void (*)(void *))func_8003CBB8,
+    (void (*)(void *))func_8003CBC0,
+    (void (*)(void *))func_8003CC2C,
+    0,
+    0,
+    0,
+    (void (*)(void *))func_8003CCDC,
+    (void (*)(void *))func_8003CD48,
+    0,
+    0,
+    0,
+    (void (*)(void *))func_8003CDE0,
+    (void (*)(void *))func_8004DB18,
+    (void (*)(void *))func_8004DC08,
+    (void (*)(void *))func_8004DC64,
+    (void (*)(void *))func_8004DCD0,
+    (void (*)(void *))func_8003D3B0,
+    (void (*)(void *))func_8003D444,
+    (void (*)(void *))func_8003D4DC,
+    (void (*)(void *))func_8003D5C0,
+    (void (*)(void *))func_8003D5CC,
+    (void (*)(void *))func_8003D6D4,
+    (void (*)(void *))func_8003D73C,
+    (void (*)(void *))func_8003D980,
+    (void (*)(void *))func_8003DA10,
+    (void (*)(void *))func_8003DAD4,
+    (void (*)(void *))func_8003DCAC,
+    (void (*)(void *))func_8003DDC8,
+    (void (*)(void *))func_8003DE30,
+    (void (*)(void *))func_8003DE9C,
+    (void (*)(void *))func_8003DFA0,
+    (void (*)(void *))func_8004DE08,
+    (void (*)(void *))attach_memory_card,
+    (void (*)(void *))func_8004E054,
+    (void (*)(void *))write_save,
+    (void (*)(void *))read_save,
+    (void (*)(void *))func_8004E230,
+};
 
 static const char *g_MENU_BUTTON_STATES[3] = { "Off", "On", NULL };
 
@@ -73,7 +213,7 @@ void func_8004D578(main_menu_t *This, dream_sys_t *DreamSys) {
     This->vtable->show_title(This, DreamSys);
 }
 
-void func_8004D678(main_menu_t *This, s32 Vtable) {
+void func_8004D678(main_menu_t *This, s32 Vtable, dream_sys_t *unused) {
     s32 unk47 = This->m_RegionCode;
     s32 is_enabled = 1;
 
@@ -92,7 +232,7 @@ void write_day_digits(s32 Value) {
 
 void func_8004D704(main_menu_t *This) {
     if (This->m_MemoryCard) {
-        This->m_MemoryCard->vtable->base_class_destructor(This->m_MemoryCard);
+        This->m_MemoryCard->vtable->Destroy(This->m_MemoryCard);
         This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
     }
 
@@ -101,7 +241,7 @@ void func_8004D704(main_menu_t *This) {
 
 // Something related to menu input
 void func_8004D788(main_menu_t *This, void **Unk2, s32 Unk3) {
-    func_8003DFBC()->Unk13(This, Unk2, Unk3);
+    func_8003DFBC()->OnNotify(This, Unk2, Unk3);
 
     if ((*(u32 *) *Unk2 & 0xF) == 0xB) {
         This->vtable->Unk77(This, Unk2, Unk3);
@@ -249,7 +389,7 @@ void func_8004DB18(main_menu_t *This, void *Unk) {
 }
 
 void func_8004DC08(main_menu_t *This) {
-    This->m_Unk43->vtable->base_class_destructor(This->m_Unk43);
+    This->m_Unk43->vtable->Destroy(This->m_Unk43);
     func_8003DFBC()->Unk54(This);
 }
 
@@ -304,30 +444,28 @@ UPDATES_ONLY:
     This->m_Unk43->vtable->Unk45(This->m_Unk43, local_buf);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DE08);
-// void func_8004DE08(main_menu_t *This) {
-//     s32 unk_value;
-//     u8 *mem;
-//     u32 unk[2];
+void func_8004DE08(main_menu_t *This) {
+    s32 saved_unk21;
+    void *mem;
+    s32 shake[2];
+    u8 size;
 
-//     unk_value = This->m_Unk21;
-//     mem = memory_allocate_mem(*((u8 *)This->m_Unk43 + 169));
-
-//     func_80040FC0(mem, g_DAY_STR);
-//     (*(void ( **)(void *, u8 *))(*(u32 *)This->m_Unk43 + 204))(This->m_Unk43, mem);
-//     memory_free_mem(mem);
-
-//     func_8004D678(This, This->m_Unk18, This->m_DreamSys);
-//     This->vtable->Unk55(This, (void *)This->m_Unk4);
-//     This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, unk);
-
-//     This->m_Unk21 = 5;
-//     This->vtable->Unk23(This, 11);
-//     This->vtable->Unk70(This, unk[0], 1);
-//     This->vtable->Unk23(This, 15);
-//     This->vtable->Unk59(This, unk_value, 0);
-//     This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, unk);
-//  }
+    size = This->m_Unk43->m_Unk41_2;
+    saved_unk21 = This->m_Unk21;
+    mem = memory_allocate_mem(size);
+    func_80040FC0(mem, g_DAY_STR);
+    This->m_Unk43->vtable->Unk50(This->m_Unk43, mem);
+    memory_free_mem(mem);
+    func_8004D678(This, This->m_Unk18, This->m_DreamSys);
+    This->vtable->Unk55(This, (void *)This->m_Unk4);
+    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, shake);
+    This->m_Unk21 = 5;
+    This->vtable->Unk23(This, 11);
+    This->vtable->Unk70(This, shake[0], 1);
+    This->vtable->Unk23(This, 15);
+    This->vtable->Unk59(This, saved_unk21, 0);
+    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, shake);
+}
 
 void attach_memory_card(main_menu_t *This, s32 Unk) {
     if (!This->m_MemoryCard) {
@@ -338,15 +476,15 @@ void attach_memory_card(main_menu_t *This, s32 Unk) {
     This->m_MemoryCard->vtable->Unk26(This->m_MemoryCard, D_80011454, &D_80086D6C, *(u32 *) (This->m_Unk2 + 4),
                                       This->m_Unk3, This->m_Unk4, This->m_Sound);
 
-    This->vtable->Unk3(This, (s32) This->m_MemoryCard);
-    This->vtable->Unk4(This, *(void **) (This->m_Unk2 + 4));
-    This->vtable->Unk4(This, (void *) This->m_Unk3);
+    This->vtable->Attach(This, (s32) This->m_MemoryCard);
+    This->vtable->Detach(This, *(void **) (This->m_Unk2 + 4));
+    This->vtable->Detach(This, (void *) This->m_Unk3);
 }
 
 void func_8004E054(main_menu_t *This) {
-    This->vtable->Unk3(This, *(u32 *) (This->m_Unk2 + 4));
-    This->vtable->Unk3(This, This->m_Unk3);
-    This->vtable->Unk4(This, This->m_MemoryCard);
+    This->vtable->Attach(This, *(u32 *) (This->m_Unk2 + 4));
+    This->vtable->Attach(This, This->m_Unk3);
+    This->vtable->Detach(This, This->m_MemoryCard);
     This->m_MemoryCard->vtable->Unk27(This->m_MemoryCard);
 }
 
@@ -397,17 +535,5 @@ void func_8004E230(main_menu_t *This, void *Unk2, s32 Unk3) {
 }
 
 main_menu_vtable_t *main_menu_get_vtable(void) {
-#ifndef CCG8
     return &g_MAIN_MENU_VTABLE;
-#else
-    // G8 hack
-    main_menu_vtable_t *result;
-
-    __asm__("lui     %0, %%hi(%1)\n\t"
-            "addiu   %0, %0, %%lo(%1)"
-            : "=r"(result)
-            : "i"(&g_MAIN_MENU_VTABLE));
-
-    return result;
-#endif
 }

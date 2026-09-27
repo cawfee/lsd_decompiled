@@ -1,11 +1,151 @@
 #include "movie_screen.h"
 
+#include "base_class.h"
 #include "ui_screen.h"
-
-extern movie_screen_vtable_t **g_MOVIE_SCREEN_VTABLE;
 
 s32 *func_8003DFCC(void);
 s32 func_80045438(s32, s32, s32);
+
+void movie_screen_construct(movie_screen_t *, s32, s32, s32, s32 *);
+void movie_screen_cleanup(movie_screen_t *);
+void func_8003E030(void);
+void func_8003BA38(void);
+void func_8003BA58(void);
+void func_8003E280(void);
+void func_8003BAB4(void);
+void func_8003C3D0(void);
+void func_8003E418(void);
+void func_8003C48C(void);
+void func_8003BB5C(void);
+void func_8003BC14(void);
+void func_8003E538(void);
+void func_8003E578(void);
+void func_8003BCF4(void);
+void func_8003C7B4(void);
+void func_8003C7F4(void);
+void func_8003BD10(void);
+void func_8003C8D0(void);
+void func_8003BD74(void);
+void func_8003BDAC(void);
+void func_8003BDE4(void);
+void func_8003BDEC(void);
+void func_8003CA1C(void);
+void func_8003BDF4(void);
+void func_8003CAEC(void);
+void func_8003CAF8(void);
+void func_8003CB30(void);
+void func_8003CB68(void);
+void func_8003CBB8(void);
+void func_8003CBC0(void);
+void func_8003CC2C(void);
+void func_8003CCDC(void);
+void func_8003CD48(void);
+void func_8003CDE0(void);
+void func_8003CE98(void);
+void func_8003D050(void);
+void func_8003D194(void);
+void func_8003D2CC(void);
+void func_8003D3B0(void);
+void func_8003D444(void);
+void func_8003D4DC(void);
+void func_8003D5C0(void);
+void func_8003D5CC(void);
+void func_8003D6D4(void);
+void func_8003D73C(void);
+void func_8003D980(void);
+void func_8003DA10(void);
+void func_8003DAD4(void);
+void func_8003DCAC(void);
+void func_8003DDC8(void);
+void func_8003DE30(void);
+void func_8003DE9C(void);
+void func_8003DFA0(void);
+void func_8003BE5C(void);
+void func_8003BE64(void);
+void func_8003BE6C(void);
+void func_8003BE74(void);
+void func_8003BE7C(void);
+
+movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
+    0x1130,
+    base_class_destructor,
+    (void (*)(void *))movie_screen_construct,
+    (void (*)(void *))movie_screen_cleanup,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(void *))func_8003E030,
+    NULL,
+    (void (*)(void *))func_8003BA38,
+    (void (*)(void *))func_8003BA58,
+    (void (*)(void *))func_8003E280,
+    (void (*)(void *))func_8003BAB4,
+    (void (*)(void *))func_8003C3D0,
+    (void (*)(void *))func_8003E418,
+    (void (*)(void *))func_8003C48C,
+    (void (*)(void *))func_8003BB5C,
+    (void (*)(void *))func_8003BC14,
+    (void (*)(void *))func_8003E538,
+    (void (*)(void *))func_8003E578,
+    (void (*)(void *))func_8003BCF4,
+    (void (*)(void *))func_8003C7B4,
+    (void (*)(void *))func_8003C7F4,
+    (void (*)(void *))func_8003BD10,
+    (void (*)(void *))func_8003C8D0,
+    (void (*)(void *))func_8003BD74,
+    (void (*)(void *))func_8003BDAC,
+    (void (*)(void *))func_8003BDE4,
+    (void (*)(void *))func_8003BDEC,
+    (void (*)(void *))func_8003CA1C,
+    (void (*)(void *))func_8003BDF4,
+    (void (*)(void *))func_8003CAEC,
+    (void (*)(void *))func_8003CAF8,
+    (void (*)(void *))func_8003CB30,
+    (void (*)(void *))func_8003CB68,
+    (void (*)(void *))func_8003CBB8,
+    (void (*)(void *))func_8003CBC0,
+    (void (*)(void *))func_8003CC2C,
+    NULL,
+    NULL,
+    NULL,
+    (void (*)(void *))func_8003CCDC,
+    (void (*)(void *))func_8003CD48,
+    NULL,
+    NULL,
+    NULL,
+    (void (*)(void *))func_8003CDE0,
+    (void (*)(void *))func_8003CE98,
+    (void (*)(void *))func_8003D050,
+    (void (*)(void *))func_8003D194,
+    (void (*)(void *))func_8003D2CC,
+    (void (*)(void *))func_8003D3B0,
+    (void (*)(void *))func_8003D444,
+    (void (*)(void *))func_8003D4DC,
+    (void (*)(void *))func_8003D5C0,
+    (void (*)(void *))func_8003D5CC,
+    (void (*)(void *))func_8003D6D4,
+    (void (*)(void *))func_8003D73C,
+    (void (*)(void *))func_8003D980,
+    (void (*)(void *))func_8003DA10,
+    (void (*)(void *))func_8003DAD4,
+    (void (*)(void *))func_8003DCAC,
+    (void (*)(void *))func_8003DDC8,
+    (void (*)(void *))func_8003DE30,
+    (void (*)(void *))func_8003DE9C,
+    (void (*)(void *))func_8003DFA0,
+    (void (*)(void *))func_8003BE5C,
+    (void (*)(void *))func_8003BE64,
+    (void (*)(void *))func_8003BE6C,
+    (void (*)(void *))func_8003BE74,
+    (void (*)(void *))func_8003BE7C,
+};
 
 movie_screen_t *movie_screen_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     movie_screen_t *allocated = (movie_screen_t *) memory_allocate_mem(0xDC);

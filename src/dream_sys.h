@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 #include "tim_image.h"
 
 typedef enum {
@@ -32,26 +34,26 @@ typedef struct {
 } dream_sys_mood_graph_contrib_t;
 
 typedef struct dream_sys_vtable {
-    /* 0x000 80087bdc */ u32 value;
-    /* 0x004 80087be0 */ void (*base_class_destructor)(void *);
+    /* 0x000 80087bdc */ u32 type_id;
+    /* 0x004 80087be0 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80087be4 */ void (*dream_sys_construct)(void *, s32, s32, s32);
     /* 0x00C 80087be8 */ void (*Unk2)(void *);
-    /* 0x010 80087bec */ void (*Unk3)(void *, void *);
-    /* 0x014 80087bf0 */ void (*Unk4)(void *, void *);
-    /* 0x018 80087bf4 */ void (*Unk5)(void *);
-    /* 0x01C 80087bf8 */ void (*Unk6)(void *);
-    /* 0x020 80087bfc */ void (*Unk7)(void *);
-    /* 0x024 80087c00 */ void (*Unk8)(void *);
-    /* 0x028 80087c04 */ void (*Unk9)(void *);
-    /* 0x02C 80087c08 */ void (*Unk10)(void *);
-    /* 0x030 80087c0c */ void (*Unk11)(void *, s32);
-    /* 0x034 80087c10 */ void (*Unk12)(void *);
-    /* 0x038 80087c14 */ void (*Unk13)(void *);
+    /* 0x010 80087bec */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80087bf0 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80087bf4 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80087bf8 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80087bfc */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80087c00 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80087c04 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80087c08 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80087c0c */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80087c10 */ void (*Nop)(base_class_t *);
+    /* 0x038 80087c14 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80087c18 */ u32 pad;
     /* 0x040 80087c1c */ void (*dream_sys_unk15)(void *); // dream_sys_unk15
     /* 0x044 80087c20 */ void (*Unk16)(void *, s32, s32 *);
     /* 0x048 80087c24 */ void (*Unk17)(void *);
-    /* 0x04C 80087c28 */ void (*dream_sys_unk18)(void *);
+    /* 0x04C 80087c28 */ void (*dream_sys_unk18)(void *, void *);
     /* 0x050 80087c2c */ void (*Unk19)(void *); // func_80058A94
     /* 0x054 80087c30 */ void (*Unk20)(void *);
     /* 0x058 80087c34 */ void (*Unk21)(void *);
@@ -91,10 +93,10 @@ typedef struct dream_sys_vtable {
     /* 0x0E0 80087cbc */ void (*dream_sys__wall_link)(void *, void *, s32);
     /* 0x0E4 80087cc0 */ s32 (*Unk56)(void *);
     /* 0x0E8 80087cc4 */ void (*Unk57)(void *);
-    /* 0x0EC 80087cc8 */ void (*Unk58)(void *);
+    /* 0x0EC 80087cc8 */ void (*Unk58)(void *, s32);
     /* 0x0F0 80087ccc */ s32 (*Unk59)(void *, void *, s32);
     /* 0x0F4 80087cd0 */ void (*Unk60)(void *, s32);
-    /* 0x0F8 80087cd4 */ void (*reset_motion_for_link)(void *);
+    /* 0x0F8 80087cd4 */ void (*reset_motion_for_link)(void *, s32, s32);
     /* 0x0FC 80087cd8 */ void (*Unk62)(void *);
     /* 0x100 80087cdc */ s32 (*Unk63)(void *);
     /* 0x104 80087ce0 */ s32 (*dream_sys__get_set_dream_time_limit)(void *, s32); // dream_sys__get_set_dream_time_limit

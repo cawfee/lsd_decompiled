@@ -27,37 +27,36 @@ void func_800431A8(class_33808_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/33808", func_80043200);
 
-/* FAILED MATCH — sltu/register schedule (see decomp_registry func_800434DC)
-s32 func_800434DC(class_33808_t *This) {
-    char dummy_stack_padding[8];
-    u32 *temp_v1;
-    u32 *var_a0;
-    u32 temp_v0;
-    u32 temp_v1_2;
-    u32 var_a1;
-    u32 var_a2;
-    u32 var_a3;
+/*
+u32 func_800434DC(class_33808_t *This) {
+    u32 *table;
+    u32 counter;
+    u32 count;
+    u32 max;
+    u32 limit;
+    u32 *walk;
+    u32 value;
+    u32 result;
+    char pad[8];
 
-    if (&dummy_stack_padding[0] == &dummy_stack_padding[7]) {
-    }
-
-    temp_v1 = *(u32 **)((u8 *) This + 0x10);
-    var_a1 = 0;
-    temp_v0 = *temp_v1;
-    var_a2 = 0;
-    if (temp_v0 != 0) {
-        var_a3 = temp_v0;
-        var_a0 = temp_v1;
+    table = (u32 *)This->m_Unk3;
+    counter = 0;
+    count = table[0];
+    max = 0;
+    if (count != 0) {
+        limit = count;
+        walk = table;
         do {
-            temp_v1_2 = *(u32 *)((u8 *) var_a0 + 0x14);
-            var_a0 = (u32 *)((u8 *) var_a0 + 4);
-            if (var_a1 < temp_v1_2) {
-                var_a1 = temp_v1_2;
+            value = *(u32 *)((u8 *)walk + 0x14);
+            walk = (u32 *)((u8 *)walk + 4);
+            if (max < value) {
+                max = value;
             }
-            var_a2 += 1;
-        } while (var_a2 < var_a3);
+            counter += 1;
+        } while (counter < limit);
     }
-    return var_a1;
+    result = max;
+    return result;
 }
 */
 INCLUDE_ASM("asm/nonmatchings/33808", func_800434DC);

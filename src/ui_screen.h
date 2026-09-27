@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 #include "349B4.h"
 #include "354D4.h"
 #include "35730.h"
@@ -10,21 +12,21 @@
 #include "tim_image.h"
 
 typedef struct ui_screen_vtable {
-    /* 0x000 8006e730 */ u32 value;
-    /* 0x004 8006e734 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006e730 */ u32 type_id;
+    /* 0x004 8006e734 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006e738 */ void (*Construct)(void *, char **, char *, s32);
-    /* 0x00C 8006e73c */ void (*Cleanup)(void *);
-    /* 0x010 8006e740 */ void (*Unk3)(void *);
-    /* 0x014 8006e744 */ void (*Unk4)(void *);
-    /* 0x018 8006e748 */ void (*Unk5)(void *);
-    /* 0x01C 8006e74c */ void (*Unk6)(void *);
-    /* 0x020 8006e750 */ void (*Unk7)(void *);
-    /* 0x024 8006e754 */ void (*Unk8)(void *);
-    /* 0x028 8006e758 */ void (*Unk9)(void *);
-    /* 0x02C 8006e75c */ void (*Unk10)(void *);
-    /* 0x030 8006e760 */ void (*Unk11)(void *);
-    /* 0x034 8006e764 */ void (*Unk12)(void *);
-    /* 0x038 8006e768 */ void (*Unk13)(void *, void **, s32);
+    /* 0x00C 8006e73c */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006e740 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006e744 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006e748 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006e74c */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006e750 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006e754 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006e758 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006e75c */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006e760 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006e764 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006e768 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006e76c */ void (*Unk14)(void *);
     /* 0x040 8006e770 */ void (*Unk15)(void *);
     /* 0x044 8006e774 */ void (*Run)(void *, void *, s32);

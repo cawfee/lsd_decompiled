@@ -6,12 +6,51 @@
 #include "base_class.h"
 #include "sound.h"
 
-extern char D_80010FEC[];
+const char D_80010FEC[0x2C] = "Seq Open error in WBgmHandleMonitorEvent";
 
-// also sound related class
+s32 D_8008A8D8 = 0;
 
-extern bgm_vtable_t **g_BGM_VTABLE;
-extern s32 D_8008A8D8;
+
+void bgm_construct(bgm_t *, s32, s32, s32);
+void bgm_cleanup(bgm_t *);
+void bgm_unk13(bgm_t *, s32 **, s32);
+void bgm_unk15(bgm_t *, s32, s32);
+void seq_play(bgm_t *);
+void seq_stop(bgm_t *);
+void seq_pause(bgm_t *);
+void seq_resume(bgm_t *);
+void seq_set_vol(bgm_t *, s16, s16);
+void bgm_set_crescendo(bgm_t *, s16, s32);
+void bgm_unk22(bgm_t *, s32);
+void bgm_unk23(bgm_t *, s32);
+
+bgm_vtable_t g_BGM_VTABLE = {
+    0x50,
+    base_class_destructor,
+    (void (*)(void *, s32, s32, s32))bgm_construct,
+    (void (*)(void *))bgm_cleanup,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(void *))bgm_unk13,
+    NULL,
+    (void (*)(void *, void **, s32))bgm_unk15,
+    (void (*)(void *))seq_play,
+    (void (*)(void *))seq_stop,
+    (void (*)(void *))seq_pause,
+    (void (*)(void *))seq_resume,
+    (void (*)(void *))seq_set_vol,
+    (void (*)(void *))bgm_set_crescendo,
+    (void (*)(void *, s32))bgm_unk22,
+    (void (*)(void *, s32))bgm_unk23,
+};
 
 void *get_display(void);
 void func_8003AE18(s16);
@@ -28,7 +67,7 @@ bgm_t *bgm_create(u32 Unk1, u32 Unk2, u32 Unk3) {
 }
 
 void bgm_construct(bgm_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = bgm_get_vtable();
 
     This->m_Sound = 0;
@@ -42,7 +81,7 @@ void bgm_construct(bgm_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
     D_8008A8D8 = 1;
     This->vtable->bgm_unk22(This, Unk3);
     This->vtable->bgm_unk23(This, Unk2);
-    This->vtable->Unk3(This, get_display());
+    This->vtable->Attach(This, get_display());
 }
 
 void bgm_cleanup(bgm_t *This) {
@@ -51,19 +90,19 @@ void bgm_cleanup(bgm_t *This) {
     func_8003AE18(This->m_SeqAccess);
 
     if (This->m_Sound) {
-        This->m_Sound->vtable->init_800269F0(This->m_Sound);
+        This->m_Sound->vtable->Destroy(This->m_Sound);
     }
 
     if (This->m_Unk3) {
         (*(void (**)(s32))(*(u32 *)This->m_Unk3 + 4))(This->m_Unk3);
     }
 
-    This->vtable->Unk4(This, get_display());
-    base_class_get_vtable()->base_class_cleanup(This);
+    This->vtable->Detach(This, get_display());
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void bgm_unk13(bgm_t *This, s32 **Unk2, s32 Unk3) {
-    base_class_get_vtable()->Unk13(This, Unk2, Unk3);
+    base_class_get_vtable()->OnNotify(This, Unk2, Unk3);
 
     if ((**(u32 **) Unk2 & 0xF) == 1) {
         This->vtable->bgm_unk15(This, Unk2, Unk3);
@@ -176,7 +215,7 @@ void bgm_unk23(bgm_t *This, s32 Unk) {
     }
 
     if (This->m_Sound) {
-        This->m_Sound->vtable->init_800269F0(This->m_Sound);
+        This->m_Sound->vtable->Destroy(This->m_Sound);
         This->m_Sound = NULL;
     }
 

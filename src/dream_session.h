@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 #include "pad.h"
 #include "frame_phase.h"
 #include "3ACC8.h"
@@ -21,20 +23,20 @@ typedef struct {
 } game_graphics_ctx_t;
 
 typedef struct dream_session_vtable {
-    /* 0x000 800865c8 */ u32 value;
-    /* 0x004 800865cc */ void (*base_class_destructor)(void *);
+    /* 0x000 800865c8 */ u32 type_id;
+    /* 0x004 800865cc */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 800865d0 */ void (*dream_session_construct)(void *, game_graphics_ctx_t *, dream_sys_t *, s32);
     /* 0x00C 800865d4 */ void (*dream_session_cleanup)(void *);
-    /* 0x010 800865d8 */ void (*Unk3)(void *, void *);
-    /* 0x014 800865dc */ void (*Unk4)(void *, dream_sys_t *);
-    /* 0x018 800865e0 */ void (*Unk5)(void *);
-    /* 0x01C 800865e4 */ void (*Unk6)(void *);
-    /* 0x020 800865e8 */ void (*Unk7)(void *);
-    /* 0x024 800865ec */ void (*Unk8)(void *);
-    /* 0x028 800865f0 */ void (*Unk9)(void *);
-    /* 0x02C 800865f4 */ void (*Unk10)(void *);
-    /* 0x030 800865f8 */ void (*Unk11)(void *);
-    /* 0x034 800865fc */ void (*Unk12)(void *);
+    /* 0x010 800865d8 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 800865dc */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 800865e0 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 800865e4 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 800865e8 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 800865ec */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 800865f0 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 800865f4 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 800865f8 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 800865fc */ void (*Nop)(base_class_t *);
     /* 0x038 80086600 */ void (*dream_session_on_tick)(void *);
     /* 0x03C 80086604 */ void (*Unk14)(void *);
     /* 0x040 80086608 */ void (*Unk15)(void *);

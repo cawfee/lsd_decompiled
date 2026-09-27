@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct class_48494_vtable {
-    /* 0x000 800879c4 */ u32 value;
-    /* 0x004 800879c8 */ void (*base_class_destructor)(void *);
+    /* 0x000 800879c4 */ u32 type_id;
+    /* 0x004 800879c8 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 800879cc */ void (*Construct)(void *, s32, s32, s32);
-    /* 0x00C 800879d0 */ void (*Cleanup)(void *);
-    /* 0x010 800879d4 */ void (*Unk3)(void *);
-    /* 0x014 800879d8 */ void (*Unk4)(void *);
-    /* 0x018 800879dc */ void (*Unk5)(void *);
-    /* 0x01C 800879e0 */ void (*Unk6)(void *);
-    /* 0x020 800879e4 */ void (*Unk7)(void *);
-    /* 0x024 800879e8 */ void (*Unk8)(void *);
-    /* 0x028 800879ec */ void (*Unk9)(void *);
-    /* 0x02C 800879f0 */ void (*Unk10)(void *);
-    /* 0x030 800879f4 */ void (*Unk11)(void *);
-    /* 0x034 800879f8 */ void (*Unk12)(void *);
-    /* 0x038 800879fc */ void (*Unk13)(void *);
+    /* 0x00C 800879d0 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 800879d4 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 800879d8 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 800879dc */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 800879e0 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 800879e4 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 800879e8 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 800879ec */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 800879f0 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 800879f4 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 800879f8 */ void (*Nop)(base_class_t *);
+    /* 0x038 800879fc */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80087a00 */ void (*Unk14)(void *);
     /* 0x040 80087a04 */ void (*Unk15)(void *);
     /* 0x044 80087a08 */ void (*Unk16)(void *);
@@ -105,5 +107,6 @@ typedef struct class_48494 {
 } class_48494_t;
 
 class_48494_vtable_t *func_80057F58(void);
+class_48494_t *func_80057C94(s32 Unk1, s32 Unk2, s32 Unk3);
 
 #endif // LSD_48494_H

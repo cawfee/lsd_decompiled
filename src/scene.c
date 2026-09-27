@@ -1,8 +1,57 @@
 #include "scene.h"
 
+#include "base_class.h"
 #include "timer.h"
 
-extern scene_vtable_t D_80086668;
+void func_8004A19C(scene_t *, void *, sound_vtable_t *);
+void func_8004A228(scene_t *);
+void func_8003E030(void);
+void func_8004A294(void);
+s32 scene_run(scene_t *, s32, s32);
+void func_8004A324(void);
+void func_8003E418(void);
+void func_8004A35C(void);
+void func_8004A364(void);
+void func_8004A3EC(void);
+void func_8003E538(void);
+void func_8003E578(void);
+void func_8004A458(void);
+void func_8004A478(void);
+
+scene_vtable_t D_80086668 = {
+    0x230,
+    base_class_destructor,
+    (void (*)(void *, s32, s32))func_8004A19C,
+    (void (*)(void *))func_8004A228,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(void *, void **, s32))func_8003E030,
+    NULL,
+    (void (*)(void *))func_8004A294,
+    (void (*)(void *, void *, s32))scene_run,
+    (void (*)(void *))func_8004A324,
+    NULL,
+    NULL,
+    (void (*)(void *, void *, s32))func_8003E418,
+    (void (*)(void *))func_8004A35C,
+    (void (*)(void *))func_8004A364,
+    (void (*)(void *, s32))func_8004A3EC,
+    (void (*)(void *))func_8003E538,
+    (void (*)(void *))func_8003E578,
+    (void (*)(void *, s32))func_8004A458,
+    (void (*)(void *))func_8004A478,
+    NULL,
+    NULL,
+    NULL,
+};
 
 scene_t *func_8004A130(u32 Unk1, u32 Unk2) {
     scene_t *allocated = (scene_t *) memory_allocate_mem(0x38);
@@ -31,10 +80,10 @@ void func_8004A19C(scene_t *This, void *Unk2, sound_vtable_t *SoundEngine) {
 
 void func_8004A228(scene_t *This) {
     if (This->m_Unk11) {
-        This->m_Sound->vtable->init_800269F0(This->m_Sound);
+        This->m_Sound->vtable->Destroy(This->m_Sound);
     }
 
-    timer_get_vtable()->base_class_cleanup(This);
+    timer_get_vtable()->Cleanup(This);
 }
 
 void func_8004A294(scene_t *This) {

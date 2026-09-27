@@ -816,12 +816,27 @@ display_copy_unk = 0x80020970;
 display_do_vsync_internal = 0x80020A74;
 display_do_vsync = 0x8002085C;
 
-// Base cpp class functions
+// Base cpp class: child/parent link lists + notify
 g_BASE_CLASS_VTABLE = 0x8006B58C;
 base_class_get_vtable = 0x80018390;
 base_class_destructor = 0x80017eb0;
 base_class_construct = 0x80017ef8;
 base_class_cleanup = 0x80017f2c;
+base_class_attach = 0x80017f98;
+base_class_detach = 0x80017ff0;
+base_class_detach_all = 0x80018040;
+base_class_iter_children = 0x800180bc;
+base_class_add_parent = 0x800180fc;
+base_class_remove_parent = 0x8001811c;
+base_class_clear_parents = 0x8001813c;
+base_class_iter_parents = 0x8001816c;
+linked_list_prepend = 0x800181ac;
+linked_list_remove = 0x80018208;
+linked_list_clear = 0x80018288;
+base_class_notify = 0x800182cc;
+base_class_nop = 0x80018350;
+base_class_on_notify = 0x80018358;
+linked_list_next = 0x800183a0;
 
 // Main Menu
 g_MAIN_MENU_VTABLE = 0x80086B60;

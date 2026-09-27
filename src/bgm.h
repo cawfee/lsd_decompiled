@@ -3,23 +3,25 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 #include "sound.h"
 
 typedef struct bgm_vtable {
-    /* 0x000 8006e48c */ u32 value;
-    /* 0x004 8006e490 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006e48c */ u32 type_id;
+    /* 0x004 8006e490 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006e494 */ void (*bgm_construct)(void *, s32, s32, s32);
     /* 0x00C 8006e498 */ void (*bgm_cleanup)(void *);
-    /* 0x010 8006e49c */ void (*Unk3)(void *, void *);
-    /* 0x014 8006e4a0 */ void (*Unk4)(void *, void *);
-    /* 0x018 8006e4a4 */ void (*Unk5)(void *);
-    /* 0x01C 8006e4a8 */ void (*Unk6)(void *);
-    /* 0x020 8006e4ac */ void (*Unk7)(void *);
-    /* 0x024 8006e4b0 */ void (*Unk8)(void *);
-    /* 0x028 8006e4b4 */ void (*Unk9)(void *);
-    /* 0x02C 8006e4b8 */ void (*Unk10)(void *);
-    /* 0x030 8006e4bc */ void (*Unk11)(void *);
-    /* 0x034 8006e4c0 */ void (*Unk12)(void *);
+    /* 0x010 8006e49c */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006e4a0 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006e4a4 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006e4a8 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006e4ac */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006e4b0 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006e4b4 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006e4b8 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006e4bc */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006e4c0 */ void (*Nop)(base_class_t *);
     /* 0x038 8006e4c4 */ void (*bgm_unk13)(void *);
     /* 0x03C 8006e4c8 */ void (*Unk14)(void *);
     /* 0x040 8006e4cc */ void (*bgm_unk15)(void *, void **, s32);

@@ -1,3 +1,4 @@
+#include "base_class.h"
 #ifndef LSD_GAME_FLOW_H
 #define LSD_GAME_FLOW_H
 
@@ -7,21 +8,21 @@
 #include "display.h"
 
 typedef struct game_flow_vtable {
-    /* 0x000 8006d3c8 */ u32 value;
-    /* 0x004 8006d3cc */ void (*base_class_destructor)(void *);
+    /* 0x000 8006d3c8 */ u32 type_id;
+    /* 0x004 8006d3cc */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006d3d0 */ void (*game_flow_on_construct)(void *, void *);
-    /* 0x00C 8006d3d4 */ void (*Cleanup)(void *);
-    /* 0x010 8006d3d8 */ void (*Unk3)(void *, void *);
-    /* 0x014 8006d3dc */ void (*Unk4)(void *, void *);
-    /* 0x018 8006d3e0 */ void (*Unk5)(void *);
-    /* 0x01C 8006d3e4 */ void (*Unk6)(void *, void *, void **);
-    /* 0x020 8006d3e8 */ void (*Unk7)(void *, void *);
-    /* 0x024 8006d3ec */ void (*Unk8)(void *, void *);
-    /* 0x028 8006d3f0 */ void (*Unk9)(void *);
-    /* 0x02C 8006d3f4 */ void (*Unk10)(void *, void *, void **);
-    /* 0x030 8006d3f8 */ void (*Unk11)(void *);
-    /* 0x034 8006d3fc */ void (*Unk12)(void *);
-    /* 0x038 8006d400 */ void (*Unk13)(void *, void *, void *);
+    /* 0x00C 8006d3d4 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006d3d8 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006d3dc */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006d3e0 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006d3e4 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006d3e8 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006d3ec */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006d3f0 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006d3f4 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006d3f8 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006d3fc */ void (*Nop)(base_class_t *);
+    /* 0x038 8006d400 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006d404 */ u32 pad;
     /* 0x040 8006d408 */ void (*game_flow_get_day_rand)(void *);
     /* 0x044 8006d40c */ void (*game_flow_init)(void *, display_t *, pad_t *);

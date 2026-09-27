@@ -1,7 +1,110 @@
 #include "text_line.h"
 #include "322B4.h"
 
-extern text_line_vtable_t D_8006EB90;
+#include "base_class.h"
+
+void func_8001CC48(void);
+void func_8001CCB4(void);
+void func_8001CD20(void);
+void func_8001CD60(void);
+void func_8001D008(void);
+void func_8001D204(void);
+void func_8001D280(void);
+void func_8001D33C(void);
+void func_8001D3CC(void);
+void func_8001D3F8(void);
+void func_8001D424(void);
+void func_8001D450(void);
+void func_8001D480(void);
+void func_8001D4AC(void);
+void func_8001D4DC(void);
+void func_8001D568(void);
+void func_8001D600(void);
+void func_8001D624(void);
+void func_8001D6A4(void);
+void func_8001D6B4(void);
+void func_8001D714(void);
+void func_8001D950(void);
+void func_8001DA28(void);
+void func_8001DDF4(void);
+void func_8001E49C(void);
+void func_8001E4A4(void);
+void func_80041E58(void);
+void func_80042170(void);
+void func_8004223C(void);
+void func_80042268(void);
+void func_80042294(void);
+
+void func_80040948(text_line_t *, s32, s32, s32);
+void func_80040A30(text_line_t *);
+void func_80040A88(text_line_t *, s32);
+void func_80040AE8(text_line_t *, s32, s32 *);
+void func_80040C00(text_line_t *);
+s32 func_80040CD0(text_line_t *, s32, s32);
+void func_80040D74(text_line_t *, s32);
+void func_80040E14(text_line_t *, s32 *);
+s32 func_80040EDC(text_line_t *, u8, s32);
+void func_80040F20(void);
+void func_80040F28(text_line_t *, u8 *);
+void func_80040FA0(void);
+void func_80040FA8(text_line_t *, s32);
+
+text_line_vtable_t D_8006EB90 = {
+    0x00011144,
+    base_class_destructor,
+    (void (*)(void *, s32, s32, s32))func_80040948,
+    (void (*)(base_class_t *))func_80040A30,
+    (void (*)(base_class_t *, base_class_t *))func_8001CC48,
+    (void (*)(base_class_t *, base_class_t *))func_8001CCB4,
+    (void (*)(base_class_t *))func_8001CD20,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(base_class_t *, base_class_t *, s32))func_8001CD60,
+    NULL,
+    (void (*)(void *, s32))func_80040A88,
+    (void (*)(void *))func_80042170,
+    (void (*)(void *))func_8001D008,
+    (void (*)(void *, s32, void *))func_80040AE8,
+    (void (*)(void *))func_80040C00,
+    (void (*)(void *))func_8001D204,
+    (void (*)(void *))func_8001D280,
+    (void (*)(void *))func_8001D33C,
+    (void (*)(void *, s32))func_80040CD0,
+    (void (*)(void *))func_8004223C,
+    (void (*)(void *))func_80042268,
+    (void (*)(void *))func_8001D3CC,
+    (void (*)(void *))func_8001D3F8,
+    (void (*)(void *))func_8001D424,
+    (void (*)(void *))func_8001D450,
+    (void (*)(void *))func_8001D480,
+    (void (*)(void *))func_8001D4AC,
+    (void (*)(void *))func_8001D4DC,
+    (void (*)(void *))func_8001D568,
+    (void (*)(void *))func_8001D600,
+    (void (*)(void *))func_8001D624,
+    (void (*)(void *))func_8001D6A4,
+    (void (*)(void *))func_80042294,
+    (void (*)(void *))func_8001D6B4,
+    (void (*)(void *))func_8001D714,
+    (void (*)(void *))func_8001D950,
+    (void (*)(void *))func_8001DA28,
+    (void (*)(void *))func_8001DDF4,
+    (void (*)(void *))func_8001E49C,
+    (void (*)(void *))func_8001E4A4,
+    (void (*)(void *, char *))func_80040D74,
+    (void (*)(void *))func_80040E14,
+    (void (*)(void *))func_80041E58,
+    (void (*)(void *))func_80040EDC,
+    (void (*)(void *))func_80040F20,
+    (void (*)(void *, char *))func_80040F28,
+    (void (*)(void *))func_80040FA0,
+    (void (*)(void *))func_80040FA8,
+};
 
 text_line_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3) {
     text_line_t *allocated = (text_line_t *) memory_allocate_mem(0xB8);

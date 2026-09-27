@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct class_3520C_vtable {
-    /* 0x000 8006f40c */ u32 value;
-    /* 0x004 8006f410 */ void (*init_800269F0)(void *);
+    /* 0x000 8006f40c */ u32 type_id;
+    /* 0x004 8006f410 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006f414 */ s32 (*Construct)(void *, s32);
-    /* 0x00C 8006f418 */ void (*Cleanup)(void *);
-    /* 0x010 8006f41c */ void (*Unk3)(void *);
-    /* 0x014 8006f420 */ void (*Unk4)(void *);
-    /* 0x018 8006f424 */ void (*Unk5)(void *);
-    /* 0x01C 8006f428 */ void (*Unk6)(void *);
-    /* 0x020 8006f42c */ void (*Unk7)(void *);
-    /* 0x024 8006f430 */ void (*Unk8)(void *);
-    /* 0x028 8006f434 */ void (*Unk9)(void *);
-    /* 0x02C 8006f438 */ void (*Unk10)(void *);
-    /* 0x030 8006f43c */ void (*Unk11)(void *);
-    /* 0x034 8006f440 */ void (*Unk12)(void *);
-    /* 0x038 8006f444 */ void (*Unk13)(void *);
+    /* 0x00C 8006f418 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006f41c */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006f420 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006f424 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006f428 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006f42c */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006f430 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006f434 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006f438 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006f43c */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006f440 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006f444 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006f448 */ void (*Unk14)(void *);
     /* 0x040 8006f44c */ void (*Unk15)(void *);
     /* 0x044 8006f450 */ void (*Unk16)(void *);

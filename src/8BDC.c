@@ -1,7 +1,7 @@
 #include "common.h"
 #include "base_class.h"
 
-extern s32 D_8008A820;
+s32 D_8008A820 = 0;
 
 s32 destroy_list(base_class_t **arr, s32 n) {
     base_class_t *obj;
@@ -9,7 +9,7 @@ s32 destroy_list(base_class_t **arr, s32 n) {
     if (n-- > 0) {
         do {
             obj = *arr;
-            *arr = obj->vtable->base_class_destructor(obj);
+            *arr = obj->vtable->Destroy(obj);
             arr++;
         } while (n-- > 0);
     }

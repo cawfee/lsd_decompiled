@@ -5,8 +5,49 @@
 #include "file_buf.h"
 #include "tim_image.h"
 
-extern class_34388_vtable_t D_8006F1C4;
-extern s16 D_8008A934;
+void func_80043BE8(class_34388_t *, s32);
+void func_80043C60(class_34388_t *);
+void func_80043CB8(class_34388_t *);
+void func_80043DFC(class_34388_t *);
+s32 init_800269F0(void *);
+void file_buf_release(void *);
+void nullsub13(void);
+
+class_34388_vtable_t D_8006F1C4 = {
+    0x0C03,
+    (void (*)(void *))init_800269F0,
+    (void (*)(void *, s32))func_80043BE8,
+    (void (*)(void *))func_80043C60,
+    (void (*)(void *))base_class_attach,
+    (void (*)(void *))base_class_detach,
+    (void (*)(void *))base_class_detach_all,
+    (void (*)(void *))base_class_iter_children,
+    (void (*)(void *))base_class_add_parent,
+    (void (*)(void *))base_class_remove_parent,
+    (void (*)(void *))base_class_clear_parents,
+    (void (*)(void *))base_class_iter_parents,
+    (void (*)(void *))base_class_notify,
+    (void (*)(void *))base_class_nop,
+    (void (*)(void *))base_class_on_notify,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (void (*)(void *))file_buf_release,
+    (void (*)(void *))nullsub13,
+    (void (*)(void *))func_80043CB8,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (void (*)(void *))func_80043DFC,
+};
+
+s16 D_8008A934[2] = { 3, 0 };
 
 class_34388_t *func_80043B88(s32 Unk1) {
     class_34388_t *allocated = (class_34388_t *) memory_allocate_mem(0x3C);
@@ -57,7 +98,7 @@ void func_80043CB8(class_34388_t *This) {
                 offsets += 1;
                 (*slots)->vtable->Unk23(*slots, &image);
                 (*slots)->unk19 =
-                    (((image.cy - 0x1E0) >> D_8008A934) * 0x10) + This->m_Unk12;
+                    (((image.cy - 0x1E0) >> D_8008A934[0]) * 0x10) + This->m_Unk12;
             }
             This->m_Unk13 = 1;
             (*(void (**)(void *))((s32)get_file_driver() + 0x64))(This);

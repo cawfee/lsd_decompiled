@@ -2,6 +2,7 @@
 
 #include <psx/libetc.h>
 
+#include "base_class.h"
 #include "system.h"
 #include "ui_screen.h"
 #include "graph_screen.h"
@@ -12,7 +13,48 @@
 #include "memory.h"
 #include "utils/cd_paths.h"
 
-extern game_flow_vtable_t g_GAME_FLOW_VTABLE;
+
+void game_flow_on_construct(game_flow_t *, game_config_t *);
+void nullsub25(void);
+s32 game_flow_get_day_rand(void);
+void game_flow_init(game_flow_t *, display_t *, pad_t *);
+void func_8003B108(void);
+void game_flow_execute_phases(game_flow_t *);
+void game_flow_display_logo_sequence(game_flow_t *);
+void game_flow_play_intro_movie(game_flow_t *);
+s32 game_flow_execute_main_menu(game_flow_t *);
+void nullsub12(void);
+s32 game_flow_execute_dream(game_flow_t *);
+void game_flow_play_ending_movie(game_flow_t *);
+
+game_flow_vtable_t g_GAME_FLOW_VTABLE = {
+    0x1F60,
+    base_class_destructor,
+    (void (*)(void *, void *))game_flow_on_construct,
+    (void (*)(void *))nullsub25,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    0,
+    (void (*)(void *))game_flow_get_day_rand,
+    (void (*)(void *, display_t *, pad_t *))game_flow_init,
+    (void (*)(void *))func_8003B108,
+    (void (*)(void *))game_flow_execute_phases,
+    (void (*)(void *))game_flow_display_logo_sequence,
+    (void (*)(void *))game_flow_play_intro_movie,
+    (s32 (*)(void *))game_flow_execute_main_menu,
+    (void (*)(void *))nullsub12,
+    (s32 (*)(void *))game_flow_execute_dream,
+    (void (*)(void *))game_flow_play_ending_movie,
+};
 
 game_flow_t *game_flow_create(game_config_t *Config) {
     game_flow_t *allocated = (game_flow_t *) memory_allocate_mem(0x2C);
@@ -70,7 +112,7 @@ void game_flow_display_logo_sequence(game_flow_t *This) {
         duration = get_movie_duration_maybe(index);
 
         player->vtable->Play(player, This->m_GraphicsCtx, path, duration, 1);
-        player->vtable->base_class_destructor(player);
+        player->vtable->Destroy(player);
 
         game_flow_display_logo(This, "ETC\\OSDLOGO.TIM");
     }
@@ -82,7 +124,7 @@ void game_flow_display_logo(game_flow_t *This, const char *Path) {
     cls->vtable->Unk26(cls, 0);
     cls->vtable->Unk52(cls, Path, 0);
     cls->vtable->Run(cls, This->m_GraphicsCtx, 0);
-    cls->vtable->base_class_destructor(cls);
+    cls->vtable->Destroy(cls);
 }
 
 void game_flow_callback() {
@@ -102,7 +144,7 @@ void game_flow_play_intro_movie(game_flow_t *This) {
         path = func_8004913C(&index, 0);
         duration = get_movie_duration_maybe(index);
         player->vtable->Play(player, This->m_GraphicsCtx, path, duration, 1);
-        player->vtable->base_class_destructor(player);
+        player->vtable->Destroy(player);
     }
 }
 
@@ -155,7 +197,7 @@ void play_special_reel(game_flow_t *This) {
         player->vtable->Unk26(player, unk[2] / 0xF);
         player->vtable->Unk74(player, 0);
         player->vtable->Play(player, This->m_GraphicsCtx, path, -1, 1);
-        player->vtable->base_class_destructor(player);
+        player->vtable->Destroy(player);
     }
 }
 
@@ -172,7 +214,7 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     // Start the dream and cleanup
     dream_ctx = dream_session_create(This->m_GraphicsCtx, This->m_pDreamSys, This->m_Config->enable_something);
     dream_result = dream_ctx->vtable->dream_session_execute(dream_ctx);
-    dream_ctx->vtable->base_class_destructor(dream_ctx);
+    dream_ctx->vtable->Destroy(dream_ctx);
 
     // Check if dream tells the loop that today is a special day
     switch (dream_result) {
@@ -233,7 +275,7 @@ void game_flow_play_special_day(game_flow_t *This) {
         cls->vtable->Run(cls, This->m_GraphicsCtx, 0);
     }
 
-    player->vtable->base_class_destructor(player);
+    player->vtable->Destroy(player);
 }
 
 void game_flow_play_ending_movie(game_flow_t *This) {
@@ -249,7 +291,7 @@ void game_flow_play_ending_movie(game_flow_t *This) {
         movie_path = get_ending_movie_path_2(&duration_index, 0);
         duration = get_movie_duration_maybe(duration_index);
         player->vtable->Play(player, This->m_GraphicsCtx, movie_path, duration, 1);
-        player->vtable->base_class_destructor(player);
+        player->vtable->Destroy(player);
     }
 }
 

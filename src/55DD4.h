@@ -2,23 +2,24 @@
 #define LSD_55DD4_H
 
 #include "common.h"
+#include "base_class.h"
 
 typedef struct class_55DD4_vtable {
-    /* 0x000 8008a6c4 */ u32 value;
-    /* 0x004 8008a6c8 */ void (*base_class_destructor)(void *);
+    /* 0x000 8008a6c4 */ u32 type_id;
+    /* 0x004 8008a6c8 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8008a6cc */ void *(*class_55DD4_construct)(void *, s32, s32);
     /* 0x00C 8008a6d0 */ void (*class_55DD4_cleanup)(void *);
-    /* 0x010 8008a6d4 */ void (*Unk3)(void *, s32);
-    /* 0x014 8008a6d8 */ void (*Unk4)(void *, s32);
-    /* 0x018 8008a6dc */ void (*Unk5)(void *);
-    /* 0x01C 8008a6e0 */ void (*Unk6)(void *);
-    /* 0x020 8008a6e4 */ void (*Unk7)(void *);
-    /* 0x024 8008a6e8 */ void (*Unk8)(void *);
-    /* 0x028 8008a6ec */ void (*Unk9)(void *);
-    /* 0x02C 8008a6f0 */ void (*Unk10)(void *);
-    /* 0x030 8008a6f4 */ void (*Unk11)(void *);
-    /* 0x034 8008a6f8 */ void (*Unk12)(void *);
-    /* 0x038 8008a6fc */ void (*Unk13)(void *);
+    /* 0x010 8008a6d4 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8008a6d8 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8008a6dc */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8008a6e0 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8008a6e4 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8008a6e8 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8008a6ec */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8008a6f0 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8008a6f4 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8008a6f8 */ void (*Nop)(base_class_t *);
+    /* 0x038 8008a6fc */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8008a700 */ s32 dummy1;
     /* 0x040 8008a704 */ void (*Unk15)(void *);
     /* 0x044 8008a708 */ void (*Unk16)(void *);
@@ -82,7 +83,7 @@ typedef struct class_55DD4_vtable {
     /* 0x12C 8008a7f0 */ void (*Unk74)(void *);
     /* 0x130 8008a7f4 */ void (*Unk75)(void *);
     /* 0x134 8008a7f8 */ void (*Unk76)(void *, s32, s32);
-    /* 0x138 8008a7fc */ void (*Unk77)(void *);
+    /* 0x138 8008a7fc */ void *(*Unk77)(void *, void *, s32);
     /* 0x13C 8008a800 */ void (*Unk78)(void *, s32);
     /* 0x140 8008a804 */ void (*Unk79)(void *);
 } class_55DD4_vtable_t;

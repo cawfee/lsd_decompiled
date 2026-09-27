@@ -3,16 +3,48 @@
 #include "game_flow.h"
 #include "base_class.h"
 
-// static s32 g_CD_INIT = 0;
-// static s32 D_8008A8E0[2] = {0x140, 0xF0};
-
-extern system_vtable_t D_8006E4F0;
-
-extern s32 g_CD_INIT;
+static s32 g_CD_INIT = 0;
 extern s32 D_8008A8E0[];
 
+
+void func_8003AF8C(system_t *, s32);
+void nullsub25(void);
+void func_8003B02C(system_t *, const s32 *, s32);
+void game_flow_init_graphics(game_flow_t *, display_t *, pad_t *);
+void func_8003B108(void);
+void game_flow_execute_phases(game_flow_t *);
+
+system_vtable_t D_8006E4F0 = {
+    0x60,
+    base_class_destructor,
+    (void (*)(void *, s32))func_8003AF8C,
+    (void (*)(void *))nullsub25,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    (void (*)(void *, s32 *, s32))func_8003B02C,
+    (void (*)(void *, display_t *, pad_t *, u32))game_flow_init_graphics,
+    (void (*)(void *))func_8003B108,
+    (void (*)(void *))game_flow_execute_phases,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
+
 void func_8003AF8C(system_t *This, s32 Unk) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = func_8003B20C();
 
     if (!g_CD_INIT) {

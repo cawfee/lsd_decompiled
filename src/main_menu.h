@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 #include "text_line.h"
 #include "dream_sys.h"
 #include "memory_card.h"
@@ -10,21 +12,21 @@
 #include "tim_image.h"
 
 typedef struct main_menu_vtable {
-    /* 0x000 80086b60 */ u32 value;
-    /* 0x004 80086b64 */ void (*base_class_destructor)(void *);
+    /* 0x000 80086b60 */ u32 type_id;
+    /* 0x004 80086b64 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80086b68 */ void (*Construct)(void *, s32);
     /* 0x00C 80086b6c */ void (*Unk2)(void *);
-    /* 0x010 80086b70 */ void (*Unk3)(void *, void *);
-    /* 0x014 80086b74 */ void (*Unk4)(void *, void *);
-    /* 0x018 80086b78 */ void (*Unk5)(void *);
-    /* 0x01C 80086b7c */ void (*Unk6)(void *);
-    /* 0x020 80086b80 */ void (*Unk7)(void *);
-    /* 0x024 80086b84 */ void (*Unk8)(void *);
-    /* 0x028 80086b88 */ void (*Unk9)(void *);
-    /* 0x02C 80086b8c */ void (*Unk10)(void *);
-    /* 0x030 80086b90 */ void (*Unk11)(void *);
-    /* 0x034 80086b94 */ void (*Unk12)(void *);
-    /* 0x038 80086b98 */ void (*Unk13)(void *);
+    /* 0x010 80086b70 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80086b74 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80086b78 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80086b7c */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80086b80 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80086b84 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80086b88 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80086b8c */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80086b90 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80086b94 */ void (*Nop)(base_class_t *);
+    /* 0x038 80086b98 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80086b9c */ u32 pad1;
     /* 0x040 80086ba0 */ void (*show_title)(void *, dream_sys_t *);
     /* 0x044 80086ba4 */ void (*Run)(void *);

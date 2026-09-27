@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct mdec_movie_vtable {
-    /* 0x000 8006f614 */ u32 value;
-    /* 0x004 8006f618 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006f614 */ u32 type_id;
+    /* 0x004 8006f618 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006f61c */ s32 (*Construct)(void *, s32, s32, s32);
-    /* 0x00C 8006f620 */ void (*Cleanup)(void *);
-    /* 0x010 8006f624 */ void (*Unk3)(void *);
-    /* 0x014 8006f628 */ void (*Unk4)(void *);
-    /* 0x018 8006f62c */ void (*Unk5)(void *);
-    /* 0x01C 8006f630 */ void (*Unk6)(void *);
-    /* 0x020 8006f634 */ void (*Unk7)(void *);
-    /* 0x024 8006f638 */ void (*Unk8)(void *);
-    /* 0x028 8006f63c */ void (*Unk9)(void *);
-    /* 0x02C 8006f640 */ void (*Unk10)(void *);
-    /* 0x030 8006f644 */ void (*Unk11)(void *);
-    /* 0x034 8006f648 */ void (*Unk12)(void *);
-    /* 0x038 8006f64c */ void (*Unk13)(void *);
+    /* 0x00C 8006f620 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006f624 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006f628 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006f62c */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006f630 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006f634 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006f638 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006f63c */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006f640 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006f644 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006f648 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006f64c */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006f650 */ void (*Unk14)(void *);
     /* 0x040 8006f654 */ void (*Unk15)(void *);
     /* 0x044 8006f658 */ void (*Unk16)(void *);

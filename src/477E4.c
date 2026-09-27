@@ -41,7 +41,7 @@ void *func_80057044(class_477E4_t *This) {
 void func_800570B4(class_477E4_t *This, void **Unk) {
     s32 value;
 
-    func_8001E57C()->Unk3(This, Unk);
+    func_8001E57C()->Attach(This, Unk);
 
     value = *(u32 *) *Unk;
 
@@ -63,13 +63,13 @@ void func_80057130(class_477E4_t *This, void **Unk) {
         This->m_Unk19 = 0;
     }
 
-    func_8001E57C()->Unk4(This, Unk);
+    func_8001E57C()->Detach(This, Unk);
 }
 
 void func_800571A8(class_477E4_t *This) {
     This->m_Unk18 = 0;
     This->m_Unk19 = 0;
-    func_8001E57C()->Unk5(This);
+    func_8001E57C()->DetachAll(This);
 }
 
 void func_800571E8(class_477E4_t *This) {

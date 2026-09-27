@@ -35,7 +35,6 @@ typedef struct class_34388_vtable {
     /* 0x070 8006f234 */ void (*Unk27)(void *);
     /* 0x074 8006f238 */ void (*Unk28)(void *);
     /* 0x078 8006f23c */ void (*Unk29)(void *);
-    /* 0x07C 8006f240 */ void (*Unk30)(void *);
 } class_34388_vtable_t;
 
 typedef struct class_34388 {

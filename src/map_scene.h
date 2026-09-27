@@ -3,24 +3,26 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct dream_sys dream_sys_t;
 
 typedef struct map_scene_vtable {
-    /* 0x000 80087034 */ u32 value;
-    /* 0x004 80087038 */ void (*base_class_destructor)(void *);
+    /* 0x000 80087034 */ u32 type_id;
+    /* 0x004 80087038 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8008703c */ void (*Construct)(void *, s32, s32, s32, s32, s32);
-    /* 0x00C 80087040 */ void (*Cleanup)(void *);
-    /* 0x010 80087044 */ void (*Unk3)(void *, void *);
-    /* 0x014 80087048 */ void (*Unk4)(void *, void *);
-    /* 0x018 8008704c */ void (*Unk5)(void *);
-    /* 0x01C 80087050 */ void (*Unk6)(void *);
-    /* 0x020 80087054 */ void (*Unk7)(void *);
-    /* 0x024 80087058 */ void (*Unk8)(void *);
-    /* 0x028 8008705c */ void (*Unk9)(void *);
-    /* 0x02C 80087060 */ void (*Unk10)(void *);
-    /* 0x030 80087064 */ void (*Unk11)(void *, s32);
-    /* 0x034 80087068 */ void (*Unk12)(void *);
-    /* 0x038 8008706c */ void (*Unk13)(void *);
+    /* 0x00C 80087040 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 80087044 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80087048 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8008704c */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80087050 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80087054 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80087058 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8008705c */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80087060 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80087064 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80087068 */ void (*Nop)(base_class_t *);
+    /* 0x038 8008706c */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80087070 */ void (*Unk14)(void *);
     /* 0x040 80087074 */ void (*Unk15)(void *);
     /* 0x044 80087078 */ void (*Run)(void *);

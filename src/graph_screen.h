@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct graph_screen_vtable {
-    /* 0x000 80087aac */ u32 value;
-    /* 0x004 80087ab0 */ void (*base_class_destructor)(void *);
+    /* 0x000 80087aac */ u32 type_id;
+    /* 0x004 80087ab0 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80087ab4 */ void (*Construct)(void *, s32);
-    /* 0x00C 80087ab8 */ void (*Cleanup)(void *);
-    /* 0x010 80087abc */ void (*Unk3)(void *);
-    /* 0x014 80087ac0 */ void (*Unk4)(void *);
-    /* 0x018 80087ac4 */ void (*Unk5)(void *);
-    /* 0x01C 80087ac8 */ void (*Unk6)(void *);
-    /* 0x020 80087acc */ void (*Unk7)(void *);
-    /* 0x024 80087ad0 */ void (*Unk8)(void *);
-    /* 0x028 80087ad4 */ void (*Unk9)(void *);
-    /* 0x02C 80087ad8 */ void (*Unk10)(void *);
-    /* 0x030 80087adc */ void (*Unk11)(void *);
-    /* 0x034 80087ae0 */ void (*Unk12)(void *);
-    /* 0x038 80087ae4 */ void (*Unk13)(void *);
+    /* 0x00C 80087ab8 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 80087abc */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80087ac0 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80087ac4 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80087ac8 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80087acc */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80087ad0 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80087ad4 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80087ad8 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80087adc */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80087ae0 */ void (*Nop)(base_class_t *);
+    /* 0x038 80087ae4 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80087ae8 */ void (*Unk14)(void *);
     /* 0x040 80087aec */ void (*show_graph)(void *, void *);
     /* 0x044 80087af0 */ void (*Run)(void *);

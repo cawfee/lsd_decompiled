@@ -19,7 +19,7 @@ pad_t *pad_create(s32 Unk1, s32 Unk2) {
 }
 
 void func_80025BA0(pad_t *This, s32 arg1, s32 arg2) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = func_80025E9C();
     if (D_8008A848++ == 0) {
         PadInit(arg1);
@@ -34,7 +34,7 @@ void func_80025C30(pad_t *This) {
         PadStop();
     }
 
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_80025C84(pad_t *This, s32 Unk) {

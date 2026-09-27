@@ -1,11 +1,26 @@
 #include "common.h"
 
-static void *g_MEMORY_MANAGER = NULL;
+typedef struct memory_block {
+    u32 header;
+    struct memory_block *next;
+    struct memory_block *prev;
+} memory_block_t;
+
+typedef struct memory_manager {
+    void *pool;
+    s32 pool_size;
+    memory_block_t *head;
+    memory_block_t *tail;
+    s32 ready;
+} memory_manager_t;
+
+static memory_manager_t *g_MEMORY_MANAGER = NULL;
 static void *g_PAD = NULL;
 
 void *malloc2(u32 size);
 int printf(char *fmt, ...);
 void memory_setup_manager(s32 *arg0);
+void func_8001844C(s32 value);
 
 void *memory_create_manager(u32 arg0, s32 unused) {
     u32 var_s1;
@@ -27,7 +42,7 @@ void *memory_create_manager(u32 arg0, s32 unused) {
 }
 
 void memory_set_manager(void *Manager) {
-    g_MEMORY_MANAGER = Manager;
+    g_MEMORY_MANAGER = (memory_manager_t *)Manager;
 }
 
 void func_80017AA8(void *Buffer) {
@@ -39,7 +54,7 @@ void memory_setup_manager(s32 *arg0) {
     s32 *temp_a0;
     s32 *temp_v0;
 
-    var_a1 = g_MEMORY_MANAGER;
+    var_a1 = (s32 *)g_MEMORY_MANAGER;
     if (var_a1 == NULL) {
         var_a1 = arg0;
     }
@@ -56,7 +71,6 @@ void memory_setup_manager(s32 *arg0) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/memory", memory_allocate_mem);
-
 
 INCLUDE_ASM("asm/nonmatchings/memory", memory_free_mem);
 

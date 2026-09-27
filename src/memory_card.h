@@ -1,24 +1,25 @@
+#include "base_class.h"
 #ifndef LSD_MEMORY_CARD_H
 #define LSD_MEMORY_CARD_H
 
 typedef struct memory_card_vtable {
-    /* 0x000 80086dc4 */ u32 value;
-    /* 0x004 80086dc8 */ void (*base_class_destructor)(void *);
+    /* 0x000 80086dc4 */ u32 type_id;
+    /* 0x004 80086dc8 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80086dcc */ void (*memory_card_on_construct)(void *, s32, s32);
-    /* 0x00C 80086dd0 */ void (*Cleanup)(void *);
-    /* 0x010 80086dd4 */ void (*Unk3)(void *, void *);
-    /* 0x014 80086dd8 */ void (*Unk4)(void *, void *);
-    /* 0x018 80086ddc */ void (*Unk5)(void *);
-    /* 0x01C 80086de0 */ void (*Unk6)(void *, void *, void **);
-    /* 0x020 80086de4 */ void (*Unk7)(void *, void *);
-    /* 0x024 80086de8 */ void (*Unk8)(void *, void *);
-    /* 0x028 80086dec */ void (*Unk9)(void *);
-    /* 0x02C 80086df0 */ void (*Unk10)(void *, void *, void **);
-    /* 0x030 80086df4 */ void (*Unk11)(void *, s32);
-    /* 0x034 80086df8 */ void (*Unk12)(void *);
-    /* 0x038 80086dfc */ void (*Unk13)(void *, void *, void *);
+    /* 0x00C 80086dd0 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 80086dd4 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80086dd8 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80086ddc */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80086de0 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80086de4 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80086de8 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80086dec */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80086df0 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80086df4 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80086df8 */ void (*Nop)(base_class_t *);
+    /* 0x038 80086dfc */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80086e00 */ u32 pad;
-    /* 0x040 80086e04 */ void (*Unk15)(void *);
+    /* 0x040 80086e04 */ void (*Unk15)(void *, s32);
     /* 0x044 80086e08 */ void (*Unk16)(void *);
     /* 0x048 80086e0c */ void (*Unk17)(void *);
     /* 0x04C 80086e10 */ s32 (*Unk18)(void *, s32 *, s32 *, s32 *);

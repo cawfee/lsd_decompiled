@@ -30,7 +30,7 @@ renderer_t *renderer_create(void) {
 void func_8003E628(renderer_t *This) {
     class_305B0_t *temp_v0;
 
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = renderer_get_vtable();
     This->m_Unk2 = 0;
     This->m_Unk3 = 0;
@@ -49,13 +49,13 @@ void func_8003E6CC(renderer_t *This) {
     temp_a0 = (void *)This->m_Unk42;
     (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
     ((void (*)(void *, s32))This->vtable->Unk41)(This, 0);
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_8003E770(renderer_t *This, void **arg1) {
     s32 temp_v1;
 
-    base_class_get_vtable()->Unk3(This, arg1);
+    base_class_get_vtable()->Attach(This, arg1);
     temp_v1 = *(s32 *)*arg1 & 0xF;
     if (temp_v1 == 4) {
         This->m_Unk3 = (s32)arg1;
@@ -77,20 +77,20 @@ void func_8003E7F4(renderer_t *This, void **Unk) {
     } else if (kind == 1) {
         This->m_Unk2 = 0;
     }
-    base_class_get_vtable()->Unk4(This, Unk);
+    base_class_get_vtable()->Detach(This, Unk);
 }
 
 void func_8003E874(renderer_t *This) {
     This->m_Unk11 = 0;
   This->m_Unk3 = 0;
   This->m_Unk2 = 0;
-  base_class_get_vtable()->Unk5(This);
+  base_class_get_vtable()->DetachAll(This);
 }
 
 void func_8003E8B8(renderer_t *This, void **Unk1, s32 Unk2) {
     s32 kind;
 
-    ((void (*)(void *, void **, s32))base_class_get_vtable()->Unk13)(This, Unk1, Unk2);
+    ((void (*)(void *, void **, s32))base_class_get_vtable()->OnNotify)(This, Unk1, Unk2);
     kind = *(u32 *)*Unk1 & 0xF;
     if (kind == 5) {
         ((void (*)(void *, void **, s32))This->vtable->Unk36)(This, Unk1, Unk2);
@@ -98,40 +98,6 @@ void func_8003E8B8(renderer_t *This, void **Unk1, s32 Unk2) {
         ((void (*)(void *, void **, s32))This->vtable->Unk37)(This, Unk1, Unk2);
     }
 }
-
-#if 0
-void func_8003E968(renderer_t *This) {
-    s32 v0;
-    s32 v1;
-
-    ((s32 *)((s8 *)This + 0x90))[0] = 0;
-    ((s32 *)((s8 *)This + 0x70))[0] = 0;
-    v0 = D_8008A8FC;
-    v1 = D_8008A900;
-    ((s32 *)((s8 *)This + 0x34))[0] = v0;
-    ((s32 *)((s8 *)This + 0x38))[0] = v1;
-    v0 = 0xD;
-    ((s32 *)((s8 *)This + 0x3C))[0] = v0;
-    v0 = 0x7D0;
-    ((s32 *)((s8 *)This + 0x44))[0] = v0;
-    v0 = 0x40;
-    ((s32 *)((s8 *)This + 0x48))[0] = v0;
-    v0 = 0x100;
-    ((s32 *)((s8 *)This + 0x40))[0] = v0;
-    v0 = 0xA;
-    ((s32 *)((s8 *)This + 0x4C))[0] = v0;
-    v0 = 0x10000;
-    ((s32 *)((s8 *)This + 0x50))[0] = v0;
-    v0 = 0x4E20;
-    ((s32 *)((s8 *)This + 0x54))[0] = 0;
-    ((s32 *)((s8 *)This + 0x60))[0] = v0;
-    __builtin_memcpy((s8 *)This + 0x5B, D_8008A8F8, 3);
-    __builtin_memcpy((s8 *)This + 0x58, D_8008A8F8, 3);
-    v0 = 1;
-    ((s32 *)((s8 *)This + 0xB4))[0] = 0;
-    ((s32 *)((s8 *)This + 0xB8))[0] = v0;
-}
-#endif
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E968);
 
@@ -187,7 +153,7 @@ void func_8003EACC(renderer_t *This, s32 unused, s32 arg2, s32 arg3, s32 *arg4) 
 
     vt = This->vtable;
     if (This->m_Unk3 == 0) {
-        ((void (*)(renderer_t *))vt->Unk3)(This);
+        ((void (*)(renderer_t *))vt->Attach)(This);
         ((void (*)(renderer_t *, s32))vt->Unk29)(This, arg2);
         ((void (*)(renderer_t *, s32))vt->Unk30)(This, arg3);
         view_arg = arg4;
@@ -201,7 +167,7 @@ void func_8003EACC(renderer_t *This, s32 unused, s32 arg2, s32 arg3, s32 *arg4) 
 
 void func_8003EB84(renderer_t *This) {
     if (This->m_Unk3) {
-        This->vtable->Unk4(This, This->m_Unk3);
+        This->vtable->Detach(This, This->m_Unk3);
     }
 }
 

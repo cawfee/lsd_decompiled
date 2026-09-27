@@ -3,6 +3,8 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct class_326E8_unk24 {
     /* 0x00 */ u32 m_Unk24;
     /* 0x04 */ s16 m_Unk25_lo;
@@ -23,21 +25,21 @@ typedef struct class_326E8_unk24 {
 } class_326E8_unk24_t;
 
 typedef struct class_326E8_vtable {
-    /* 0x000 8006ee1c */ u32 value;
-    /* 0x004 8006ee20 */ void (*base_class_destructor)(void *);
+    /* 0x000 8006ee1c */ u32 type_id;
+    /* 0x004 8006ee20 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006ee24 */ void (*Construct)(void *, s32, s32, s32, s32, s32);
-    /* 0x00C 8006ee28 */ void (*Cleanup)(void *);
-    /* 0x010 8006ee2c */ void (*Unk3)(void *);
-    /* 0x014 8006ee30 */ void (*Unk4)(void *);
-    /* 0x018 8006ee34 */ void (*Unk5)(void *);
-    /* 0x01C 8006ee38 */ void (*Unk6)(void *);
-    /* 0x020 8006ee3c */ void (*Unk7)(void *);
-    /* 0x024 8006ee40 */ void (*Unk8)(void *);
-    /* 0x028 8006ee44 */ void (*Unk9)(void *);
-    /* 0x02C 8006ee48 */ void (*Unk10)(void *);
-    /* 0x030 8006ee4c */ void (*Unk11)(void *);
-    /* 0x034 8006ee50 */ void (*Unk12)(void *);
-    /* 0x038 8006ee54 */ void (*Unk13)(void *);
+    /* 0x00C 8006ee28 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006ee2c */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006ee30 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006ee34 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006ee38 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006ee3c */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006ee40 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006ee44 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006ee48 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006ee4c */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006ee50 */ void (*Nop)(base_class_t *);
+    /* 0x038 8006ee54 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006ee58 */ void (*Unk14)(void *);
     /* 0x040 8006ee5c */ void (*Unk15)(void *, s32, s32, s32, s32, s32);
     /* 0x044 8006ee60 */ void (*Unk16)(void *);

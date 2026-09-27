@@ -5,6 +5,7 @@
 extern mdec_movie_vtable_t D_8006F614;
 
 extern s32 D_8008A940;
+extern char D_8008A944[];
 extern s32 D_8008A948;
 extern s32 D_8008A93C;
 
@@ -19,6 +20,7 @@ s32 func_8004564C(mdec_movie_t *This, s32 Unk1, s32 Unk2);
 void func_80045DE0(void);
 void func_8004593C(mdec_movie_t *This);
 void func_80046568(s32, s32);
+void func_800458AC(mdec_movie_t *This);
 
 mdec_movie_t *func_80045438(s32 Unk1, s32 Unk2, s32 Unk3) {
     mdec_movie_t *allocated = (mdec_movie_t *) memory_allocate_mem(0x6C);
@@ -39,7 +41,7 @@ s32 func_800454C4(mdec_movie_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     void **obj;
     void (*cb)(void);
 
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = func_80045E44();
     This->m_Unk23 = (s32)func_80046F0C(Unk2, 0xF, 0);
     if (This->m_Unk23 != 0) {
@@ -69,7 +71,7 @@ void func_800455D4(mdec_movie_t *This) {
     DecDCToutCallback(0);
     DecDCTReset(0);
     func_8004575C(This);
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 typedef struct {
@@ -134,7 +136,39 @@ void func_8004575C(mdec_movie_t *This) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/mdec_movie", func_800457C0);
+s32 func_800457C0(mdec_movie_t *This, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    void **obj;
+    void **disp;
+    s32 result;
+
+    if (D_8008A940 == 0) {
+        if (This->m_Unk25 != 0) {
+            func_800458AC(This);
+        }
+        obj = (void **)This->m_Unk23;
+        This->m_Unk22 = arg2;
+        if ((*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x44))(obj, arg1, 0x64) == 0) {
+            D_8008A940 = (s32)This;
+            This->m_Unk15 = 0;
+            This->m_Unk14 = 0;
+            This->m_Unk18 = 1;
+            This->m_Unk17 = 0;
+            This->m_Unk16 = 0;
+            This->m_Unk20 = arg3;
+            This->m_Unk21 = arg4;
+            disp = (void **)get_display();
+            (*(void (**)(void **, char *, s32 *))(*(u32 *)disp + 0x78))(
+                disp, D_8008A944, &This->m_Unk7);
+            result = 0;
+            goto end;
+        }
+        result = 1;
+        goto end;
+    }
+    result = 0;
+end:
+    return result;
+}
 
 void func_800458AC(mdec_movie_t *This) {
     This->m_Unk19 = 1;
@@ -163,6 +197,7 @@ void func_800458B8(mdec_movie_t *This) {
 void func_8004593C(mdec_movie_t *This) {
     This->m_Unk19 = -1;
 }
+
 
 INCLUDE_ASM("asm/nonmatchings/mdec_movie", func_80045948);
 

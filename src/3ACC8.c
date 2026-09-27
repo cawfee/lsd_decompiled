@@ -34,7 +34,7 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004A534);
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004A7C0);
 
 void func_8004A984(class_3ACC8_t *This, s32 **Unk2, s32 Unk3) {
-    func_8001E57C()->Unk13(This, Unk2, Unk3);
+    func_8001E57C()->OnNotify(This, Unk2, Unk3);
 
     if ((**Unk2 & 0xF) == 1) {
         This->vtable->Unk63(This, Unk2, Unk3);
@@ -66,7 +66,7 @@ void func_8004AA6C(class_3ACC8_t *This, s32 arg1, void *arg2) {
         /* fallthrough */
     case 7:
         This->m_Unk110 = (s32)arg2;
-        ((void (*)(void *, s32))This->vtable->Unk11)(This, arg1);
+        ((void (*)(void *, s32))This->vtable->Notify)(This, arg1);
         break;
     }
 }
@@ -301,7 +301,7 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B100);
 
 void func_8004B2D4(class_3ACC8_t *This) {
     if (This && (This->m_Unk12_2 & 0x80) != 0) {
-        This->vtable->Unk13(This);
+        This->vtable->OnNotify(This);
     }
 }
 
@@ -394,7 +394,7 @@ s32 func_8004B5BC(class_3ACC8_t *This) {
     old = *(u16 *)&This->m_Unk46;
     *(func_8004B5BC_buf_t *)&This->m_Unk46 = buf;
     if ((s16)old != buf.first) {
-        This->vtable->Unk11(This, 5);
+        This->vtable->Notify(This, 5);
     }
     return kind;
 }

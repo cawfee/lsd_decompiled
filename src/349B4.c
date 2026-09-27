@@ -63,68 +63,89 @@ void func_80044380(class_349B4_t *This, s32 arg1, u8 *arg2) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/349B4", func_8004441C);
-// 90%
-// void func_8004441C(class_349B4_t *This, s32 a1, s16 *a2) {
-//     s32 v3;
-//     s32 v4;
-//     s32 v6 = 0;
-//     s32 v7 = 0;
-
-//     if (a2[0] < 0 || a2[1] < 0) {
-//         v6 = 1;
+// Best attempt, 140/140 with two instructions swapped (lh then sll vs sll then lh).
+// void func_8004441C(class_349B4_t *This, s32 arg1, u8 *arg2) {
+//     s32 neg_x;
+//     s32 neg_y;
+//     s32 ratio_x;
+//     s32 ratio_y;
+//     s32 num_x;
+//     s32 den_x;
+//     s32 num_y;
+//     s32 den_y;
+//     s32 old;
+//     s32 sum;
+//     s32 result;
+//     s32 added;
+//     s8 pad[0x10];
+//
+//     neg_x = 0;
+//     neg_y = 0;
+//     if (*(s16 *)arg2 < 0 || *(s16 *)(arg2 + 2) < 0) {
+//         neg_x = 1;
 //     }
-//     if (a2[2] < 0 || a2[3] < 0) {
-//         v7 = 1;
+//     if (*(s16 *)(arg2 + 4) < 0 || *(s16 *)(arg2 + 6) < 0) {
+//         neg_y = 1;
 //     }
-
-//     if (a2[1] != 0) {
-//         v3 = ((a2[0] / a2[1]) << 12) + (((a2[0] % a2[1]) << 12) / a2[1]);
+//
+//     den_x = *(s16 *)(arg2 + 2);
+//     if (den_x != 0) {
+//         num_x = *(s16 *)arg2;
+//         ratio_x = ((num_x / den_x) << 12) + (((num_x % den_x) << 12) / den_x);
 //     }
-
-//     if (a2[3] != 0) {
-//         v4 = ((a2[2] / a2[3]) << 12) + (((a2[2] % a2[3]) << 12) / a2[3]);
+//     den_y = *(s16 *)(arg2 + 6);
+//     if (den_y != 0) {
+//         num_y = *(s16 *)(arg2 + 4);
+//         ratio_y = ((num_y / den_y) << 12) + (((num_y % den_y) << 12) / den_y);
 //     }
-
-//     if (a1 != 0) {
-//         if (a2[1] == 0) {
-//             This->m_Unk23_0 = 4096;
+//
+//     if (arg1 != 0) {
+//         if (*(s16 *)(arg2 + 2) == 0) {
+//             This->m_Unk23_0 = 0x1000;
 //         } else {
-//             s16 val = v3;
-//             if (val >= 30001) {
-//                 val = 30000;
+//             result = (s16)ratio_x;
+//             if (result >= 30001) {
+//                 result = 30000;
 //             }
-//             This->m_Unk23_0 = val;
+//             This->m_Unk23_0 = result;
 //         }
-
-//         if (a2[3] == 0) {
-//             This->m_Unk23_1 = 4096;
+//         if (*(s16 *)(arg2 + 6) == 0) {
+//             added = 0x1000;
+//             This->m_Unk23_1 = added;
 //         } else {
-//             s16 val = v4;
-//             if (val >= 30001) {
-//                 val = 30000;
+//             result = (s16)ratio_y;
+//             if (result >= 30001) {
+//                 result = 30000;
 //             }
-//             This->m_Unk23_1 = val;
+//             This->m_Unk23_1 = result;
 //         }
 //     } else {
-//         if (This->m_Unk23_0 + (s16)v3 < 30001) {
-//             This->m_Unk23_0 = This->m_Unk23_0 + v3;
-//         } else {
-//             s16 val = 1;
-//             if (v6 == 0) {
-//                 val = 30000;
+//         old = This->m_Unk23_0;
+//         sum = old + ratio_x - ratio_x;
+//         old = old + (s16)ratio_x;
+//         old = old < 30001;
+//         if (old == 0) {
+//             added = 1;
+//             if (neg_x == 0) {
+//                 added = 30000;
 //             }
-//             This->m_Unk23_0 = val;
-//         }
-
-//         if (This->m_Unk23_1 + (s16)v4 < 30001) {
-//             This->m_Unk23_1 = This->m_Unk23_1 + v4;
 //         } else {
-//             s16 val = 1;
-//             if (v7 == 0) {
-//                 val = 30000;
-//             }
-//             This->m_Unk23_1 = val;
+//             added = ratio_x + sum;
 //         }
+//         This->m_Unk23_0 = added;
+//         old = This->m_Unk23_1;
+//         sum = old + ratio_y - ratio_y;
+//         old = old + (s16)ratio_y;
+//         old = old < 30001;
+//         if (old == 0) {
+//             added = 1;
+//             if (neg_y == 0) {
+//                 added = 30000;
+//             }
+//         } else {
+//             added = ratio_y + sum;
+//         }
+//         This->m_Unk23_1 = added;
 //     }
 // }
 

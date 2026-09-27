@@ -61,7 +61,7 @@ s32 func_800452FC(class_359B8_t *This) {
                 do {
                     entries--;
                     obj = (class_34684_t *)*entries;
-                    obj->vtable->init_800269F0(obj);
+                    obj->vtable->Destroy(obj);
                 } while (--i != 0);
             }
             return 1;

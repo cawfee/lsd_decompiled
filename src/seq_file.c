@@ -1,6 +1,48 @@
 #include "seq_file.h"
 
-extern seq_file_vtable_t D_8006EED8;
+#include "base_class.h"
+#include "file_buf.h"
+
+s32 init_800269F0(void *);
+void nullsub13(void);
+void file_buf_release(void *);
+
+void func_8004232C(seq_file_t *, unsigned char *);
+void func_800423A8(seq_file_t *);
+void func_800423E4(seq_file_t *);
+
+seq_file_vtable_t D_8006EED8 = {
+    0x00000B03,
+    (base_class_t *(*)(base_class_t *))init_800269F0,
+    (void (*)(void *, s32))func_8004232C,
+    (void (*)(base_class_t *))func_800423A8,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    file_buf_release,
+    (void (*)(void *))nullsub13,
+    (void (*)(void *))func_800423E4,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
 
 seq_file_t *func_800422CC(u32 Unk1) {
     seq_file_t *allocated = (seq_file_t *) memory_allocate_mem(0x30);

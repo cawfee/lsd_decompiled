@@ -4,12 +4,85 @@
 #include "base_class.h"
 #include "memory.h"
 
-extern file_buf_vtable_t **D_8006D430;
-extern void *D_8006D4AC[];
+
+s32 init_800269F0(file_buf_t *);
+void func_80026A50(file_buf_t *);
+void func_80026AB4(file_buf_t *);
+void file_buf_load(file_buf_t *, s32);
+void file_buf_release(file_buf_t *);
+void nullsub13(void);
+void func_80026C88(file_buf_t *);
+
+void *class_1C92C_get_vtable(void);
+void *tim_image_get_vtable(void);
+void *func_800451A8(void);
+void *func_80044F20(void);
+void *func_80043E74(void);
+void *func_80043830(void);
+void *func_80043B78(void);
+void *sound_get_vtable(void);
+void *func_800423F0(void);
+void *func_80048CE0(void);
+void *func_800441A4(void);
+void *func_80045428(void);
+void *func_800449FC(void);
+void *func_80044CC4(void);
+
+file_buf_vtable_t D_8006D430 = {
+    3,
+    (void (*)(void *))init_800269F0,
+    (void (*)(void *))func_80026A50,
+    (void (*)(void *))func_80026AB4,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    (void (*)(void *))file_buf_load,
+    (void (*)(void *))file_buf_release,
+    (void (*)(void *))nullsub13,
+    (void (*)(void *))func_80026C88,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
+
+void *D_8006D4AC[] = {
+    class_1C92C_get_vtable,
+    tim_image_get_vtable,
+    func_800451A8,
+    func_80044F20,
+    func_80043E74,
+    func_80043830,
+    func_80043B78,
+    sound_get_vtable,
+    func_800423F0,
+    func_80048CE0,
+    func_800441A4,
+    func_80045428,
+    func_800449FC,
+    func_80044CC4,
+    NULL,
+};
 
 static s32 D_8008A84C = 0x13;
-extern s32 D_8008A850;
-extern s32 D_8008A854;
+static s32 D_8008A850 = 0;
+static s32 D_8008A854 = 0x8006D4A8;
 extern char *strcat(char *, char *);
 s32 func_80027F18(s32, s32, s32);
 void func_80027FD8(s32);
@@ -21,13 +94,13 @@ s32 func_8002C468(s32, s32);
 s32 init_800269F0(file_buf_t *This) {
     This->m_Unk7_1 = 0;
     This->vtable->Cleanup();
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
     memory_free_mem(This);
     return 0;
 }
 
 void func_80026A50(file_buf_t *This) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = file_buf_get_vtable();
     This->m_Unk2 = 0;
     This->m_Buffer = NULL;
@@ -87,19 +160,7 @@ void func_80026C88(file_buf_t *This) {
 }
 
 file_buf_vtable_t *file_buf_get_vtable(void) {
-#ifndef CCG8
     return &D_8006D430;
-#else
-    // G8 hack
-    file_buf_vtable_t *result;
-
-    __asm__("lui     %0, %%hi(%1)\n\t"
-            "addiu   %0, %0, %%lo(%1)"
-            : "=r"(result)
-            : "i"(&D_8006D430));
-
-    return result;
-#endif
 }
 
 void *get_file_driver() {

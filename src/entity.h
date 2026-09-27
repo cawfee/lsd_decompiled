@@ -3,25 +3,26 @@
 
 #include "305B0.h"
 #include "common.h"
+#include "base_class.h"
 
 typedef struct dream_sys dream_sys_t;
 
 typedef struct entity_vtable {
-    /* 0x000 80089ad4 */ u32 value;
-    /* 0x004 80089ad8 */ void (*base_class_destructor)(void *);
+    /* 0x000 80089ad4 */ u32 type_id;
+    /* 0x004 80089ad8 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80089adc */ void *(*entity_construct)(void *, s32, s32, s32);
     /* 0x00C 80089ae0 */ void (*entity_cleanup)(void *);
-    /* 0x010 80089ae4 */ void (*Unk3)(void *);
-    /* 0x014 80089ae8 */ void (*Unk4)(void *);
-    /* 0x018 80089aec */ void (*Unk5)(void *);
-    /* 0x01C 80089af0 */ void (*Unk6)(void *);
-    /* 0x020 80089af4 */ void (*Unk7)(void *);
-    /* 0x024 80089af8 */ void (*Unk8)(void *);
-    /* 0x028 80089afc */ void (*Unk9)(void *);
-    /* 0x02C 80089b00 */ void (*Unk10)(void *);
-    /* 0x030 80089b04 */ void (*Unk11)(void *, s32);
-    /* 0x034 80089b08 */ void (*Unk12)(void *);
-    /* 0x038 80089b0c */ void (*Unk13)(void *);
+    /* 0x010 80089ae4 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80089ae8 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80089aec */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80089af0 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 80089af4 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80089af8 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80089afc */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80089b00 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 80089b04 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80089b08 */ void (*Nop)(base_class_t *);
+    /* 0x038 80089b0c */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80089b10 */ s32 dummy1;
     /* 0x040 80089b14 */ void (*Unk15)(void *);
     /* 0x044 80089b18 */ void (*Unk16)(void *, s32, s32 *);
@@ -90,10 +91,10 @@ typedef struct entity_vtable {
     /* 0x140 80089c14 */ void (*Unk79)(void *);
     /* 0x144 80089c18 */ s32 (*entity_get_distance)(void *, void *);
     /* 0x148 80089c1c */ s32 (*Unk81)(void *);
-    /* 0x14C 80089c20 */ void (*entity_get_mood_effect)(void *);
-    /* 0x150 80089c24 */ void (*entity_get_unlock_effect)(void *);
-    /* 0x154 80089c28 */ void (*entity_get_link_stage)(void *);
-    /* 0x158 80089c2c */ void (*entity_get_event_video)(void *);
+    /* 0x14C 80089c20 */ s8 *(*entity_get_mood_effect)(void *);
+    /* 0x150 80089c24 */ s32 (*entity_get_unlock_effect)(void *);
+    /* 0x154 80089c28 */ s32 (*entity_get_link_stage)(void *);
+    /* 0x158 80089c2c */ s32 (*entity_get_event_video)(void *);
     /* 0x15C 80089c30 */ void (*Unk86)(void *);
     /* 0x160 80089c34 */ void (*Unk87)(void *);
     /* 0x164 80089c38 */ void (*Unk88)(void *, s32);

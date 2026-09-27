@@ -30,7 +30,7 @@ class_55DD4_t *class_55DD4_construct(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
         This->m_Unk36 = 0;
 
         if (!This->vtable->Unk60(This, Unk2)) {
-            This->vtable->Unk3(This, This->m_Unk22);
+            This->vtable->Attach(This, This->m_Unk22);
             This->vtable->Unk15(This);
             return This;
         }
@@ -47,10 +47,10 @@ void class_55DD4_cleanup(class_55DD4_t *This) {
 }
 
 void func_80065790(class_55DD4_t *This, u16 **Unk2, s32 Unk3) {
-    func_80057C84()->Unk13(This, Unk2, Unk3);
+    func_80057C84()->OnNotify(This, Unk2, Unk3);
 
     if (**Unk2 == 0x5F03 && Unk3 == 1 && !This->m_Unk23) {
-        This->vtable->base_class_destructor(This);
+        This->vtable->Destroy(This);
     }
 }
 
@@ -73,7 +73,7 @@ void func_80065918(class_55DD4_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) 
         func_80057C84()->Unk18(This, Unk4, Unk5);
 
         if (Unk3 && !This->m_Unk19) {
-            This->vtable->Unk3(This, Unk3);
+            This->vtable->Attach(This, Unk3);
         }
 
         This->vtable->Unk78(This, Unk2);
@@ -85,7 +85,7 @@ void func_800659D0(class_55DD4_t *This) {
         This->vtable->Unk79(This);
 
         if (This->m_Unk19) {
-            This->vtable->Unk4(This, This->m_Unk19);
+            This->vtable->Detach(This, This->m_Unk19);
         }
 
         func_80057C84()->Unk19(This);
@@ -131,7 +131,7 @@ void func_80065B80(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
     }
 
     if (Unk3 == 4) {
-        This->vtable->base_class_destructor(This);
+        This->vtable->Destroy(This);
     }
 }
 
@@ -434,45 +434,24 @@ void func_800662B4(class_55DD4_t *This) {
     This->m_Unk35 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/55DD4", func_800662BC);
-// vtable is missing from This
-// void *func_800662BC(void *This, void *arg1, s32 Unk) {
-//     register void *s1 asm("s1");
-//     register void *a1_reg asm("a1");
-//     register s32 s3 asm("s3");
-//     register u16 s2 asm("s2");
-//     register u32 s0 asm("s0");
-//     void *(*fn)(void *, void *, s32);
-//
-//     s1 = This;
-//     a1_reg = arg1;
-//     s3 = Unk;
-//     s2 = *(u16 *)((char *)a1_reg + 2);
-//     a1_reg = (char *)a1_reg + 8;
-//     s0 = 0;
-//     if (s2 == 0) {
-//         goto epilogue;
-//     }
-//     s0 = 1;
-//     fn = (void *(*)(void *, void *, s32))(*(s32 *)((char *)(*(void **)s1) + 0x138));
-// loop:
-//     a1_reg = fn(s1, a1_reg, s3);
-//     if (s0 < s2) {
-//         s0 += 1;
-//         goto loop;
-//     }
-//     s0 += 1;
-//     s0 -= 1;
-// epilogue:
-//     return a1_reg;
-// }
+void *func_800662BC(class_55DD4_t *This, void *arg1, s32 arg2) {
+    u32 count;
+    u32 index;
+
+    count = *(u16 *)((u8 *)arg1 + 2);
+    arg1 = (u8 *)arg1 + 8;
+    for (index = 0; index < count; index++) {
+        arg1 = This->vtable->Unk77(This, arg1, arg2);
+    }
+    return arg1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/55DD4", func_80066340);
 
 void func_80066748(class_55DD4_t *This, s32 Unk2) {
     if (Unk2) {
         (*(void (**)(s32, class_55DD4_t *))(*(s32 *) Unk2 + 16))(Unk2, This);
-        This->vtable->Unk3(This, Unk2);
+        This->vtable->Attach(This, Unk2);
         This->m_Unk36 = Unk2;
     }
 }
@@ -483,7 +462,7 @@ void func_800667B0(class_55DD4_t *This) {
     m_Unk36 = This->m_Unk36;
     if (m_Unk36) {
         (*(void (**)(s32, class_55DD4_t *))(*(s32 *) m_Unk36 + 20))(m_Unk36, This);
-        This->vtable->Unk4(This, This->m_Unk36);
+        This->vtable->Detach(This, This->m_Unk36);
         This->m_Unk36 = 0;
     }
 }

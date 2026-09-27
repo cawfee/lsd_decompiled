@@ -13,6 +13,13 @@ extern void StSetStream(unsigned long, unsigned long, unsigned long, void *, voi
 extern str_stream_vtable_t D_800817E0;
 
 extern str_stream_t *D_8008A950;
+extern s32 D_8008A94C;
+extern char D_8008A954[];
+
+extern char *strcpy(char *, char *);
+extern char *strcat(char *, char *);
+extern s32 func_800270B8(void);
+extern void *CdSearchFile(void *fp, char *name);
 
 str_stream_t *func_80046F0C(s32 Unk1, s32 Unk2, s32 Unk3) {
     str_stream_t *allocated = (str_stream_t *) memory_allocate_mem(0x5C);
@@ -26,7 +33,7 @@ str_stream_t *func_80046F0C(s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void func_80046F88(str_stream_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = func_80047900();
     This->m_Unk12 = Unk2;
 
@@ -48,7 +55,7 @@ void func_80046F88(str_stream_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
 
 void func_80047074(str_stream_t *This) {
     This->vtable->Unk17(This);
-    base_class_get_vtable()->base_class_cleanup(This);
+    base_class_get_vtable()->Cleanup(This);
 }
 
 void func_800470C8(str_stream_t *This, s32 Unk2, u32 Unk3) {
@@ -58,7 +65,45 @@ void func_800470C8(str_stream_t *This, s32 Unk2, u32 Unk3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/str_stream", func_80047114);
+s32 func_80047240(str_stream_t *This);
+
+s32 func_80047114(str_stream_t *This, char *name, s32 retries) {
+    char path[0x20];
+    s32 left;
+    s32 orig;
+    s32 pad;
+    s32 *file;
+
+    left = retries;
+    orig = left;
+    pad = 0;
+    if (This->m_Unk10 == 0) {
+        if (This->m_Unk19 != 0) {
+            if (D_8008A950 == NULL) {
+                path[0] = 0x5C;
+                strcpy(&path[1], (char *)func_800270B8());
+                strcat(path, name);
+                strcat(path, D_8008A954);
+                file = &This->m_Unk2;
+                while (CdSearchFile(file, path) == 0) {
+                    if (orig >= 0) {
+                        left -= 1;
+                        if (left < 0) {
+                            return 1;
+                        }
+                    }
+                }
+                This->m_Unk15 = (s32)((u32)This->m_Unk3 / This->m_Unk13);
+                D_8008A94C = func_80047240(This);
+                D_8008A950 = This;
+                This->vtable->Unk18(This, file);
+                return pad;
+            }
+            return pad;
+        }
+    }
+    return 1;
+}
 
 s32 func_80047240(str_stream_t *This) {
     spu_common_attr_t attributes;

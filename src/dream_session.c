@@ -1,4 +1,5 @@
 #include "dream_session.h"
+#include "base_class.h"
 #include "scene.h"
 #include "map_scene.h"
 #include "tmd_model.h"
@@ -8,9 +9,65 @@
 #include "tim_image.h"
 #include "utils/cd_paths.h"
 
-extern dream_session_vtable_t **g_DREAM_SESSION_VTABLE;
-extern s32 D_80086650;
-extern s32 D_8008665C;
+void dream_session_construct(dream_session_t *, game_graphics_ctx_t *, dream_sys_t *, s32);
+void dream_session_cleanup(dream_session_t *);
+void dream_session_on_tick(void);
+void func_80049A14(void);
+void dream_session_execute(dream_session_t *);
+void func_80049AC0(void);
+void func_80049B54(void);
+void func_80049C50(void);
+void func_80049CA8(void);
+void func_8004A35C(void);
+void func_8004A364(void);
+void func_8004A3EC(void);
+void func_8003E538(void);
+void func_8003E578(void);
+void func_8004A458(void);
+void func_8004A478(void);
+void func_80049EA4(void);
+void func_80049EAC(void);
+void on_link_code(void);
+
+dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
+    0x1F230,
+    base_class_destructor,
+    (void (*)(void *))dream_session_construct,
+    (void (*)(void *))dream_session_cleanup,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void (*)(void *))dream_session_on_tick,
+    NULL,
+    (void (*)(void *))func_80049A14,
+    (s32 (*)(void *))dream_session_execute,
+    (void (*)(void *))func_80049AC0,
+    (void (*)(void *))func_80049B54,
+    (void (*)(void *))func_80049C50,
+    (void (*)(void *))func_80049CA8,
+    (void (*)(void *))func_8004A35C,
+    (void (*)(void *))func_8004A364,
+    (void (*)(void *))func_8004A3EC,
+    (void (*)(void *))func_8003E538,
+    (void (*)(void *))func_8003E578,
+    (void (*)(void *))func_8004A458,
+    (void (*)(void *))func_8004A478,
+    NULL,
+    NULL,
+    (void (*)(void *))func_80049EA4,
+    (void (*)(void *))func_80049EAC,
+    (void (*)(void *))on_link_code,
+};
+
+s32 D_80086650[3] = { 0, 0xFFFFFB50, 0 };
+s32 D_8008665C[3] = { 0, 0xFFFFFB50, 0x2710 };
 
 dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 EnableSomething) {
     dream_session_t *allocated = (dream_session_t *) memory_allocate_mem(0x50);
@@ -52,7 +109,7 @@ void dream_session_construct(dream_session_t *This,
     GraphicsCtx->cls_3acc8 = func_8004A4C8(0, 1);
 
     This->m_DreamSys = DreamSys;
-    This->vtable->Unk3(This, DreamSys);
+    This->vtable->Attach(This, DreamSys);
     DreamSys->vtable->Unk66(DreamSys, This->m_Unk12);
     DreamSys->vtable->Unk68(DreamSys, This->m_TextureHelper);
     This->vtable->Unk15(This);
@@ -66,14 +123,14 @@ void dream_session_cleanup(dream_session_t *This) {
     tmd_model_t *model;
 
     gfx = This->m_GraphicsCtx;
-    This->vtable->Unk4(This, This->m_DreamSys);
-    gfx->cls_3acc8 = gfx->cls_3acc8->vtable->base_class_destructor(gfx->cls_3acc8);
-    gfx->cls_32c00 = gfx->cls_32c00->vtable->base_class_destructor(gfx->cls_32c00);
-    gfx->cls_3da54 = gfx->cls_3da54->vtable->base_class_destructor(gfx->cls_3da54);
+    This->vtable->Detach(This, This->m_DreamSys);
+    gfx->cls_3acc8 = gfx->cls_3acc8->vtable->Destroy(gfx->cls_3acc8);
+    gfx->cls_32c00 = gfx->cls_32c00->vtable->Destroy(gfx->cls_32c00);
+    gfx->cls_3da54 = gfx->cls_3da54->vtable->Destroy(gfx->cls_3da54);
     bgm = (bgm_t *)This->m_Unk15;
-    bgm->vtable->base_class_destructor(bgm);
+    bgm->vtable->Destroy(bgm);
     model = (tmd_model_t *)This->m_Unk17;
-    model->vtable->init_800269F0(model);
+    model->vtable->Destroy(model);
     This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
     func_8005C5E8();
     func_8004A4B8()->Cleanup(This);
@@ -84,7 +141,7 @@ void dream_session_on_tick(dream_session_t *This, void **Unk2, s32 Unk3) {
 
     // unk2 could be either gshelper or 32c00?
 
-    func_8004A4B8()->Unk13(This, Unk2, Unk3);
+    func_8004A4B8()->OnNotify(This, Unk2, Unk3);
     value = *(s32 *) *Unk2;
 
     if ((value & 0xFFFF) == 0x1F34) {
@@ -100,8 +157,8 @@ void func_80049A14(dream_session_t *This) {
 
 void dream_session_execute(dream_session_t *This) {
     dream_sys_t *dream_sys = This->m_DreamSys;
-    dream_sys->vtable->Unk3(dream_sys, This->m_GraphicsCtx->cls_16634);
-    dream_sys->vtable->Unk3(dream_sys, This->m_GraphicsCtx->cls_32c00);
+    dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_16634);
+    dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_32c00);
     dream_sys->vtable->Unk67(dream_sys, This->m_GraphicsCtx->cls_3da54);
     func_8004A4B8()->scene_run(This, This->m_GraphicsCtx, 0);
 }
@@ -112,8 +169,8 @@ void func_80049AC0(dream_session_t *This) {
     dream_sys = This->m_DreamSys;
     func_8004A4B8()->Unk17(This);
     dream_sys->vtable->Unk67(dream_sys, 0);
-    dream_sys->vtable->Unk4(dream_sys, This->m_GraphicsCtx->cls_16634);
-    dream_sys->vtable->Unk4(dream_sys, This->m_Unk3);
+    dream_sys->vtable->Detach(dream_sys, This->m_GraphicsCtx->cls_16634);
+    dream_sys->vtable->Detach(dream_sys, This->m_Unk3);
 }
 
 typedef struct dream_ctx_actor_vtable dream_ctx_actor_vtable_t;
@@ -210,7 +267,7 @@ state3:
     obj = (map_scene_t *)This->m_Unk18;
     ((void (*)(map_scene_t *))obj->vtable->Unk17)(obj);
     obj = (map_scene_t *)This->m_Unk18;
-    obj->vtable->base_class_destructor(obj);
+    obj->vtable->Destroy(obj);
     open_map(This, This->m_DreamSys->vtable->Unk119(This->m_DreamSys));
 }
 
@@ -219,7 +276,7 @@ void open_map(dream_session_t *This, s32 Unk) {
 
     This->m_Unk18 = (s32)map_scene_create(This->m_Unk12, This->m_Unk15, (s32)This->m_TextureHelper,
                                          This->m_Unk17, Unk);
-    This->vtable->Unk3(This, This->m_Unk18);
+    This->vtable->Attach(This, This->m_Unk18);
     obj = (void **)This->m_Unk18;
     (*(void (**)(void **, void *, void *))(*(u32 *)obj + 0x44))(obj, This->m_GraphicsCtx, This->m_DreamSys);
     This->m_Unk14 = 2;
@@ -282,5 +339,3 @@ void on_link_code(dream_session_t *This, s32 Unk2, s32 Unk3) {
 dream_session_vtable_t *dream_session_get_vtable(void) {
     return &g_DREAM_SESSION_VTABLE;
 }
-
-INCLUDE_ASM("asm/nonmatchings/dream_session", func_8004A070);

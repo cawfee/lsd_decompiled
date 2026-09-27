@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct movie_screen_vtable {
-    /* 0x000 8006e5f8 */ u32 value;
-    /* 0x004 8006e5fc */ void (*base_class_destructor)(void *);
+    /* 0x000 8006e5f8 */ u32 type_id;
+    /* 0x004 8006e5fc */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 8006e600 */ void (*movie_screen_construct)(void *, s32, s32, s32, s32);
     /* 0x00C 8006e604 */ void (*movie_screen_cleanup)(void *);
-    /* 0x010 8006e608 */ void (*Unk3)(void *);
-    /* 0x014 8006e60c */ void (*Unk4)(void *);
-    /* 0x018 8006e610 */ void (*Unk5)(void *);
-    /* 0x01C 8006e614 */ void (*Unk6)(void *);
-    /* 0x020 8006e618 */ void (*Unk7)(void *);
-    /* 0x024 8006e61c */ void (*Unk8)(void *);
-    /* 0x028 8006e620 */ void (*Unk9)(void *);
-    /* 0x02C 8006e624 */ void (*Unk10)(void *);
-    /* 0x030 8006e628 */ void (*Unk11)(void *);
-    /* 0x034 8006e62c */ void (*Unk12)(void *);
-    /* 0x038 8006e630 */ void (*Unk13)(void *);
+    /* 0x010 8006e608 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006e60c */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006e610 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006e614 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006e618 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006e61c */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006e620 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006e624 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006e628 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006e62c */ void (*Nop)(base_class_t *);
+    /* 0x038 8006e630 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006e634 */ void (*Unk14)(void *);
     /* 0x040 8006e638 */ void (*Unk15)(void *);
     /* 0x044 8006e63c */ void (*Play)(void *, void *, const char *, s32, s32);

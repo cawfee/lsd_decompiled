@@ -3,22 +3,24 @@
 
 #include <common.h>
 
+#include "base_class.h"
+
 typedef struct class_46B20_vtable {
-    /* 0x000 800876fc */ u32 value;
-    /* 0x004 80087700 */ void (*base_class_destructor)(void *);
+    /* 0x000 800876fc */ u32 type_id;
+    /* 0x004 80087700 */ base_class_t *(*Destroy)(base_class_t *);
     /* 0x008 80087704 */ void *(*Construct)(void *, s32, s32, s32, s32);
-    /* 0x00C 80087708 */ void (*Cleanup)(void *);
-    /* 0x010 8008770c */ void (*Unk3)(void *);
-    /* 0x014 80087710 */ void (*Unk4)(void *);
-    /* 0x018 80087714 */ void (*Unk5)(void *);
-    /* 0x01C 80087718 */ void (*Unk6)(void *);
-    /* 0x020 8008771c */ void (*Unk7)(void *);
-    /* 0x024 80087720 */ void (*Unk8)(void *);
-    /* 0x028 80087724 */ void (*Unk9)(void *);
-    /* 0x02C 80087728 */ void (*Unk10)(void *);
-    /* 0x030 8008772c */ void (*Unk11)(void *);
-    /* 0x034 80087730 */ void (*Unk12)(void *);
-    /* 0x038 80087734 */ void (*Unk13)(void *);
+    /* 0x00C 80087708 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8008770c */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 80087710 */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 80087714 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 80087718 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8008771c */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 80087720 */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 80087724 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 80087728 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8008772c */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 80087730 */ void (*Nop)(base_class_t *);
+    /* 0x038 80087734 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80087738 */ void (*Unk14)(void *);
     /* 0x040 8008773c */ void (*Unk15)(void *, s32);
     /* 0x044 80087740 */ void (*Unk16)(void *, s32, s32);
@@ -50,7 +52,7 @@ typedef struct class_46B20_vtable {
     /* 0x0AC 800877a8 */ void (*Unk42)(void *);
     /* 0x0B0 800877ac */ void (*Unk43)(void *);
     /* 0x0B4 800877b0 */ void (*Unk44)(void *);
-    /* 0x0B8 800877b4 */ void (*Unk45)(void *);
+    /* 0x0B8 800877b4 */ void (*Unk45)(void *, void *);
     /* 0x0BC 800877b8 */ void (*Unk46)(void *);
     /* 0x0C0 800877bc */ void (*Unk47)(void *);
     /* 0x0C4 800877c0 */ void (*Unk48)(void *);
@@ -110,5 +112,12 @@ typedef struct class_46B20 {
 } class_46B20_t;
 
 class_46B20_vtable_t *func_80056F4C(void);
+void func_80056520(class_46B20_t *This, s32 Unk3, s32 Unk4);
+void func_80056640(class_46B20_t *This, s32 Unk1);
+void func_80056718(class_46B20_t *This);
+void func_80056B8C(class_46B20_t *This);
+void func_80056DF8(class_46B20_t *This);
+void func_80056F28(class_46B20_t *This);
+void func_80056D18(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 
 #endif // LSD_46B20_H

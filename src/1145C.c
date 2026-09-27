@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern void *D_8008A83C;
+void *D_8008A83C = NULL;
 
 void *get_display(void) {
     return D_8008A83C;

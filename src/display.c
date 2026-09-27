@@ -6,7 +6,63 @@
 #include "base_class.h"
 #include <common.h>
 
-extern display_vtable_t **g_DISPLAY_VTABLE;
+
+void func_80020730(display_t *);
+void display_reset(display_t *);
+void display_init_gs(display_t *, vec2d_t *, s32);
+void display_do_vsync(display_t *);
+void display_reset_vsync_count(display_t *);
+void display_swap_disp_buffer(display_t *);
+s32 display_get_active_buffer(display_t *);
+void display_load_image(display_t *, s16 *, s32);
+void display_store_image(display_t *, s32, s16 *);
+s32 func_80020A1C(display_t *);
+void func_80020A24(display_t *, s16 *, s16, s16);
+void display_do_vsync_internal(display_t *);
+void func_80020AF4(display_t *);
+void display_set_vblanks(display_t *, s32);
+s32 display_get_vblanks(display_t *);
+void func_80020B74(display_t *, unsigned char *, s32);
+void *display_get_screen_size(display_t *, void *);
+void func_80020C3C(display_t *, s32);
+void display_set_vsync_callback(display_t *, void (*)(void));
+
+display_vtable_t g_DISPLAY_VTABLE = {
+    1,
+    base_class_destructor,
+    func_80020730,
+    base_class_cleanup,
+    base_class_attach,
+    base_class_detach,
+    base_class_detach_all,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    base_class_on_notify,
+    NULL,
+    display_reset,
+    display_init_gs,
+    display_do_vsync,
+    display_reset_vsync_count,
+    display_swap_disp_buffer,
+    display_get_active_buffer,
+    display_load_image,
+    display_store_image,
+    func_80020A1C,
+    func_80020A24,
+    display_do_vsync_internal,
+    func_80020AF4,
+    display_set_vblanks,
+    display_get_vblanks,
+    func_80020B74,
+    display_get_screen_size,
+    func_80020C3C,
+    display_set_vsync_callback,
+};
 
 display_t *display_create() {
     display_t *allocated = (display_t *) memory_allocate_mem(0x34);
@@ -21,7 +77,7 @@ display_t *display_create() {
 }
 
 void func_80020730(display_t *This) {
-    base_class_get_vtable()->base_class_construct(This);
+    base_class_get_vtable()->Construct(This);
     This->vtable = display_get_vtable();
     This->vtable->display_reset(This);
 }
@@ -118,7 +174,7 @@ void display_do_vsync_internal(display_t *This) {
         if (vsync_callback) {
             vsync_callback();
         }
-        This->vtable->Unk11(This, 2);
+        This->vtable->Notify(This, 2);
     }
 }
 

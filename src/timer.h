@@ -3,37 +3,42 @@
 
 #include <common.h>
 
-typedef struct timer_vtable {
-    /* 0x000 8006e878 */ u32 value;
-    /* 0x004 8006e87c */ void (*base_class_destructor)(void *);
-    /* 0x008 8006e880 */ void (*timer_create)(void *);
-    /* 0x00C 8006e884 */ void (*base_class_cleanup)(void *);
-    /* 0x010 8006e888 */ void (*Unk3)(void *, s32);
-    /* 0x014 8006e88c */ void (*Unk4)(void *, s32);
-    /* 0x018 8006e890 */ void (*Unk5)(void *);
-    /* 0x01C 8006e894 */ void (*Unk6)(void *);
-    /* 0x020 8006e898 */ void (*Unk7)(void *);
-    /* 0x024 8006e89c */ void (*Unk8)(void *);
-    /* 0x028 8006e8a0 */ void (*Unk9)(void *);
-    /* 0x02C 8006e8a4 */ void (*Unk10)(void *);
-    /* 0x030 8006e8a8 */ void (*Unk11)(void *, s32);
-    /* 0x034 8006e8ac */ void (*Unk12)(void *);
-    /* 0x038 8006e8b0 */ void (*Unk13)(void *);
-    /* 0x03C 8006e8b4 */ u32 pad;
-    /* 0x040 8006e8b8 */ void (*timer_reset)(void *);
-    /* 0x044 8006e8bc */ void (*Unk16)(void *, s32, s32);
-    /* 0x048 8006e8c0 */ void (*Unk17)(void *);
-    /* 0x04C 8006e8c4 */ void (*Unk18)(void *, s32, s32, s32);
-    /* 0x050 8006e8c8 */ void (*Unk19)(void *);
-    /* 0x054 8006e8cc */ void (*Unk20)(void *, void **, s32);
-    /* 0x058 8006e8d0 */ void (*Unk21)(void *, void **, s32);
-    /* 0x05C 8006e8d4 */ void (*timer_increment)(void *, void **, s32);
-    /* 0x060 8006e8d8 */ void (*Unk23)(void *, s32);
-    /* 0x064 8006e8dc */ void (*Unk24)(void *);
-    /* 0x068 8006e8e0 */ void (*Unk25)(void *);
-} timer_vtable_t;
+#include "base_class.h"
 
-typedef struct timer {
+typedef struct timer timer_t;
+typedef struct timer_vtable timer_vtable_t;
+
+struct timer_vtable {
+    /* 0x000 8006e878 */ u32 type_id;
+    /* 0x004 8006e87c */ base_class_t *(*Destroy)(base_class_t *);
+    /* 0x008 8006e880 */ void (*timer_create)(timer_t *);
+    /* 0x00C 8006e884 */ void (*Cleanup)(base_class_t *);
+    /* 0x010 8006e888 */ void (*Attach)(base_class_t *, base_class_t *);
+    /* 0x014 8006e88c */ void (*Detach)(base_class_t *, base_class_t *);
+    /* 0x018 8006e890 */ void (*DetachAll)(base_class_t *);
+    /* 0x01C 8006e894 */ void (*IterChildren)(base_class_t *, void **, void **);
+    /* 0x020 8006e898 */ void (*AddParent)(base_class_t *, base_class_t *);
+    /* 0x024 8006e89c */ void (*RemoveParent)(base_class_t *, base_class_t *);
+    /* 0x028 8006e8a0 */ void (*ClearParents)(base_class_t *);
+    /* 0x02C 8006e8a4 */ void (*IterParents)(base_class_t *, void **, void **);
+    /* 0x030 8006e8a8 */ void (*Notify)(base_class_t *, s32);
+    /* 0x034 8006e8ac */ void (*Nop)(base_class_t *);
+    /* 0x038 8006e8b0 */ void (*OnNotify)(timer_t *, void **, void *);
+    /* 0x03C 8006e8b4 */ u32 pad;
+    /* 0x040 8006e8b8 */ void (*timer_reset)(timer_t *);
+    /* 0x044 8006e8bc */ void (*Unk16)(timer_t *, s32 *, s32);
+    /* 0x048 8006e8c0 */ void (*Unk17)(timer_t *);
+    /* 0x04C 8006e8c4 */ void (*Unk18)(timer_t *, s32, s32, s32);
+    /* 0x050 8006e8c8 */ void (*Unk19)(timer_t *);
+    /* 0x054 8006e8cc */ void (*Unk20)(timer_t *, void **, s32);
+    /* 0x058 8006e8d0 */ void (*Unk21)(timer_t *, void **, s32);
+    /* 0x05C 8006e8d4 */ void (*timer_increment)(timer_t *, void **, s32);
+    /* 0x060 8006e8d8 */ void (*Unk23)(timer_t *, s32);
+    /* 0x064 8006e8dc */ void (*Unk24)(timer_t *);
+    /* 0x068 8006e8e0 */ void (*Unk25)(timer_t *);
+};
+
+struct timer {
     /* 0x00 */ timer_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
@@ -46,7 +51,7 @@ typedef struct timer {
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Unk10;
-} timer_t;
+};
 
 timer_vtable_t *timer_get_vtable(void);
 
