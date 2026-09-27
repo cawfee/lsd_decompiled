@@ -53,7 +53,7 @@ void func_8003AF8C(system_t *This, s32 Unk) {
     }
 
     This->m_Unk5 = 0;
-    func_80026CFC(Unk);
+    file_driver_set_class(Unk);
     This->vtable->Unk15(This, &D_8008A8E0, 0);
 }
 

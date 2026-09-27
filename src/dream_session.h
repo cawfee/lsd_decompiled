@@ -83,7 +83,7 @@ typedef struct dream_session {
     /* 0x50 */ s32 m_Unk19;
 } dream_session_t;
 
-dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 EnableSomething);
+dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode);
 dream_session_vtable_t *dream_session_get_vtable(void);
 
 #endif

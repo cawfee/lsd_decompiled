@@ -173,7 +173,7 @@ typedef struct dream_sys_vtable {
     /* 0x21C 80087df8 */ void (*dream_sys__reset_flashback_list)(void *);
     /* 0x220 80087dfc */ void (*Unk135)(void *); // func_8005B904
     /* 0x224 80087e00 */ void (*Unk136)(void *); // func_8005B990
-    /* 0x228 80087e04 */ void (*Unk137)(void *, u32);
+    /* 0x228 80087e04 */ void (*dream_sys__set_unk_flag)(void *, u32);
 } dream_sys_vtable_t;
 
 typedef struct dream_sys {
@@ -762,7 +762,7 @@ typedef struct dream_sys {
     /* 0x918 */ s32 m_Unk581;
     /* 0x91C */ s32 m_Unk582;
     /* 0x920 */ s32 m_Unk583;
-    /* 0x924 */ s32 m_Unk584;
+    /* 0x924 */ s32 m_UnkFlag; /* set by dream_sys__set_unk_flag, never read */
     /* 0x928 */ s32 m_Unk585;
 } dream_sys_t;
 

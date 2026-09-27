@@ -45,12 +45,12 @@ typedef struct file_buf {
     /* 0x08 */ s32 m_Unk1;
     s32 m_Unk2;
     void *m_Buffer;
-    s32 m_Unk4;
+    s32 m_Size;
     s32 m_Unk5;
     s32 m_Unk6;
-    u16 m_Unk7_1;
+    u16 m_NoFree;
     s16 m_Unk7_2;
-    s32 m_Unk8;
+    s32 m_Flags;
     s16 m_Unk9;
     s16 m_Unk10;
 } file_buf_t;

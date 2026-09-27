@@ -4,7 +4,7 @@ s32 D_8008A978 = 0;
 s32 D_8008A97C = 0;
 
 const char *get_path_table(s32 *Count);
-s32 func_80027024(s32 arg0, s32 arg1);
+s32 file_driver_lookup_path(s32 arg0, s32 arg1);
 
 s32 func_8004A070(s32 arg0) {
     s32 count;
@@ -34,7 +34,7 @@ s32 func_8004A070(s32 arg0) {
         break;
     }
     do {
-        result = func_80027024(path_table, count);
+        result = file_driver_lookup_path(path_table, count);
     } while (result == 0);
     return result;
 }

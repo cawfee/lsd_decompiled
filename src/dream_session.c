@@ -69,11 +69,11 @@ dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
 s32 D_80086650[3] = { 0, -1200, 0 };
 s32 D_8008665C[3] = { 0, -1200, 10000 };
 
-dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 EnableSomething) {
+dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode) {
     dream_session_t *allocated = (dream_session_t *) memory_allocate_mem(0x50);
 
     if (allocated) {
-        dream_session_get_vtable()->dream_session_construct(allocated, GraphicsCtx, DreamSys, EnableSomething);
+        dream_session_get_vtable()->dream_session_construct(allocated, GraphicsCtx, DreamSys, FrameSyncMode);
         return allocated;
     }
 
@@ -83,7 +83,7 @@ dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sy
 void dream_session_construct(dream_session_t *This,
                              game_graphics_ctx_t *GraphicsCtx,
                              dream_sys_t *DreamSys,
-                             s32 EnableSomething) {
+                             s32 FrameSyncMode) {
     char *unk[4];
 
     func_8004A4B8()->Construct(This, get_se_path(0), 0);
@@ -101,7 +101,7 @@ void dream_session_construct(dream_session_t *This,
     This->m_Unk15 = bgm_create(get_random_sound_type(NULL), 0, 1);
 
     func_8004A070(1);
-    frame_setup(EnableSomething == 0, 1, 1);
+    frame_setup(FrameSyncMode == 0, 1, 1);
 
     This->m_GraphicsCtx = GraphicsCtx;
     GraphicsCtx->cls_3da54 = func_8004D254();

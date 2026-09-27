@@ -382,7 +382,7 @@ c_targets_g8 = [
     "src/dream_session_path.c",
     "src/413A8_unk41.c",
     "src/413A8_construct.c",
-    "src/1CBB8.c",
+    "src/debug_file_driver.c",
     "src/mdec_movie.c",
     "src/3ACC8.c",
     "src/str_stream.c",

@@ -72,7 +72,7 @@ game_flow_t *game_flow_create(game_config_t *Config) {
 void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
     char *buffer[4];
 
-    func_8003B20C()->Construct(This, Config->unk_flags);
+    func_8003B20C()->Construct(This, Config->file_driver_class);
     This->vtable = game_flow_get_vtable();
     This->m_Config = Config;
 
@@ -83,7 +83,7 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
 
     This->m_pDreamSys = dream_sys_create(tmd_create(&buffer), 0, 0);
     This->m_UnkGameMember = 0;
-    This->m_pDreamSys->vtable->Unk137(This->m_pDreamSys, Config->enable_unk);
+    This->m_pDreamSys->vtable->dream_sys__set_unk_flag(This->m_pDreamSys, Config->unused_flag);
     This->vtable->game_flow_get_day_rand(This);
 }
 
@@ -212,7 +212,7 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     s32 result;
 
     // Start the dream and cleanup
-    dream_ctx = dream_session_create(This->m_GraphicsCtx, This->m_pDreamSys, This->m_Config->enable_something);
+    dream_ctx = dream_session_create(This->m_GraphicsCtx, This->m_pDreamSys, This->m_Config->frame_sync_mode);
     dream_result = dream_ctx->vtable->dream_session_execute(dream_ctx);
     dream_ctx->vtable->Destroy(dream_ctx);
 

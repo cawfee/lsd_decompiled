@@ -9,12 +9,12 @@
 
 // data
 static game_config_t g_GAME_CONFIG = {
-    .unk_flags = 0x13, // 0x23 crashes
-    .enable_something = 0,
+    .file_driver_class = 0x13, // 0x23 selects the null driver and crashes
+    .frame_sync_mode = 0,
     .enable_movie = 1,
     .enable_logo = 1,
     .enable_main_menu = 1,
-    .enable_unk = 1,
+    .unused_flag = 1,
 };
 
 // sdata

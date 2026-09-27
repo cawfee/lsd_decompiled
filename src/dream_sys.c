@@ -125,7 +125,7 @@ void dream_sys_unk15(dream_sys_t *This) {
     This->m_Unk578 = 0;
     This->m_Unk579 = 0;
     This->m_Unk29 = 0;
-    This->m_Unk584 = 0;
+    This->m_UnkFlag = 0;
 }
 
 void dream_sys_unk18(dream_sys_t *This, void **arg1) {
@@ -1540,10 +1540,10 @@ s32 func_8005BA20(dream_sys_t *This, s32 Value) {
     s32 out;
 
     if (Value >= 0) {
-        out = This->m_Unk584;
-        This->m_Unk584 = Value;
+        out = This->m_UnkFlag;
+        This->m_UnkFlag = Value;
     } else {
-        out = This->m_Unk584;
+        out = This->m_UnkFlag;
     }
 
     return out;

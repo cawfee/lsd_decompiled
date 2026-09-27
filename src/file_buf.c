@@ -1,13 +1,13 @@
 #include "file_buf.h"
 
-#include "1CBB8.h"
+#include "debug_file_driver.h"
 #include "base_class.h"
 #include "memory.h"
 
 
 s32 init_800269F0(file_buf_t *);
-void func_80026A50(void *);
-void func_80026AB4(void *);
+void file_buf_construct(void *);
+void file_buf_cleanup(void *);
 void file_buf_load(void *);
 void file_buf_release(void *);
 void nullsub13(void *);
@@ -28,11 +28,11 @@ void *func_80045428(void);
 void *func_800449FC(void);
 void *func_80044CC4(void);
 
-file_buf_vtable_t D_8006D430 = {
+file_buf_vtable_t g_FILE_BUF_VTABLE = {
     3,
     (void (*)(void *))init_800269F0,
-    func_80026A50,
-    func_80026AB4,
+    file_buf_construct,
+    file_buf_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -62,7 +62,7 @@ file_buf_vtable_t D_8006D430 = {
     NULL,
 };
 
-void *D_8006D4AC[] = {
+void *g_FILE_DRIVER_CLASS_VTABLES[] = {
     class_1C92C_get_vtable,
     tim_image_get_vtable,
     func_800451A8,
@@ -80,39 +80,39 @@ void *D_8006D4AC[] = {
     NULL,
 };
 
-static s32 D_8008A84C = 0x13;
+static s32 g_FileDriverClass = 0x13;
 static s32 D_8008A850 = 0;
-static s32 D_8008A854 = 0x8006D4A8;
+static s32 g_DataFolder = 0x8006D4A8;
 extern char *strcat(char *, char *);
 s32 func_80027F18(s32, s32, s32);
 void func_80027FD8(s32);
 void func_80027FE4(s32);
 s32 func_80027FF0(void);
 s32 func_80027FFC(s32, s32);
-s32 func_8002C468(s32, s32);
+s32 debug_file_driver_frame_setup(s32, s32);
 
 s32 init_800269F0(file_buf_t *This) {
-    This->m_Unk7_1 = 0;
+    This->m_NoFree = 0;
     This->vtable->Cleanup();
     base_class_get_vtable()->Cleanup(This);
     memory_free_mem(This);
     return 0;
 }
 
-void func_80026A50(file_buf_t *This) {
+void file_buf_construct(file_buf_t *This) {
     base_class_get_vtable()->Construct(This);
     This->vtable = file_buf_get_vtable();
     This->m_Unk2 = 0;
     This->m_Buffer = NULL;
-    This->m_Unk4 = 0;
-    This->m_Unk7_1 = 0;
+    This->m_Size = 0;
+    This->m_NoFree = 0;
     This->m_Unk7_2 = 0;
-    This->m_Unk8 = 0;
+    This->m_Flags = 0;
     This->m_Unk9 = 0;
     This->m_Unk10 = 0;
 }
 
-void func_80026AB4(file_buf_t *This) {
+void file_buf_cleanup(file_buf_t *This) {
     This->vtable->Unk17(This);
     This->vtable->file_buf_release(This);
 }
@@ -136,7 +136,7 @@ void file_buf_load(file_buf_t *This, s32 Unk) {
             This->vtable->Unk20(This, mem, size);
             This->vtable->Unk17(This);
             This->m_Buffer = mem;
-            This->m_Unk4 = size;
+            This->m_Size = size;
             This->m_Unk2 = old_unk;
         } else {
             memory_free_mem(NULL);
@@ -146,7 +146,7 @@ void file_buf_load(file_buf_t *This, s32 Unk) {
 }
 
 void file_buf_release(file_buf_t *This) {
-    if (This->m_Buffer && This->m_Unk4 && !This->m_Unk7_1) {
+    if (This->m_Buffer && This->m_Size && !This->m_NoFree) {
         memory_free_mem(This->m_Buffer);
         This->m_Buffer = 0;
     }
@@ -156,16 +156,16 @@ void nullsub13(void *) {
 }
 
 void func_80026C88(file_buf_t *This) {
-    This->m_Unk8 |= 1;
+    This->m_Flags |= 1;
 }
 
 file_buf_vtable_t *file_buf_get_vtable(void) {
-    return &D_8006D430;
+    return &g_FILE_BUF_VTABLE;
 }
 
 void *get_file_driver() {
-    if (D_8008A84C == 0x23) {
-        return class_1CBB8_get_vtable();
+    if (g_FileDriverClass == 0x23) {
+        return debug_file_driver_get_vtable();
     } else {
         return func_80027E68();
     }
@@ -178,18 +178,18 @@ s32 *func_80026CE8(s32 *Data, s32 Unk1, s32 Unk2, s32 Unk3) {
     return Data;
 }
 
-void func_80026CFC(s32 arg0) {
+void file_driver_set_class(s32 arg0) {
     void *(**cursor)(void);
     void *vt;
     void *cur;
     void *(*fn)(void);
 
-    cursor = (void *(**)(void))D_8006D4AC;
-    D_8008A84C = arg0;
+    cursor = (void *(**)(void))g_FILE_DRIVER_CLASS_VTABLES;
+    g_FileDriverClass = arg0;
     if (arg0 == 0x13) {
         vt = (void *)func_80027E68();
     } else {
-        vt = (void *)class_1CBB8_get_vtable();
+        vt = (void *)debug_file_driver_get_vtable();
     }
     cur = (void *)file_buf_get_vtable();
     goto loop_test;
@@ -198,12 +198,12 @@ void func_80026CFC(s32 arg0) {
         cursor++;
         cur = fn();
 loop_test:
-        func_80026D88(cur, vt);
+        file_driver_copy_vtable_slots(cur, vt);
         fn = *cursor;
     } while (fn != NULL);
 }
 
-void func_80026D88(s32 *Dest, s32 *Src) {
+void file_driver_copy_vtable_slots(s32 *Dest, s32 *Src) {
     Dest[16] = Src[16];
     Dest[17] = Src[17];
     Dest[18] = Src[18];
@@ -218,43 +218,43 @@ void func_80026D88(s32 *Dest, s32 *Src) {
 }
 
 void func_80026E0C(void) {
-    if (D_8008A84C == 0x13) {
+    if (g_FileDriverClass == 0x13) {
         func_800280D0();
     }
 }
 
 void func_80026E38(void) {
-    if (D_8008A84C == 0x13) {
+    if (g_FileDriverClass == 0x13) {
         func_800280E0();
     }
 }
 
-s32 func_80026E64(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_is_busy(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80027EC8();
     }
 
     return 0;
 }
 
-s32 func_80026E98(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_is_read_idle(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80027ED4();
     }
 
     return 1;
 }
 
-s32 func_80026ECC(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_get_read_param(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80027EE0();
     }
 
     return 0;
 }
 
-s32 func_80026F00(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_get_read_state(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80027EEC();
     }
 
@@ -264,34 +264,34 @@ s32 func_80026F00(void) {
 void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
     s32 (*fn)(s32, s32, s32);
 
-    fn = (s32 (*)(s32, s32, s32))func_8002C468;
-    if (D_8008A84C == 0x13) {
+    fn = (s32 (*)(s32, s32, s32))debug_file_driver_frame_setup;
+    if (g_FileDriverClass == 0x13) {
         fn = (s32 (*)(s32, s32, s32))func_80027F18;
     }
     do {
     } while (fn(Unk1, Unk2, Unk3) == 0);
 }
 
-s32 func_80026FAC(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_get_frame_state(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80027EF8();
     }
 
-    return func_8002C448();
+    return debug_file_driver_get_frame_state();
 }
 
-s32 func_80026FE8(void) {
-    if (D_8008A84C == 0x13) {
+s32 file_driver_get_frame_mode(void) {
+    if (g_FileDriverClass == 0x13) {
         return func_80028B6C();
     }
 
-    return func_8002C478();
+    return debug_file_driver_get_frame_mode();
 }
 
-s32 func_80027024(s32 arg0, s32 arg1) {
+s32 file_driver_lookup_path(s32 arg0, s32 arg1) {
     s32 temp;
 
-    if (D_8008A84C == 0x13) {
+    if (g_FileDriverClass == 0x13) {
         D_8008A850 = 1;
         func_80027FD8(arg0);
         temp = func_80027FF0();
@@ -302,11 +302,11 @@ s32 func_80027024(s32 arg0, s32 arg1) {
 }
 
 void set_data_folder(s32 Value) {
-    D_8008A854 = Value;
+    g_DataFolder = Value;
 }
 
 s32 func_800270B8() {
-    return D_8008A854;
+    return g_DataFolder;
 }
 
 s8 *func_800270C4(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3) {
