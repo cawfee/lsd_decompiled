@@ -54,7 +54,32 @@ void func_800581C4(graph_screen_t *This) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/graph_screen", func_80058228);
+extern s32 D_8008ABAC[];
+extern s8 D_8008ABB4[];
+extern s8 D_8008ABB8[];
+extern void *func_800404D0(u32, u32, u32);
+
+void func_80058228(graph_screen_t *This) {
+    s32 dec;
+    s32 i;
+    u8 coords[3];
+    u8 *cursor;
+
+    This->m_Unk41 = (s32) func_800404D0((u32) D_8008ABAC, (u32) D_8008ABB4, 0);
+    __builtin_memcpy(coords, D_8008ABB8, 3);
+    i = 1;
+    cursor = (u8 *) This + 4;
+    do {
+        *(s32 *) (cursor + 0xA8) = (s32) func_800404D0((u32) D_8008ABAC, (u32) coords, 0);
+        dec = (i < 7) ? 20 : 1;
+        coords[0] -= dec;
+        coords[1] -= dec;
+        coords[2] -= dec;
+        cursor += 4;
+        i++;
+    } while (i < 100);
+    This->m_Unk143 = memory_allocate_mem(4);
+}
 
 void func_80058308(graph_screen_t *This) {
     s32 i;

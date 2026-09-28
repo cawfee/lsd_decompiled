@@ -876,27 +876,21 @@ void func_8005A1EC(dream_sys_t *This, s32 Value) {
     This->m_Unk71 = Value;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A1F4);
-// Best attempt under -O2: 25/25, div-by-20 keeps the sign in v0 and mfhi in v1.
-// The stub wants the sign in v1 and mfhi in v0. -fno-schedule-insns swaps those
-// registers but leaves the sign shift after mfhi.
-// void func_8005A1F4(dream_sys_t *This, s32 *arg1) {
-//     s32 mode;
-//     s32 value;
-//
-//     mode = arg1[0];
-//     if (mode != 1) {
-//         return;
-//     }
-//     value = arg1[1];
-//     if (value == (value / 20) * 20) {
-//         arg1[7] = 9;
-//         arg1[8] = -1;
-//         return;
-//     }
-//     arg1[12] = 9;
-//     arg1[13] = -1;
-// }
+void func_8005A1F4(dream_sys_t *This, s32 *arg1) {
+    s32 temp;
+
+    if (arg1[0] != 1) {
+        return;
+    }
+    temp = arg1[1] % 20;
+    if (temp == 0) {
+        arg1[7] = 9;
+        arg1[8] = -1;
+        return;
+    }
+    arg1[12] = 9;
+    arg1[13] = -1;
+}
 
 void dream_sys__init_new_game(dream_sys_t *This) {
     s32 temp_v1;

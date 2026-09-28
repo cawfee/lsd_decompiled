@@ -80,12 +80,64 @@ void func_80032AD0(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/22D88", func_80032B18);
+extern s32 D_8006DCB0;
 
-INCLUDE_ASM("asm/nonmatchings/22D88", func_80032BB8);
+s32 func_80032B18(s32 arg0, s16 arg1, s32 arg2) {
+    s32 idx = arg0 & 0xFFFF;
+    s16 flags = 0x48;
 
-INCLUDE_ASM("asm/nonmatchings/22D88", func_80032BF0);
+    if (idx >= 3) {
+        return 0;
+    }
+    *(volatile s16 *)((u8 *)(idx * 0x10 + D_8006DCB0) + 4) = 0;
+    *(volatile s16 *)((u8 *)(idx * 0x10 + D_8006DCB0) + 8) = arg1;
+    if ((u32)idx < 2) {
+        if (arg2 & 0x10) {
+            flags = 0x49;
+        }
+        if (!(arg2 & 1)) {
+            flags |= 0x100;
+        }
+    } else if (idx == 2) {
+        if (!(arg2 & 1)) {
+            flags = 0x248;
+        }
+    }
+    if (arg2 & 0x1000) {
+        flags |= 0x10;
+    }
+    *(s16 *)((u8 *)(idx * 0x10 + D_8006DCB0) + 4) = flags;
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/22D88", func_80032C28);
+u16 func_80032BB8(s32 arg0) {
+    if ((arg0 & 0xFFFF) >= 3) {
+        return 0;
+    }
+    return *(volatile u16 *)((arg0 & 0xFFFF) * 0x10 + D_8006DCB0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/22D88", func_80032C60);
+extern s32 *D_8006DCAC;
+extern s32 D_8006DCB4[];
+
+s32 func_80032BF0(s32 arg0) {
+    s32 idx = arg0 & 0xFFFF;
+
+    *(volatile s32 *)&D_8006DCAC[1] |= D_8006DCB4[idx];
+    return idx < 3;
+}
+
+s32 func_80032C28(s32 arg0) {
+    s32 idx = arg0 & 0xFFFF;
+
+    D_8006DCAC[1] &= ~D_8006DCB4[idx];
+    return 1;
+}
+
+s32 func_80032C60(s32 arg0) {
+    if ((arg0 & 0xFFFF) >= 3) {
+        return 0;
+    }
+    *(volatile u16 *)((arg0 & 0xFFFF) * 0x10 + D_8006DCB0) = 0;
+    return 1;
+}

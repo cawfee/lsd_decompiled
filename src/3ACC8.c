@@ -647,6 +647,28 @@ void func_8004CC74(class_3ACC8_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CD38);
 
+/*
+ * Near match (semantics correct, wrong register allocation): the target begins
+ * with `addu a2,a0,zero` and uses $a2 for the object pointer while $a0 is a
+ * temp; gcc 2.6.3 here coalesces the pointer into $a0 and uses $v1 for the
+ * `lh`. Tried local s16 / s32 / u8 pointer forms, m2c u8 temporaries, struct fields,
+ * guarded/early-return/else-if and reversed comparisons: all compile to the
+ * same 26-insn sequence without the $a2 copy (~20 variants).
+ *
+ * s32 func_8004CD38(s32 arg0, void *arg1) {
+ *     s8 *q = (s8 *)arg1;
+ *     s32 var_v0 = 1;
+ *     if (arg0 != 0) {
+ *         if (q[0] >= *(s16 *)arg0 && *(s32 *)(arg0 + 4) >= q[0]) {
+ *             if (q[1] >= *(s16 *)(arg0 + 2)) {
+ *                 var_v0 = *(s32 *)(arg0 + 8) < q[1];
+ *             }
+ *         }
+ *     }
+ *     return var_v0;
+ * }
+ */
+
 s32 func_8004CDA4(class_3ACC8_t *This, s32 unused, s32 index, s32 arg3) {
     s32 *dest;
     s32 off;

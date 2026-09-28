@@ -1,5 +1,6 @@
 #include "ui_screen.h"
 
+#include "30CD0.h"
 #include "text_line.h"
 #include "timer.h"
 
@@ -689,7 +690,37 @@ void func_8003D194(void *this, s32 arg1) {
     } while (i < count);
 }
 
-INCLUDE_ASM("asm/nonmatchings/ui_screen", func_8003D2CC);
+void func_8003D2CC(ui_screen_t *This, s32 Unk2) {
+    s32 saved;
+    s32 i;
+    s32 count;
+    text_line_t **list;
+    char pad[4];
+
+    (void)pad;
+
+    if (This->m_Unk18 != 0) {
+        list = (text_line_t **)This->m_Unk20;
+        saved = This->m_Unk21;
+        i = 0;
+        if (This->m_Unk19 > 0) {
+            do {
+                text_line_t *line = *list;
+
+                line->vtable->Unk45(line, (char *)Unk2);
+
+                if (((func_8003CE98_arg_t *)This->m_Unk18)->table[i] != NULL) {
+                    This->m_Unk21 = i;
+                    This->vtable->Unk64(This, Unk2);
+                }
+                i++;
+                list++;
+                count = This->m_Unk19;
+            } while (i < count);
+        }
+        This->m_Unk21 = saved;
+    }
+}
 
 void func_8003D3B0(ui_screen_t *This) {
     s32 v1;
@@ -804,6 +835,71 @@ void func_8003D6D4(ui_screen_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/ui_screen", func_8003D73C);
 
+/* Best match: 144/145 insns.  Uses the target's do/while idiom (increment
+ * between the two calls) and a 16-byte stack pad for the 0x58 frame.  Residual
+ * diffs are local_alloc picks: the entry temp lands in a1 not v0, and the
+ * target spills pos[1] while this toolchain forwards it.
+ *
+void func_8003D73C(ui_screen_t *This, s32 Unk2, s32 Unk3) {
+    s32 idx;
+    s32 count;
+    s32 v9;
+    s32 i;
+    text_line_t **row;
+    text_line_t *obj;
+    s32 pos[2];
+    s32 tmp[2];
+    class_30CD0_t *sound;
+    char pad[16];
+
+    (void)pad;
+
+    idx = This->m_Unk21;
+    row = (text_line_t **)This->m_Unk24[idx];
+    v9 = ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[1];
+    count = This->m_Unk22[idx];
+
+    i = 0;
+    if (count > 0) {
+        do {
+            obj = *row++;
+            obj->vtable->Unk19(obj);
+            i++;
+        } while (i < count);
+    }
+
+    pos[0] = ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[4];
+    pos[1] = ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[5];
+    pos[1] -= v9 * 10;
+
+    sound = (class_30CD0_t *)This->m_Unk25;
+    if (Unk3) {
+        sound->vtable->Unk18(sound, This->m_Unk4, pos);
+        tmp[0] = 0x28;
+        tmp[1] = count * 12;
+        sound->vtable->Unk47(sound, tmp);
+    } else {
+        sound->vtable->Unk19(sound);
+    }
+
+    row = (text_line_t **)This->m_Unk24[idx];
+    i = 0;
+    if (count > 0) {
+        do {
+            (*row)->vtable->Unk18(*row, Unk2, pos);
+            i++;
+            (*row)->vtable->Unk23(*row, Unk3);
+            pos[1] += 10;
+            row++;
+        } while (i < count);
+    }
+
+    obj = ((text_line_t **)This->m_Unk24[idx])[v9];
+    obj->vtable->Unk23(obj, 1);
+}
+*/
+
+
 void func_8003D980(ui_screen_t *This, char *arg1) {
     s32 count;
     text_line_t **list;
@@ -835,7 +931,65 @@ void func_8003DA10(ui_screen_t *This) {
     }
 }
 
+
+
 INCLUDE_ASM("asm/nonmatchings/ui_screen", func_8003DAD4);
+
+/* Best match: 117/118 insns.  Uses the target's do/while idiom (increment
+ * between the two calls).  Residual diffs are local_alloc picks: the entry temp
+ * lands in a1 not v0 (rotating the m_Unk22/m_Unk24 pair) and the target spills
+ * pos[1] while this toolchain forwards it.
+ *
+void func_8003DAD4(ui_screen_t *This) {
+    s32 idx;
+    s32 sel;
+    s32 count;
+    s32 i;
+    text_line_t **row;
+    s32 pos[2];
+    s32 *entry;
+    class_30CD0_t *sound;
+    char pad[8];
+
+    (void)pad;
+
+    if (This->m_HasIdleTimeout != 2) {
+        return;
+    }
+
+    idx = This->m_Unk21;
+    sel = This->m_Unk23[idx];
+    entry = (s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx];
+    pos[0] = entry[4];
+    pos[1] = entry[5];
+    pos[1] -= sel * 10;
+
+    count = This->m_Unk22[idx];
+    row = (text_line_t **)This->m_Unk24[idx];
+    i = 0;
+    if (count > 0) {
+        do {
+            (*row)->vtable->Unk23(*row, 0);
+            i++;
+            (*row)->vtable->Unk46(*row, (char *)pos);
+            pos[1] += 10;
+            row++;
+        } while (i < count);
+    }
+
+    {
+        text_line_t *obj = ((text_line_t **)This->m_Unk24[idx])[sel];
+        obj->vtable->Unk23(obj, 1);
+        obj->vtable->Unk45(obj, (char *)This->m_Unk18 + 0x10);
+    }
+    ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[1] = sel;
+    sound = (class_30CD0_t *)This->m_Unk25;
+    sound->vtable->Unk19(sound);
+    This->m_HasIdleTimeout = 1;
+    This->vtable->Unk23(This, 0x10);
+}
+*/
+
 
 void func_8003DCAC(ui_screen_t *This) {
     s32 idx;

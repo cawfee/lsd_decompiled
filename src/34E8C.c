@@ -21,7 +21,24 @@ class_34E8C_t *func_8004468C(s32 Unk1) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/34E8C", func_800446FC);
+class_34E8C_t *func_800446FC(class_34E8C_t *This, s32 *arg1, s32 arg2) {
+    (*(void (**)(void *))((s32)get_file_driver() + 8))(This);
+    This->vtable = func_800449FC();
+    This->m_Unk12 = arg2;
+    if (*arg1 != 0) {
+        This->m_Unk3 = *arg1;
+        This->m_Unk4 = 0;
+        if (This->vtable->Unk24(This) != 0) {
+            goto fail;
+        }
+        return This;
+    } else {
+        This->vtable->Unk26(This, arg1[1]);
+        return This;
+    }
+fail:
+    return NULL;
+}
 
 void func_800447B4(class_34E8C_t *This) {
     This->vtable->Unk30(This);

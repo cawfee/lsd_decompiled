@@ -31,9 +31,9 @@ typedef struct tmd_model_vtable {
     /* 0x058 8006f194 */ void (*Unk21)(void *);
     /* 0x05C 8006f198 */ void (*file_buf_release)(void *);
     /* 0x060 8006f19c */ void (*Unk23)(void *);
-    /* 0x064 8006f1a0 */ void (*Unk24)(void *);
+    /* 0x064 8006f1a0 */ s32 (*Unk24)(void *);
     /* 0x068 8006f1a4 */ void (*Unk25)(void *);
-    /* 0x06C 8006f1a8 */ void (*Unk26)(void *);
+    /* 0x06C 8006f1a8 */ void (*Unk26)(void *, s32);
     /* 0x070 8006f1ac */ void (*Unk27)(void *);
     /* 0x074 8006f1b0 */ void (*Unk28)(void *);
     /* 0x078 8006f1b4 */ void (*tmd_map)(void *);

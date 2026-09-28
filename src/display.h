@@ -5,6 +5,14 @@
 
 #include "base_class.h"
 
+/* 0xC bytes; w/h are 32-bit; display_copy_rect reads +0, +2, +4, +8 */
+typedef struct vram_rect {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ s32 w;
+    /* 0x08 */ s32 h;
+} vram_rect_t;
+
 typedef struct display display_t;
 typedef struct display_vtable display_vtable_t;
 

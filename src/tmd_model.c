@@ -20,7 +20,25 @@ tmd_model_t *tmd_create(s32 Unk1) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/tmd_model", func_800438B0);
+tmd_model_t *func_800438B0(tmd_model_t *This, s32 *Unk) {
+    (*(void (**)(void *))((s32)get_file_driver() + 8))(This);
+    This->vtable = func_80043B78();
+    if (Unk == NULL) {
+        return This;
+    }
+    if (*Unk != 0) {
+        This->m_Unk3 = *Unk;
+        This->m_Unk4 = 0;
+        if (This->vtable->Unk24(This) != 0) {
+            goto fail;
+        }
+        return This;
+    }
+    This->vtable->Unk26(This, Unk[1]);
+    return This;
+fail:
+    return NULL;
+}
 
 void func_80043954(tmd_model_t *This) {
     void ***var_s0;

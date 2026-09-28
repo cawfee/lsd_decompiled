@@ -74,6 +74,16 @@ void func_8004001C(class_305B0_t *This, s32 Value) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040024);
+// Best attempt: all 35 instructions present and equal; only a scheduling
+// tie-break differs. Target sets arg1 (ori a1,1) right after arg0 and loads
+// the D_8006EA90 lui/addiu after lw v0,0(s0); GCC 2.6.3 emits sll/addu,
+// lui/addiu a2, lw v0,0(s0), li a1,1 instead.
+// s32 temp = ((s32 (*)(class_305B0_t *))This->vtable->Unk54)(This);
+// s32 *color = (s32 *)((u8 *)D_8006EA90 + (temp * 3));
+// This->vtable->Unk45(This, 1, color);
+// This->m_Unk26 = 1;
+// This->m_Unk28 = -This->m_Unk28;
+// Tried: inline vs temp, function-scope decls, local `one` variable.
 
 /*
 void func_800400B0(class_305B0_t *This) {

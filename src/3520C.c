@@ -5,6 +5,9 @@
 
 extern class_3520C_vtable_t D_8006F40C;
 
+void file_buf_set_triple(void *, void *, s32, s32);
+class_34E8C_t *func_8004468C(s32);
+
 class_3520C_t *func_80044A0C(s32 Unk1) {
     class_3520C_t *allocated = (class_3520C_t *) memory_allocate_mem(0x3C);
 
@@ -47,7 +50,33 @@ void func_80044B58(class_3520C_t *This) {
     This->vtable->Unk29(This);
 }
 
-INCLUDE_ASM("asm/nonmatchings/3520C", func_80044B88);
+s32 func_80044B88(class_3520C_t *This) {
+    s32 data[3];
+    s32 i;
+    s32 *entries;
+    s32 count;
+    s32 result;
+
+    file_buf_set_triple(data, 0, 0, 1);
+    i = 0;
+    count = *(s32 *)(This->m_Unk3 + 4);
+    entries = (s32 *)(This->m_Unk3 + 8);
+    This->m_Unk13 = 0;
+    for (i = 0; i < count; i++) {
+        data[0] = This->m_Unk3 + *(s32 *)(This->m_Unk3 + 8 + i * 4);
+        result = (s32)func_8004468C((s32)data);
+        *entries = result;
+        if (result == 0) {
+            goto fail;
+        }
+        This->m_Unk13++;
+        entries++;
+    }
+    return 0;
+fail:
+    This->vtable->Unk30(This);
+    return 1;
+}
 
 s32 func_80044C58(class_3520C_t *This) {
     s32 result = destroy_list((s32 *)(This->m_Unk3 + 8), This->m_Unk13);
