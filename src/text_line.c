@@ -338,4 +338,23 @@ u8 *func_80041020(u8 *arg0, u8 *arg1) {
     return arg0;
 }
 
+/*
+ * Best-known C (byte-identical except register allocation of buf/len):
+ * target uses buf=$s3, pad=$s1, len=$s0; gcc 2.6.3 assigns buf=$s0,
+ * pad=$s1, len=$s3 for every source ordering tried (declaration order,
+ * nested strcpy, pointer aliases, named/nested len, VLA size via len).
+ *
+ * u8 *func_8004109C(u8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
+ *     s32 len;
+ *     char buf[arg2 + 1];
+ *     char pad[arg2 + 1];
+ *
+ *     len = arg2 - strlen(strcpy(buf, (char *)itoa(arg1)));
+ *     if (arg3 == 0) {
+ *         memset(pad, '0', arg2);
+ *         strcpy(pad + len, buf);
+ *     }
+ *     return func_80041020(arg0, (u8 *)(arg3 == 0 ? pad : buf));
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/text_line", func_8004109C);

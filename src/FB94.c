@@ -8,7 +8,11 @@ INCLUDE_ASM("asm/nonmatchings/FB94", func_8001F3B0);
 
 INCLUDE_ASM("asm/nonmatchings/FB94", func_8001F4E4);
 
-INCLUDE_ASM("asm/nonmatchings/FB94", func_8001F50C);
+extern s32 D_8008B21C;
+
+void *func_8001F50C(void) {
+    return &D_8008B21C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/FB94", func_8001F51C);
 

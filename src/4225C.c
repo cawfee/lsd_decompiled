@@ -315,7 +315,28 @@ void func_80052644(class_4225C_t *This, s32 arg1, s32 arg2, s32 arg3, char *arg4
 */
 INCLUDE_ASM("asm/nonmatchings/4225C", func_80052644);
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_8005278C);
+void func_8005278C(class_4225C_t *This) {
+    s32 count;
+    s32 index;
+    text_line_t *line;
+    s32 pad[2];
+
+    if (This->m_Unk19 != 0) {
+        count = This->m_Unk3;
+        if (count >= 5) {
+            count = 4;
+        }
+        index = 0;
+        if (count > 0) {
+            do {
+                line = ((text_line_t **)&This->m_Unk15)[index];
+                line->vtable->Destroy((base_class_t *)line);
+                ((text_line_t **)&This->m_Unk15)[index] = 0;
+                index += 1;
+            } while (index < count);
+        }
+    }
+}
 
 void func_8005281C(class_4225C_t *This, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 count;
