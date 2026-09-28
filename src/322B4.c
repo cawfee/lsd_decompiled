@@ -146,4 +146,14 @@ class_322B4_vtable_t *glyph_get_vtable(void) {
     return &g_GLYPH_VTABLE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/322B4", func_80041C4C);
+extern s32 D_8006ED40[3];
+
+void func_80041C4C(s8 *arg0, s32 arg1) {
+    s32 *dest;
+
+    dest = (s32 *)arg0;
+    __builtin_memcpy(dest, D_8006ED40, 12);
+    arg1 &= 0xFF;
+    *(u16 *)(arg0 + 0) = *(u16 *)(arg0 + 0) + (arg1 & 0x1F) * 8;
+    *(u16 *)(arg0 + 2) = *(u16 *)(arg0 + 2) + ((u32)arg1 >> 5) * 8;
+}

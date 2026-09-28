@@ -210,7 +210,6 @@ c_game_targets = [
     "src/2864.c",
     "src/ED8C.c",
     "src/FB94.c",
-    "src/179D8.c",
     "src/22A1C.c",
     "src/22D88.c",
     "src/24490.c",
@@ -412,6 +411,7 @@ c_targets_g8 = [
     "src/pad.c",
     "src/1145C.c",
     "src/base_class.c",
+    "src/179D8.c",
 ]
 
 cpp_targets = []

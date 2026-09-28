@@ -247,6 +247,12 @@ bgm_vtable_t *bgm_get_vtable(void) {
 #endif
 }
 
-INCLUDE_ASM("asm/nonmatchings/bgm", func_8003A05C);
+s32 func_8003A05C(void) {
+    return g_BgmActive;
+}
 
-INCLUDE_ASM("asm/nonmatchings/bgm", func_8003A068);
+extern u8 D_8008DF38[];
+
+u8 *func_8003A068(void) {
+    return D_8008DF38;
+}

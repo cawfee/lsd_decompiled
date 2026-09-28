@@ -48,6 +48,10 @@ void func_80040F20(void *);
 void text_line_set_string(void *, char *);
 void func_80040FA0(void *);
 void text_line_set_spacing(void *);
+s8 *itoa(s32);
+char *strcpy(char *, char *);
+s32 strlen(char *);
+void *memset(void *, s32, u32);
 
 text_line_vtable_t g_TEXT_LINE_VTABLE = {
     0x11144,
@@ -293,8 +297,45 @@ text_line_vtable_t *text_line_get_vtable(void) {
     return &g_TEXT_LINE_VTABLE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/text_line", func_80040FC0);
+s8 *func_80040FC0(s8 *arg0, u8 *arg1) {
+    u32 c;
+    s8 *out;
+    u8 *p;
 
-INCLUDE_ASM("asm/nonmatchings/text_line", func_80041020);
+    p = arg1 + 1;
+    if (arg1[0] != 0) {
+        u32 forty;
+
+        forty = 0x40;
+        out = arg0;
+        for (;;) {
+            out++;
+            c = p[0];
+            arg0++;
+            out[-1] = (c >= 0x80 || c == forty) ? c - 0x20 : c - 0x1F;
+            p++;
+            if (*p++ == 0) {
+                break;
+            }
+        }
+    }
+    *arg0 = 0;
+    return arg0;
+}
+
+u8 *func_80041020(u8 *arg0, u8 *arg1) {
+    u32 c;
+
+    if (*arg1 != 0) {
+        do {
+            *arg0++ = (*arg1 >= 0x30) ? 0x82 : 0x81;
+            c = *arg1;
+            *arg0++ = (c >= 0x60 || c == 0x20) ? c + 0x20 : c + 0x1F;
+            arg1++;
+        } while (*arg1 != 0);
+    }
+    *arg0 = 0;
+    return arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/text_line", func_8004109C);
