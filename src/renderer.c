@@ -5,7 +5,7 @@
 
 #include <psx/libgte.h>
 
-extern renderer_vtable_t *g_RENDERER_VTABLE;
+extern renderer_vtable_t g_RENDERER_VTABLE;
 extern s32 D_8008A904;
 extern s32 D_8008A90C;
 extern s8 D_8008A8F8[4];

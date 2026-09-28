@@ -15,9 +15,9 @@ void func_8001EE04(void *arg0, void *arg1, s32 arg2, void *arg3);
 
 // Maybe pad handling? unchecked
 
-extern class_D294_vtable_t **D_8006B5CC;
-extern s32 D_8006B684;
-extern s32 D_8006B690;
+extern class_D294_vtable_t D_8006B5CC;
+extern s32 D_8006B684[3];
+extern s32 D_8006B690[3];
 
 class_D294_t *func_8001CA94() {
     class_D294_t *allocated = (class_D294_t *) memory_allocate_mem(0x44);
@@ -107,8 +107,8 @@ s32 func_8001CE30(class_D294_t *This) {
     This->m_Unk8 = 0;
     This->m_Unk3 = 0;
     GsInitCoordinate2(NULL, This->m_Unk4);
-    This->vtable->Unk16(This, 1, &D_8006B684);
-    This->vtable->Unk17(This, 1, &D_8006B690);
+    This->vtable->Unk16(This, 1, D_8006B684);
+    This->vtable->Unk17(This, 1, D_8006B690);
     *(s32 *)This->m_Unk4 = 1;
     return 1;
 }

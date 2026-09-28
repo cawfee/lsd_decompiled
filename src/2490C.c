@@ -1,6 +1,10 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/2490C", func_8003410C);
+void func_80034138(s16, s16);
+
+void func_8003410C(s16 arg0, s16 arg1) {
+    func_80034138(arg0, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2490C", func_80034138);
 

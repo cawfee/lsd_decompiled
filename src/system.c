@@ -2,6 +2,7 @@
 
 #include "game_flow.h"
 #include "base_class.h"
+#include <psx/libspu.h>
 
 static s32 g_CD_INIT = 0;
 extern s32 D_8008A8E0[];
@@ -69,7 +70,7 @@ void game_flow_init_graphics(game_flow_t *This, display_t *Display, pad_t *Pad) 
     if (!This->m_IsInit) {
         set_display(Display);
         Display->vtable->display_init_gs(Display, &This->m_ScreenSize, This->m_VarMode);
-        func_80032368();
+        SpuInit();
         GsInit3D();
 
         This->m_GraphicsCtx = memory_allocate_mem(0x14);

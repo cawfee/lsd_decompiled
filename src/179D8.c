@@ -2,6 +2,7 @@
 
 #include "file_buf.h"
 #include "memory.h"
+#include "display.h"
 
 typedef struct unk_list_node {
     /* 0x00 */ s32 m_Unk0;
@@ -16,6 +17,7 @@ typedef struct unk_list_node {
 } unk_list_node_t;
 
 extern void VSyncCallback();
+display_t *get_display(void);
 extern s32 get_current_data_folder();
 extern char *strcpy(char *, char *);
 extern char *strcat(char *, char *);
@@ -42,6 +44,8 @@ extern s32 D_8008A86C;
 extern s32 D_8008A870;
 extern s32 D_8008A874;
 extern s32 D_8008A878;
+extern s32 D_8008A87C;
+extern s32 D_8008A888;
 extern s32 D_8008A88C;
 extern s32 D_8008A890;
 extern unk_list_node_t *D_8008A894;
@@ -77,7 +81,23 @@ void func_800272C8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/179D8", func_800272D0);
 
-INCLUDE_ASM("asm/nonmatchings/179D8", func_80027480);
+void func_80027480(file_buf_t *arg0) {
+    if (D_8008A85C == 0 && D_8008A860 == 0) {
+        func_80028A34();
+    } else {
+        func_800280D0();
+        if (arg0->m_Unk9 != 0) {
+            if (D_8008A864 == 0) {
+                func_80028844(0, 0);
+                arg0->m_Unk2 = 0;
+                func_80028864();
+            }
+        } else {
+            func_800282AC(arg0, 0, 3, 0, 0);
+        }
+        func_800280E0();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/179D8", func_80027528);
 
@@ -98,7 +118,33 @@ void func_80027D40(void) {
     func_800280E0();
 }
 
-INCLUDE_ASM("asm/nonmatchings/179D8", func_80027D70);
+void func_80027D70(file_buf_t *arg0) {
+    unk_list_node_t *node;
+    unk_list_node_t *next;
+
+    func_800280D0();
+    if (D_8008A894 != NULL && arg0->m_Unk7_2 != 0) {
+        arg0->m_Flags = 0;
+        if (D_8008A894->m_Unk3 == (s32)arg0 && D_8008A894->m_Unk0 != 0 && D_8008A870 == 0) {
+            CdFlush();
+            func_80028864();
+            D_8008A87C = D_8008A888;
+            D_8008A888 = 0;
+        }
+        node = D_8008A894;
+        if (node != NULL) {
+            do {
+                next = node->m_Next;
+                if (node->m_Unk3 == (s32)arg0) {
+                    func_800283C4(node);
+                    arg0->m_Unk7_2 = arg0->m_Unk7_2 - 1;
+                }
+                node = next;
+            } while (node != NULL);
+        }
+    }
+    func_800280E0();
+}
 
 void *func_80027E68(void) {
     return D_8006D4E8;
@@ -139,7 +185,29 @@ s32 func_80027EF8(s32 *arg0) {
     return D_8008A85C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/179D8", func_80027F18);
+s32 func_80027F18(s32 arg0, s32 arg1, s32 arg2) {
+    display_t *disp;
+
+    if (D_8008A864 == 0) {
+        if (arg2 == 0) {
+            disp = get_display();
+            if (D_8008A85C == 0) {
+                if (arg0 != 0) {
+                    disp->vtable->display_set_vsync_callback(disp, func_800280EC);
+                }
+            } else {
+                if (arg0 == 0) {
+                    disp->vtable->display_set_vsync_callback(disp, NULL);
+                }
+            }
+        }
+        D_8008A8A4 = arg2;
+        D_8008A85C = arg0;
+        D_8008A860 = arg1;
+        return 1;
+    }
+    return 0;
+}
 
 void func_80027FD8(s32 arg0) {
     D_8008A868 = arg0;

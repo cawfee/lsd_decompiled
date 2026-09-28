@@ -2,6 +2,7 @@
 
 #include "sound.h"
 #include "memory.h"
+#include <psx/libspu.h>
 
 extern sound_vtable_t g_SOUND_VTABLE;
 
@@ -19,7 +20,6 @@ s32 func_8003A05C(void);
 s32 func_8003A068(void);
 void func_800329D8(void);
 void func_80032A7C(void);
-void func_80032368(void);
 void func_800323A8(s32, s32, s32);
 void func_80032588(s32);
 void build_data_path(char *, char *, char *, char *);
@@ -54,7 +54,7 @@ void sound_construct(sound_t *This, char *path) {
     This->unk22_2 = 0;
     This->unk23 = 0;
     if (D_8008A8B8 == 0) {
-        func_80032368();
+        SpuInit();
         D_8008A8B8 = 1;
         func_800323A8(func_8003A068(), 2, 1);
     }

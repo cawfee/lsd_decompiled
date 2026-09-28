@@ -42,4 +42,7 @@ typedef struct {
 
 extern void SpuSetCommonAttr(spu_common_attr_t *attr);
 
+extern void SpuInit(void);
+extern void SpuInitHot(void);
+
 #endif

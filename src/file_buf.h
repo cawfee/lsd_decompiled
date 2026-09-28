@@ -49,9 +49,9 @@ typedef struct file_buf {
     s32 m_Unk5;
     s32 m_Unk6;
     u16 m_NoFree;
-    s16 m_Unk7_2;
+    u16 m_Unk7_2;
     s32 m_Flags;
-    s16 m_Unk9;
+    u16 m_Unk9;
     s16 m_Unk10;
 } file_buf_t;
 
