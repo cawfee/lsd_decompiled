@@ -156,7 +156,7 @@ const char *get_opening_movie_path(s32 *arg0) {
     return get_path_table(0) + 0x3D40;
 }
 
-const char *func_8004913C(s32 *out, s32 unused) {
+const char *get_random_opening_movie_path(s32 *out, s32 unused) {
     s32 dur;
     u32 idx;
     const char *path;
@@ -250,7 +250,9 @@ s32 get_movie_duration_maybe(s32 Index) {
     return D_80086170[Index];
 }
 
-const char *func_800493E4(s32 *out, s32 index, s32 count) {
+// Picks one of the special-day movies at `index` and sums the durations of
+// `count` consecutive movies (used to time the concatenated special reel).
+const char *get_special_reel_movie_path(s32 *out, s32 index, s32 count) {
     s32 start;
     const char *path;
     s32 i;

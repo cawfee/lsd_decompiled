@@ -88,6 +88,15 @@ def main():
 
                 total_size += obj_size
             elif file.endswith(".c.o"):
+                # Psy-Q library C is vendored SDK code, not game decompilation:
+                # count it with the PSYQ size and exclude it from progress.
+                if os.path.relpath(fp, BUILD_DIR).replace("\\", "/").startswith(
+                    "src/psyq/"
+                ):
+                    psyq_size += obj_size
+                    total_size += obj_size
+                    continue
+
                 decompiled_size, obj_size = parse_c_obj(fp)
                 file_stats.append(
                     {

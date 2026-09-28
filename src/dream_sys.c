@@ -1,4 +1,4 @@
-\#include <psx/rand.h>
+#include <psx/rand.h>
 #include "dream_sys.h"
 
 
@@ -334,7 +334,7 @@ s32 func_800590E8(dream_sys_t *This, void **Unk2, s32 Unk3) {
 
     value = This->m_Unk25;
     if (Unk3 < 0) {
-        *Unk2 = (void *) calc_dream_color((char *) &This->m_Unk99 + 2 * This->m_Unk95);
+        *Unk2 = (void *) calc_dream_color((char *) &This->m_Unk99 + 2 * This->m_DayOfYear);
     } else {
         This->m_Unk25 = Unk3;
     }
@@ -827,7 +827,7 @@ void func_8005A134(dream_sys_t *This, s32 Unk) {
     This->m_Unk49 = Unk;
 
     if (Unk) {
-        func_8002CC84(This->m_Unk21, &This->m_Unk50);
+        sound_update_entity(This->m_Unk21, &This->m_Unk50);
     }
 }
 
@@ -902,8 +902,8 @@ void dream_sys__init_new_game(dream_sys_t *This) {
     s32 temp_v1;
 
     temp_v1 = D_8008ABE0;
-    This->m_Unk94 = 0;
-    This->m_Unk95 = 0;
+    This->m_Year = 0;
+    This->m_DayOfYear = 0;
     This->m_Unk96 = 0;
     This->m_Unk97 = 0;
     This->m_Unk98 = 0;
@@ -924,23 +924,23 @@ void dream_sys__get_set_screen_shake(dream_sys_t *This, s32 *Value) {
     *Value = old_value;
 }
 
-s32 get_day_number(dream_sys_t *This, s32 *Out) {
-    if (Out) {
-        *Out = This->m_Unk94;
+s32 get_day_number(dream_sys_t *This, s32 *Year) {
+    if (Year) {
+        *Year = This->m_Year;
     }
-    return This->m_Unk95 + 1;
+    return This->m_DayOfYear + 1;
 }
 
 s32 dream_sys__advance_day(dream_sys_t *This) {
-    s32 next_day = This->m_Unk95 + 1;
-    This->m_Unk95 = next_day;
+    s32 next_day = This->m_DayOfYear + 1;
+    This->m_DayOfYear = next_day;
 
     if (next_day > 364) {
-        This->m_Unk95 = 0;
-        This->m_Unk94++;
+        This->m_DayOfYear = 0;
+        This->m_Year++;
     }
 
-    return This->m_Unk95;
+    return This->m_DayOfYear;
 }
 
 void func_8005A33C(dream_sys_t *This) {
@@ -967,11 +967,11 @@ s32 dream_sys__start_day(dream_sys_t *This) {
 
     This->m_Unk542 = 0;
     This->m_GameTick = 0;
-    This->m_Unk546 = This->m_Unk95;
+    This->m_Unk546 = This->m_DayOfYear;
     if (This->m_Unk25 != 0) {
         ((void (*)(void *, s32))This->vtable->dream_sys__load_next_flashback)(This, 1);
     } else {
-        special = is_day_special((u8 *)This + 0x168, This->m_Unk95 + 1);
+        special = is_day_special((u8 *)This + 0x168, This->m_DayOfYear + 1);
         ((void (*)(void *, s32))This->vtable->dream_sys__init_mood_contibutors)(This, special);
         if (special != 0) {
             return -1;
@@ -984,11 +984,11 @@ s32 dream_sys__start_day(dream_sys_t *This) {
 s32 dream_sys__end_day(dream_sys_t *This, s32 arg1) {
     s32 off;
 
-    This->m_Unk95 = This->m_Unk546;
+    This->m_DayOfYear = This->m_Unk546;
     if (This->m_Unk25 == 0) {
         if (arg1 == 0) {
             This->vtable->dream_sys__calc_unlock_score(This);
-            off = This->m_Unk95 * 2;
+            off = This->m_DayOfYear * 2;
             off += 0x190;
             ((void (*)(void *, void *))This->vtable->dream_sys__update_dream_chart)(This, (u8 *)This + off);
             This->vtable->dream_sys__advance_day(This);
@@ -1015,7 +1015,7 @@ void dream_sys__init_spawn_loc(dream_sys_t *This) {
 
     This->vtable->dream_sys__get_previous_day_mood(This, &sp10, 1);
     This->m_NextMap =
-        generate_initial_spawn(&This->m_Unk90, &sp14, &sp10, This->m_Unk95);
+        generate_initial_spawn(&This->m_Unk90, &sp14, &sp10, This->m_DayOfYear);
     sp14 = This->vtable->dream_sys__get_set_dream_time_limit(This, sp14);
     This->m_Unk16 = 0xB;
 }
@@ -1057,7 +1057,7 @@ s32 dream_sys__load_next_flashback(dream_sys_t *This, s32 arg1) {
         if (arg1 == 0) {
             ((void (*)(void *, s32))This->vtable->Notify)(This, 0xE);
         }
-        This->m_Unk95 = *(s32 *)(slot + 0x20);
+        This->m_DayOfYear = *(s32 *)(slot + 0x20);
         This->m_NextMap = *(s32 *)slot;
         *(dream_sys_fb_pkt10_t *)((u8 *)This + 0x16C) = *(dream_sys_fb_pkt10_t *)(slot + 4);
         return 1;
@@ -1292,16 +1292,16 @@ void dream_sys__get_previous_day_mood(dream_sys_t *This, s8 *out, s32 mode) {
     t0 = 0;
     t1 = 0;
     if (mode != 0) {
-        if (This->m_Unk94 != 0) {
+        if (This->m_Year != 0) {
             goto last_day;
         }
-        if (This->m_Unk95 == 0) {
+        if (This->m_DayOfYear == 0) {
             goto store_both;
         }
     last_day:
         {
             void *row;
-            row = (u8 *)This + ((This->m_Unk95 - 1) << 1);
+            row = (u8 *)This + ((This->m_DayOfYear - 1) << 1);
             t1 = ((s8 *)row)[0x190];
             t0 = ((s8 *)row)[0x191];
             out[0] = t1;
@@ -1310,8 +1310,8 @@ void dream_sys__get_previous_day_mood(dream_sys_t *This, s8 *out, s32 mode) {
         }
     }
     count = 0x16D;
-    if (This->m_Unk94 == 0) {
-        count = This->m_Unk95;
+    if (This->m_Year == 0) {
+        count = This->m_DayOfYear;
     }
     if (count != 0) {
         p = (s8 *)This + 0x190;
@@ -1497,7 +1497,7 @@ void dream_sys__flashback_saving(dream_sys_t *This, s32 arg1, s32 arg2) {
             temp = (*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x10C))(obj, 0, 0);
             func_8001E6F8(This, sp20);
             ((void (*)(void *, s32, s32, void *, s32, s32, s32))This->vtable->dream_sys__add_flashback)(
-                This, This->m_NextMap, temp, sp20, arg1, arg2, This->m_Unk95);
+                This, This->m_NextMap, temp, sp20, arg1, arg2, This->m_DayOfYear);
         }
     }
 }

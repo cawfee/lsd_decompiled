@@ -45,7 +45,7 @@ typedef struct sound_vtable {
     /* 0x090 8006dac4 */ void (*func_8002CBDC)(void *);
     /* 0x094 8006dac8 */ void (*func_8002CBE4)(void *);
     /* 0x098 8006dacc */ void (*func_8002CBEC)(void *);
-    /* 0x09C 8006dad0 */ void (*func_8002CBF4)(void *, s32);
+    /* 0x09C 8006dad0 */ void (*sound_set_volume_offset)(void *, s32);
 } sound_vtable_t;
 
 typedef struct sound {

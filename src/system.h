@@ -47,6 +47,6 @@ typedef struct system {
     /* 0x18 */ s32 m_Unk5;
 } system_t;
 
-system_vtable_t *func_8003B20C(void);
+system_vtable_t *system_get_vtable(void);
 
 #endif

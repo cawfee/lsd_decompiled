@@ -4,7 +4,7 @@
 #include "ui_screen.h"
 
 s32 *func_8003DFCC(void);
-s32 func_80045438(s32, s32, s32);
+s32 mdec_movie_create(s32, s32, s32);
 
 void movie_screen_construct(void *);
 void movie_screen_cleanup(void *);
@@ -166,7 +166,7 @@ void movie_screen_construct(movie_screen_t *This, s32 Unk1, s32 Unk2, s32 Unk3, 
     } else {
         __builtin_memcpy(&This->m_Unk41, func_8003DFCC(), 12);
     }
-    This->m_Unk44 = func_80045438((s32)func_8003DFCC(), 0, 0);
+    This->m_Unk44 = mdec_movie_create((s32)func_8003DFCC(), 0, 0);
     This->m_Unk45 = 0;
     This->vtable->Unk15(This);
 }
@@ -203,7 +203,7 @@ s32 func_8003BAB4(movie_screen_t *This) {
     result = (*(s32 (**)(void *, s32, s32, s32, s32))(*(u32 *)This->m_Unk44 + 0x40))(
         (void *)This->m_Unk44, This->m_Unk45, This->m_Unk46, This->m_Unk48, This->m_Unk49);
     if (result != 0) {
-        result = ((s32 (*)(void *, s32))This->vtable->Unk26)(This, 0);
+        result = ((s32 (*)(void *, s32))This->vtable->SetLength)(This, 0);
     }
     return result;
 }

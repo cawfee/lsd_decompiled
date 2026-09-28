@@ -272,8 +272,8 @@ typedef struct dream_sys {
     /* 0x170 */ s32 m_Unk91;
     /* 0x174 */ s32 m_Unk92;
     /* 0x178 */ s32 m_Unk93;
-    /* 0x17C */ s32 m_Unk94;
-    /* 0x180 */ s32 m_Unk95;
+    /* 0x17C */ s32 m_Year;
+    /* 0x180 */ s32 m_DayOfYear; // 0-based (0-364); get_day_number returns this + 1
     /* 0x184 */ s32 m_Unk96;
     /* 0x188 */ s32 m_Unk97;
     /* 0x18C */ s32 m_Unk98;

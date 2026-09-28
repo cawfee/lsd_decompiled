@@ -7,7 +7,7 @@
 #include <common.h>
 
 
-void func_80020730(display_t *);
+void display_construct(display_t *);
 void display_reset(display_t *);
 void display_init_gs(display_t *, vec2d_t *, s32);
 void display_do_vsync(display_t *);
@@ -17,20 +17,20 @@ s32 display_get_active_buffer(display_t *);
 void display_load_image(display_t *, s16 *, s32);
 void display_store_image(display_t *, s32, s16 *);
 s32 func_80020A1C(display_t *);
-void func_80020A24(display_t *, s16 *, s16, s16);
+void display_move_image(display_t *, s16 *, s16, s16);
 void display_do_vsync_internal(display_t *);
 void func_80020AF4(display_t *);
 void display_set_vblanks(display_t *, s32);
 s32 display_get_vblanks(display_t *);
-void func_80020B74(display_t *, unsigned char *, s32);
+void display_clear_image(display_t *, unsigned char *, s32);
 void *display_get_screen_size(display_t *, void *);
-void func_80020C3C(display_t *, s32);
+void display_set_sync_mode(display_t *, s32);
 void display_set_vsync_callback(display_t *, void (*)(void));
 
 display_vtable_t g_DISPLAY_VTABLE = {
     1,
     base_class_destructor,
-    func_80020730,
+    display_construct,
     base_class_cleanup,
     base_class_attach,
     base_class_detach,
@@ -53,14 +53,14 @@ display_vtable_t g_DISPLAY_VTABLE = {
     display_load_image,
     display_store_image,
     func_80020A1C,
-    func_80020A24,
+    display_move_image,
     display_do_vsync_internal,
     func_80020AF4,
     display_set_vblanks,
     display_get_vblanks,
-    func_80020B74,
+    display_clear_image,
     display_get_screen_size,
-    func_80020C3C,
+    display_set_sync_mode,
     display_set_vsync_callback,
 };
 
@@ -76,7 +76,7 @@ display_t *display_create() {
     return NULL;
 }
 
-void func_80020730(display_t *This) {
+void display_construct(display_t *This) {
     base_class_get_vtable()->Construct(This);
     This->vtable = display_get_vtable();
     This->vtable->display_reset(This);
@@ -125,7 +125,7 @@ void display_load_image(display_t *This, s16 *Unk2, s32 Unk3) {
     s16 unk_struct[4];
 
     if (!This->m_VSyncCount || This->m_Unk9) {
-        display_copy_unk(unk_struct, Unk2);
+        display_copy_rect(unk_struct, Unk2);
         LoadImage(unk_struct, Unk3);
         if (This->m_Unk9) {
             DrawSync(0);
@@ -134,7 +134,7 @@ void display_load_image(display_t *This, s16 *Unk2, s32 Unk3) {
 }
 
 // Copy something to something, not on the vtable
-void display_copy_unk(void *This, void *CopyFrom) {
+void display_copy_rect(void *This, void *CopyFrom) {
     *(u16 *) ((u8 *) This + 0) = *(u16 *) ((u8 *) CopyFrom + 0);
     *(u16 *) ((u8 *) This + 2) = *(u16 *) ((u8 *) CopyFrom + 2);
     *(u16 *) ((u8 *) This + 4) = *(u16 *) ((u8 *) CopyFrom + 4);
@@ -145,7 +145,7 @@ void display_store_image(display_t *This, s32 Unk2, s16 *Unk3) {
     s16 unk_struct[4];
 
     if (!This->m_VSyncCount || This->m_Unk9) {
-        display_copy_unk(unk_struct, Unk3);
+        display_copy_rect(unk_struct, Unk3);
         StoreImage(unk_struct, Unk2);
         if (This->m_Unk9) {
             DrawSync(0);
@@ -158,10 +158,10 @@ s32 func_80020A1C(display_t *This) {
     return 0;
 }
 
-void func_80020A24(display_t *This, s16 *Unk1, s16 Unk2, s16 Unk3) {
+void display_move_image(display_t *This, s16 *Unk1, s16 Unk2, s16 Unk3) {
     s16 unk_struct[4];
 
-    display_copy_unk((s16 *) &unk_struct, (s16 *) Unk1);
+    display_copy_rect((s16 *) &unk_struct, (s16 *) Unk1);
     MoveImage((s16 *) &unk_struct, (s16) Unk2, (s16) Unk3);
 }
 
@@ -207,7 +207,7 @@ s32 display_get_vblanks(display_t *This) {
     return This->m_NextVBlank;
 }
 
-void func_80020B74(display_t *This, unsigned char *UnkData, s32 Unk3) {
+void display_clear_image(display_t *This, unsigned char *UnkData, s32 Unk3) {
     char unk_buffer1[16];
     char unk_buffer2[4];
 
@@ -215,7 +215,7 @@ void func_80020B74(display_t *This, unsigned char *UnkData, s32 Unk3) {
         This->vtable->display_get_screen_size(This, (s32) unk_buffer1);
         This->vtable->Unk29(This, UnkData, unk_buffer1);
     } else {
-        display_copy_unk(unk_buffer2, Unk3);
+        display_copy_rect(unk_buffer2, Unk3);
         ClearImage((int) unk_buffer2, *UnkData, UnkData[1], UnkData[2]);
     }
 }
@@ -230,7 +230,7 @@ void *display_get_screen_size(display_t *This, void *Unk) {
     return &This->m_ScreenSize;
 }
 
-void func_80020C3C(display_t *This, s32 Unk) {
+void display_set_sync_mode(display_t *This, s32 Unk) {
     This->m_Unk9 = Unk;
 }
 

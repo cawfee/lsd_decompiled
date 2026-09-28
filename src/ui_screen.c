@@ -9,7 +9,7 @@
 extern void **D_8006E854;
 extern ui_screen_vtable_t D_8006E730;
 
-ui_screen_t *func_8003BE94(u32 Unk1, u32 Unk2, u32 Unk3) {
+ui_screen_t *ui_screen_create(u32 Unk1, u32 Unk2, u32 Unk3) {
     ui_screen_t *allocated = (ui_screen_t *) memory_allocate_mem(0xA4);
 
     if (allocated) {
@@ -32,7 +32,7 @@ void func_8003BF10(ui_screen_t *This, s32 Unk2, s32 Unk3, sound_t *Unk4) {
     }
 
     This->m_Unk16 = Unk3;
-    This->vtable->Unk52(This, 0, 0);
+    This->vtable->SetTexture(This, 0, 0);
     This->m_Unk31 = func_80044F30(0);
     This->m_Unk30 = func_80044CD4(0, This->m_Unk31);
     This->m_Unk29 = func_800441B4(This->m_Unk30, 1);
@@ -59,7 +59,7 @@ void func_8003C11C(ui_screen_t *This) {
     ui_screen_vtable_t *vt;
 
     vt = This->vtable;
-    vt->Unk26(This, -1);
+    vt->SetIdleTimeout(This, -1);
     vt->Unk40(This, D_8006E860, D_8006E860 + 3, D_8006E860 + 6);
     vt->Unk38(This, 1);
     vt->Unk39(This, 1);
@@ -565,7 +565,7 @@ func_8003CE98_count:
         do {
             entry = arg->table[i];
             len = strlen(*cursor);
-            *out = func_800408CC((s32)tex, len, (s32)*cursor);
+            *out = text_line_create((s32)tex, len, (s32)*cursor);
             out += 1;
             if (entry != NULL) {
                 This->m_Unk21 = i;
@@ -790,7 +790,7 @@ void func_8003D5CC(ui_screen_t *This, ui_screen_name_list_t *list, s32 ctx) {
     if (*cursor != 0) {
         do {
             len = strlen(*cursor);
-            *dest = func_800408CC(ctx, len, (s32)*cursor);
+            *dest = text_line_create(ctx, len, (s32)*cursor);
             cursor += 1;
             dest += 1;
         } while (*cursor != 0);

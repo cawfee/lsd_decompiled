@@ -23,11 +23,11 @@ typedef struct debug_file_driver_vtable {
     /* 0x038 8006d9f4 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006d9f8 */ void (*Unk14)(void *);
     /* 0x040 8006d9fc */ void (*debug_file_driver_unk15)(void *);
-    /* 0x044 8006da00 */ void (*debug_file_driver_unk16)(void *);
-    /* 0x048 8006da04 */ void (*debug_file_driver_unk17)(void *);
-    /* 0x04C 8006da08 */ void (*debug_file_driver_unk18)(void *);
+    /* 0x044 8006da00 */ void (*debug_file_driver_open)(void *);
+    /* 0x048 8006da04 */ void (*debug_file_driver_close)(void *);
+    /* 0x04C 8006da08 */ void (*debug_file_driver_seek)(void *);
     /* 0x050 8006da0c */ void (*debug_file_driver_unk19)(void *);
-    /* 0x054 8006da10 */ void (*debug_file_driver_unk20)(void *);
+    /* 0x054 8006da10 */ void (*debug_file_driver_read)(void *);
     /* 0x058 8006da14 */ void (*debug_file_driver_unk21)(void *);
     /* 0x05C 8006da18 */ void (*file_buf_release)(void *);
     /* 0x060 8006da1c */ void (*Unk23)(void *);

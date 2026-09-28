@@ -50,11 +50,11 @@ typedef struct seq_file {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
-    /* 0x2C */ s32 m_Unk10;
+    /* 0x2C */ s32 m_Flag;
     /* 0x30 */ s32 m_Unk11;
 } seq_file_t;
 
-seq_file_t *func_800422CC(u32 Unk1);
-seq_file_vtable_t *func_800423F0(void);
+seq_file_t *seq_file_create(u32 Unk1);
+seq_file_vtable_t *seq_file_get_vtable(void);
 
 #endif

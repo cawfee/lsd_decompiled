@@ -33,7 +33,7 @@ typedef struct movie_screen_vtable {
     /* 0x060 8006e658 */ void (*Unk23)(void *, s32);
     /* 0x064 8006e65c */ void (*Unk24)(void *);
     /* 0x068 8006e660 */ void (*Unk25)(void *);
-    /* 0x06C 8006e664 */ void (*Unk26)(void *, u32);
+    /* 0x06C 8006e664 */ void (*SetLength)(void *, u32);
     /* 0x070 8006e668 */ void (*Unk27)(void *);
     /* 0x074 8006e66c */ void (*Unk28)(void *);
     /* 0x078 8006e670 */ void (*Unk29)(void *);

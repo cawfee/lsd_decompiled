@@ -7,17 +7,17 @@ static s32 g_CD_INIT = 0;
 extern s32 D_8008A8E0[];
 
 
-void func_8003AF8C(void *, s32);
+void system_construct(void *, s32);
 void nullsub25(void *);
 void func_8003B02C(void *, s32 *, s32);
 void game_flow_init_graphics(void *, display_t *, pad_t *, u32);
 void func_8003B108(void *);
 void game_flow_execute_phases(void *);
 
-system_vtable_t D_8006E4F0 = {
+system_vtable_t g_SYSTEM_VTABLE = {
     0x60,
     base_class_destructor,
-    func_8003AF8C,
+    system_construct,
     nullsub25,
     base_class_attach,
     base_class_detach,
@@ -43,9 +43,9 @@ system_vtable_t D_8006E4F0 = {
     NULL,
 };
 
-void func_8003AF8C(system_t *This, s32 Unk) {
+void system_construct(system_t *This, s32 Unk) {
     base_class_get_vtable()->Construct(This);
-    This->vtable = func_8003B20C();
+    This->vtable = system_get_vtable();
 
     if (!g_CD_INIT) {
         CdInit();
@@ -65,16 +65,16 @@ void func_8003B02C(system_t *This, const s32 *src, s32 val) {
     This->m_Unk4 = val;
 }
 
-void game_flow_init_graphics(game_flow_t *This, display_t *GsHelper, pad_t *Cls16634) {
+void game_flow_init_graphics(game_flow_t *This, display_t *Display, pad_t *Pad) {
     if (!This->m_IsInit) {
-        set_display(GsHelper);
-        GsHelper->vtable->display_init_gs(GsHelper, &This->unk1, This->unk5);
+        set_display(Display);
+        Display->vtable->display_init_gs(Display, &This->m_ScreenSize, This->m_VarMode);
         func_80032368();
         GsInit3D();
 
         This->m_GraphicsCtx = memory_allocate_mem(0x14);
-        This->m_GraphicsCtx->display = GsHelper;
-        This->m_GraphicsCtx->cls_16634 = Cls16634;
+        This->m_GraphicsCtx->display = Display;
+        This->m_GraphicsCtx->cls_16634 = Pad;
         This->m_GraphicsCtx->cls_32c00 = NULL;
         This->m_GraphicsCtx->cls_3acc8 = NULL;
         This->m_GraphicsCtx->cls_3da54 = NULL;
@@ -123,6 +123,6 @@ void game_flow_execute_phases(game_flow_t *This) {
     }
 }
 
-system_vtable_t *func_8003B20C(void) {
-    return &D_8006E4F0;
+system_vtable_t *system_get_vtable(void) {
+    return &g_SYSTEM_VTABLE;
 }

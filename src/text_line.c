@@ -29,14 +29,14 @@ void func_8001DA28(void *);
 void func_8001DDF4(void *);
 void func_8001E49C(void *);
 void func_8001E4A4(void *);
-void func_80041E58(void *);
+void class_3249C_set_anchor(void *);
 void func_80042170(void *);
 void func_8004223C(void *);
 void func_80042268(void *);
 void func_80042294(void *);
 
-void func_80040948(void *, s32, s32, s32);
-void func_80040A30(base_class_t *);
+void text_line_construct(void *, s32, s32, s32);
+void text_line_cleanup(base_class_t *);
 void func_80040A88(void *, s32);
 void func_80040AE8(void *, s32, void *);
 void func_80040C00(void *);
@@ -45,15 +45,15 @@ void func_80040D74(void *, char *);
 void func_80040E14(void *);
 s32 func_80040EDC(text_line_t *, u8, s32);
 void func_80040F20(void *);
-void func_80040F28(void *, char *);
+void text_line_set_string(void *, char *);
 void func_80040FA0(void *);
-void func_80040FA8(void *);
+void text_line_set_spacing(void *);
 
-text_line_vtable_t D_8006EB90 = {
+text_line_vtable_t g_TEXT_LINE_VTABLE = {
     0x11144,
     base_class_destructor,
-    func_80040948,
-    func_80040A30,
+    text_line_construct,
+    text_line_cleanup,
     func_8001CC48,
     func_8001CCB4,
     func_8001CD20,
@@ -98,31 +98,31 @@ text_line_vtable_t D_8006EB90 = {
     func_8001E4A4,
     func_80040D74,
     func_80040E14,
-    func_80041E58,
+    class_3249C_set_anchor,
     (void (*)(void *))func_80040EDC,
     func_80040F20,
-    func_80040F28,
+    text_line_set_string,
     func_80040FA0,
-    func_80040FA8,
+    text_line_set_spacing,
 };
 
-text_line_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3) {
+text_line_t *text_line_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     text_line_t *allocated = (text_line_t *) memory_allocate_mem(0xB8);
 
     if (allocated) {
-        func_80040FB0()->Construct(allocated, Unk1, Unk2, Unk3);
+        text_line_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);
         return allocated;
     }
 
     return NULL;
 }
 
-void func_80040948(text_line_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
+void text_line_construct(text_line_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     s32 i;
     s32 *arr;
 
-    func_80041C3C()->Construct(This, Unk1, 0x20);
-    This->vtable = func_80040FB0();
+    glyph_get_vtable()->Construct(This, Unk1, 0x20);
+    This->vtable = text_line_get_vtable();
     This->m_Unk41_2 = Unk2;
     This->m_Unk41_4 = Unk2;
     This->m_Unk42_1 = 0;
@@ -131,17 +131,17 @@ void func_80040948(text_line_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     if (arr != NULL) {
         This->m_Unk44 = arr;
         for (i = 0; i < Unk2; i++) {
-            *arr = (s32)func_80041AB4(Unk1, 0x20);
+            *arr = (s32)glyph_create(Unk1, 0x20);
             arr += 1;
         }
         This->vtable->Unk15(This, Unk3);
     }
 }
 
-void func_80040A30(text_line_t *This) {
+void text_line_cleanup(text_line_t *This) {
     destroy_list(This->m_Unk44, This->m_Unk41_2);
     This->m_Unk44 = memory_free_mem(This->m_Unk44);
-    func_80041C3C()->Cleanup(This);
+    glyph_get_vtable()->Cleanup(This);
 }
 
 void func_80040A88(text_line_t *This, s32 Unk) {
@@ -157,7 +157,7 @@ void func_80040AE8(text_line_t *This, s32 arg1, s32 *arg2) {
     class_322B4_t *obj;
 
     if (This->m_Unk2 == 0) {
-        ((void (*)(void *, s32, s32 *))func_80041C3C()->Unk18)(This, arg1, arg2);
+        ((void (*)(void *, s32, s32 *))glyph_get_vtable()->Unk18)(This, arg1, arg2);
         __builtin_memcpy(pos, arg2, 8);
         start = (u8)This->m_Unk42_1;
         p = (class_322B4_t **)((u8 *)This->m_Unk44 + (start * 4));
@@ -196,7 +196,7 @@ void func_80040C00(text_line_t *This) {
                 } while (i < (s32)((u8)This->m_Unk42_1 + (u8)This->m_Unk41_4));
             }
         }
-        ((void (*)(void *))func_80041C3C()->Unk19)(This);
+        ((void (*)(void *))glyph_get_vtable()->Unk19)(This);
     }
 }
 
@@ -245,7 +245,7 @@ void func_80040E14(text_line_t *This, s32 *arg1) {
 
     if (This->m_Unk2 != 0) {
         i = 0;
-        ((void (*)(void *, s32 *))func_80041C3C()->Unk46)(This, arg1);
+        ((void (*)(void *, s32 *))glyph_get_vtable()->Unk46)(This, arg1);
         __builtin_memcpy(pos, arg1, 8);
         p = (class_322B4_t **)This->m_Unk44;
         if (i < (s32)This->m_Unk41_2) {
@@ -268,7 +268,7 @@ s32 func_80040EDC(text_line_t *This, u8 Unk2, s32 Unk3) {
 void func_80040F20(void *) {
 }
 
-void func_80040F28(text_line_t *This, u8 *Str) {
+void text_line_set_string(text_line_t *This, u8 *Str) {
     void **arr;
 
     arr = This->m_Unk44;
@@ -285,10 +285,16 @@ void func_80040F28(text_line_t *This, u8 *Str) {
 void func_80040FA0(void *) {
 }
 
-void func_80040FA8(text_line_t *This, s32 Unk) {
+void text_line_set_spacing(text_line_t *This, s32 Unk) {
     This->m_Unk43 = Unk;
 }
 
-text_line_vtable_t *func_80040FB0(void) {
-    return &D_8006EB90;
+text_line_vtable_t *text_line_get_vtable(void) {
+    return &g_TEXT_LINE_VTABLE;
 }
+
+INCLUDE_ASM("asm/nonmatchings/text_line", func_80040FC0);
+
+INCLUDE_ASM("asm/nonmatchings/text_line", func_80041020);
+
+INCLUDE_ASM("asm/nonmatchings/text_line", func_8004109C);

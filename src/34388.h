@@ -5,7 +5,7 @@
 
 typedef struct class_34388_vtable {
     /* 0x000 8006f1c4 */ u32 value;
-    /* 0x004 8006f1c8 */ void (*init_800269F0)(void *);
+    /* 0x004 8006f1c8 */ void (*file_buf_destroy)(void *);
     /* 0x008 8006f1cc */ void (*Construct)(void *, s32);
     /* 0x00C 8006f1d0 */ void (*Cleanup)(void *);
     /* 0x010 8006f1d4 */ void (*Unk3)(void *);

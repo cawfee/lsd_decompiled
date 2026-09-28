@@ -52,8 +52,8 @@ typedef struct str_stream {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
-    /* 0x2C */ s32 m_Unk10;
-    /* 0x30 */ s32 m_Unk11;
+    /* 0x2C */ s32 m_State;
+    /* 0x30 */ s32 m_Paused;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ u32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
@@ -61,12 +61,12 @@ typedef struct str_stream {
     /* 0x44 */ s32 m_Unk16;
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
-    /* 0x50 */ s32 m_Unk19;
+    /* 0x50 */ s32 m_RingSize;
     /* 0x54 */ s32 m_Unk20;
     /* 0x58 */ s32 m_Unk21;
     /* 0x5C */ s32 m_Unk22;
 } str_stream_t;
 
-str_stream_vtable_t *func_80047900(void);
+str_stream_vtable_t *str_stream_get_vtable(void);
 
 #endif

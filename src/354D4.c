@@ -4,13 +4,13 @@ void func_80044D40(void *, s32, void *);
 void func_80044DC8(base_class_t *);
 void func_80044E10(void *);
 void func_80044E64(void *);
-s32 init_800269F0(void *);
+s32 file_buf_destroy(void *);
 void file_buf_release(void *);
 void nullsub13(void *);
 
 class_354D4_vtable_t D_8006F498 = {
     0x203,
-    (base_class_t *(*)(base_class_t *))init_800269F0,
+    (base_class_t *(*)(base_class_t *))file_buf_destroy,
     func_80044D40,
     func_80044DC8,
     base_class_attach,

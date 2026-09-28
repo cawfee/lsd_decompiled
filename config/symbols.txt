@@ -176,7 +176,7 @@ seq_close = 0x8003AC9C;
 Snd_SetPauseMode = 0x8003AE60;
 SsSeqPause = 0x8003AF38;
 SsSepPause = 0x8003AF60;
-SsInitHot = 0x80027D40;
+func_80027D40 = 0x80027D40;
 SpuClearReverbWorkArea = 0x80038B28;
 SsUtPitchBend = 0x800319B4;
 SsUtGetDetVVol = 0x80031E94;
@@ -256,7 +256,6 @@ nullsub3 = 0x80017EA8;
 nullsub12 = 0x80026690;
 nullsub13 = 0x80026C80;
 nullsub25 = 0x8003B024;
-init_800269F0 = 0x800269F0;
 
 get_stage_chunk_from_mood = 0x8004950c;
 get_mood_from_stage_chunk = 0x800495b8;
@@ -391,14 +390,8 @@ start = 0x8001199C;
 
 // LIBAPI
 SetMem = 0x80012768;
-InitHeap2 = 0x80011CF4;
 AllocRestBlockTop = 0x8008AC28;
 max_heap = 0x8008AC38;
-realloc2 = 0x80011F7C;
-malloc2 = 0x80011D34;
-free2 = 0x80011F68;
-realloc2_expand = 0x80011B4C;
-calloc2 = 0x8001200C;
 write = 0x80013488;
 EnterCriticalSection = 0x80024CE0;
 ExitCriticalSection = 0x80024CF0;
@@ -753,7 +746,7 @@ game_flow_play_special_day = 0x8002677C;
 game_flow_execute_dream = 0x80026698;
 game_flow_execute_main_menu = 0x80026410;
 game_flow_execute_phases = 0x8003B110;
-game_flow_callback = 0x80026328;
+game_flow_logo_callback = 0x80026328;
 game_flow_init = 0x80026108;
 game_flow_init_graphics = 0x8003B044;
 
@@ -763,6 +756,21 @@ memory_card_get_vtable = 0x800507E8;
 memory_card_create = 0x8004E2E0;
 memory_card_on_construct = 0x8004E34C;
 memory_card_state_reset = 0x8004E3F4;
+memory_card_format = 0x8004E940;
+memory_card_read_file = 0x8004E9AC;
+memory_card_read_file_impl = 0x8004EA38;
+memory_card_delete_file = 0x8004EC5C;
+memory_card_delete_file_impl = 0x8004ECCC;
+memory_card_read_data = 0x8004ED40;
+memory_card_read_data_impl = 0x8004EDC0;
+memory_card_write_file = 0x8004EEA0;
+memory_card_build_path = 0x8004F32C;
+memory_card_enable_events = 0x8004F394;
+memory_card_disable_events = 0x8004F3BC;
+memory_card_test_events = 0x8004F3E4;
+memory_card_call_event = 0x8004F40C;
+memory_card_check_events = 0x8004F4A4;
+memory_card_wait_event = 0x8004F4C8;
 
 // Asset helpers?
 g_STRING_TABLE = 0x80081A04;
@@ -812,9 +820,29 @@ display_init_gs = 0x800207DC;
 display_reset = 0x80020784;
 display_swap_disp_buffer = 0x800208B8;
 display_get_active_buffer = 0x800208D8;
-display_copy_unk = 0x80020970;
+display_copy_rect = 0x80020970;
 display_do_vsync_internal = 0x80020A74;
 display_do_vsync = 0x8002085C;
+display_construct = 0x80020730;
+display_move_image = 0x80020A24;
+display_clear_image = 0x80020B74;
+display_set_sync_mode = 0x80020C3C;
+
+// Frame phase (per-frame phase/notify state machine)
+frame_phase_create = 0x80042400;
+frame_phase_construct = 0x80042450;
+frame_phase_cleanup = 0x800424A8;
+frame_phase_remove_parent = 0x800424E0;
+frame_phase_notify = 0x80042550;
+frame_phase_reset = 0x800425D8;
+frame_phase_advance = 0x800425EC;
+frame_phase_get_phase = 0x8004264C;
+frame_phase_set_waiting = 0x80042658;
+frame_phase_clear_waiting = 0x80042664;
+frame_phase_is_waiting = 0x8004266C;
+frame_phase_set_finished = 0x80042678;
+frame_phase_get_vtable = 0x80042684;
+g_FRAME_PHASE_VTABLE = 0x8006EF50;
 
 // Base cpp class: child/parent link lists + notify
 g_BASE_CLASS_VTABLE = 0x8006B58C;
@@ -902,11 +930,11 @@ debug_file_driver_get_vtable = 0x8002C438;
 debug_file_driver_construct = 0x8002C3C0;
 debug_file_driver_cleanup = 0x8002C3C8;
 debug_file_driver_unk15 = 0x8002C3D0;
-debug_file_driver_unk16 = 0x8002C3E0;
-debug_file_driver_unk17 = 0x8002C3F0;
-debug_file_driver_unk18 = 0x8002C3F8;
+debug_file_driver_open = 0x8002C3E0;
+debug_file_driver_close = 0x8002C3F0;
+debug_file_driver_seek = 0x8002C3F8;
 debug_file_driver_unk19 = 0x8002C400;
-debug_file_driver_unk20 = 0x8002C408;
+debug_file_driver_read = 0x8002C408;
 debug_file_driver_unk21 = 0x8002C410;
 debug_file_driver_unk25 = 0x8002C418;
 debug_file_driver_unk26 = 0x8002C420;
@@ -919,8 +947,9 @@ bgm_get_vtable = 0x8003A04C;
 bgm_create = 0x800398E0;
 bgm_construct = 0x8003995C;
 bgm_cleanup = 0x80039A34;
-bgm_unk13 = 0x80039B04;
-bgm_unk15 = 0x80039B90;
+bgm_on_notify = 0x80039B04;
+bgm_handle_event = 0x80039B90;
+g_BgmActive = 0x8008A8D8;
 seq_open = 0x80039C04;
 seq_play = 0x80039CBC;
 seq_stop = 0x80039D14;
@@ -928,9 +957,84 @@ seq_pause = 0x80039D68;
 seq_resume = 0x80039DB0;
 seq_set_vol = 0x80039DF4;
 bgm_unk21 = 0x8006E4E4;
-bgm_unk22 = 0x80039E7C;
-bgm_unk23 = 0x80039F64;
+bgm_set_sequence = 0x80039E7C;
+bgm_set_sound = 0x80039F64;
 bgm_set_crescendo = 0x80039E24;
+seq_file_create = 0x800422CC;
+seq_file_construct = 0x8004232C;
+seq_file_cleanup = 0x800423A8;
+seq_file_set_flag = 0x800423E4;
+seq_file_get_vtable = 0x800423F0;
+g_SEQ_FILE_VTABLE = 0x8006EED8;
+
+// CD audio stream (StSetStream/StGetNext driver)
+str_stream_create = 0x80046F0C;
+str_stream_construct = 0x80046F88;
+str_stream_cleanup = 0x80047074;
+str_stream_set_ring = 0x800470C8;
+str_stream_open = 0x80047114;
+str_stream_set_spu_volume = 0x80047240;
+str_stream_close = 0x8004728C;
+str_stream_start = 0x800472EC;
+str_stream_sync_callback = 0x80047388;
+str_stream_play = 0x800473E4;
+str_stream_stop = 0x800474C8;
+str_stream_reset = 0x80047574;
+str_stream_pause = 0x800475D8;
+str_stream_resume = 0x80047638;
+str_stream_get_next = 0x80047694;
+str_stream_invoke_callback = 0x800477B0;
+str_stream_finish = 0x80047810;
+str_stream_free_ring = 0x80047870;
+str_stream_unset_ring = 0x80047890;
+str_stream_clear_ring = 0x800478B0;
+str_stream_sync = 0x800478D0;
+str_stream_get_vtable = 0x80047900;
+g_STR_STREAM_VTABLE = 0x800817E0;
+g_StreamActive = 0x8008A950;
+g_StreamState = 0x8008A94C;
+
+// Text line (text layout/rendering)
+text_line_create = 0x800408CC;
+text_line_construct = 0x80040948;
+text_line_cleanup = 0x80040A30;
+text_line_set_string = 0x80040F28;
+text_line_set_spacing = 0x80040FA8;
+text_line_get_vtable = 0x80040FB0;
+g_TEXT_LINE_VTABLE = 0x8006EB90;
+
+// Memory manager helper
+memory_free_buffer = 0x80017AA8;
+
+// Glyph / per-character text primitive (type_id 0x1144)
+g_GLYPH_VTABLE = 0x8006EC74;
+glyph_create = 0x80041AB4;
+glyph_construct = 0x80041B20;
+glyph_set_mode = 0x80041BAC;
+glyph_set_char = 0x80041BDC;
+glyph_get_char = 0x80041C28;
+glyph_get_vtable = 0x80041C3C;
+
+// Text/icon node class 3249C (derives from glyph, type_id 0x144)
+g_CLASS_3249C_VTABLE = 0x8006ED4C;
+class_3249C_create = 0x80041C9C;
+class_3249C_construct = 0x80041D18;
+class_3249C_cleanup = 0x80041DA4;
+class_3249C_run = 0x80041DAC;
+class_3249C_set_offset = 0x80041E2C;
+class_3249C_set_anchor = 0x80041E58;
+class_3249C_get_vtable = 0x80041ED8;
+
+// MDEC movie decoder
+mdec_movie_create = 0x80045438;
+mdec_movie_construct = 0x800454C4;
+mdec_movie_cleanup = 0x800455D4;
+mdec_movie_free_buffers = 0x8004575C;
+mdec_movie_get_vtable = 0x80045E44;
+g_MDEC_MOVIE_VTABLE = 0x8006F614;
+g_ActiveMovie = 0x8008A940;
+g_MovieFrameCounter = 0x8008A948;
+g_MdecInitialized = 0x8008A93C;
 
 // Class app
 g_CD_INIT = 0x8008a8dc;
@@ -984,14 +1088,33 @@ display_get_screen_size = 0x80020C08;
 get_display = 0x80020C5C;
 set_display = 0x80020C68;
 pad_create = 0x80025B34;
+pad_construct = 0x80025BA0;
+pad_cleanup = 0x80025C30;
+pad_set_port = 0x80025C84;
+pad_poll = 0x80025CC4;
+pad_load_default_table = 0x80025E1C;
+pad_get_vtable = 0x80025E9C;
+g_PadInitRefCount = 0x8008A848;
+g_PadState = 0x8008B388;
+g_PAD_VTABLE = 0x8006D370;
 run_screen = 0x80026518;
 play_special_reel = 0x8002658C;
 file_buf_get_vtable = 0x80026C9C;
 get_file_driver = 0x80026CAC;
 file_buf_load = 0x80026B08;
 file_buf_release = 0x80026C20;
+file_buf_destroy = 0x800269F0;
+file_buf_set_flag = 0x80026C88;
+file_buf_set_triple = 0x80026CE8;
+file_driver_lock = 0x80026E0C;
+file_driver_unlock = 0x80026E38;
+get_current_data_folder = 0x800270B8;
+build_data_path = 0x800270C4;
 sound_construct = 0x8002C4E0;
 sound_close = 0x8002C638;
+sound_get_instance_count = 0x8002CC1C;
+sound_set_volume_offset = 0x8002CBF4;
+sound_update_entity = 0x8002CC84;
 tim_construct = 0x8003B3FC;
 tmd_create = 0x80043840;
 tmd_map = 0x80043B18;
@@ -1009,3 +1132,12 @@ show_graph = 0x80058078;
 set_move_from_pad = 0x80058C58;
 reset_motion_for_link = 0x800591B4;
 get_day_number = 0x8005A2E4;
+
+// psyq MALLOC.O, confirmed
+psyq_malloc_ExpAllocArea = 0x80011A58;
+psyq_malloc_expand = 0x80011B4C;
+psyq_malloc_InitHeap = 0x80011CF4;
+psyq_malloc_malloc = 0x80011D34;
+psyq_malloc_free = 0x80011F68;
+psyq_malloc_realloc = 0x80011F7C;
+psyq_malloc_calloc = 0x8001200C;

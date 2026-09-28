@@ -118,7 +118,7 @@ typedef struct text_line {
     /* 0xB8 */ s32 m_Unk45;
 } text_line_t;
 
-text_line_vtable_t *func_80040FB0(void);
-text_line_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3);
+text_line_vtable_t *text_line_get_vtable(void);
+text_line_t *text_line_create(s32 Unk1, s32 Unk2, s32 Unk3);
 
 #endif

@@ -282,7 +282,7 @@ void func_800542D0(map_scene_t *This) {
 
     unk31 = This->m_Unk31;
     if (unk31 == 0) {
-        obj = func_800408CC(This->m_Unk28, 5, (s32)D_8008AB44);
+        obj = text_line_create(This->m_Unk28, 5, (s32)D_8008AB44);
         This->m_Unk30 = obj;
         (*(void (**)(void *, void *, s32 *))(*(s32 *)obj + 0x4C))(obj, This->m_Unk4, &D_8008AB38);
         obj = This->m_Unk30;

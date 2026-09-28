@@ -38,24 +38,26 @@ typedef struct game_flow_vtable {
 
 typedef struct game_flow {
     /* 0x00 */ game_flow_vtable_t *vtable;
-    /* 0x04 */ void *m_UnkObj1;
-    /* 0x08 */ void *m_UnkObj2;
-    /* 0x0C */ s16 unk1;
-    /* 0x0E */ s16 unk2;
-    /* 0x10 */ s16 unk3;
-    /* 0x12 */ s16 unk4;
-    /* 0x14 */ s32 unk5;
+    /* 0x04 */ linked_list_node_t *m_Children;
+    /* 0x08 */ linked_list_node_t *m_Parents;
+    /* 0x0C */ vec2d_t m_ScreenSize;
+    /* 0x14 */ s32 m_VarMode;
     /* 0x18 */ s32 m_IsInit;
     /* 0x1C */ game_graphics_ctx_t *m_GraphicsCtx;
     /* 0x20 */ game_config_t *m_Config;
-    /* 0x24 */ s32 m_UnkGameMember;
-    /* 0x28 */ dream_sys_t *m_pDreamSys;
-    /* 0x2C */ s32 m_Unk10;
+    /* 0x24 */ s32 m_SkipDreamChart; // Set when execute_dream returns 3 (special day handled); skips graph_screen once
+    /* 0x28 */ dream_sys_t *m_DreamSys;
 } game_flow_t;
 
 game_flow_t *game_flow_create(game_config_t *);
 game_flow_vtable_t *game_flow_get_vtable(void);
 
-void game_flow_callback();
+void game_flow_logo_callback();
+
+// Top-level flow helpers (not vtable slots)
+void game_flow_display_logo(game_flow_t *This, const char *Path);
+void game_flow_play_special_day(game_flow_t *This);
+s32 run_screen(s32 (*Callback)(s32), s32 Unk1, s32 Unk2);
+void play_special_reel(game_flow_t *This);
 
 #endif

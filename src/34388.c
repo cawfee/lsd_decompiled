@@ -9,13 +9,13 @@ void func_80043BE8(void *, s32);
 void func_80043C60(void *);
 void func_80043CB8(void *);
 void func_80043DFC(void *);
-s32 init_800269F0(void *);
+s32 file_buf_destroy(void *);
 void file_buf_release(void *);
 void nullsub13(void *);
 
 class_34388_vtable_t D_8006F1C4 = {
     0xC03,
-    (void (*)(void *))init_800269F0,
+    (void (*)(void *))file_buf_destroy,
     func_80043BE8,
     func_80043C60,
     (void (*)(void *))base_class_attach,

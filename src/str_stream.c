@@ -10,34 +10,34 @@ extern void StSetStream(unsigned long, unsigned long, unsigned long, void *, voi
 
 // CD related class?
 
-extern str_stream_vtable_t D_800817E0;
+extern str_stream_vtable_t g_STR_STREAM_VTABLE;
 
-extern str_stream_t *D_8008A950;
-extern s32 D_8008A94C;
+extern str_stream_t *g_StreamActive;
+extern s32 g_StreamState;
 extern char D_8008A954[];
 
 extern char *strcpy(char *, char *);
 extern char *strcat(char *, char *);
-extern s32 func_800270B8(void);
+extern s32 get_current_data_folder(void);
 extern void *CdSearchFile(void *fp, char *name);
 
-str_stream_t *func_80046F0C(s32 Unk1, s32 Unk2, s32 Unk3) {
+str_stream_t *str_stream_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     str_stream_t *allocated = (str_stream_t *) memory_allocate_mem(0x5C);
 
     if (allocated) {
-        func_80047900()->Construct(allocated, Unk1, Unk2, Unk3);
+        str_stream_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);
         return allocated;
     }
 
     return NULL;
 }
 
-void func_80046F88(str_stream_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
+void str_stream_construct(str_stream_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
     base_class_get_vtable()->Construct(This);
-    This->vtable = func_80047900();
+    This->vtable = str_stream_get_vtable();
     This->m_Unk12 = Unk2;
 
-    This->m_Unk11 = 0;
+    This->m_Paused = 0;
 
     if (Unk2 < 4) {
         This->m_Unk13 = 2054 * (300 / Unk3 / 2);
@@ -46,28 +46,28 @@ void func_80046F88(str_stream_t *This, u32 Unk2, s32 Unk3, s32 Unk4) {
     }
 
     This->m_Unk14 = Unk4;
-    This->m_Unk19 = 0;
+    This->m_RingSize = 0;
     This->m_Unk18 = 0;
     This->m_Unk17 = 0;
     This->m_Unk20 = 0;
-    This->m_Unk10 = 0;
+    This->m_State = 0;
 }
 
-void func_80047074(str_stream_t *This) {
+void str_stream_cleanup(str_stream_t *This) {
     This->vtable->Unk17(This);
     base_class_get_vtable()->Cleanup(This);
 }
 
-void func_800470C8(str_stream_t *This, s32 Unk2, u32 Unk3) {
-    if (!This->m_Unk10) {
+void str_stream_set_ring(str_stream_t *This, s32 Unk2, u32 Unk3) {
+    if (!This->m_State) {
         StSetRing(Unk2, Unk3 >> 11);
-        This->m_Unk19 = Unk2;
+        This->m_RingSize = Unk2;
     }
 }
 
-s32 func_80047240(str_stream_t *This);
+s32 str_stream_set_spu_volume(str_stream_t *This);
 
-s32 func_80047114(str_stream_t *This, char *name, s32 retries) {
+s32 str_stream_open(str_stream_t *This, char *name, s32 retries) {
     char path[0x20];
     s32 left;
     s32 orig;
@@ -77,11 +77,11 @@ s32 func_80047114(str_stream_t *This, char *name, s32 retries) {
     left = retries;
     orig = left;
     pad = 0;
-    if (This->m_Unk10 == 0) {
-        if (This->m_Unk19 != 0) {
-            if (D_8008A950 == NULL) {
+    if (This->m_State == 0) {
+        if (This->m_RingSize != 0) {
+            if (g_StreamActive == NULL) {
                 path[0] = 0x5C;
-                strcpy(&path[1], (char *)func_800270B8());
+                strcpy(&path[1], (char *)get_current_data_folder());
                 strcat(path, name);
                 strcat(path, D_8008A954);
                 file = &This->m_Unk2;
@@ -94,8 +94,8 @@ s32 func_80047114(str_stream_t *This, char *name, s32 retries) {
                     }
                 }
                 This->m_Unk15 = (s32)((u32)This->m_Unk3 / This->m_Unk13);
-                D_8008A94C = func_80047240(This);
-                D_8008A950 = This;
+                g_StreamState = str_stream_set_spu_volume(This);
+                g_StreamActive = This;
                 This->vtable->Unk18(This, file);
                 return pad;
             }
@@ -105,7 +105,7 @@ s32 func_80047114(str_stream_t *This, char *name, s32 retries) {
     return 1;
 }
 
-s32 func_80047240(str_stream_t *This) {
+s32 str_stream_set_spu_volume(str_stream_t *This) {
     spu_common_attr_t attributes;
     attributes.mask = (SPU_COMMON_MVOLL | SPU_COMMON_MVOLR | SPU_COMMON_CDVOLL | SPU_COMMON_CDVOLR | SPU_COMMON_CDMIX);
 
@@ -121,53 +121,53 @@ s32 func_80047240(str_stream_t *This) {
     return 1;
 }
 
-void func_8004728C(str_stream_t *This) {
+void str_stream_close(str_stream_t *This) {
     str_stream_t *cur;
 
-    if (This->m_Unk10 != 0) {
-        cur = D_8008A950;
+    if (This->m_State != 0) {
+        cur = g_StreamActive;
         if (cur == This) {
             cur->vtable->Unk20(cur);
-            cur->m_Unk10 = 0;
-            D_8008A950 = NULL;
+            cur->m_State = 0;
+            g_StreamActive = NULL;
         }
     }
 }
 
 // gp
-void func_80047388(str_stream_t *This);
+void str_stream_sync_callback(str_stream_t *This);
 
-void func_800472EC(str_stream_t *This, void *arg1) {
-    if (This->m_Unk10 != 2) {
-        if (D_8008A950 == This) {
+void str_stream_start(str_stream_t *This, void *arg1) {
+    if (This->m_State != 2) {
+        if (g_StreamActive == This) {
             if (This->m_Unk20 != 0) {
-                CdSyncCallback((void *)func_80047388);
+                CdSyncCallback((void *)str_stream_sync_callback);
                 CdControlF(0x15, arg1);
             } else {
                 do {
                 } while (CdControl(0x15, arg1, 0) == 0);
             }
-            This->m_Unk10 = 1;
+            This->m_State = 1;
         }
     }
 }
 
-void func_80047388(str_stream_t *This) {
-    if ((D_8008A950 != NULL) && ((u8) This == 2)) {
+void str_stream_sync_callback(str_stream_t *This) {
+    if ((g_StreamActive != NULL) && ((u8) This == 2)) {
         CdSyncCallback(0);
         
-        if (D_8008A950->m_Unk20) {
-            ((void (*)(s32)) D_8008A950->m_Unk20)(D_8008A950->m_Unk16);
+        if (g_StreamActive->m_Unk20) {
+            ((void (*)(s32)) g_StreamActive->m_Unk20)(g_StreamActive->m_Unk16);
         }
     }
 }
 
 // gp
-void func_800473E4(str_stream_t *This, s32 arg1, s32 arg2) {
+void str_stream_play(str_stream_t *This, s32 arg1, s32 arg2) {
     s32 mode;
 
-    if (This->m_Unk10 == 1) {
-        if (D_8008A950 == This) {
+    if (This->m_State == 1) {
+        if (g_StreamActive == This) {
             mode = 0x140;
             if (This->m_Unk12 < 4) {
                 mode = 0x1C0;
@@ -183,29 +183,29 @@ void func_800473E4(str_stream_t *This, s32 arg1, s32 arg2) {
                 }
             } while (CdRead2(mode) == 0);
             This->vtable->Unk25(This);
-            This->m_Unk10 = 2;
+            This->m_State = 2;
         }
     }
 }
 
 // gp
-void func_800474C8(str_stream_t *This) {
-    if (This->m_Unk10 == 2) {
-        if (D_8008A950 == This) {
+void str_stream_stop(str_stream_t *This) {
+    if (This->m_State == 2) {
+        if (g_StreamActive == This) {
             This->vtable->Unk24(This);
             This->vtable->Unk29(This);
             This->vtable->Unk28(This);
             do {
             } while (CdControl(9, 0, 0) == 0);
-            This->m_Unk10 = 4;
+            This->m_State = 4;
         }
     }
 }
 
-void func_80047574(str_stream_t *This) {
-    if ((This->m_Unk10 == 4) && (D_8008A950 == This)) {
-        D_8008A950->m_Unk10 = 0;
-        D_8008A950->vtable->Unk18(D_8008A950, &D_8008A950->m_Unk2);
+void str_stream_reset(str_stream_t *This) {
+    if ((This->m_State == 4) && (g_StreamActive == This)) {
+        g_StreamActive->m_State = 0;
+        g_StreamActive->vtable->Unk18(g_StreamActive, &g_StreamActive->m_Unk2);
     }
 }
 
@@ -215,30 +215,30 @@ void func_800475C8(void) {
 void func_800475D0(void) {
 }
 
-void func_800475D8(str_stream_t *This) {
-    if (This->m_Unk11 == 0) {
-        if (D_8008A950 == This) {
+void str_stream_pause(str_stream_t *This) {
+    if (This->m_Paused == 0) {
+        if (g_StreamActive == This) {
             do {
             } while (CdControl(0xB, 0, 0) == 0);
-            This->m_Unk11 = 1;
+            This->m_Paused = 1;
         }
     }
 }
 
-void func_80047638(str_stream_t *This) {
-    if ((This->m_Unk11 != 0) && (D_8008A950 == This)) {
+void str_stream_resume(str_stream_t *This) {
+    if ((This->m_Paused != 0) && (g_StreamActive == This)) {
         do {
 
         } while (CdControl(0xC, 0, 0) == 0);
-        This->m_Unk11 = 0;
+        This->m_Paused = 0;
     }
 }
 
 extern int StGetNext(u32 *ring, u32 **header);
-void func_800477B0(str_stream_t *This, s32 Unk);
-void func_80047810(str_stream_t *This);
+void str_stream_invoke_callback(str_stream_t *This, s32 Unk);
+void str_stream_finish(str_stream_t *This);
 
-s32 func_80047694(str_stream_t *This, u32 *ring, s32 *out, s32 count) {
+s32 str_stream_get_next(str_stream_t *This, u32 *ring, s32 *out, s32 count) {
     u32 *header;
     s32 result;
     s32 value;
@@ -269,49 +269,49 @@ reject:
     if ((u32)value < (u32)This->m_Unk21) {
         *out = 0;
     }
-    ((void (*)(str_stream_t *, s32, s32))func_800477B0)(This, ring[0], *out);
-    func_80047810(This);
+    ((void (*)(str_stream_t *, s32, s32))str_stream_invoke_callback)(This, ring[0], *out);
+    str_stream_finish(This);
     return -1;
 store:
     This->m_Unk21 = value;
 accept:
-    ((void (*)(str_stream_t *, s32, s32))func_800477B0)(This, ring[0], *out);
+    ((void (*)(str_stream_t *, s32, s32))str_stream_invoke_callback)(This, ring[0], *out);
     return 1;
 }
 
-void func_800477B0(str_stream_t *This, s32 Unk) {
+void str_stream_invoke_callback(str_stream_t *This, s32 Unk) {
     if (This->m_Unk17) {
         ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
         ((void (*)(void *, s32))This->vtable->Unk27)(This, Unk);
     }
 }
 
-void func_80047810(str_stream_t *This) {
+void str_stream_finish(str_stream_t *This) {
     if (This->m_Unk18) {
         ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
     This->vtable->Unk17(This);
     }
 }
 
-u32 func_80047870(str_stream_t *This, u32 Base) {
+u32 str_stream_free_ring(str_stream_t *This, u32 Base) {
     return StFreeRing(Base);
 }
 
-void func_80047890() {
+void str_stream_unset_ring() {
     StUnSetRing();
 }
 
-void func_800478B0(void) {
+void str_stream_clear_ring(void) {
     StClearRing();
 }
 
-s32 func_800478D0(str_stream_t *This, s32 Mode) {
+s32 str_stream_sync(str_stream_t *This, s32 Mode) {
     return CdSync(Mode, &This->m_Unk8);
 }
 
 void func_800478F8(void) {
 }
 
-str_stream_vtable_t *func_80047900(void) {
-    return &D_800817E0;
+str_stream_vtable_t *str_stream_get_vtable(void) {
+    return &g_STR_STREAM_VTABLE;
 }

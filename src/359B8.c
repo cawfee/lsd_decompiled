@@ -5,7 +5,7 @@ class_359B8_t *func_80045228(class_359B8_t *, s32 *);
 void func_800452AC(base_class_t *);
 s32 func_800452FC(void *);
 u8 func_800453DC(class_359B8_t *, s32, s32);
-s32 init_800269F0(void *);
+s32 file_buf_destroy(void *);
 void file_buf_release(void *);
 void nullsub13(void *);
 void func_80043FE4(void *);
@@ -13,7 +13,7 @@ void func_8004416C(void *);
 
 class_359B8_vtable_t D_8006F590 = {
     0x14F03,
-    (base_class_t *(*)(base_class_t *))init_800269F0,
+    (base_class_t *(*)(base_class_t *))file_buf_destroy,
     (s32 (*)(void *, s32 *))func_80045228,
     func_800452AC,
     base_class_attach,
@@ -92,7 +92,7 @@ s32 func_800452FC(class_359B8_t *This) {
     s32 result;
     class_34684_t *obj;
 
-    func_80026CE8(data, 0, 0, 1);
+    file_buf_set_triple(data, 0, 0, 1);
     i = 0;
     count = *(s32 *)(This->m_Unk3 + 4);
     entries = (s32 *)(This->m_Unk3 + 8);

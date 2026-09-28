@@ -105,7 +105,7 @@ void dream_session_construct(dream_session_t *This,
 
     This->m_GraphicsCtx = GraphicsCtx;
     GraphicsCtx->cls_3da54 = func_8004D254();
-    GraphicsCtx->cls_32c00 = func_80042400();
+    GraphicsCtx->cls_32c00 = frame_phase_create();
     GraphicsCtx->cls_3acc8 = func_8004A4C8(0, 1);
 
     This->m_DreamSys = DreamSys;

@@ -205,7 +205,7 @@ void func_8004D578(main_menu_t *This, dream_sys_t *DreamSys) {
     char *font_icon_path = &g_FONT_ICON_PATH;
     func_8003DFBC()->Construct(This, font_icon_path, "ETC\\ETCSE", 0);
     This->vtable = main_menu_get_vtable();
-    This->m_Sound->vtable->func_8002CBF4(This->m_Sound, -1);
+    This->m_Sound->vtable->sound_set_volume_offset(This->m_Sound, -1);
     This->m_DreamSys = DreamSys;
     This->m_MemoryCard = 0;
     This->m_RegionCode = DreamSys->vtable->GetRegionCode(DreamSys, &This->m_RegionCodeParam);
@@ -382,7 +382,7 @@ void func_8004DB18(main_menu_t *This, void *Unk) {
         mem = memory_allocate_mem(len);
         func_80040FC0(mem, g_DAY_STR);
 
-        This->m_Unk43 = func_800408CC(*((u32 *) Unk + 1), len, mem);
+        This->m_Unk43 = text_line_create(*((u32 *) Unk + 1), len, mem);
         This->m_Unk43->m_Unk41_4 = 8;
         This->m_Unk43->m_Unk42_1 = 4;
         This->m_Unk43->m_Unk41_3 = 9;

@@ -22,17 +22,17 @@ typedef struct bgm_vtable {
     /* 0x02C 8006e4b8 */ void (*IterParents)(base_class_t *, void **, void **);
     /* 0x030 8006e4bc */ void (*Notify)(base_class_t *, s32);
     /* 0x034 8006e4c0 */ void (*Nop)(base_class_t *);
-    /* 0x038 8006e4c4 */ void (*bgm_unk13)(void *);
+    /* 0x038 8006e4c4 */ void (*bgm_on_notify)(void *);
     /* 0x03C 8006e4c8 */ void (*Unk14)(void *);
-    /* 0x040 8006e4cc */ void (*bgm_unk15)(void *, void **, s32);
+    /* 0x040 8006e4cc */ void (*bgm_handle_event)(void *, void **, s32);
     /* 0x044 8006e4d0 */ void (*seq_play)(void *);
     /* 0x048 8006e4d4 */ void (*seq_stop)(void *);
     /* 0x04C 8006e4d8 */ void (*seq_pause)(void *);
     /* 0x050 8006e4dc */ void (*seq_resume)(void *);
     /* 0x054 8006e4e0 */ void (*seq_set_vol)(void *);
     /* 0x058 8006e4e4 */ void (*bgm_set_crescendo)(void *);
-    /* 0x05C 8006e4e8 */ void (*bgm_unk22)(void *, s32);
-    /* 0x060 8006e4ec */ void (*bgm_unk23)(void *, s32);
+    /* 0x05C 8006e4e8 */ void (*bgm_set_sequence)(void *, s32);
+    /* 0x060 8006e4ec */ void (*bgm_set_sound)(void *, s32);
 } bgm_vtable_t;
 
 typedef struct bgm {
@@ -40,14 +40,14 @@ typedef struct bgm {
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
     /* 0x0C */ sound_t *m_Sound;
-    /* 0x10 */ s32 m_Unk3;
+    /* 0x10 */ s32 m_SeqFile;
     /* 0x14 */ s16 m_SeqAccess;
     /* 0x16 */ s16 m_Unk4_2;
     /* 0x18 */ u16 m_Unk5_1;
     /* 0x20 */ u16 m_IsOpened;
-    /* 0x1C */ u16 m_Unk6_1;
-    /* 0x1E */ u16 m_Unk6_2;
-    /* 0x20 */ s32 m_Unk7;
+    /* 0x1C */ u16 m_Paused;
+    /* 0x1E */ u16 m_Playing;
+    /* 0x20 */ s32 m_AutoPlay;
     /* 0x24 */ s32 m_Unk8;
 } bgm_t;
 

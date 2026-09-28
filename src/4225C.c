@@ -272,7 +272,7 @@ void func_80052598(class_4225C_t *This) {
 
 void func_800529FC(class_4225C_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
 char *func_8005292C(class_4225C_t *This, char *dest, s32 arg2, s32 arg3, char *base);
-text_line_t *func_800408CC(s32 Unk1, s32 Unk2, s32 Unk3);
+text_line_t *text_line_create(s32 Unk1, s32 Unk2, s32 Unk3);
 
 extern s32 D_8008AB00;
 extern s32 D_8008AB04;
@@ -300,7 +300,7 @@ void func_80052644(class_4225C_t *This, s32 arg1, s32 arg2, s32 arg3, char *arg4
         if (count > 0) {
             do {
                 func_8005292C(This, text, index, arg3, arg4);
-                line = func_800408CC(arg2, 0x1A, (s32)text);
+                line = text_line_create(arg2, 0x1A, (s32)text);
                 *slot = line;
                 line->vtable->Unk18(line, arg1, coords);
                 slot[0]->vtable->Unk45(slot[0], (char *)&D_8008AB0C);

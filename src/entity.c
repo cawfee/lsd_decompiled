@@ -333,7 +333,7 @@ void func_8005DAFC(entity_t *This) {
 }
 
 void func_8005DB8C(entity_t *This) {
-    func_8002CC84(This->m_Unk21, &This->m_EntityContext);
+    sound_update_entity(This->m_Unk21, &This->m_EntityContext);
     This->vtable->Unk75(This);
     This->vtable->Unk68(This);
     This->m_Unk61 = 0;

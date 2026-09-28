@@ -38,15 +38,15 @@ extern char D_8008AABC[]; /* ".TIM" */
 #include "tim_image.h"
 
 typedef struct class_3249C class_3249C_t;
-class_3249C_t *func_80041C9C(void *, void *, s32);
+class_3249C_t *class_3249C_create(void *, void *, s32);
 
 s32 func_8004E77C(memory_card_t *, s32 *, s32 *, s32 *);
 s32 func_8004E7D0(memory_card_t *, s32 *, s32 *);
 s32 func_8004E890(memory_card_t *, s32 *, s32 *);
-s32 func_8004EA38(memory_card_t *, char *, char *);
-s32 func_8004EDC0(memory_card_t *, char *, void *, s32);
-s32 func_8004ECCC(memory_card_t *, s32, s32);
-s32 func_8004F40C(memory_card_t *, long (*)(long), s32);
+s32 memory_card_read_file_impl(memory_card_t *, char *, char *);
+s32 memory_card_read_data_impl(memory_card_t *, char *, void *, s32);
+s32 memory_card_delete_file_impl(memory_card_t *, s32, s32);
+s32 memory_card_call_event(memory_card_t *, long (*)(long), s32);
 
 memory_card_t *memory_card_create(u32 Unk1, u32 Unk2) {
     memory_card_t *allocated = (memory_card_t *) memory_allocate_mem(0x84);
@@ -169,13 +169,13 @@ s32 func_8004E5E4(memory_card_t *arg0) {
         var_s1 = (memory_card_t *) ((u32) var_s1 + 4);
     } while (var_s2 < 4);
     ExitCriticalSection();
-    func_8004F394(arg0);
+    memory_card_enable_events(arg0);
     return 1;
 }
 
 int func_8004E678(memory_card_t *This) {
-    func_8004F3BC(This);
-    func_8004F40C(This, CloseEvent, 1);
+    memory_card_disable_events(This);
+    memory_card_call_event(This, CloseEvent, 1);
     return 1;
 }
 
@@ -213,10 +213,10 @@ s32 func_8004E7D0(memory_card_t *This, s32 *arg1, s32 *arg2) {
     ok = 1;
     *arg1 = 0;
     *arg2 = 0;
-    func_8004F3E4(This);
+    memory_card_test_events(This);
     do {
     } while (_card_info(This->m_Unk3) == 0);
-    status = func_8004F4A4(This);
+    status = memory_card_check_events(This);
     if (status == 0x100) {
         ok = 0;
     } else if (status == 0x8000) {
@@ -238,10 +238,10 @@ s32 func_8004E890(memory_card_t *This, s32 *arg1, s32 *arg2) {
     ok = 1;
     *arg1 = 0;
     *arg2 = 1;
-    func_8004F3E4(This);
+    memory_card_test_events(This);
     do {
     } while (_card_load(This->m_Unk3) == 0);
-    status = func_8004F4A4(This);
+    status = memory_card_check_events(This);
     if (status == 0x100) {
         ok = 0;
     } else if (status == 0x8000) {
@@ -255,7 +255,7 @@ s32 func_8004E890(memory_card_t *This, s32 *arg1, s32 *arg2) {
     return ok;
 }
 
-s32 func_8004E940(memory_card_t *This) {
+s32 memory_card_format(memory_card_t *This) {
     s32 retries;
     s32 result;
     char *dev;
@@ -271,7 +271,7 @@ s32 func_8004E940(memory_card_t *This) {
     return result;
 }
 
-s32 func_8004E9AC(memory_card_t *This, char *dst, char *name) {
+s32 memory_card_read_file(memory_card_t *This, char *dst, char *name) {
     s32 retries;
     s32 result;
 
@@ -280,17 +280,17 @@ s32 func_8004E9AC(memory_card_t *This, char *dst, char *name) {
         return 0;
     }
     do {
-        result = func_8004EA38(This, dst, name);
+        result = memory_card_read_file_impl(This, dst, name);
     } while (result == 0 && retries--);
     return result;
 }
 
-s32 func_8004EA38(memory_card_t *This, char *dst, char *name) {
+s32 memory_card_read_file_impl(memory_card_t *This, char *dst, char *name) {
     char path[0x20];
     s32 fd;
     u8 *mem;
 
-    fd = open(func_8004F32C(path, This->m_Unk2, name), 1);
+    fd = open(memory_card_build_path(path, This->m_Unk2, name), 1);
     if (fd == -1) {
         return 0;
     }
@@ -342,24 +342,24 @@ s32 func_8004EB88(memory_card_t *This, s32 *vals, char **out, char *prefix, char
     return count;
 }
 
-s32 func_8004EC5C(memory_card_t *This, u8 unused, s32 size) {
+s32 memory_card_delete_file(memory_card_t *This, u8 unused, s32 size) {
     s32 retries;
     s32 result;
 
     retries = 0xA;
     do {
-        result = func_8004ECCC(This, unused, size);
+        result = memory_card_delete_file_impl(This, unused, size);
     } while (result == 0 && retries--);
     return result;
 }
 
-s32 func_8004ECCC(memory_card_t *This, s32 unused, s32 size) {
+s32 memory_card_delete_file_impl(memory_card_t *This, s32 unused, s32 size) {
     char path[0x20];
     s32 fd;
     u32 blocks;
 
     blocks = (u32)(size + 0x21FF) >> 13;
-    fd = open(func_8004F32C(path, This->m_Unk2, D_8008AAAC), (blocks << 16) | 0x200);
+    fd = open(memory_card_build_path(path, This->m_Unk2, D_8008AAAC), (blocks << 16) | 0x200);
     if (fd == -1) {
         return 0;
     }
@@ -370,25 +370,25 @@ s32 func_8004ECCC(memory_card_t *This, s32 unused, s32 size) {
 
 
 
-s32 func_8004ED40(memory_card_t *This, char *name, void *buf, s32 size) {
+s32 memory_card_read_data(memory_card_t *This, char *name, void *buf, s32 size) {
     s32 retries;
     s32 result;
 
     retries = 0xA;
     do {
-        result = func_8004EDC0(This, name, buf, size);
+        result = memory_card_read_data_impl(This, name, buf, size);
     } while (result == 0 && retries--);
     return result;
 }
 
-s32 func_8004EDC0(memory_card_t *This, char *name, void *buf, s32 size) {
+s32 memory_card_read_data_impl(memory_card_t *This, char *name, void *buf, s32 size) {
     char path[0x20];
     s32 fd;
     u8 *hdr;
     s32 off;
     s32 result;
 
-    fd = open(func_8004F32C(path, This->m_Unk2, name), 1);
+    fd = open(memory_card_build_path(path, This->m_Unk2, name), 1);
     if (fd != -1) {
         hdr = memory_allocate_mem(0x80);
         read(fd, hdr, 0x80);
@@ -408,7 +408,7 @@ end:
 s32 func_8004EF6C(memory_card_t *, char *, void *, s32, s32, s32, s32);
 void func_800507F8(void *, void *);
 
-s32 func_8004EEA0(memory_card_t *This, char *name, void *buf, u8 a3, s32 a4, s32 a5, s32 a6) {
+s32 memory_card_write_file(memory_card_t *This, char *name, void *buf, u8 a3, s32 a4, s32 a5, s32 a6) {
     s32 retries;
     s32 result;
 
@@ -425,7 +425,7 @@ s32 func_8004EEA0(memory_card_t *This, char *name, void *buf, u8 a3, s32 a4, s32
 
 INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004EF6C);
 
-char *func_8004F32C(char *dst, s32 port, char *suffix) {
+char *memory_card_build_path(char *dst, s32 port, char *suffix) {
     char *prefix;
 
     prefix = D_8008AAA4;
@@ -437,19 +437,19 @@ char *func_8004F32C(char *dst, s32 port, char *suffix) {
     return dst;
 }
 
-void func_8004F394(memory_card_t *This) {
-    func_8004F40C(This, EnableEvent, 1);
+void memory_card_enable_events(memory_card_t *This) {
+    memory_card_call_event(This, EnableEvent, 1);
 }
 
-void func_8004F3BC(memory_card_t *This) {
-    func_8004F40C(This, DisableEvent, 1);
+void memory_card_disable_events(memory_card_t *This) {
+    memory_card_call_event(This, DisableEvent, 1);
 }
 
-void func_8004F3E4(memory_card_t *This) {
-    func_8004F40C(This, TestEvent, 0);
+void memory_card_test_events(memory_card_t *This) {
+    memory_card_call_event(This, TestEvent, 0);
 }
 
-s32 func_8004F40C(memory_card_t *This, long (*fn)(unsigned long), s32 critical) {
+s32 memory_card_call_event(memory_card_t *This, long (*fn)(unsigned long), s32 critical) {
     s32 i;
     s32 result;
     u8 *cursor;
@@ -473,11 +473,11 @@ s32 func_8004F40C(memory_card_t *This, long (*fn)(unsigned long), s32 critical) 
     return result;
 }
 
-s32 func_8004F4A4(memory_card_t *This) {
-    return func_8004F4C8(&This->m_Unk4, 4);
+s32 memory_card_check_events(memory_card_t *This) {
+    return memory_card_wait_event(&This->m_Unk4, 4);
 }
 
-s32 func_8004F4C8(s32 *events, s32 count) {
+s32 memory_card_wait_event(s32 *events, s32 count) {
     char dummy_stack_padding[8];
     s32 *var_s4;
     s32 var_s3;
@@ -782,7 +782,7 @@ void func_8004FE24(memory_card_t *This, s32 idx) {
                 strcat(pathp, D_8008AABC);
                 tex = tim_image_create(pathp);
                 tex->vtable->Unk14(tex);
-                obj = func_80041C9C(tex, D_80086EC4, 0);
+                obj = class_3249C_create(tex, D_80086EC4, 0);
                 This->m_Unk27 = (s32)obj;
                 tex->vtable->Destruct(tex);
                 (*(void (**)(void *, s32, s32 *))(*(u32 *)obj + 0x4C))(obj, This->m_Unk25, D_8008AA94);

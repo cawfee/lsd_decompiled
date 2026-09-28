@@ -5,13 +5,13 @@
 #include "memory.h"
 
 
-s32 init_800269F0(file_buf_t *);
+s32 file_buf_destroy(file_buf_t *);
 void file_buf_construct(void *);
 void file_buf_cleanup(void *);
 void file_buf_load(void *);
 void file_buf_release(void *);
 void nullsub13(void *);
-void func_80026C88(void *);
+void file_buf_set_flag(void *);
 
 void *class_1C92C_get_vtable(void);
 void *tim_image_get_vtable(void);
@@ -21,7 +21,7 @@ void *func_80043E74(void);
 void *func_80043830(void);
 void *func_80043B78(void);
 void *sound_get_vtable(void);
-void *func_800423F0(void);
+void *seq_file_get_vtable(void);
 void *func_80048CE0(void);
 void *func_800441A4(void);
 void *func_80045428(void);
@@ -30,7 +30,7 @@ void *func_80044CC4(void);
 
 file_buf_vtable_t g_FILE_BUF_VTABLE = {
     3,
-    (void (*)(void *))init_800269F0,
+    (void (*)(void *))file_buf_destroy,
     file_buf_construct,
     file_buf_cleanup,
     base_class_attach,
@@ -54,7 +54,7 @@ file_buf_vtable_t g_FILE_BUF_VTABLE = {
     file_buf_load,
     file_buf_release,
     nullsub13,
-    func_80026C88,
+    file_buf_set_flag,
     NULL,
     NULL,
     NULL,
@@ -71,7 +71,7 @@ void *g_FILE_DRIVER_CLASS_VTABLES[] = {
     func_80043830,
     func_80043B78,
     sound_get_vtable,
-    func_800423F0,
+    seq_file_get_vtable,
     func_80048CE0,
     func_800441A4,
     func_80045428,
@@ -91,7 +91,7 @@ s32 func_80027FF0(void);
 s32 func_80027FFC(s32, s32);
 s32 debug_file_driver_frame_setup(s32, s32);
 
-s32 init_800269F0(file_buf_t *This) {
+s32 file_buf_destroy(file_buf_t *This) {
     This->m_NoFree = 0;
     This->vtable->Cleanup();
     base_class_get_vtable()->Cleanup(This);
@@ -113,7 +113,7 @@ void file_buf_construct(file_buf_t *This) {
 }
 
 void file_buf_cleanup(file_buf_t *This) {
-    This->vtable->Unk17(This);
+    This->vtable->Close(This);
     This->vtable->file_buf_release(This);
 }
 
@@ -126,21 +126,21 @@ void file_buf_load(file_buf_t *This, s32 Unk) {
         old_unk = This->m_Unk2;
         This->m_Unk2 = 0;
 
-        This->vtable->Unk16(This, Unk, 1, 0);
-        size = This->vtable->Unk18(This, 0, 2);
+        This->vtable->Open(This, Unk, 1, 0);
+        size = This->vtable->Seek(This, 0, 2);
 
         mem = memory_allocate_mem(size);
 
         if (mem) {
-            This->vtable->Unk18(This, 0, 0);
-            This->vtable->Unk20(This, mem, size);
-            This->vtable->Unk17(This);
+            This->vtable->Seek(This, 0, 0);
+            This->vtable->Read(This, mem, size);
+            This->vtable->Close(This);
             This->m_Buffer = mem;
             This->m_Size = size;
             This->m_Unk2 = old_unk;
         } else {
             memory_free_mem(NULL);
-            This->vtable->Unk17(This);
+            This->vtable->Close(This);
         }
     }
 }
@@ -155,7 +155,7 @@ void file_buf_release(file_buf_t *This) {
 void nullsub13(void *) {
 }
 
-void func_80026C88(file_buf_t *This) {
+void file_buf_set_flag(file_buf_t *This) {
     This->m_Flags |= 1;
 }
 
@@ -171,7 +171,7 @@ void *get_file_driver() {
     }
 }
 
-s32 *func_80026CE8(s32 *Data, s32 Unk1, s32 Unk2, s32 Unk3) {
+s32 *file_buf_set_triple(s32 *Data, s32 Unk1, s32 Unk2, s32 Unk3) {
     Data[0] = Unk1;
     Data[1] = Unk2;
     Data[2] = Unk3;
@@ -217,13 +217,13 @@ void file_driver_copy_vtable_slots(s32 *Dest, s32 *Src) {
     Dest[29] = Src[29];
 }
 
-void func_80026E0C(void) {
+void file_driver_lock(void) {
     if (g_FileDriverClass == 0x13) {
         func_800280D0();
     }
 }
 
-void func_80026E38(void) {
+void file_driver_unlock(void) {
     if (g_FileDriverClass == 0x13) {
         func_800280E0();
     }
@@ -305,11 +305,11 @@ void set_data_folder(s32 Value) {
     g_DataFolder = Value;
 }
 
-s32 func_800270B8() {
+s32 get_current_data_folder() {
     return g_DataFolder;
 }
 
-s8 *func_800270C4(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3) {
+s8 *build_data_path(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3) {
     *dest = 0;
     if (arg2 != NULL) {
         strcat(dest, arg2);

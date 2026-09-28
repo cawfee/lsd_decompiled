@@ -2,12 +2,12 @@
 #include "str_stream.h"
 #include "base_class.h"
 
-extern mdec_movie_vtable_t D_8006F614;
+extern mdec_movie_vtable_t g_MDEC_MOVIE_VTABLE;
 
-extern s32 D_8008A940;
+extern s32 g_ActiveMovie;
 extern char D_8008A944[];
-extern s32 D_8008A948;
-extern s32 D_8008A93C;
+extern s32 g_MovieFrameCounter;
+extern s32 g_MdecInitialized;
 
 void DecDCTReset(s32 mode);
 s32 DecDCToutCallback(void (*func)());
@@ -15,19 +15,19 @@ void DecDCTout(s32, s32);
 void DecDCTin(s32, s32);
 s32 DrawSync(s32);
 void *get_display(void);
-void func_8004575C(mdec_movie_t *This);
+void mdec_movie_free_buffers(mdec_movie_t *This);
 s32 func_8004564C(mdec_movie_t *This, s32 Unk1, s32 Unk2);
 void func_80045DE0(void);
 void func_8004593C(mdec_movie_t *This);
 void func_80046568(s32, s32);
 void func_800458AC(mdec_movie_t *This);
 
-mdec_movie_t *func_80045438(s32 Unk1, s32 Unk2, s32 Unk3) {
+mdec_movie_t *mdec_movie_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     mdec_movie_t *allocated = (mdec_movie_t *) memory_allocate_mem(0x6C);
 
     if (allocated) {
         ;
-        if (!func_80045E44()->Construct(allocated, Unk1, Unk2, Unk3)) {
+        if (!mdec_movie_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3)) {
             return allocated;
         }
 
@@ -37,20 +37,20 @@ mdec_movie_t *func_80045438(s32 Unk1, s32 Unk2, s32 Unk3) {
     return NULL;
 }
 
-s32 func_800454C4(mdec_movie_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
+s32 mdec_movie_construct(mdec_movie_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     void **obj;
     void (*cb)(void);
 
     base_class_get_vtable()->Construct(This);
-    This->vtable = func_80045E44();
-    This->m_Unk23 = (s32)func_80046F0C(Unk2, 0xF, 0);
+    This->vtable = mdec_movie_get_vtable();
+    This->m_Unk23 = (s32)str_stream_create(Unk2, 0xF, 0);
     if (This->m_Unk23 != 0) {
         if (func_8004564C(This, Unk1, Unk3) == 0) {
-            if (D_8008A93C == 0) {
+            if (g_MdecInitialized == 0) {
                 DecDCTReset(0);
             }
             cb = func_80045DE0;
-            D_8008A93C = 1;
+            g_MdecInitialized = 1;
             DecDCToutCallback(cb);
             obj = (void **)This->m_Unk23;
             (*(void (**)(void *, s32, s32))(*(u32 *)obj + 0x40))(obj, This->m_Unk3, 0x12000);
@@ -63,14 +63,14 @@ s32 func_800454C4(mdec_movie_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     return 1;
 }
 
-void func_800455D4(mdec_movie_t *This) {
+void mdec_movie_cleanup(mdec_movie_t *This) {
     void **temp_a0;
 
     temp_a0 = (void **)This->m_Unk23;
     This->m_Unk23 = (s32)((void *(*)(void **))(*(void **)((s8 *)*temp_a0 + 4)))(temp_a0);
     DecDCToutCallback(0);
     DecDCTReset(0);
-    func_8004575C(This);
+    mdec_movie_free_buffers(This);
     base_class_get_vtable()->Cleanup(This);
 }
 
@@ -123,11 +123,11 @@ s32 func_8004564C(mdec_movie_t *This, s32 arg1, s32 arg2) {
     This->m_Unk13 = (This->m_Unk12 << 4) >> 1;
     return 0;
 fail:
-    func_8004575C(This);
+    mdec_movie_free_buffers(This);
     return 1;
 }
 
-void func_8004575C(mdec_movie_t *This) {
+void mdec_movie_free_buffers(mdec_movie_t *This) {
     if (This->m_Unk2 == 0) {
         memory_free_mem(This->m_Unk4);
         memory_free_mem(This->m_Unk5);
@@ -141,14 +141,14 @@ s32 func_800457C0(mdec_movie_t *This, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     void **disp;
     s32 result;
 
-    if (D_8008A940 == 0) {
+    if (g_ActiveMovie == 0) {
         if (This->m_Unk25 != 0) {
             func_800458AC(This);
         }
         obj = (void **)This->m_Unk23;
         This->m_Unk22 = arg2;
         if ((*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x44))(obj, arg1, 0x64) == 0) {
-            D_8008A940 = (s32)This;
+            g_ActiveMovie = (s32)This;
             This->m_Unk15 = 0;
             This->m_Unk14 = 0;
             This->m_Unk18 = 1;
@@ -178,7 +178,7 @@ void func_800458B8(mdec_movie_t *This) {
     void **obj;
     mdec_movie_t *g;
 
-    g = (mdec_movie_t *)D_8008A940;
+    g = (mdec_movie_t *)g_ActiveMovie;
     if (g == This) {
         obj = (void **)g->m_Unk23;
         g->m_Unk15 = 0;
@@ -206,7 +206,7 @@ void func_80045A38(mdec_movie_t *This) {
     mdec_movie_t *g;
     s32 one;
 
-    g = (mdec_movie_t *)D_8008A940;
+    g = (mdec_movie_t *)g_ActiveMovie;
     if (g == This) {
         obj = (void **)g->m_Unk23;
         one = 1;
@@ -263,22 +263,22 @@ s32 func_80045C94(mdec_movie_t *This) {
     if (This->m_Unk20 != 0) {
         s32 temp_v0;
 
-        temp_v0 = D_8008A948 < 0x65;
-        D_8008A948 += 1;
+        temp_v0 = g_MovieFrameCounter < 0x65;
+        g_MovieFrameCounter += 1;
         if (temp_v0 == 0) {
-            D_8008A948 = 1;
+            g_MovieFrameCounter = 1;
             This->vtable->Unk16(This);
         }
         return 0;
     }
-    D_8008A940 = 0;
+    g_ActiveMovie = 0;
     return 1;
 }
 
 s32 func_80045CFC(mdec_movie_t *This) {
     mdec_movie_t *g;
 
-    g = (mdec_movie_t *)D_8008A940;
+    g = (mdec_movie_t *)g_ActiveMovie;
     if (g == This) {
         if (g->m_Unk16 == 0) {
             if (g->m_Unk15 != 0) {
@@ -301,8 +301,8 @@ s32 func_80045CFC(mdec_movie_t *This) {
 }
 
 void func_80045DE0(void) {
-    if (D_8008A940 != NULL) {
-        (*(void ( **)(int))(*(s32 *)D_8008A940 + 96))(D_8008A940);
+    if (g_ActiveMovie != NULL) {
+        (*(void ( **)(int))(*(s32 *)g_ActiveMovie + 96))(g_ActiveMovie);
     }
 }
 
@@ -315,6 +315,6 @@ void func_80045E3C(mdec_movie_t *This, s32 Unk) {
     This->m_Unk25 = Unk;
 }
 
-mdec_movie_vtable_t *func_80045E44(void) {
-    return &D_8006F614;
+mdec_movie_vtable_t *mdec_movie_get_vtable(void) {
+    return &g_MDEC_MOVIE_VTABLE;
 }

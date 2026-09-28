@@ -22,7 +22,7 @@ void func_80032A7C(void);
 void func_80032368(void);
 void func_800323A8(s32, s32, s32);
 void func_80032588(s32);
-void func_800270C4(char *, char *, char *, char *);
+void build_data_path(char *, char *, char *, char *);
 extern char *strcpy(char *, char *);
 extern s32 strlen(char *);
 s16 func_80030E90(s16, s16, s16, s16, s32, s32, s32);
@@ -49,7 +49,7 @@ void sound_construct(sound_t *This, char *path) {
     This->unk20 = 0;
     This->unk21_1 = 0;
     This->m_IsMuted = 0;
-    This->vtable->func_8002CBF4(This, 0);
+    This->vtable->sound_set_volume_offset(This, 0);
     This->unk22_1 = 0;
     This->unk22_2 = 0;
     This->unk23 = 0;
@@ -69,7 +69,7 @@ void sound_construct(sound_t *This, char *path) {
         if (mem != 0) {
             This->unk23 = (s32)mem;
             strcpy(mem, path);
-            func_800270C4(buf, mem, NULL, D_8008A8D0);
+            build_data_path(buf, mem, NULL, D_8008A8D0);
             This->unk10_2 = 1;
             This->vtable->Unk11(This, buf);
         }
@@ -119,7 +119,7 @@ void func_8002C6FC(sound_t *This) {
 case1:
     if (This->m_FlagsUnk & 0x200) {
         This->unk21_1 = SsVabOpenHead((unsigned char *)This->unk4, -1);
-        func_800270C4(buffer, (char *)This->unk23, NULL, D_8008A8D4);
+        build_data_path(buffer, (char *)This->unk23, NULL, D_8008A8D4);
         saved = This->unk4;
         This->unk10_2 = 6;
         This->unk4 = 0;
@@ -221,7 +221,7 @@ void func_8002CBE4(void) {
 void func_8002CBEC(void) {
 }
 
-void func_8002CBF4(sound_t *This, s32 Unk) {
+void sound_set_volume_offset(sound_t *This, s32 Unk) {
     This->unk24 = 12 * Unk - 24;
 }
 
@@ -229,7 +229,7 @@ sound_vtable_t *sound_get_vtable(void) {
     return &g_SOUND_VTABLE;
 }
 
-s32 func_8002CC1C(void) {
+s32 sound_get_instance_count(void) {
     return D_8008A8C4;
 }
 
@@ -266,7 +266,7 @@ s32 helper_1_set_entity(sound_t *This, s32 *Unk2, s32 Unk3, s32 Unk4, s32 Unk5) 
     return 1;
 }
 
-void func_8002CC84(void **This, s32 *Unk2) {
+void sound_update_entity(void **This, s32 *Unk2) {
     s32 *ptr;
     s32 i;
     s32 val;

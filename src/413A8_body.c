@@ -89,7 +89,7 @@ extern s8 D_8008AAD4[];
 extern s8 D_8008AAC8[];
 extern s8 D_8008AADC[];
 
-s8 *func_800270C4(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3);
+s8 *build_data_path(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3);
 
 void func_80050F98(class_413A8_t *This, void *arg1) {
     s8 buf[32];
@@ -106,16 +106,16 @@ void func_80050F98(class_413A8_t *This, void *arg1) {
     }
     path_a = D_8008AAE8;
     path_b = D_8008AAF0;
-    tex = tim_image_create((char *)func_800270C4(buf, D_80011610, path_a, path_b));
+    tex = tim_image_create((char *)build_data_path(buf, D_80011610, path_a, path_b));
     tex->vtable->Unk14(tex);
-    This->m_Unk17 = (s32)func_80041C9C((s32)tex, (s32)&D_80086F7C, 0);
+    This->m_Unk17 = (s32)class_3249C_create((s32)tex, (s32)&D_80086F7C, 0);
     tex->vtable->Destruct(tex);
     panel = (class_3249C_t *)*(s32 volatile *)&This->m_Unk17;
     panel->vtable->Unk18(panel, arg1, D_8008AACC);
-    tex2 = tim_image_create((char *)func_800270C4(buf, D_8001161C, path_a, path_b));
+    tex2 = tim_image_create((char *)build_data_path(buf, D_8001161C, path_a, path_b));
     tex2->vtable->Unk14(tex2);
-    This->m_Unk16 = (s32)func_800408CC((s32)tex2, This->m_Unk3, This->m_Unk9);
-    This->m_Unk15 = (s32)func_80041AB4((s32)tex2, 0x5F);
+    This->m_Unk16 = (s32)text_line_create((s32)tex2, This->m_Unk3, This->m_Unk9);
+    This->m_Unk15 = (s32)glyph_create((s32)tex2, 0x5F);
     tex2->vtable->Destruct(tex2);
     label = (text_line_t *)*(s32 volatile *)&This->m_Unk16;
     label->vtable->Unk18(label, (s32)arg1, D_8008AAD4);

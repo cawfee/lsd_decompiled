@@ -2,8 +2,8 @@
 
 extern class_33808_vtable_t D_8006F0B8;
 
-void func_80026E0C(void);
-void func_80026E38(void);
+void file_driver_lock(void);
+void file_driver_unlock(void);
 void func_80043648(class_33808_slot_t *slot, s32 arg1);
 
 class_33808_t *func_80043008(s32 Unk1, s32 Unk2) {
@@ -72,23 +72,23 @@ void func_80043538(class_33808_t *This, s32 a2, s16 a3) {
 void func_8004355C(class_33808_t *This, s32 arg1) {
     s32 i;
 
-    func_80026E0C();
+    file_driver_lock();
     i = 0;
     do {
         ((void (*)(void *, s32, s32))This->vtable->Unk31)(This, i, arg1);
         i += 1;
     } while (i < 4);
-    func_80026E38();
+    file_driver_unlock();
 }
 
 void func_800435D0(class_33808_t *This, s32 arg1, s8 *arg2) {
     class_33808_slot_t *slot;
 
-    func_80026E0C();
+    file_driver_lock();
     slot = &This->m_Slots[arg1];
     __builtin_memcpy(slot->rgb, arg2, 3);
     func_80043648(slot, arg1);
-    func_80026E38();
+    file_driver_unlock();
 }
 
 INCLUDE_ASM("asm/nonmatchings/33808", func_80043648);

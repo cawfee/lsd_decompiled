@@ -84,7 +84,7 @@ void func_8003E10C(timer_t *This, s32 *Unk2, s32 Unk3) {
     value = Unk2[2];
     vtable = This->vtable;
     if (value == 0) {
-        value = (s32) func_80042400();
+        value = (s32) frame_phase_create();
     }
     This->m_Unk3 = (void *)value;
 

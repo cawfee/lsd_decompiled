@@ -68,6 +68,6 @@ typedef struct mdec_movie {
     /* 0x6C */ s32 m_Unk26;
 } mdec_movie_t;
 
-mdec_movie_vtable_t *func_80045E44(void);
+mdec_movie_vtable_t *mdec_movie_get_vtable(void);
 
 #endif // LSD_MDEC_MOVIE_H

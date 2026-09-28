@@ -34,16 +34,16 @@ typedef struct pad {
     /* 0x00 */ pad_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ u16 m_Unk2_1;
+    /* 0x0C */ u16 m_Port;
     s16 m_Unk2_2;
-    /* 0x10 */ s32 m_Unk3;
-    /* 0x14 */ s32 m_Unk4;
-    /* 0x18 */ s32 m_Unk5;
+    /* 0x10 */ s32 m_Buttons;
+    /* 0x14 */ s32 m_Released;
+    /* 0x18 */ s32 m_Pressed;
     /* 0x1C */ s32 m_Unk6;
     /* 0x20 */ s32 m_Unk7;
 } pad_t;
 
 pad_t *pad_create(s32 Unk1, s32 Unk2);
-pad_vtable_t *func_80025E9C(void);
+pad_vtable_t *pad_get_vtable(void);
 
 #endif

@@ -1,128 +1,128 @@
 #include "frame_phase.h"
 #include "base_class.h"
 
-void func_80042450(void *);
-void func_800424A8(base_class_t *);
-void func_800424E0(base_class_t *, base_class_t *);
-void func_80042550(base_class_t *, s32);
-void func_800425D8(void *, s32);
-void func_800425EC(void *);
-s32 func_8004264C(frame_phase_t *);
-void func_80042658(void *);
-void func_80042664(void *);
-s32 func_8004266C(frame_phase_t *);
-void func_80042678(void *);
+void frame_phase_construct(void *);
+void frame_phase_cleanup(base_class_t *);
+void frame_phase_remove_parent(base_class_t *, base_class_t *);
+void frame_phase_notify(base_class_t *, s32);
+void frame_phase_reset(void *, s32);
+void frame_phase_advance(void *);
+s32 frame_phase_get_phase(frame_phase_t *);
+void frame_phase_set_waiting(void *);
+void frame_phase_clear_waiting(void *);
+s32 frame_phase_is_waiting(frame_phase_t *);
+void frame_phase_set_finished(void *);
 
-frame_phase_vtable_t D_8006EF50 = {
+frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     0x5,
     base_class_destructor,
-    func_80042450,
-    func_800424A8,
+    frame_phase_construct,
+    frame_phase_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
     base_class_iter_children,
     base_class_add_parent,
-    func_800424E0,
+    frame_phase_remove_parent,
     base_class_clear_parents,
     base_class_iter_parents,
-    func_80042550,
+    frame_phase_notify,
     base_class_nop,
     base_class_on_notify,
     NULL,
-    func_800425D8,
-    func_800425EC,
-    (void (*)(void *))func_8004264C,
-    func_80042658,
-    func_80042664,
-    (void (*)(void *))func_8004266C,
-    func_80042678,
+    frame_phase_reset,
+    frame_phase_advance,
+    (void (*)(void *))frame_phase_get_phase,
+    frame_phase_set_waiting,
+    frame_phase_clear_waiting,
+    (void (*)(void *))frame_phase_is_waiting,
+    frame_phase_set_finished,
 };
 
-frame_phase_t *func_80042400(void) {
+frame_phase_t *frame_phase_create(void) {
     frame_phase_t *allocated = (frame_phase_t *) memory_allocate_mem(0x1C);
 
     if (allocated) {
-        func_80042684()->Construct(allocated);
+        frame_phase_get_vtable()->Construct(allocated);
         return allocated;
     }
 
     return NULL;
 }
 
-void func_80042450(frame_phase_t *This) {
+void frame_phase_construct(frame_phase_t *This) {
     base_class_get_vtable()->Construct(This);
-    This->vtable = func_80042684();
-    This->vtable->Unk15(This, 0);
+    This->vtable = frame_phase_get_vtable();
+    This->vtable->frame_phase_reset(This, 0);
 }
 
-void func_800424A8(frame_phase_t *This) {
+void frame_phase_cleanup(frame_phase_t *This) {
     base_class_get_vtable()->Cleanup(This);
 }
 
-void func_800424E0(frame_phase_t *This, void *Unk) {
+void frame_phase_remove_parent(frame_phase_t *This, void *Unk) {
     void **node;
 
-    node = (void **)This->m_Unk5;
+    node = (void **)This->m_NotifyCursor;
     if (node != NULL && Unk == node[1]) {
-        This->m_Unk5 = (s32)node[0];
+        This->m_NotifyCursor = (s32)node[0];
     }
     base_class_get_vtable()->RemoveParent(This, Unk);
 }
 
-void func_80042550(frame_phase_t *This, s32 Unk) {
+void frame_phase_notify(frame_phase_t *This, s32 Unk) {
     base_class_t *cur;
 
-    This->m_Unk5 = This->m_Unk1;
-    linked_list_next(&cur, (linked_list_node_t **)&This->m_Unk5);
+    This->m_NotifyCursor = This->m_Parents;
+    linked_list_next(&cur, (linked_list_node_t **)&This->m_NotifyCursor);
     while (cur != NULL) {
         cur->vtable->OnNotify(cur, This, Unk);
-        linked_list_next(&cur, (linked_list_node_t **)&This->m_Unk5);
+        linked_list_next(&cur, (linked_list_node_t **)&This->m_NotifyCursor);
     }
-    This->m_Unk5 = 0;
+    This->m_NotifyCursor = 0;
 }
 
-void func_800425D8(frame_phase_t *This, s32 Unk) {
-    This->m_Unk2 = Unk;
-    This->m_Unk4 = 0;
-    This->m_Unk3 = 0;
-    This->m_Unk5 = 0;
+void frame_phase_reset(frame_phase_t *This, s32 Unk) {
+    This->m_Phase = Unk;
+    This->m_Finished = 0;
+    This->m_Waiting = 0;
+    This->m_NotifyCursor = 0;
 }
 
-void func_800425EC(frame_phase_t *This) {
+void frame_phase_advance(frame_phase_t *This) {
     s32 value;
 
     value = 4;
-    if (!This->m_Unk4) {
+    if (!This->m_Finished) {
         value = 3;
-        if (!This->m_Unk3) {
+        if (!This->m_Waiting) {
             value = 2;
-            ++This->m_Unk2;
+            ++This->m_Phase;
         }
     }
     This->vtable->Notify(This, value);
 }
 
-s32 func_8004264C(frame_phase_t *This) {
-    return This->m_Unk2;
+s32 frame_phase_get_phase(frame_phase_t *This) {
+    return This->m_Phase;
 }
 
-void func_80042658(frame_phase_t *This) {
-    This->m_Unk3 = 1;
+void frame_phase_set_waiting(frame_phase_t *This) {
+    This->m_Waiting = 1;
 }
 
-void func_80042664(frame_phase_t *This) {
-    This->m_Unk3 = 0;
+void frame_phase_clear_waiting(frame_phase_t *This) {
+    This->m_Waiting = 0;
 }
 
-s32 func_8004266C(frame_phase_t *This) {
-    return This->m_Unk3;
+s32 frame_phase_is_waiting(frame_phase_t *This) {
+    return This->m_Waiting;
 }
 
-void func_80042678(frame_phase_t *This) {
-    This->m_Unk4 = 1;
+void frame_phase_set_finished(frame_phase_t *This) {
+    This->m_Finished = 1;
 }
 
-frame_phase_vtable_t *func_80042684(void) {
-    return &D_8006EF50;
+frame_phase_vtable_t *frame_phase_get_vtable(void) {
+    return &g_FRAME_PHASE_VTABLE;
 }

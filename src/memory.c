@@ -17,7 +17,7 @@ typedef struct memory_manager {
 static memory_manager_t *g_MEMORY_MANAGER = NULL;
 static void *g_PAD = NULL;
 
-void *malloc2(u32 size);
+void *psyq_malloc_malloc(u32 size);
 int printf(char *fmt, ...);
 void memory_setup_manager(s32 *arg0);
 void func_8001844C(s32 value);
@@ -30,7 +30,7 @@ void *memory_create_manager(u32 arg0, s32 unused) {
     if (var_s1 < 0x400U) {
         var_s1 = 0x400;
     }
-    temp_s0 = (s32 *)malloc2(var_s1 + 0x20);
+    temp_s0 = (s32 *)psyq_malloc_malloc(var_s1 + 0x20);
     if (temp_s0 != NULL) {
         temp_s0[0] = (s32)((u8 *)temp_s0 + 0x1C);
         temp_s0[1] = var_s1;
@@ -45,8 +45,8 @@ void memory_set_manager(void *Manager) {
     g_MEMORY_MANAGER = (memory_manager_t *)Manager;
 }
 
-void func_80017AA8(void *Buffer) {
-    free2(Buffer);
+void memory_free_buffer(void *Buffer) {
+    psyq_malloc_free(Buffer);
 }
 
 void memory_setup_manager(s32 *arg0) {

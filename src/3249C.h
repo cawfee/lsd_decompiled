@@ -105,6 +105,6 @@ typedef struct class_3249C {
     /* 0xA8 */ s32 m_Unk41;
 } class_3249C_t;
 
-class_3249C_vtable_t *func_80041ED8(void);
+class_3249C_vtable_t *class_3249C_get_vtable(void);
 
 #endif

@@ -2,6 +2,8 @@
 
 #include "base_class.h"
 
+s32 D_8008A820 = 0;
+
 base_class_vtable_t g_BASE_CLASS_VTABLE = {
     0,
     base_class_destructor,
@@ -180,4 +182,24 @@ void linked_list_next(void *out_value, linked_list_node_t **cursor) {
     } else {
         *(u32 *) out_value = 0;
     }
+}
+
+s32 destroy_list(base_class_t **arr, s32 n) {
+    base_class_t *obj;
+
+    if (n-- > 0) {
+        do {
+            obj = *arr;
+            *arr = obj->vtable->Destroy(obj);
+            arr++;
+        } while (n-- > 0);
+    }
+}
+
+void func_8001844C(s32 value) {
+    D_8008A820 = value;
+}
+
+s32 func_80018458(void) {
+    return D_8008A820;
 }
