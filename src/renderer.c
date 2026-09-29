@@ -6,12 +6,12 @@
 #include <psx/libgte.h>
 
 extern renderer_vtable_t g_RENDERER_VTABLE;
-extern s32 D_8008A904;
-extern s32 D_8008A90C;
-extern s8 D_8008A8F8[4];
+extern s32 D_8008A904[];
+extern s32 D_8008A90C[];
+extern s8 D_8008A8F8[];
 extern s32 D_8008A8FC;
 extern s32 D_8008A900;
-extern s32 D_8008A8F4;
+extern s32 D_8008A8F4[];
 
 class_D294_t *func_8001CA94(void);
 s32 GsSetRefView2(void *);
@@ -98,6 +98,44 @@ void func_8003E8B8(renderer_t *This, void **Unk1, s32 Unk2) {
         ((void (*)(void *, void **, s32))This->vtable->Unk37)(This, Unk1, Unk2);
     }
 }
+
+typedef struct {
+    s32 w;
+    s32 h;
+} renderer_wh_t;
+
+#if 0
+/* Best match (39/41 insns): insns 1-19 are byte-identical to the stub.  The
+ * residual is GCC 2.6.3 scheduling/regalloc, not source shape:
+ *   - target keeps `sw zero,0x54` before `sw v0,0x60` and before the
+ *     D_8008A8F8 address materialization; gcc sinks the zero store past both.
+ *   - target re-materializes the D_8008A8F8 base into $a2 for each 3-byte copy
+ *     (two `lui/addiu` pairs); gcc keeps a single base in $v0.
+ * The u8 pointer form and the 2-word struct copy are required to stop gcc
+ * hoisting the %gp_rel scalar loads above the leading stores and to keep the
+ * byte copies as signed `lb`.  renderer.c was moved to -G8 for this stub's
+ * %gp_rel loads of D_8008A8FC/D_8008A900. */
+void func_8003E968(renderer_t *This) {
+    u8 *p;
+
+    p = (u8 *)This;
+    *(s32 *)(p + 0x90) = 0;
+    *(s32 *)(p + 0x70) = 0;
+    *(renderer_wh_t *)(p + 0x34) = *(renderer_wh_t *)&D_8008A8FC;
+    *(s32 *)(p + 0x3C) = 0xD;
+    *(s32 *)(p + 0x44) = 0x7D0;
+    *(s32 *)(p + 0x48) = 0x40;
+    *(s32 *)(p + 0x40) = 0x100;
+    *(s32 *)(p + 0x4C) = 0xA;
+    *(s32 *)(p + 0x50) = 0x10000;
+    *(s32 *)(p + 0x54) = 0;
+    *(s32 *)(p + 0x60) = 0x4E20;
+    __builtin_memcpy(p + 0x5B, D_8008A8F8, 3);
+    __builtin_memcpy(p + 0x58, D_8008A8F8, 3);
+    *(s32 *)(p + 0xB4) = 0;
+    *(s32 *)(p + 0xB8) = 1;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/renderer", func_8003E968);
 

@@ -28,6 +28,11 @@ void func_800431A8(class_33808_t *This) {
 INCLUDE_ASM("asm/nonmatchings/33808", func_80043200);
 
 /*
+ * Best attempt (not matching: target has a 23-instruction body with a real
+ * stack frame (`addiu sp,sp,-8` / `sw $ra`); compiled version is 21 insns with
+ * no frame. First difference is insn 1: target `addiu sp,sp,-8` vs compiled
+ * `lw v1,16(a0)`.)
+ *
 u32 func_800434DC(class_33808_t *This) {
     u32 *table;
     u32 counter;
@@ -36,16 +41,15 @@ u32 func_800434DC(class_33808_t *This) {
     u32 limit;
     u32 *walk;
     u32 value;
-    u32 result;
-    char pad[8];
 
-    table = This->m_Unk3;
-    counter = 0;
-    count = table[0];
+    table = (u32 *)This->m_Unk3;
+    count = *(u32 *)This->m_Unk3;
     max = 0;
+    counter = 0;
     if (count != 0) {
-        limit = count;
         walk = table;
+        limit = count;
+        counter = 0;
         do {
             value = *(u32 *)((u8 *)walk + 0x14);
             walk = (u32 *)((u8 *)walk + 4);
@@ -55,8 +59,7 @@ u32 func_800434DC(class_33808_t *This) {
             counter += 1;
         } while (counter < limit);
     }
-    result = max;
-    return result;
+    return max;
 }
 */
 INCLUDE_ASM("asm/nonmatchings/33808", func_800434DC);

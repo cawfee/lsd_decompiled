@@ -49,6 +49,9 @@ extern s32 D_80087E08[];
 extern s32 D_8008ABE0;
 extern u8 D_8008875C[];
 extern s8 D_80087E14[];
+extern s8 D_80087EB0[];
+extern s8 D_80087EC8[];
+extern s32 D_80087EEC[]; /* used by the saved func_8005A9CC attempt */
 extern s16 D_8008ABD0[];
 extern s16 D_8008ABC0[];
 extern s16 D_8008ABC8[];
@@ -57,6 +60,7 @@ extern s32 D_80087EFC[];
 extern s32 D_80087F08[];
 
 s32 test_for_static_link(s32 *Unk0, s32 Unk1, s32 Unk2);
+s32 get_static_spawn(void *dst, s16 *key, s32 chunk, s32 *counts, s32 *records, s32 *entries, s32 flag);
 s32 execute_link(dream_sys_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 s32 test_4_tunnel_links(void *Unk0, s32 Unk1, s32 Unk2);
 void func_8001E6F8(void *This, void *out);
@@ -86,6 +90,19 @@ typedef struct {
     u8 m_data[4];
     s16 m_hi;
 } dream_sys_pkt6_t;
+
+typedef struct {
+    s16 m_Unk0;
+    s16 m_Unk1;
+    s8 m_Unk2;
+    u8 m_Unk3;
+} dream_sys_static_spawn_t;
+
+typedef struct {
+    dream_sys_pkt4_t m_Unk0;
+    u8 m_Unk1;
+    s8 m_Unk2;
+} dream_sys_spawn_entry_t;
 
 dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     dream_sys_t *allocated = (dream_sys_t *) memory_allocate_mem(0x928);
@@ -454,9 +471,57 @@ void func_800593D8(dream_sys_t *This) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005942C);
+extern s32 D_80087EE8[];
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005950C);
+void func_8001E600(void *arg0, void *arg1, void *arg2, s32 arg3);
+s32 func_8001EF14(s32 *arg0, s32 arg1, s32 *arg2);
+
+s32 func_8005942C(dream_sys_t *This, vec3d_t *arg1, s32 arg2, s32 *arg3, s32 arg4) {
+    vec3d_t pos;
+    s32 temp;
+    s32 *p;
+
+    D_80087EE8[0] = arg2;
+    func_8001E600(This, &pos, &D_80087EE8[-2], 0);
+    temp = func_8005950C((s32 *)(This->m_Unk22 + 0x14), (s32 *)(This->m_Unk22 + 0x20), arg2);
+    if (This->m_Unk2 != 0) {
+        p = (s32 *)(This->m_Unk4 + 0x38);
+    } else {
+        p = NULL;
+    }
+    pos.y = temp + p[1];
+    if (arg1 != NULL) {
+        *arg1 = pos;
+    }
+    if (arg3 != NULL) {
+        return func_8001EF14((s32 *)&pos, arg4, arg3);
+    } else {
+        return 0;
+    }
+}
+
+s32 func_8005950C(s32 *arg0, s32 *arg1, s32 arg2) {
+    s32 var_a3;
+    s32 mult;
+    s32 var_v1;
+    s32 divisor;
+
+    var_a3 = arg2;
+    mult = var_a3;
+    if (arg2 < 0) {
+        var_a3 += 0x3FF;
+    }
+    mult = var_a3 >> 10;
+    var_v1 = arg1[2] - arg0[2];
+    if (var_v1 < 0) {
+        var_v1 += 0x3FF;
+    }
+    divisor = var_v1 >> 10;
+    if (divisor == 0) {
+        divisor = 1;
+    }
+    return ((arg1[1] - arg0[1]) * mult) / divisor + arg0[1];
+}
 
 void func_80059590(dream_sys_t *This) {
     This->m_Unk30 = 0;
@@ -742,7 +807,30 @@ s32 func_80059BE0(dream_sys_t *This, s32 arg1) {
     return saved;
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", func_80059D1C);
+void func_80059D1C(dream_sys_t *This) {
+    s32 *link;
+    s32 surface;
+    void **vtable;
+    s32 offset;
+
+    link = (s32 *)This->m_Unk21;
+    surface = This->m_FloorSurfaceType;
+    vtable = (void **)*link;
+    if (surface != 0) {
+        offset = D_80087EB0[surface] * 0x10;
+        ((void (*)(s32 *, s32))vtable[0x9C / 4])(link, D_80087EC8[surface]);
+        This->m_Unk46 = ((s32 (*)(s32 *, s32, s32, s32))vtable[0x80 / 4])(link, offset, 0x6E, 0x6E);
+        if (This->m_FloorSurfaceType != 0x16) {
+            This->m_Unk46 = -1;
+        }
+        if (This->m_FloorSurfaceType == 0xB) {
+            ((void (*)(s32 *, s32))vtable[0x9C / 4])(link, 1);
+            ((s32 (*)(s32 *, s32, s32, s32))vtable[0x80 / 4])(link, offset, 0x6E, 0x6E);
+            ((void (*)(s32 *, s32))vtable[0x9C / 4])(link, 2);
+            ((s32 (*)(s32 *, s32, s32, s32))vtable[0x80 / 4])(link, 0x90, 0x6E, 0x6E);
+        }
+    }
+}
 
 void func_80059E3C(dream_sys_t *This) {
     if (This->m_Unk46 >= 0) {
@@ -1098,6 +1186,45 @@ s32 func_8005A7A0(dream_sys_t *This, s32 arg1) {
     return 1;
 }
 
+/*
+ * Best attempt (not matching: 63/63 instructions present, identical operands,
+ * but GCC 2.6.3 duplicates the `return 1` constant into each branch delay slot
+ * and branches to the epilogue, while the target materialises one shared
+ * `ori v0,zero,1` block (.L8005A908) that two branches jump to and fills the
+ * first `beqz` delay slot with `addiu a1,sp,0x10`. First difference is insn 23
+ * (`addiu a1,sp,0x10` vs `ori v0,zero,1`). Tried: single nested if with one
+ * return, three separate early returns, a `result` accumulator, and m2c's
+ * goto-block_5 form (68 insns). Needs the link vtable slot 0xE8 widened
+ * (`void (*)(func_80059E98_link_t *, s32 *, void *)`) before retrying.
+ *
+ * s32 func_8005A82C(dream_sys_t *This, s32 arg1) {
+ *     s32 sp10[4];
+ *     s32 idx;
+ *     s32 flag;
+ *     func_80059E98_link_t *link;
+ *
+ *     idx = test_4_instant_teleporters((s32)((u8 *)This + 0x16C), arg1, This->m_NextMap);
+ *     if (idx < 0) {
+ *         return 0;
+ *     }
+ *     flag = func_8005BFC4();
+ *     if (execute_link(This, idx, 0x11, 0) == 0) {
+ *         return 1;
+ *     }
+ *     link = (func_80059E98_link_t *)This->m_Unk18;
+ *     This->m_Unk16 = 0;
+ *     link->vtable->Unk58(link, sp10, (u8 *)This + 0x16C);
+ *     This->vtable->Unk45(This, (s32)sp10);
+ *     if (flag == 0) {
+ *         return 1;
+ *     }
+ *     if (This->m_Unk25 != 0) {
+ *         return 1;
+ *     }
+ *     This->vtable->dream_sys__get_set_dream_time_limit(This, This->vtable->Unk65(This) + flag);
+ *     return 1;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A82C);
 
 s32 execute_link(dream_sys_t *This, s32 arg1, s32 arg2, s32 arg3) {
@@ -1120,6 +1247,59 @@ s32 execute_link(dream_sys_t *This, s32 arg1, s32 arg2, s32 arg3) {
     return 1;
 }
 
+/*
+ * Best attempt (not matching: 87/88 instructions present, identical operands
+ * and relocations, but GCC 2.6.3 tail-merges the handle-active `vtable->0x188`
+ * indirect call into the final `m_Unk579` indirect call: the target keeps a
+ * separate `lw v0,0x188(v0); nop; jalr v0; addu a0,s0; j .L8005AB14;
+ * addu v0,zero,zero`, while the compiled body jumps to the shared `jalr` block.
+ * GCC also hoists `addiu a0,s0,0x16C` into the `beqz` delay slot that the target
+ * leaves as `nop`. Tried: v local vs direct call in condition, `return 0` inside
+ * the m_Unk42 arm vs falling through, m_Unk578=0 inside vs outside the arm,
+ * goto-block_9 form, source-order swap (handle-active last), and a
+ * function-pointer local. All compile to the same merged 87-insn sequence.
+ * First difference is insn 13 (`nop` vs `addiu a0,s0,364`).
+ *
+ * s32 func_8005A9CC(dream_sys_t *This, void *arg1) {
+ *     s16 sp10[8];
+ *     s16 temp_a0;
+ *
+ *     if (This->m_Unk16 != 0) {
+ *         return 0;
+ *     }
+ *     if (This->m_Unk579 != 0) {
+ *         if (((s32 (*)(dream_sys_t *))This->m_Unk579)(This) != 0) {
+ *             This->m_Unk577 = 0;
+ *             This->m_Unk579 = 0;
+ *             This->m_Unk578 = 0;
+ *             if (This->m_Unk42 == 4) {
+ *                 ((void (*)(dream_sys_t *))This->vtable->Unk97)(This);
+ *                 return 0;
+ *             }
+ *         }
+ *         return 0;
+ *     }
+ *     if (test_4_staircase_nodes((s32)((u8 *)This + 0x16C), (s32)arg1, This->m_NextMap) < 0) {
+ *         return 0;
+ *     }
+ *     func_8001E6F8(This, sp10);
+ *     if (func_8005C02C((void **)((u8 *)This + 0x888), (void **)((u8 *)This + 0x884), sp10) == 0) {
+ *         return 0;
+ *     }
+ *     if (This->m_Unk41 == 0) {
+ *         return 0;
+ *     }
+ *     temp_a0 = ((s16 *)arg1)[4];
+ *     *(dream_sys_fb_pkt10_t *)((u8 *)This + 0x918) = *(dream_sys_fb_pkt10_t *)arg1;
+ *     This->m_Unk577 = 1;
+ *     This->m_Unk578 = 1;
+ *     This->m_Unk580 = 0;
+ *     This->m_Unk579 = D_80087EEC[func_8005C118(temp_a0)];
+ *     This->vtable->Unk16(This, 1, (s32 *)This->m_Unk544);
+ *     ((void (*)(dream_sys_t *))This->m_Unk579)(This);
+ *     return 0;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/dream_sys", func_8005A9CC);
 
 s32 func_8005AB2C(dream_sys_t *This) {
@@ -1766,7 +1946,41 @@ s8 func_8005C118(void) {
     return ((s8 *)D_80088BA4[D_8008ACC4])[D_8008ACC8 * 6 + 5];
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream_sys", get_static_spawn);
+s32 get_static_spawn(void *dst, s16 *key, s32 chunk, s32 *counts, s32 *records, s32 *entries, s32 flag) {
+    s32 count;
+    s32 i;
+    s32 table;
+    s32 sub;
+    dream_sys_static_spawn_t *rec;
+    dream_sys_spawn_entry_t *entry;
+
+    count = ((u8 *)counts)[chunk];
+    if (count != 0) {
+        rec = ((dream_sys_static_spawn_t **)records)[chunk];
+        i = 0;
+        while (i < count) {
+            if (key[0] == rec->m_Unk0 && (key[1] == rec->m_Unk1 || rec->m_Unk1 < 0)) {
+                D_8008ACBC = chunk;
+                D_8008ACC0 = i;
+                table = rec->m_Unk2;
+                D_8008ACC4 = table;
+                sub = rec->m_Unk3;
+                entry = (dream_sys_spawn_entry_t *)((u8 *)entries[table] + sub * 6);
+                D_8008ACC8 = sub;
+                *(dream_sys_pkt4_t *)dst = entry->m_Unk0;
+                *(dream_sys_pkt6_t *)((u8 *)dst + 4) =
+                    *(dream_sys_pkt6_t *)((u8 *)SPAWN_POS_ADJUST + entry->m_Unk1 * 6);
+                if (flag != 0) {
+                    ((u8 *)gpNavChallengesComplete)[entry->m_Unk2] = 1;
+                }
+                return D_8008ACC4;
+            }
+            i += 1;
+            rec += 1;
+        }
+    }
+    return -1;
+}
 
 s32 generate_initial_spawn(void *dst, s32 *time_out, void *mood, s32 tick) {
     struct {

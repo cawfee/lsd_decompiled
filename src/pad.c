@@ -56,7 +56,49 @@ void pad_poll(pad_t *This) {
   This->m_Pressed = (v2 ^ old_buttons) & v2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/pad", func_80025D10);
+void func_80025D10(pad_t *This) {
+    s32 buf[0x10];
+    s32 *p;
+    s32 i;
+    s32 buttons;
+    s32 released;
+    s32 pressed;
+    void (*notify)(base_class_t *, s32);
+
+    buttons = This->m_Buttons;
+    released = This->m_Released;
+    pressed = This->m_Pressed;
+
+    if (buttons != 0 || released != 0 || pressed != 0) {
+        p = buf;
+        i = 0;
+        do {
+            s32 code = -1;
+            s32 state = g_PadState[i];
+
+            if (released & state) {
+                code = 0x22;
+            } else if (pressed & state) {
+                code = 0x12;
+            } else if (buttons & state) {
+                code = 2;
+            }
+            if (code >= 0) {
+                *p++ = code + i;
+            }
+            i++;
+        } while (i < 0x10);
+
+        p--;
+        notify = This->vtable->Notify;
+        if ((u32) p >= (u32) buf) {
+            do {
+                notify((base_class_t *) This, *p);
+                p--;
+            } while ((u32) p >= (u32) buf);
+        }
+    }
+}
 
 void func_80025E14(void) {
 }

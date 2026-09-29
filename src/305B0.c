@@ -86,20 +86,28 @@ INCLUDE_ASM("asm/nonmatchings/305B0", func_80040024);
 // Tried: inline vs temp, function-scope decls, local `one` variable.
 
 /*
-void func_800400B0(class_305B0_t *This) {
-    s32 temp;
-
-    if (This->m_Unk26 == 0) {
-        temp = ((s32 (*)(class_305B0_t *))This->vtable->Unk54)(This);
-        if (This->m_Unk37 != 0) {
-            This->m_Unk31 -= 1;
-        } else {
-            This->vtable->Unk45(This, 1, (s32 *)((u8 *)D_8006EAA8 + (temp * 3)));
-        }
-        This->m_Unk26 = 2;
-    }
-}
-*/
+ * Best attempt (not matching: target is 41 insns, compiled 40. The only real
+ * difference is the dead parameter copy `addu t0,a2,zero` in the delay slot of
+ * the first `bnez`; t0 is immediately overwritten with the Unk54 result. gcc
+ * 2.6.3 removes the copy for s32 temp=Unk2 / temp=Unk2 / parameter-reassign
+ * forms. Everything else matches: `This->m_Unk26 == 0` guard, Unk54 call,
+ * m_Unk37 branch, m_Unk31-=1, and Unk45(This,1,&D_8006EAA8[temp*3]).)
+ *
+ * void func_800400B0(class_305B0_t *This, s32 Unk1, s32 Unk2) {
+ *     s32 temp;
+ *
+ *     temp = Unk2;
+ *     if (This->m_Unk26 == 0) {
+ *         temp = ((s32 (*)(class_305B0_t *))This->vtable->Unk54)(This);
+ *         if (This->m_Unk37 != 0) {
+ *             This->m_Unk31 -= 1;
+ *         } else {
+ *             This->vtable->Unk45(This, 1, (s32 *)((u8 *)D_8006EAA8 + (temp * 3)));
+ *         }
+ *         This->m_Unk26 = 2;
+ *     }
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/305B0", func_800400B0);
 
 INCLUDE_ASM("asm/nonmatchings/305B0", func_80040154);

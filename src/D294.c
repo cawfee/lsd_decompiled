@@ -469,6 +469,42 @@ void func_8001E2E8(func_8001E2E8_pt_t *mid, func_8001E2E8_box_t *box, func_8001E
 void func_8001E49C(void) {
 }
 
+/*
+ * Best attempt (not matching: 51/54 instructions, control flow and every load/
+ * store/call identical, but GCC 2.6.3 allocates the two live-across-loop values
+ * to s0 (arg0) and s1 (arg1) and rematerialises the type constant into v1 with
+ * `li v1,4` in the beqz delay. The target keeps arg1 in s0, the constant 4 in
+ * s1 and arg0 in s2, emitting `ori s1,zero,4` in the prologue. First difference
+ * is insn 2 (`sw s2,32(sp)` vs `sw s0,24(sp)`). Adding an explicit s32 type=4
+ * local makes GCC keep both 4 and 0x34 in callee-saved regs (s3/s2, frame 0x30,
+ * 57 insns), so it is worse. Needs the original variable/ordering that gives
+ * arg0 s2 and forces only the 4 constant into s1.
+ *
+ * void func_8001E4A4(s32 arg0, base_class_t *arg1) {
+ *     s32 sp14;
+ *     s32 **sp10;
+ *     s32 *temp_a1;
+ *
+ *     sp10 = NULL;
+ *     do {
+ *     loop_1:
+ *         base_class_iter_parents(arg1, (void **)&sp10, (void **)&sp14);
+ *         if ((sp10 == NULL) || ((**sp10 & 0xF) != 4)) {
+ *             if (sp14 == 0) {
+ *                 sp10 = NULL;
+ *             } else {
+ *                 goto loop_1;
+ *             }
+ *         }
+ *         if (sp10 != NULL) {
+ *             temp_a1 = *sp10;
+ *             if (*(u8 *)temp_a1 == 0x34) {
+ *                 ((void (*)(s32 **, s32)) * (void **)((u8 *)temp_a1 + 0x10))(sp10, arg0);
+ *             }
+ *         }
+ *     } while (sp14 != 0);
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/D294", func_8001E4A4);
 
 class_D294_vtable_t *func_8001E57C(void) {

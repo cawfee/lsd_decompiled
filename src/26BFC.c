@@ -1,3 +1,7 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/26BFC", SpuVmDamperOn);
+extern s16 D_8008E84C;
+
+void SpuVmDamperOn(void) {
+    D_8008E84C = 2;
+}

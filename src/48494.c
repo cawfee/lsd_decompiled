@@ -33,7 +33,26 @@ void func_80057DBC(class_48494_t *This, s32 Unk) {
     This->m_Unk28_2 = D_80087AA6[Unk];
 }
 
-INCLUDE_ASM("asm/nonmatchings/48494", func_80057DF4);
+void func_80057DF4(class_48494_t *This, s32 arg1, s16 *arg2) {
+    s16 x;
+    s16 y;
+    s32 q;
+    s32 r;
+
+    q = arg2[0] / arg2[1];
+    r = arg2[0] % arg2[1];
+    x = (q << 12) + ((r << 12) / arg2[1]);
+    q = arg2[2] / arg2[3];
+    r = arg2[2] % arg2[3];
+    y = (q << 12) + ((r << 12) / arg2[3]);
+    if (This->m_Unk21 != 0) {
+        This->m_Unk22 = (x * This->m_Unk22) >> 12;
+        This->m_Unk23 = (y * This->m_Unk23) >> 12;
+    } else {
+        *(s16 *)((u8 *)This + 0x80) = x;
+        *(s16 *)((u8 *)This + 0x82) = y;
+    }
+}
 
 void func_80057F38(void) {
 }

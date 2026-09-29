@@ -4,6 +4,8 @@
 extern class_3ACC8_vtable_t D_800866E8;
 
 extern s8 D_800868FC[];
+extern s32 D_8008688C[];
+extern s32 D_800868A8[];
 extern s32 D_80086974[];
 extern s32 D_800869CC[];
 extern s32 D_80086904[];
@@ -87,12 +89,16 @@ void func_8004AB88(class_3ACC8_t *This, u8 **Unk) {
 typedef struct {
     u8 m_Pad[0x74];
     void (*Unk29)(void *);
-    u8 m_Pad2[0xC];
+    u8 m_Pad2[4];
+    void (*Unk30)(void *);
+    u8 m_Pad3[4];
     void (*Unk33)(void *);
 } class_3ACC8_slot_obj_vtable_t;
 
 typedef struct class_3ACC8_slot_obj {
     class_3ACC8_slot_obj_vtable_t *vtable;
+    u8 m_Pad[0x2C];
+    s16 m_Unk30_1;
 } class_3ACC8_slot_obj_t;
 
 typedef struct {
@@ -109,12 +115,24 @@ typedef struct {
     class_3ACC8_slot_child_t *m_Child;
 } class_3ACC8_slot_link_t;
 
+typedef struct class_3ACC8_slot_item {
+    void *m_Unk0;
+    u8 m_Pad[0xC];
+    u32 m_Flags;
+    s32 m_Unk5;
+    s32 m_Unk6;
+    s32 m_Unk7;
+    s32 m_Unk8;
+} class_3ACC8_slot_item_t;
+
 typedef struct {
     s16 m_Flag;
     s16 m_Pad;
     class_3ACC8_slot_obj_t *m_Obj;
     class_3ACC8_slot_link_t *m_Link;
-    u8 m_Rest[0x10];
+    u8 m_UnkC[4];
+    class_3ACC8_slot_item_t **m_Items;
+    u8 m_Rest[8];
 } class_3ACC8_slot_t;
 
 void func_8004ABD0(class_3ACC8_t *This) {
@@ -348,7 +366,76 @@ void func_8004B418(class_3ACC8_t *This, s32 Unk2, s32 Unk3) {
     func_8004B44C(Unk2, unk, This->m_Unk25, &This->m_Unk20, Unk3);
 }
 
+typedef struct {
+    /* 0x0 */ s16 m_Width;
+    /* 0x2 */ s16 m_Height;
+    /* 0x4 */ s32 m_Mode;
+} func_8004B44C_grid_t;
+
+typedef struct {
+    /* 0x0 */ s8 m_Unk0;
+    /* 0x1 */ s8 m_Unk1;
+    /* 0x2 */ s8 m_Unk2;
+    /* 0x3 */ s8 m_Unk3;
+    /* 0x4 */ s16 m_Unk4;
+    /* 0x6 */ s16 m_Unk6;
+    /* 0x8 */ s16 m_Unk8;
+} func_8004B44C_info_t;
+
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B44C);
+
+/*
+ * Near match (semantics exact, 73/73 insns, 4 residual insns). Best C below.
+ * Residual: the target schedules the src->y load one slot later (after the
+ * outB->z add) and therefore keeps y in $v1 across the outB->x load, forcing
+ * $a0 for outB->x/outB->z; gcc keeps y in $v1 only until its store and reloads
+ * outB->x into $v1. This also makes gcc fold the `+0x400` into the accumulator
+ * (addiu v0,v0,0x400) instead of into the info[4] operand
+ * (addiu v1,v1,0x400). Tried: y/bx/zbase temporaries, all 24 permutations of
+ * the (y, bx, outB->z, outB->y) statements, direct vs cached outB->x, and three
+ * groupings of the +0x400 sum; all yield the same 73-insn schedule.
+ *
+ * s32 func_8004B44C(void *arg0, void *arg1, s32 arg2, void *arg3, void *arg4) {
+ *     s32 t4;
+ *     s32 t1;
+ *     s32 t0;
+ *     s32 tmp;
+ *     s32 zbase;
+ *     s32 y;
+ *     s32 bx;
+ *
+ *     if (((func_8004B44C_grid_t *)arg2)->m_Mode == 0) {
+ *         t0 = ((func_8004B44C_info_t *)arg4)->m_Unk1;
+ *         t1 = ((func_8004B44C_grid_t *)arg2)->m_Height;
+ *         t4 = ((func_8004B44C_info_t *)arg4)->m_Unk0 +
+ *              (((func_8004B44C_grid_t *)arg2)->m_Width * t0);
+ *     } else {
+ *         t1 = 1;
+ *         t0 = 0;
+ *         t4 = 0;
+ *     }
+ *     tmp = (((vec3d_t *)arg3)->x - (((func_8004B44C_grid_t *)arg2)->m_Width * 0x5000)) +
+ *           (((func_8004B44C_info_t *)arg4)->m_Unk0 * 0xA000);
+ *     zbase = ((vec3d_t *)arg3)->z - (t1 * 0x5000);
+ *     ((vec3d_t *)arg1)->x = tmp;
+ *     if (t0 & 1) {
+ *         ((vec3d_t *)arg1)->x = tmp - 0x5000;
+ *     }
+ *     y = ((vec3d_t *)arg3)->y;
+ *     bx = ((vec3d_t *)arg1)->x;
+ *     ((vec3d_t *)arg1)->z = zbase + (t0 * 0xA000);
+ *     ((vec3d_t *)arg1)->y = y;
+ *     ((vec3d_t *)arg0)->x = (((func_8004B44C_info_t *)arg4)->m_Unk2 << 11) + bx +
+ *                            (((func_8004B44C_info_t *)arg4)->m_Unk4 + 0x400);
+ *     ((vec3d_t *)arg0)->y = ((func_8004B44C_info_t *)arg4)->m_Unk6 + ((vec3d_t *)arg1)->y;
+ *     ((vec3d_t *)arg0)->z = (((func_8004B44C_info_t *)arg4)->m_Unk3 << 11) +
+ *                            ((vec3d_t *)arg1)->z +
+ *                            (((func_8004B44C_info_t *)arg4)->m_Unk8 + 0x400);
+ *     ((vec3d_t *)arg1)->x += 0x5000;
+ *     ((vec3d_t *)arg1)->z += 0x5000;
+ *     return t4;
+ * }
+ */
 
 void func_8004B570(class_3ACC8_t *This) {
     This->m_Unk27 = 1;
@@ -403,7 +490,85 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B700);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B930);
 
+/*
+ * Near match (semantics exact, 65/68 insns): only the target's unused 8-byte
+ * stack frame (addiu sp,sp,-8 in the mode-test delay slot, addiu sp,sp,8 before
+ * jr) and one duplicated `nor v0,zero,a0` in the second modulo branch delay are
+ * missing. No source-level scalar/array/struct/union/alloca/address-taken-local
+ * construct reproduced a frame without also emitting sp-relative lw/sw; the
+ * frame has no sp operand anywhere in the target, so it is not a normal local.
+ *
+ * s32 func_8004B930(class_3ACC8_t *This, s32 index, s32 parity) {
+ *     s32 width = *(s16 *)(This->m_Unk25 + 0);
+ *     s32 mode = *(s32 *)(This->m_Unk25 + 4);
+ *     s32 height = *(s16 *)(This->m_Unk25 + 2);
+ *     s32 result;
+ *
+ *     if (mode == 0) {
+ *         result = 0;
+ *         if (index < width) result |= 3;
+ *         if (index >= width * (height - 1)) result |= 0x60;
+ *         if (index % width == 0) {
+ *             if (parity != 0) result |= 0x25; else result |= 4;
+ *         }
+ *         if ((index + 1) % width == 0) {
+ *             if (parity != 0) result |= 0x10; else result |= 0x52;
+ *         }
+ *     } else {
+ *         result = -1;
+ *         if (height > 0) {
+ *             s32 i = 0;
+ *             do { i++; result <<= 1; } while (i < height);
+ *         }
+ *     }
+ *     return ~result;
+ * }
+ */
+
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BA40);
+
+/*
+ * Near match (semantics exact, 63/63 insns). Residual: target allocates the
+ * 5th arg (base) to $a1 and result/v to $v0, and saves $s1 before $s0; gcc
+ * allocates base to $t0 and result/v to $a1 (and saves $s0 first). Tried
+ * if/else vs early-return, inlined out[1] writes, `v` before/after result,
+ * declaration order, and a base copy; all give base in $t0. This is a
+ * local-alloc priority tie, not a semantics/type issue.
+ *
+ * s32 func_8004BA40(class_3ACC8_t *This, s32 *out, s32 col, s32 parity, s32 base, s32 mask, s32 dir) {
+ *     s32 result;
+ *     s32 v;
+ *     s32 *tbl;
+ *     s32 t0;
+ *     s32 prod;
+ *
+ *     result = 0;
+ *     if (mask & D_8008688C[dir]) {
+ *         v = base + dir;
+ *         if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+ *             tbl = &D_800868A8[dir * 3];
+ *             t0 = tbl[0];
+ *             if (t0 == 0) {
+ *                 v = base + tbl[1];
+ *             } else {
+ *                 prod = col * t0;
+ *                 if (parity != 0) {
+ *                     v = base + (prod + tbl[1]);
+ *                 } else {
+ *                     v = base + (prod + tbl[2]);
+ *                 }
+ *             }
+ *         }
+ *         out[1] = v;
+ *         out[0] = ((s32(*)(s32, s32, s32, s32))This->m_Unk23)(This->m_Unk24, out[1], 0, 0);
+ *         result = 1;
+ *     } else {
+ *         out[0] = 0;
+ *     }
+ *     out[2] = dir;
+ *     return result;
+ * }
+ */
 
 typedef struct func_8004BB3C_inner func_8004BB3C_inner_t;
 
@@ -489,7 +654,26 @@ INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BD14);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BE54);
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C0AC);
+void func_8004C0AC(class_3ACC8_t *This, class_3ACC8_slot_t *slot) {
+    class_3ACC8_slot_obj_t *obj;
+    class_3ACC8_slot_item_t **start;
+    class_3ACC8_slot_item_t **end;
+    class_3ACC8_slot_item_t **cursor;
+
+    obj = slot->m_Obj;
+    if (obj->m_Unk30_1 >= 0) {
+        obj->vtable->Unk30(obj);
+        start = slot->m_Items;
+        end = (class_3ACC8_slot_item_t **)((u8 *)start + 0x668);
+        cursor = start;
+        while (cursor < end) {
+            (*cursor)->m_Flags |= 0x80000000;
+            (*cursor)->m_Unk8 = 0;
+            (*cursor)->m_Unk6 = 0;
+            cursor++;
+        }
+    }
+}
 
 void *func_8004C158(class_3ACC8_t *This, s32 arg1, s32 *arg2) {
     s32 temp_v1;

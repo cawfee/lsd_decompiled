@@ -609,7 +609,44 @@ void func_8004F810(memory_card_t *This) {
 
 s32 func_8004F9D8(memory_card_t *This);
 
-INCLUDE_ASM("asm/nonmatchings/memory_card", func_8004F8A4);
+void func_8004F8A4(memory_card_t *This, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7) {
+    s32 state;
+
+    This->m_Unk15 = arg1;
+    This->m_Unk16 = arg2;
+    This->m_Unk17 = arg3;
+    This->m_Unk8 = 2;
+    *(u8 *)&This->m_Unk18 = arg4;
+    This->m_Unk19 = arg5;
+    This->m_Unk20 = arg6;
+    This->m_Unk21 = arg7;
+    if (func_8004F9D8(This) == 0) {
+        return;
+    }
+    if (This->vtable->Unk20(This, 0, (char *)arg1) != 0) {
+        state = 0xA;
+        if (This->m_Unk9 == 0xA) {
+            state = 0x11;
+        } else if (This->m_Unk9 == 0x11) {
+            state = 0xB;
+        }
+        This->vtable->Unk30(This, state);
+        return;
+    }
+    if (This->vtable->Unk23(This, arg4, arg7) == 0) {
+        This->vtable->Unk30(This, 9);
+        return;
+    }
+    {
+        memory_card_vtable_t *vt = This->vtable;
+
+        state = 0x11;
+        if (This->m_Unk9 == 0x11) {
+            state = 0xB;
+        }
+        vt->Unk30(This, state);
+    }
+}
 
 s32 func_8004F9D8(memory_card_t *This) {
     s32 slot0;

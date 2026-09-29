@@ -56,6 +56,54 @@ void func_80043954(tmd_model_t *This) {
     (*(void (**)(void *))((s32)get_file_driver() + 0xC))(This);
 }
 
+/*
+ * Best attempt (not matching: compiled 76-77 insns / frame 0x28 vs target 75 /
+ * frame 0x30. gcc keeps the object array in $s0 and the loop index in $s1;
+ * target has array=$s1, index=$s0 and reserves 8 extra frame bytes. Body,
+ * allocation size, tmd_map call, build loop, failure cleanup loop, and
+ * epilogue otherwise match. Tried declaration reorder and pre-initialising
+ * the index.)
+ *
+ * s32 func_800439EC(tmd_model_t *This) {
+ *     class_FA50_t **array;
+ *     class_FA50_t **p;
+ *     u32 i;
+ *     s32 off;
+ *
+ *     array = (class_FA50_t **)memory_allocate_mem((*(u32 *)(This->m_Unk3 + 8) + 1) * 4);
+ *     if (array == NULL) {
+ *         return 1;
+ *     }
+ *     This->m_Unk10 = (s32)array;
+ *     This->vtable->tmd_map(This);
+ *     if (*(u32 *)(This->m_Unk3 + 8) != 0) {
+ *         i = 0;
+ *         off = 0xC;
+ *         do {
+ *             *array = class_FA50_create(This->m_Unk3 + off);
+ *             if (*array == NULL) {
+ *                 if (i != 0) {
+ *                     p = array - 1;
+ *                     do {
+ *                         i--;
+ *                         (*p)->vtable->Destroy((base_class_t *)*p);
+ *                         p--;
+ *                     } while (i != 0);
+ *                     array = p + 1;
+ *                 }
+ *                 memory_free_mem(array);
+ *                 return 1;
+ *             }
+ *             array++;
+ *             i++;
+ *             off += 0x1C;
+ *         } while (i < *(u32 *)(This->m_Unk3 + 8));
+ *     }
+ *     *array = NULL;
+ *     (*(void (**)(void *))((s32)get_file_driver() + 0x64))(This);
+ *     return 0;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/tmd_model", func_800439EC);
 
 void tmd_map(tmd_model_t *This) {

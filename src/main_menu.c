@@ -397,6 +397,22 @@ void func_8004DC08(main_menu_t *This) {
 
 INCLUDE_ASM("asm/nonmatchings/main_menu", func_8004DC64);
 
+/*
+ * Best match: 27/27 instructions, all operand shapes identical. The only
+ * difference is the D_8008A9B4 address: target emits lui/addiu (absolute)
+ * but gcc emits addiu $a2,$gp,0x30 because the static is placed in .sdata.
+ * D_8008A9B4 sits in the middle of main_menu's .sdata (rom 0x7b1b4), between
+ * compiler-generated string literals and later statics, so it cannot be moved
+ * to an extern/splat-data symbol without splitting main_menu's .sdata.
+ * Making it a 7-element array forces .data (absolute) but shifts .sdata/.data
+ * and breaks the ROM.
+ *
+ * void func_8004DC64(main_menu_t *This, s32 Unk_arg) {
+ *     func_8003DFBC()->Unk55(This, Unk_arg);
+ *     This->m_Unk43->vtable->Unk18(This->m_Unk43, Unk_arg, D_8008A9B4);
+ * }
+ */
+
 void func_8004DCD0(main_menu_t *This, char *Unk_arg_s0) {
     u8 local_buf[3];
     u8 *s1_buf_ptr = local_buf;

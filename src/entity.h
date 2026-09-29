@@ -27,7 +27,7 @@ typedef struct entity_vtable {
     /* 0x040 80089b14 */ void (*Unk15)(void *);
     /* 0x044 80089b18 */ void (*Unk16)(void *, s32, s32 *);
     /* 0x048 80089b1c */ void (*Unk17)(void *, s32, s32 *);
-    /* 0x04C 80089b20 */ void (*Unk18)(void *);
+    /* 0x04C 80089b20 */ void (*Unk18)(void *, s32, s32, s32, s32);
     /* 0x050 80089b24 */ void (*Unk19)(void *);
     /* 0x054 80089b28 */ void (*Unk20)(void *);
     /* 0x058 80089b2c */ void (*Unk21)(void *);

@@ -265,7 +265,34 @@ s32 func_80057954(class_477E4_t *This, void *arg1, s32 arg2, s32 count, void *ar
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/477E4", func_80057A18);
+s32 func_80057A18(class_477E4_t *This, void *a, void *b, void *c, void *d) {
+    s32 *grid;
+    s32 i;
+    s32 j;
+    s32 next;
+
+    grid = (s32 *)(*(s32 *)((u8 *)d + 0x10) + *(s16 *)((u8 *)c + 2) * 0x50 +
+                   *(s16 *)((u8 *)c + 0) * 4);
+    for (i = 0; i < *(s32 *)((u8 *)c + 8); i++) {
+        for (j = 0; j < *(s32 *)((u8 *)c + 4); j++) {
+            if (func_80057B54((class_477E4_t *)*grid, (s32)a, (s16 *)b) != 0) {
+                return *grid;
+            }
+            next = *(s32 *)((u8 *)*grid + 0x38);
+            if (next != 0) {
+                do {
+                    if (func_80057B54((class_477E4_t *)next, (s32)a, (s16 *)b) != 0) {
+                        return next;
+                    }
+                    next = *(s32 *)((u8 *)next + 0x38);
+                } while (next != 0);
+            }
+            grid++;
+        }
+        grid = (s32 *)((u8 *)grid - (*(s32 *)((u8 *)c + 4) * 4 + 0x50));
+    }
+    return 0;
+}
 
 class_477E4_t *func_80057B54(class_477E4_t *This, s32 Unk1, s16 *Unk2) {
     if (This && func_8001E7BC(This, Unk1, Unk2)) {

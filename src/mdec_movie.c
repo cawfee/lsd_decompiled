@@ -199,7 +199,38 @@ void func_8004593C(mdec_movie_t *This) {
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/mdec_movie", func_80045948);
+s32 func_80045948(mdec_movie_t *This) {
+    void **obj;
+    mdec_movie_t *g;
+
+    g = (mdec_movie_t *)g_ActiveMovie;
+    if (g == This) {
+        if (g->m_Unk19 == 0) {
+            if (g->m_Unk24 != 0) {
+                goto call;
+            }
+        } else {
+            obj = (void **)g->m_Unk23;
+            (*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x50))(obj, 1, g->m_Unk22);
+            if (g->m_Unk19 < 0) {
+                if (g->m_Unk21 == 0 || --g->m_Unk21 == 0) {
+                    obj = (void **)g->m_Unk23;
+                    (*(void (**)(void **))(*(u32 *)obj + 0x64))(obj);
+                }
+            }
+            This->m_Unk19 = 0;
+            This->m_Unk24 = 1;
+            return 0;
+        }
+    }
+    goto end;
+call:
+    return ((s32 (*)(void *))g->vtable->Unk25)(g);
+end:
+#ifdef NON_MATCHING
+    return 0;
+#endif
+}
 
 void func_80045A38(mdec_movie_t *This) {
     void **obj;
@@ -229,7 +260,35 @@ void func_80045AC8(void) {
 void func_80045AD0(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/mdec_movie", func_80045AD8);
+s32 func_80045AD8(mdec_movie_t *This) {
+    s32 sp10;
+    s32 sp14;
+    s32 temp;
+    s32 one;
+
+    if (This->m_Unk17 != 0) {
+        return 1;
+    }
+    temp = (*(s32 (**)(void **, s32 *, s32 *, s32))(*(u32 *)This->m_Unk23 + 0x6C))(
+        (void **)This->m_Unk23, &sp10, &sp14, 0x800000);
+    if (temp == 0) {
+        return 1;
+    }
+    if (sp14 != 0) {
+        s32 mode;
+
+        mode = This->m_Unk14 ^ 1;
+        This->m_Unk14 = mode;
+        func_80046568(sp10, *(s32 *)((u8 *)This + 0x14 + (mode * 4)));
+    }
+    (*(void (**)(void **, s32))(*(u32 *)This->m_Unk23 + 0x70))((void **)This->m_Unk23, sp10);
+    one = 1;
+    if (temp < 0) {
+        This->m_Unk17 = one;
+        (*(void (**)(void **))(*(u32 *)This->m_Unk23 + 0x54))((void **)This->m_Unk23);
+    }
+    return 0;
+}
 
 void func_80045BC0(void) {
 }

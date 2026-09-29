@@ -203,15 +203,12 @@ c_game_targets = [
     "src/26BFC.c",
     "src/26D18.c",
     "src/272A8.c",
-    "src/2AE70.c",
     "src/3030C.c",
     "src/2BE24.c",
-    "src/renderer.c",
     "src/4225C.c",
     "src/entity.c",
     "src/D294.c",
     "src/33808.c",
-    "src/4775C.c",
     "src/map_scene_post.c",
 ]
 
@@ -329,6 +326,7 @@ c_psyq_targets = [
     "src/psyq/snd/SsSeqSetVol.c",
     "src/psyq/snd/Snd_SetReplayMode.c",
     "src/psyq/snd/Snd_setvol_data.c",
+    "src/psyq/snd/SsSeqOpen.c",
     "src/psyq/snd/Snd_SetPlayMode.c",
     "src/psyq/snd/seq_close.c",
     "src/psyq/snd/Snd_SetPauseMode.c",
@@ -396,7 +394,7 @@ c_targets_g8 = [
     "src/pad.c",
     "src/1145C.c",
     "src/base_class.c",
-    "src/179D8.c",
+    "src/cd_file_driver.c",
     "src/FB94.c",
     "src/ED8C.c",
     "src/44CE4.c",
@@ -404,6 +402,8 @@ c_targets_g8 = [
     "src/413A8.c",
     "src/map_scene.c",
     "src/4cd08.c",
+    "src/4775C.c",
+    "src/renderer.c",
 ]
 
 cpp_targets = []

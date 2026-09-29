@@ -27,7 +27,7 @@ typedef struct memory_card_vtable {
     /* 0x054 80086e18 */ s32 (*Unk20)(void *, s32, char *);
     /* 0x058 80086e1c */ void (*Unk21)(void *, s32, s32, s32);
     /* 0x05C 80086e20 */ s32 (*Unk22)(void *, s32, s32, s32, s32);
-    /* 0x060 80086e24 */ void (*Unk23)(void *);
+    /* 0x060 80086e24 */ s32 (*Unk23)(void *, s32, s32);
     /* 0x064 80086e28 */ s32 (*Unk24)(void *, s32, s32, s32);
     /* 0x068 80086e2c */ s32 (*Unk25)(void *, s32, s32, u32, s32, s32, s32);
     /* 0x06C 80086e30 */ void (*Unk26)(void *, char **, char **, void *, s32, s32, s32);

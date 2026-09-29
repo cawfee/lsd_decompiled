@@ -31,8 +31,8 @@ typedef struct class_30CD0_vtable {
     /* 0x058 8006eb18 */ void (*Unk21)(void *);
     /* 0x05C 8006eb1c */ void (*Unk22)(void *);
     /* 0x060 8006eb20 */ void (*Unk23)(void *);
-    /* 0x064 8006eb24 */ void (*Unk24)(void *);
-    /* 0x068 8006eb28 */ void (*Unk25)(void *);
+    /* 0x064 8006eb24 */ void (*Unk24)(void *, s32);
+    /* 0x068 8006eb28 */ void (*Unk25)(void *, s32);
     /* 0x06C 8006eb2c */ void (*Unk26)(void *);
     /* 0x070 8006eb30 */ void (*Unk27)(void *);
     /* 0x074 8006eb34 */ void (*Unk28)(void *);

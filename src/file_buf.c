@@ -84,11 +84,11 @@ static s32 g_FileDriverClass = 0x13;
 static s32 D_8008A850 = 0;
 static s32 g_DataFolder = 0x8006D4A8;
 extern char *strcat(char *, char *);
-s32 func_80027F18(s32, s32, s32);
-void func_80027FD8(s32);
-void func_80027FE4(s32);
-s32 func_80027FF0(void);
-s32 func_80027FFC(s32, s32);
+s32 cd_file_driver_frame_setup(s32, s32, s32);
+void cd_file_driver_set_disc_table(s32);
+void cd_file_driver_set_disc_count(s32);
+s32 cd_file_driver_get_disc_count(void);
+s32 cd_file_driver_search_disc_files(s32, s32);
 s32 debug_file_driver_frame_setup(s32, s32);
 
 s32 file_buf_destroy(file_buf_t *This) {
@@ -167,7 +167,7 @@ void *get_file_driver() {
     if (g_FileDriverClass == 0x23) {
         return debug_file_driver_get_vtable();
     } else {
-        return func_80027E68();
+        return cd_file_driver_get_vtable();
     }
 }
 
@@ -187,7 +187,7 @@ void file_driver_set_class(s32 arg0) {
     cursor = (void *(**)(void))g_FILE_DRIVER_CLASS_VTABLES;
     g_FileDriverClass = arg0;
     if (arg0 == 0x13) {
-        vt = (void *)func_80027E68();
+        vt = (void *)cd_file_driver_get_vtable();
     } else {
         vt = (void *)debug_file_driver_get_vtable();
     }
@@ -219,19 +219,19 @@ void file_driver_copy_vtable_slots(s32 *Dest, s32 *Src) {
 
 void file_driver_lock(void) {
     if (g_FileDriverClass == 0x13) {
-        func_800280D0();
+        cd_file_driver_lock();
     }
 }
 
 void file_driver_unlock(void) {
     if (g_FileDriverClass == 0x13) {
-        func_800280E0();
+        cd_file_driver_unlock();
     }
 }
 
 s32 file_driver_is_busy(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80027EC8();
+        return cd_file_driver_is_busy();
     }
 
     return 0;
@@ -239,7 +239,7 @@ s32 file_driver_is_busy(void) {
 
 s32 file_driver_is_read_idle(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80027ED4();
+        return cd_file_driver_is_read_idle();
     }
 
     return 1;
@@ -247,7 +247,7 @@ s32 file_driver_is_read_idle(void) {
 
 s32 file_driver_get_read_param(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80027EE0();
+        return cd_file_driver_get_read_param();
     }
 
     return 0;
@@ -255,7 +255,7 @@ s32 file_driver_get_read_param(void) {
 
 s32 file_driver_get_read_state(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80027EEC();
+        return cd_file_driver_get_read_state();
     }
 
     return 0;
@@ -266,7 +266,7 @@ void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
 
     fn = (s32 (*)(s32, s32, s32))debug_file_driver_frame_setup;
     if (g_FileDriverClass == 0x13) {
-        fn = (s32 (*)(s32, s32, s32))func_80027F18;
+        fn = (s32 (*)(s32, s32, s32))cd_file_driver_frame_setup;
     }
     do {
     } while (fn(Unk1, Unk2, Unk3) == 0);
@@ -274,7 +274,7 @@ void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
 
 s32 file_driver_get_frame_state(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80027EF8();
+        return cd_file_driver_get_frame_state();
     }
 
     return debug_file_driver_get_frame_state();
@@ -282,7 +282,7 @@ s32 file_driver_get_frame_state(void) {
 
 s32 file_driver_get_frame_mode(void) {
     if (g_FileDriverClass == 0x13) {
-        return func_80028B6C();
+        return cd_file_driver_get_frame_mode();
     }
 
     return debug_file_driver_get_frame_mode();
@@ -293,10 +293,10 @@ s32 file_driver_lookup_path(s32 arg0, s32 arg1) {
 
     if (g_FileDriverClass == 0x13) {
         D_8008A850 = 1;
-        func_80027FD8(arg0);
-        temp = func_80027FF0();
-        func_80027FE4(temp + arg1);
-        return func_80027FFC(arg0 + (temp * 0x1C), arg1);
+        cd_file_driver_set_disc_table(arg0);
+        temp = cd_file_driver_get_disc_count();
+        cd_file_driver_set_disc_count(temp + arg1);
+        return cd_file_driver_search_disc_files(arg0 + (temp * 0x1C), arg1);
     }
     return 1;
 }
