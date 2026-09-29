@@ -1,4 +1,5 @@
 #include "dream_session.h"
+#include "dream_session_path.h"
 #include "base_class.h"
 #include "scene.h"
 #include "map_scene.h"
@@ -100,7 +101,7 @@ void dream_session_construct(dream_session_t *This,
     This->m_Unk17 = tmd_create(unk);
     This->m_Unk15 = bgm_create(get_random_sound_type(NULL), 0, 1);
 
-    func_8004A070(1);
+    dream_session_path_advance(1);
     frame_setup(FrameSyncMode == 0, 1, 1);
 
     This->m_GraphicsCtx = GraphicsCtx;

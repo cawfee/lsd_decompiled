@@ -9,7 +9,7 @@ void func_8001F314(void *);
 void func_8001F33C(void *);
 s32 func_8001F360(class_FA50_t *, s32);
 void func_8001F37C(void *);
-void func_8001F394(class_FA50_t *);
+void class_FA50_reset_flag(class_FA50_t *);
 
 class_FA50_vtable_t g_CLASS_FA50_VTABLE = {
     0x9,
@@ -52,7 +52,7 @@ void class_FA50_construct(class_FA50_t *This, void *Unk2) {
     This->m_Unk3 = Unk2;
     This->m_Unk2 = (s32) Unk2 - 12;
 
-    func_8001F394(This);
+    class_FA50_reset_flag(This);
 }
 
 void func_8001F314(class_FA50_t *This, class_FA50_t *Unk2) {

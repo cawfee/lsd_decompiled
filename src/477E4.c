@@ -77,7 +77,7 @@ void func_800571E8(class_477E4_t *This) {
     This->m_Unk20 = 0;
 }
 
-extern s32 func_8001F3A4(s32);
+extern s32 class_FA50_is_active(s32);
 extern void func_8001F66C(void *, s32, s32, s32);
 
 void func_800571F8(class_477E4_t *This, s32 arg1) {
@@ -97,7 +97,7 @@ void func_800571F8(class_477E4_t *This, s32 arg1) {
     if (This->m_Unk7 == 0) {
         return;
     }
-    if (func_8001F3A4(This->m_Unk7) == 0) {
+    if (class_FA50_is_active(This->m_Unk7) == 0) {
         return;
     }
     This->vtable->Unk34(This, buf);

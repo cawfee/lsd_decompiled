@@ -8,6 +8,7 @@
 #include "graph_screen.h"
 #include "movie_screen.h"
 #include "dream_session.h"
+#include "dream_session_path.h"
 #include "game_flow.h"
 #include "main_menu.h"
 #include "memory.h"
@@ -128,7 +129,7 @@ void game_flow_display_logo(game_flow_t *This, const char *Path) {
 }
 
 void game_flow_logo_callback() {
-    func_8004A070(0);
+    dream_session_path_advance(0);
 }
 
 void game_flow_play_intro_movie(game_flow_t *This) {

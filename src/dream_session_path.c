@@ -1,12 +1,16 @@
 #include "common.h"
 
-s32 D_8008A978 = 0;
-s32 D_8008A97C = 0;
+#include "dream_session_path.h"
+
+/* Cursor state for dream_session_path_advance: current step and the half-table
+   count captured on the first (arg0 == 0) call. */
+s32 g_DreamPathStep = 0;
+s32 g_DreamPathHalfCount = 0;
 
 const char *get_path_table(s32 *Count);
 s32 file_driver_lookup_path(s32 arg0, s32 arg1);
 
-s32 func_8004A070(s32 arg0) {
+s32 dream_session_path_advance(s32 arg0) {
     s32 count;
     s32 path_table;
     s32 prev;
@@ -14,20 +18,20 @@ s32 func_8004A070(s32 arg0) {
     s32 result;
 
     path_table = (s32)get_path_table(&count);
-    prev = D_8008A978;
+    prev = g_DreamPathStep;
     step = prev + 1;
-    D_8008A978 = step;
+    g_DreamPathStep = step;
     switch (step) {
     case 1:
         if (arg0 != 0) {
-            D_8008A978 = prev + 2;
+            g_DreamPathStep = prev + 2;
         } else {
             count = count / 2;
-            D_8008A97C = count;
+            g_DreamPathHalfCount = count;
         }
         break;
     case 2:
-        count -= D_8008A97C;
+        count -= g_DreamPathHalfCount;
         break;
     default:
         count = 0;

@@ -5,7 +5,7 @@
 #include <psx/libspu.h>
 
 static s32 g_CD_INIT = 0;
-extern s32 D_8008A8E0[];
+extern s32 g_ScreenSize[];
 
 
 void system_construct(void *, s32);
@@ -55,7 +55,7 @@ void system_construct(system_t *This, s32 Unk) {
 
     This->m_Unk5 = 0;
     file_driver_set_class(Unk);
-    This->vtable->Unk15(This, &D_8008A8E0, 0);
+    This->vtable->Unk15(This, &g_ScreenSize, 0);
 }
 
 void nullsub25(void *) {

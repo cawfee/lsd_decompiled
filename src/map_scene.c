@@ -18,8 +18,8 @@ void func_8005C76C(void);
 void func_80054D30(void);
 s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 
-const char *func_80048EA0(s32 arg0, s32 seed_arg, s32 count);
-const char *func_80048F84(s32 arg0, s32 unused);
+const char *get_random_stage_texture_path(s32 arg0, s32 seed_arg, s32 count);
+const char *get_stage_music_path(s32 arg0, s32 unused);
 void *func_80043008(s32 Unk1, s32 Unk2);
 s32 func_800544E4(void *a0, s32 a1, s32 *a2, s32 a3, s32 a4);
 void func_8001EF60(s32 arg);
@@ -86,9 +86,9 @@ void func_80052DE8(map_scene_t *This, void *arg1, s32 arg2) {
 
 s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     if (Unk1 < 0) {
-        return func_80049098(This->m_Unk13, Unk2, Unk3);
+        return get_stage_model_path_by_grid(This->m_Unk13, Unk2, Unk3);
     } else {
-        return func_80049060(This->m_Unk13, Unk1);
+        return get_stage_model_path(This->m_Unk13, Unk1);
     }
 }
 
@@ -106,8 +106,8 @@ void func_80052F10(map_scene_t *This, s32 arg1, s32 arg2, s32 arg3) {
     (*(void (**)(void *))(*(s32 *)obj5 + 0x74))(obj5);
     This->m_Unk23 = 1;
     (*(void (**)(void *, const char *))(*(s32 *)This->m_Unk20 + 0x5C))(
-        This->m_Unk20, func_80048F84(This->m_Unk13, 0));
-    This->m_Unk21 = (s32)((void *(*)(s32))func_80043008)((s32)func_80048EA0(
+        This->m_Unk20, get_stage_music_path(This->m_Unk13, 0));
+    This->m_Unk21 = (s32)((void *(*)(s32))func_80043008)((s32)get_random_stage_texture_path(
         This->m_Unk13, 0, This->m_Unk14->vtable->get_day_number(This->m_Unk14, 0)));
     (*(void (**)(void *, dream_sys_t *, s32 *, s32 *, s32))(*(s32 *)obj5 + 0x70))(
         obj5, This->m_Unk14, D_8008715C, D_80087168, 0);

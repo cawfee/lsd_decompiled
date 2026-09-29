@@ -1,11 +1,11 @@
 #include "common.h"
 
-void *D_8008A83C = NULL;
+void *g_Display = NULL;
 
 void *get_display(void) {
-    return D_8008A83C;
+    return g_Display;
 }
 
 void set_display(void *value) {
-    D_8008A83C = value;
+    g_Display = value;
 }

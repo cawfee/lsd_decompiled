@@ -2,7 +2,7 @@
 
 #include "base_class.h"
 
-extern s32 func_8001F3A4(s32);
+extern s32 class_FA50_is_active(s32);
 
 extern void *RotMatrix(s16 *, void *);
 
@@ -268,7 +268,7 @@ s32 func_8001D568(class_D294_t *This, s32 arg1) {
     if (arg1 < 4) {
         if (arg1 >= 2) {
             if (This->m_Unk7 != 0) {
-                if (func_8001F3A4(This->m_Unk7) != 0) {
+                if (class_FA50_is_active(This->m_Unk7) != 0) {
                     This->vtable->Unk34(This, buf);
                     return This->vtable->Unk35(This, buf, arg1);
                 }

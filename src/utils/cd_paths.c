@@ -6,12 +6,16 @@
 #include "paths.h"
 
 static char *g_CDI_STR = "CDI\\";
-static s32 D_8008A964 = NULL;
-static s32 D_8008A968 = NULL;
+/* Forced sound-type / music-track selection set by set_audio_path_override;
+   0 means "use the seeded random choice". */
+static s32 g_SoundTypeOverride = NULL;
+static s32 g_MusicTrackOverride = NULL;
 
 extern const char *g_SE_PATHS[];
 
-static s16 D_80086170[] = {
+/* Play length in seconds for each movie in g_STRING_TABLE order; indexed by
+   the duration hint returned by the movie path getters. */
+static s16 g_MovieDurations[] = {
     1060,  1088,  953,   1179,  979,   1231,  1046,  474,   524,   439,   349,   379,   352,
     352,   475,   867,   527,   445,   399,   579,   264,   541,   566,   325,   436,   524,
     522,   523,   649,   451,   465,   473,   411,   490,   467,   523,   187,   384,   90,
@@ -30,13 +34,13 @@ s32 get_seeded_random(s32 Seed, s32 Unk) {
     return rand();
 }
 
-void func_80048D28(s32 arg0, s32 arg1) {
-    if (arg0 >= 0) {
-        D_8008A964 = arg0;
+void set_audio_path_override(s32 SoundType, s32 MusicTrack) {
+    if (SoundType >= 0) {
+        g_SoundTypeOverride = SoundType;
     }
 
-    if (arg1 >= 0) {
-        D_8008A968 = arg1;
+    if (MusicTrack >= 0) {
+        g_MusicTrackOverride = MusicTrack;
     }
 }
 
@@ -61,7 +65,7 @@ const char *get_random_sound_type(s32 *Length) {
 
     idx = (u32)get_seeded_random(0, (s32)Length) % 7u;
     paths = get_sound_types_paths();
-    override = D_8008A964;
+    override = g_SoundTypeOverride;
     if (override != 0) {
         off = (override - 1) * 4;
     } else {
@@ -80,15 +84,15 @@ const char *get_se_path(void) {
     return *get_se_paths();
 }
 
-s32 func_80048E2C(s32 Arg) {
-    return get_path_table(NULL) + (D_800819E8[Arg] * 0x1C);
+s32 get_stage_paths(s32 Arg) {
+    return get_path_table(NULL) + (g_StagePathStart[Arg] * 0x1C);
 }
 
-const char *func_80048E80(s32 Arg) {
-    return func_80048E2C(Arg);
+const char *get_stage_paths_str(s32 Arg) {
+    return get_stage_paths(Arg);
 }
 
-const char *func_80048EA0(s32 arg0, s32 seed_arg, s32 count) {
+const char *get_random_stage_texture_path(s32 arg0, s32 seed_arg, s32 count) {
     s32 mod;
     s32 idx;
 
@@ -96,14 +100,14 @@ const char *func_80048EA0(s32 arg0, s32 seed_arg, s32 count) {
     count = count % 40;
     mod = (count / 10) + 1;
     idx = get_seeded_random(0, seed_arg) % mod;
-    return func_80048E80(arg0) + (idx * 0x1C);
+    return get_stage_paths_str(arg0) + (idx * 0x1C);
 }
 
-const char *func_80048F60(s32 Arg) {
-    return func_80048E2C(Arg) + 0x70;
+const char *get_stage_music_paths(s32 Arg) {
+    return get_stage_paths(Arg) + 0x70;
 }
 
-const char *func_80048F84(s32 arg0, s32 unused) {
+const char *get_stage_music_path(s32 arg0, s32 unused) {
     u32 idx;
     const char *path;
     s32 override;
@@ -114,12 +118,12 @@ const char *func_80048F84(s32 arg0, s32 unused) {
         if (idx == 2) {
             idx = 3;
         }
-        if (D_8008A968 == 3) {
-            D_8008A968 = 4;
+        if (g_MusicTrackOverride == 3) {
+            g_MusicTrackOverride = 4;
         }
     }
-    path = func_80048F60(arg0);
-    override = D_8008A968;
+    path = get_stage_music_paths(arg0);
+    override = g_MusicTrackOverride;
     if (override != 0) {
         off = (override - 1) * 7;
     } else {
@@ -128,16 +132,16 @@ const char *func_80048F84(s32 arg0, s32 unused) {
     return (const char *)((u8 *)path + off * 4);
 }
 
-const char *func_8004903C(s32 Arg) {
-    return func_80048E2C(Arg) + 0xFC;
+const char *get_stage_model_paths(s32 Arg) {
+    return get_stage_paths(Arg) + 0xFC;
 }
 
-const char *func_80049060(s32 Arg1, s32 Arg2) {
-    return func_8004903C(Arg1) + 28 * Arg2;
+const char *get_stage_model_path(s32 Arg1, s32 Arg2) {
+    return get_stage_model_paths(Arg1) + 28 * Arg2;
 }
 
-const char *func_80049098(s32 Arg1, s32 Arg2, s32 Arg3) {
-    return func_80049060(Arg1, Arg2 + (stage_grid_get_dimension(Arg1)->columns * Arg3));
+const char *get_stage_model_path_by_grid(s32 Arg1, s32 Arg2, s32 Arg3) {
+    return get_stage_model_path(Arg1, Arg2 + (stage_grid_get_dimension(Arg1)->columns * Arg3));
 }
 
 const char *get_logo_asmk_path(s32 *DurationMaybe) {
@@ -247,7 +251,7 @@ const char *get_special_day_movie(s32 *out, s32 packed) {
 }
 
 s32 get_movie_duration_maybe(s32 Index) {
-    return D_80086170[Index];
+    return g_MovieDurations[Index];
 }
 
 // Picks one of the special-day movies at `index` and sums the durations of
@@ -264,7 +268,7 @@ const char *get_special_reel_movie_path(s32 *out, s32 index, s32 count) {
     end += start;
     i = start;
     while (i < end) {
-        *out += D_80086170[i] + 10;
+        *out += g_MovieDurations[i] + 10;
         i++;
     }
     *out -= 10;
