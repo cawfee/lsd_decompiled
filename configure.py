@@ -401,7 +401,7 @@ c_targets_g8 = [
     "src/46B20.c",
     "src/413A8.c",
     "src/map_scene.c",
-    "src/4cd08.c",
+    "src/link.c",
     "src/4775C.c",
     "src/renderer.c",
 ]

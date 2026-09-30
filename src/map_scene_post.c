@@ -10,7 +10,7 @@ extern s32 D_8008AB40;
 extern char D_8008AB44[];
 
 void func_80053EB4(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
-void func_8005C76C(void);
+void link_destroy_teleport_entity(void);
 void func_80054D30(void);
 s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 
@@ -18,12 +18,12 @@ void func_800536B0(map_scene_t *This) {
     dream_sys_t *dream_sys;
 
     This->vtable->Unk52(This);
-    dream_sys = This->m_Unk14;
+    dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_lock_input(dream_sys);
-    dream_sys = This->m_Unk14;
+    dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_detach_actor(dream_sys);
-    (*(void (**)(void *))(*(s32 *)This->m_Unk5 + 0x74))(This->m_Unk5);
-    This->vtable->Detach(This, This->m_Unk4);
+    (*(void (**)(void *))(*(s32 *)This->m_StageObject + 0x74))(This->m_StageObject);
+    This->vtable->Detach(This, This->m_SceneObject);
 }
 
 void func_80053764(map_scene_t *This) {
@@ -35,11 +35,11 @@ void func_80053764(map_scene_t *This) {
     s32 ret;
     s32 arg2;
 
-    This->m_Unk25 = 1;
-    This->m_Unk14->vtable->reset_motion_for_link(This->m_Unk14, This->m_Unk16, This->m_Unk15);
-    (*(void (**)(void *))(*(s32 *)This->m_Unk4 + 0xEC))(This->m_Unk4);
-    obj5 = This->m_Unk5;
-    link = (s32 *)This->m_Unk19;
+    This->m_LinkActive = 1;
+    This->m_DreamSys->vtable->reset_motion_for_link(This->m_DreamSys, This->m_Unk16, This->m_Unk15);
+    (*(void (**)(void *))(*(s32 *)This->m_SceneObject + 0xEC))(This->m_SceneObject);
+    obj5 = This->m_StageObject;
+    link = (s32 *)This->m_Generation;
     (*(void (**)(void *, s32))(*(s32 *)obj5 + 0x60))(obj5, 1);
     (*(void (**)(void *, s32))(*(s32 *)obj5 + 0x64))(obj5, link[3]);
     (*(void (**)(void *, s32))(*(s32 *)obj5 + 0x6C))(obj5, link[7]);
@@ -58,7 +58,7 @@ void func_80053764(map_scene_t *This) {
     (*(void (**)(void *, s32))(*(s32 *)obj5 + 0xB4))(obj5, 1);
     This->vtable->Attach(
         This, created = (*(void *(**)(void *))(*(s32 *)obj5 + 0xAC))(obj5));
-    ret = This->m_Unk14->vtable->dream_sys_get_set_flashback(This->m_Unk14, &sp10, -1);
+    ret = This->m_DreamSys->vtable->dream_sys_get_set_flashback(This->m_DreamSys, &sp10, -1);
     (*(void (**)(void *, s32, s32))(*(s32 *)created + 0xF0))(
         created, ret, -(ret != 0) & 3);
     {
@@ -77,12 +77,12 @@ void func_80053764(map_scene_t *This) {
 s32 func_8005393C(map_scene_t *This) {
     s32 v1;
 
-    v1 = (*(s32 (**)(void *, s32, s32))(*(s32 *)This->m_Unk4 + 0x10C))(This->m_Unk4, 0, 0);
+    v1 = (*(s32 (**)(void *, s32, s32))(*(s32 *)This->m_SceneObject + 0x10C))(This->m_SceneObject, 0, 0);
     return func_800558F0(v1, 0, 0);
 }
 
 void func_80053984(map_scene_t *This, s32 Unk2, s32 Unk3) {
-    if (This->m_Unk7 == 0) {
+    if (This->m_State == 0) {
         switch (Unk3) {
         case 10:
             This->vtable->Unk36(This);
@@ -107,7 +107,7 @@ void func_80053984(map_scene_t *This, s32 Unk2, s32 Unk3) {
             break;
         }
     } else if (Unk3 >= 9) {
-        This->m_Unk14->m_Unk16 = 0;
+        This->m_DreamSys->m_LinkState = 0;
     }
 }
 
@@ -126,10 +126,10 @@ void func_80053ACC(map_scene_t *This) {
     s32 var_a3;
     dream_sys_t *dream_sys;
 
-    dream_sys = This->m_Unk14;
-    This->m_Unk7 = 4;
+    dream_sys = This->m_DreamSys;
+    This->m_State = 4;
     if (dream_sys->vtable->dream_sys_get_set_flashback(dream_sys, &sp18, -1) == 0) {
-        temp_v1 = (This->m_Unk6 + This->m_Unk13) & 3;
+        temp_v1 = (This->m_Tick + This->m_Location) & 3;
         if (temp_v1 == 0) {
             This->vtable->Notify(This, 4);
             return;
@@ -162,15 +162,15 @@ void func_80053BE8(map_scene_t *This) {
     dream_sys_t *dream_sys;
     s32 v;
 
-    if (This->m_Unk14->m_NextMap < 0) {
+    if (This->m_DreamSys->m_NextMap < 0) {
         callback = This->vtable->Unk38;
         callback(This);
     } else {
-        This->m_Unk7 = 5;
-        dream_sys = This->m_Unk14;
+        This->m_State = 5;
+        dream_sys = This->m_DreamSys;
         v = dream_sys->vtable->dream_sys_get_dream_color(dream_sys);
         func_80053EB4(This, v, 0, 0xA, 1);
-        dream_sys = This->m_Unk14;
+        dream_sys = This->m_DreamSys;
         dream_sys->vtable->dream_sys_lock_input(dream_sys);
     }
 }
@@ -178,10 +178,10 @@ void func_80053BE8(map_scene_t *This) {
 void func_80053C94(map_scene_t *This) {
     dream_sys_t *dream_sys;
 
-    This->m_Unk7 = 6;
-    dream_sys = This->m_Unk14;
+    This->m_State = 6;
+    dream_sys = This->m_DreamSys;
     func_80053EB4(This, dream_sys->vtable->dream_sys_get_dream_color(dream_sys), 0, 0x1E, 1);
-    dream_sys = This->m_Unk14;
+    dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_lock_input(dream_sys);
 }
 
@@ -189,25 +189,25 @@ void func_80053D18(map_scene_t *This) {
     s32 sp18;
     dream_sys_t *dream_sys;
 
-    This->m_Unk7 = 7;
-    dream_sys = This->m_Unk14;
+    This->m_State = 7;
+    dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_get_set_flashback(dream_sys, &sp18, -1);
     func_80053EB4(This, sp18, 0, 5, 1);
-    dream_sys = This->m_Unk14;
+    dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_lock_input(dream_sys);
 }
 
 void func_80053D9C(map_scene_t *This) {
-    This->m_Unk7 = 8;
+    This->m_State = 8;
     func_80053EB4(This, 0, 0, 6, 1);
-    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 1);
+    This->m_DreamSys->vtable->dream_sys_set_paused(This->m_DreamSys, 1);
 }
 
 void func_80053E00(map_scene_t *This) {
-    This->m_Unk7 = 0xA;
+    This->m_State = 0xA;
     func_80053EB4(This, 0, 0, 6, 1);
-    This->m_Unk14->vtable->dream_sys_set_move_callback(This->m_Unk14, 2);
-    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 2);
+    This->m_DreamSys->vtable->dream_sys_set_move_callback(This->m_DreamSys, 2);
+    This->m_DreamSys->vtable->dream_sys_set_paused(This->m_DreamSys, 2);
 }
 
 void func_80053E84(map_scene_t *This) {
@@ -218,7 +218,7 @@ void func_80053EB4(map_scene_t *This, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     void *obj;
     void *created;
 
-    obj = This->m_Unk5;
+    obj = This->m_StageObject;
     created = (*(void *(**)(void *))(*(s32 *)obj + 0xAC))(obj);
     if (arg3 != 0) {
         (*(void (**)(void *, s32))(*(s32 *)created + 0xD0))(created, arg3);
@@ -246,21 +246,21 @@ void func_80053F84(map_scene_t *This, dream_sys_t *arg1, s32 arg2) {
     return;
 kind5:
     This->vtable->Detach(This, arg1);
-    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 0);
-    This->m_Unk7 = 0;
+    This->m_DreamSys->vtable->dream_sys_set_paused(This->m_DreamSys, 0);
+    This->m_State = 0;
     return;
 kind6:
     This->vtable->Detach(This, arg1);
     value = arg1->vtable->Unk56(arg1);
-    obj = This->m_Unk5;
+    obj = This->m_StageObject;
     ((void (*)(void *, s32))(*(u32 *)((u8 *)*(void **)obj + 0x64)))(obj, value);
-    state = This->m_Unk7;
+    state = This->m_State;
     if (state != five && state != 8 && state == 10) {
-        This->m_Unk14->vtable->dream_sys_set_view_mode(This->m_Unk14, 1);
-        This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 0);
-        This->m_Unk7 = 4;
+        This->m_DreamSys->vtable->dream_sys_set_view_mode(This->m_DreamSys, 1);
+        This->m_DreamSys->vtable->dream_sys_set_paused(This->m_DreamSys, 0);
+        This->m_State = 4;
     }
-    This->vtable->Notify(This, This->m_Unk7);
+    This->vtable->Notify(This, This->m_State);
 }
 
 void func_800540E8(map_scene_t *This, s32 Unk1, s32 Unk2) {
@@ -269,7 +269,7 @@ void func_800540E8(map_scene_t *This, s32 Unk1, s32 Unk2) {
     }
 }
 
-s32 func_8005C7D4(s32, void *, s32);
+s32 link_spawn_from_tile(s32, void *, s32);
 
 s32 func_80054120(map_scene_t *This) {
     s32 sp10;
@@ -278,10 +278,10 @@ s32 func_80054120(map_scene_t *This) {
     s32 v;
     s32 r;
 
-    a = This->m_Unk4;
+    a = This->m_SceneObject;
     obj = (*(void *(**)(void *, s32 *))(*(s32 *)a + 0x114))(a, &sp10);
-    v = This->m_Unk14->vtable->get_day_number(This->m_Unk14, 0);
-    r = func_8005C7D4(*(s32 *)(*(s32 *)((u8 *)obj + 4) + 0x34), &sp10, v);
+    v = This->m_DreamSys->vtable->get_day_number(This->m_DreamSys, 0);
+    r = link_spawn_from_tile(*(s32 *)(*(s32 *)((u8 *)obj + 4) + 0x34), &sp10, v);
     *(s32 *)((u8 *)obj + 0x14) = r;
     if (r != 0) {
         return 0;
@@ -295,8 +295,8 @@ void func_800541CC(void) {
 }
 
 void func_800541D4(map_scene_t *This) {
-    if (This->m_Unk31) {
-        if (!This->m_Unk7) {
+    if (This->m_TextStarted) {
+        if (!This->m_State) {
             This->m_Unk32 = 1;
         }
     }
@@ -324,23 +324,23 @@ void func_800542D0(map_scene_t *This) {
     s32 unk31;
     void *obj;
 
-    unk31 = This->m_Unk31;
+    unk31 = This->m_TextStarted;
     if (unk31 == 0) {
         obj = text_line_create(This->m_Unk28, 5, (s32)D_8008AB44);
-        This->m_Unk30 = obj;
-        (*(void (**)(void *, void *, s32 *))(*(s32 *)obj + 0x4C))(obj, This->m_Unk4, &D_8008AB38);
-        obj = This->m_Unk30;
+        This->m_TextLine = obj;
+        (*(void (**)(void *, void *, s32 *))(*(s32 *)obj + 0x4C))(obj, This->m_SceneObject, &D_8008AB38);
+        obj = This->m_TextLine;
         (*(void (**)(void *, s32 *))(*(s32 *)obj + 0xB8))(obj, &D_8008AB40);
-        This->m_Unk31 = 1;
+        This->m_TextStarted = 1;
         return;
     }
-    This->m_Unk31 = unk31 + 1;
+    This->m_TextStarted = unk31 + 1;
     if (unk31 == 4) {
-        obj = This->m_Unk5;
+        obj = This->m_StageObject;
         (*(void (**)(void *, s32))(*(s32 *)obj + 0xB4))(obj, 0);
         obj = This->m_Unk3;
         (*(void (**)(void *))(*(s32 *)obj + 0x4C))(obj);
-        obj = This->m_Unk20;
+        obj = This->m_Music;
         (*(void (**)(void *))(*(s32 *)obj + 0x4C))(obj);
         obj = This->m_Unk12;
         (*(void (**)(void *))(*(s32 *)obj + 0x88))(obj);
@@ -350,19 +350,19 @@ void func_800542D0(map_scene_t *This) {
 void func_800543FC(map_scene_t *This) {
     void *obj;
 
-    if (This->m_Unk31 != 0) {
-        obj = This->m_Unk30;
+    if (This->m_TextStarted != 0) {
+        obj = This->m_TextLine;
         (*(void (**)(void *))(*(s32 *)obj + 4))(obj);
     }
     obj = This->m_Unk12;
     (*(void (**)(void *))(*(s32 *)obj + 0x8C))(obj);
-    obj = This->m_Unk20;
+    obj = This->m_Music;
     (*(void (**)(void *))(*(s32 *)obj + 0x50))(obj);
     obj = This->m_Unk3;
     (*(void (**)(void *))(*(s32 *)obj + 0x50))(obj);
-    obj = This->m_Unk5;
+    obj = This->m_StageObject;
     (*(void (**)(void *, s32))(*(s32 *)obj + 0xB4))(obj, 1);
-    This->m_Unk31 = 0;
+    This->m_TextStarted = 0;
 }
 
 map_scene_vtable_t *func_800544D4(void) {

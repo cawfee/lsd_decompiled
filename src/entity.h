@@ -174,7 +174,6 @@ typedef struct entity {
     /* 0xFC */ s32 m_Unk62;
     /* 0x100 */ class_305B0_t *m_Class_305B0;
     /* 0x104 */ s32 m_Unk64;
-    /* 0x108 */ s32 m_Unk65;
 } entity_t;
 
 typedef struct {
@@ -193,12 +192,26 @@ typedef struct {
     /* 0x0C */ void (*behaviour_fn)(entity_t *This, void *);
 } entity_prop_t;
 
+/* Per-object effect driver registered with helper_1_set_entity
+ * (src/sound.c) and updated once per frame by helper_1_update_entity.
+ * The behaviour function (g_ENTITY_TABLE[].behaviour_fn) is invoked as
+ * callback(owner, &context) and writes effect ids into the three slots. */
 typedef struct {
-    /* 0x00 */ s32 entity_id;
-    /* 0x04 */ s32 current_tick;
-    /* 0x08 */ entity_t *entity_cls_1;
-    /* 0x0C */ entity_t *entity_cls_2;
-    /* 0x10 */ s32 update_flags;
+    /* 0x00 */ s32 handle;   /* effect/sound handle, -1 when free */
+    /* 0x04 */ s32 id;       /* effect id chosen by the behaviour */
+    /* 0x08 */ s32 param;    /* effect parameter chosen by the behaviour */
+    /* 0x0C */ s32 period;   /* reset to 0x7F by helper_1_update_entity */
+    /* 0x10 */ s32 counter;  /* reset to 0x40 by helper_1_update_entity */
+} entity_effect_slot_t;
+
+typedef struct {
+    /* 0x00 */ s32 state;    /* 0 disables updates; set to entity id + 1 */
+    /* 0x04 */ s32 tick;     /* frame counter, incremented each update */
+    /* 0x08 */ void *owner;  /* object passed as the callback's first arg */
+    /* 0x0C */ void (*callback)(void *, s32 *);
+    /* 0x10 */ s32 motion;   /* current motion/pose id */
+    /* 0x14 */ s32 divisor;  /* period used by helper_1_update_entity */
+    /* 0x18 */ entity_effect_slot_t slots[3];
 } entity_context_t;
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3);

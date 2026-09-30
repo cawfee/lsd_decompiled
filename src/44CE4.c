@@ -4,37 +4,37 @@
 extern u8 D_800872C4[];
 extern s32 D_8008730C[];
 
-extern s32 D_8008AB4C;
-extern s32 D_8008AC6C;
-extern s32 *D_8008AC7C;
-extern s32 D_8008AC70;
-extern s32 D_8008AC74;
+extern s32 g_GenerationOwner;
+extern s32 g_GenerationLocation;
+extern s32 *g_GenerationEntityContext;
+extern s32 g_LocationTimer;
+extern s32 g_CurrentDay;
 extern s32 D_8008AC78;
-extern s32 D_8008AC80;
+extern s32 g_GenerationType;
 extern s32 D_8008ACA0[];
 
-s32 func_80054558();
+s32 dream_generation_load();
 
-s32 func_800544E4(void *a0, s32 a1, s32 *a2, s32 a3, s32 a4) {
+s32 dream_generation_start(void *a0, s32 a1, s32 *a2, s32 a3, s32 a4) {
     s32 *p;
     s32 i;
 
-    if (D_8008AB4C == 0) {
+    if (g_GenerationOwner == 0) {
         i = 1;
         p = D_8008ACA0;
-        D_8008AB4C = (s32)a0;
-        D_8008AC6C = a1;
-        D_8008AC7C = a2;
-        D_8008AC80 = -1;
-        D_8008AC74 = a3;
+        g_GenerationOwner = (s32)a0;
+        g_GenerationLocation = a1;
+        g_GenerationEntityContext = a2;
+        g_GenerationType = -1;
+        g_CurrentDay = a3;
         D_8008AC78 = a4;
-        D_8008AC70 = 0;
+        g_LocationTimer = 0;
         do {
             *p = 0;
             i--;
             p--;
         } while (i >= 0);
-        return func_80054558();
+        return dream_generation_load();
     }
     return 0;
 }
@@ -42,23 +42,23 @@ s32 func_800544E4(void *a0, s32 a1, s32 *a2, s32 a3, s32 a4) {
 extern s8 *D_800873EC[];
 extern u8 D_80087424[];
 extern s32 D_8008AB54;
-void func_800545FC(u8 *, s8 *);
-s8 *func_80054758(void);
+void dream_generation_apply_entry(u8 *, s8 *);
+s8 *dream_generation_pick_entry(void);
 
-u8 *func_80054558(void) {
-    s8 *s0 = D_800873EC[D_8008AC6C];
+u8 *dream_generation_load(void) {
+    s8 *s0 = D_800873EC[g_GenerationLocation];
 
     if (s0 == NULL) {
-        s0 = func_80054758();
+        s0 = dream_generation_pick_entry();
     }
-    func_800545FC(D_80087424, s0);
+    dream_generation_apply_entry(D_80087424, s0);
     if (s0[1] >= 4) {
         D_8008AB54 = (s32)(D_800872C4 + s0[2] * 3);
     }
     return D_80087424;
 }
 
-void func_800545FC(u8 *arg0, s8 *arg1) {
+void dream_generation_apply_entry(u8 *arg0, s8 *arg1) {
     *(void **)(arg0 + 0xC) = (u8 *)&D_800872C4 + arg1[3] * 3;
     *(void **)(arg0 + 0x18) = (u8 *)&D_800872C4 + arg1[2] * 3;
     *(s32 *)(arg0 + 0x1C) = D_8008730C[arg1[1]];
@@ -68,7 +68,7 @@ void func_800545FC(u8 *arg0, s8 *arg1) {
 extern s32 D_8008AB54;
 extern s32 D_8008AB58[];
 extern s32 D_8008AB60[];
-extern s32 *D_8008AC7C;
+extern s32 *g_GenerationEntityContext;
 extern class_30CD0_t *D_8008AC94;
 
 void func_80054660(void) {
@@ -79,7 +79,7 @@ void func_80054660(void) {
         D_8008AC94 = func_800404D0((u32)D_8008AB60, (u32)D_8008AB54, 0);
         D_8008AC94->vtable->Unk24(D_8008AC94, 1);
         D_8008AC94->vtable->Unk25(D_8008AC94, 0);
-        ctx = *(void ***)((u8 *)D_8008AC7C + 0xC);
+        ctx = *(void ***)((u8 *)g_GenerationEntityContext + 0xC);
         result = (*(s32 (**)(void *))((u8 *)*ctx + 0xAC))(ctx);
         D_8008AC94->vtable->Unk18(D_8008AC94, result, D_8008AB58);
     }
@@ -100,35 +100,35 @@ extern s8 D_800873D8[];
 extern u8 *D_800873C8[];
 extern u8 D_80087234[];
 extern u8 D_8008726C[];
-extern s32 D_8008AB50;
-extern s32 D_8008AC84;
-extern s32 D_8008AC8C;
-extern s32 D_8008AC90;
+extern s32 g_GenerationFlags;
+extern s32 g_GenerationIndex;
+extern s32 g_GenerationTablePtr;
+extern s32 g_GenerationDataPtr;
 
-s8 *func_80054758(void) {
+s8 *dream_generation_pick_entry(void) {
     s32 temp_v1;
     s8 temp_a0;
     s32 idx;
     s8 *entry;
     u8 *p;
 
-    temp_v1 = D_8008AC74 + D_8008AC6C;
+    temp_v1 = g_CurrentDay + g_GenerationLocation;
     temp_a0 = D_800873DC[temp_v1 & 0xF];
-    D_8008AC80 = temp_a0;
+    g_GenerationType = temp_a0;
     idx = temp_v1 % D_800873D8[temp_a0];
-    D_8008AC84 = idx;
+    g_GenerationIndex = idx;
     entry = (s8 *)(D_800873C8[temp_a0] + idx * 4);
     if (temp_a0 == 0) {
         p = D_8008726C;
-        D_8008AC90 = (s32)(D_800872C4 + entry[3] * 3);
+        g_GenerationDataPtr = (s32)(D_800872C4 + entry[3] * 3);
         if (entry[2] != 0x12) {
             p = D_80087234;
         }
-        D_8008AC8C = (s32)p;
+        g_GenerationTablePtr = (s32)p;
         if (idx < 4) {
-            D_8008AB50 = 1;
+            g_GenerationFlags = 1;
         } else if (idx < 6) {
-            D_8008AB50 = 2;
+            g_GenerationFlags = 2;
         }
     }
     return entry;
@@ -144,19 +144,19 @@ void func_80054B1C(u8 *arg0, u8 *arg1, s32 arg2) {
     arg0[2] = arg1[2] + arg2;
 }
 
-extern s32 D_8008AB50;
+extern s32 g_GenerationFlags;
 extern base_class_t *D_8008E10C[];
 
 void func_80054B50(void) {
-    if (D_8008AB50 != 0) {
+    if (g_GenerationFlags != 0) {
         destroy_list(D_8008E10C, 0x12);
-        D_8008AB50 = 0;
+        g_GenerationFlags = 0;
     }
 }
 
 /*
  * Near match (semantics exact, 59/60 insns, same opcode stream). Only residual:
- * gcc 2.6.3 CSEs the two `D_8008AC80 == 2` constants into one pseudolive across
+ * gcc 2.6.3 CSEs the two `g_GenerationType == 2` constants into one pseudolive across
  * the calls, keeping 2 in $s2 and saving/restoring it; the target rematerializes
  * `ori a0,zero,2` / `ori v0,zero,2` at each test and so has no $s2 save. Tried
  * if/else, else-if, switch, do{break;}while, `!= 2u`, 2/0x2 spellings, inverted
@@ -164,16 +164,16 @@ void func_80054B50(void) {
  *
  * void func_80054B84(s32 arg0) {
  *     s32 byte, pad, temp_v0;
- *     if (D_8008AC80 >= 0) {
- *         func_80056F5C(D_8008AC80, (void *)D_8008AC7C[1], D_8008AC7C[2], D_8008AC7C[3]);
+ *     if (g_GenerationType >= 0) {
+ *         func_80056F5C(g_GenerationType, (void *)g_GenerationEntityContext[1], g_GenerationEntityContext[2], g_GenerationEntityContext[3]);
  *         byte = D_80087324[rand() & 3];
  *         pad = 0;
- *         if (D_8008AC80 == 2) { pad = 0x10 - byte; }
+ *         if (g_GenerationType == 2) { pad = 0x10 - byte; }
  *         D_8008AC88 = byte + pad;
  *         temp_v0 = (s32)func_80054F30((s32 *)func_80054DA4(D_8008E0C8, byte, arg0), pad, arg0);
- *         if (D_8008AC80 == 0) {
+ *         if (g_GenerationType == 0) {
  *             func_80054FD8(temp_v0, arg0);
- *         } else if (D_8008AC80 != 2) {
+ *         } else if (g_GenerationType != 2) {
  *             return;
  *         } else {
  *             func_8005511C(temp_v0, arg0);
@@ -197,7 +197,7 @@ void func_80054C74(s32 arg0) {
     s32 i;
     base_class_t **p;
 
-    if (D_8008AC80 >= 0) {
+    if (g_GenerationType >= 0) {
         i = 0;
         if (D_8008AC88 > 0) {
             p = D_8008E0C8;
@@ -215,12 +215,12 @@ void func_80054C74(s32 arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/44CE4", func_80054C74);
 
-extern s32 D_8008AC80;
+extern s32 g_GenerationType;
 extern s32 D_8008AC88;
 extern base_class_t *D_8008E0C8[];
 
 void func_80054CFC(void) {
-    if (D_8008AC80 >= 0) {
+    if (g_GenerationType >= 0) {
         destroy_list(D_8008E0C8, D_8008AC88);
     }
 }
@@ -242,8 +242,8 @@ void func_80054D30(void) {
         i++;
         p++;
     } while (i < 2);
-    if (D_8008AB4C != 0) {
-        D_8008AB4C = 0;
+    if (g_GenerationOwner != 0) {
+        g_GenerationOwner = 0;
     }
 }
 
@@ -264,7 +264,7 @@ s32 *func_80054F30(s32 *arg0, s32 arg1, s32 arg2) {
     D_8008E0B4[0] = D_80087204;
     for (var_s0 = 0; var_s0 < arg1; var_s0++) {
         func_80055258(arg2, temp_s4);
-        *arg0 = func_80056320(1, D_8008E0A4, D_8008AB4C, arg2);
+        *arg0 = func_80056320(1, D_8008E0A4, g_GenerationOwner, arg2);
         arg0 += 1;
     }
     return arg0;
@@ -278,7 +278,7 @@ INCLUDE_ASM("asm/nonmatchings/44CE4", func_80055258);
 
 INCLUDE_ASM("asm/nonmatchings/44CE4", func_80055410);
 
-extern s32 *D_8008AC7C;
+extern s32 *g_GenerationEntityContext;
 extern s32 D_800874B0[];
 
 void *func_80055620(s32 *, s32 *, s32);
@@ -294,7 +294,7 @@ s32 *func_8005556C(s32 *arg0, s32 *arg1, s32 arg2) {
     if (temp_v0 != NULL) {
         arg0[0] = (s32)temp_v0;
         temp_a2 = *(s8 *)((u8 *)temp_v0 + 6);
-        helper_1_set_entity(*D_8008AC7C, arg0 + 5, temp_a2, (s32)arg0, D_800874B0[temp_a2]);
+        helper_1_set_entity(*g_GenerationEntityContext, arg0 + 5, temp_a2, (s32)arg0, D_800874B0[temp_a2]);
         temp_v2 = *(s8 *)((u8 *)temp_v0 + 6);
         if (temp_v2 == *arg1) {
             *arg1 = -temp_v2;
@@ -308,14 +308,14 @@ s32 *func_8005556C(s32 *arg0, s32 *arg1, s32 arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/44CE4", func_80055620);
 
-extern s32 *D_8008AC7C;
+extern s32 *g_GenerationEntityContext;
 
 void sound_update_entity(s32, s32 *);
 
 s32 func_800557DC(s32 *arg0) {
     u8 *temp_v1;
 
-    sound_update_entity(*D_8008AC7C, (s32 *)arg0 + 5);
+    sound_update_entity(*g_GenerationEntityContext, (s32 *)arg0 + 5);
     temp_v1 = (u8 *)*arg0;
     temp_v1[6] = -temp_v1[6];
     return 0;
@@ -326,7 +326,7 @@ s32 func_80055874();
 
 s32 func_8005582C(s32 arg0) {
     if (func_80055874() != 0) {
-        helper_1_update_entity(*D_8008AC7C, (s32 *)(arg0 + 0x14));
+        helper_1_update_entity(*g_GenerationEntityContext, (s32 *)(arg0 + 0x14));
         return 1;
     }
 
@@ -367,14 +367,14 @@ extern s32 D_80087444[];
 extern s32 D_80087450[];
 extern s32 D_8008745C[];
 extern s32 D_80087468[];
-extern s32 D_8008AC6C;
+extern s32 g_GenerationLocation;
 
 void func_8003B624(void *, s32, void *);
 
 void func_80055A24(void) {
-    if (D_8008AC6C == 2) {
+    if (g_GenerationLocation == 2) {
         func_8003B624(&D_80087444, 1, &D_80087450);
-    } else if ((u32)(D_8008AC6C - 3) < 3) {
+    } else if ((u32)(g_GenerationLocation - 3) < 3) {
         func_8003B624(&D_8008745C, 1, &D_80087468);
     }
 }
@@ -633,8 +633,8 @@ s32 func_8005627C(void *arg0) {
     return *(s32 *)((u8 *)arg0 + 0x10) / divisor;
 }
 
-extern s32 D_8008AC80;
+extern s32 g_GenerationType;
 
 s32 func_8005630C(void) {
-    return (D_8008AC80 & 1) ^ 1;
+    return (g_GenerationType & 1) ^ 1;
 }

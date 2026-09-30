@@ -54,7 +54,7 @@ extern void *D_8008AC1C;
 
 extern entity_prop_t g_ENTITY_TABLE[];
 
-void func_8005DF9C(entity_t *This, s32 Unk2);
+void entity_check_event_video(entity_t *This, s32 Unk2);
 s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4);
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
@@ -86,7 +86,7 @@ entity_vtable_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Un
     return NULL;
 }
 
-class_305B0_t *func_8005D108(entity_t *This, void *Unk2, void *Unk3, s32 Unk4, s32 Unk5) {
+class_305B0_t *entity_create_effect(entity_t *This, void *Unk2, void *Unk3, s32 Unk4, s32 Unk5) {
     class_305B0_t *out;
     class_305B0_t *temp_v0;
 
@@ -127,7 +127,7 @@ void entity_cleanup(entity_t *This) {
     class_55DD4_get_vtable()->class_55DD4_cleanup(This);
 }
 
-void func_8005D278(entity_t *This) {
+void entity_init(entity_t *This) {
     if ((u8) ((u32) (g_ENTITY_TABLE[This->m_EntityID].unlock - 1)) < 9) {
         This->vtable->Unk27(This, 1);
     }
@@ -136,7 +136,7 @@ void func_8005D278(entity_t *This) {
     This->vtable->Unk87(This);
 }
 
-void func_8005D314(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
+void entity_start(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     if (This->m_Unk2 == 0) {
         s32 entity_id;
 
@@ -155,7 +155,7 @@ void func_8005D314(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     }
 }
 
-void func_8005D418(entity_t *This) {
+void entity_stop(entity_t *This) {
     if (This->m_Unk2) {
         This->vtable->Unk87(This);
         class_55DD4_get_vtable()->Unk19(This);
@@ -163,7 +163,7 @@ void func_8005D418(entity_t *This) {
     }
 }
 
-void func_8005D480(entity_t *This, s32 Unk2, s32 Unk3) {
+void entity_update(entity_t *This, s32 Unk2, s32 Unk3) {
     if (This->vtable->Unk91(This)) {
         This->vtable->Unk92(This);
     }
@@ -174,7 +174,7 @@ void func_8005D480(entity_t *This, s32 Unk2, s32 Unk3) {
     class_55DD4_get_vtable()->Unk37(This, Unk2, Unk3);
 }
 
-void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
+void entity_notify_interaction(entity_t *This, s32 Unk2, s32 Unk3) {
     s32 v5;
 
     v5 = g_ENTITY_TABLE[This->m_EntityID].link_stage;
@@ -196,14 +196,14 @@ void func_8005D560(entity_t *This, s32 Unk2, s32 Unk3) {
     }
 }
 
-void func_8005D658(entity_t *This, s32 Unk2, s32 Unk3) {
+void entity_notify_interaction_done(entity_t *This, s32 Unk2, s32 Unk3) {
     class_55DD4_get_vtable()->Unk55(This, Unk2, Unk3);
     if (Unk3 == 4) {
         This->vtable->Unk87(This);
     }
 }
 
-void func_8005D6D4(entity_t *This) {
+void entity_tick(entity_t *This) {
     helper_1_update_entity(This->m_Unk21, &This->m_EntityContext);
     ++This->m_Unk62;
 }
@@ -264,7 +264,7 @@ s32 entity_get_distance(entity_t *This, void *a1) {
     return result;
 }
 
-s32 func_8005D864(entity_t *This) {
+s32 entity_get_trigger_ratio(entity_t *This) {
     if (This->m_Unk36) {
         s32 vcall_result = This->vtable->entity_get_distance(This, This->m_Unk36);
         s32 array_val_shifted = (s32) g_ENTITY_TABLE[This->m_EntityID].proximity << 11;
@@ -301,27 +301,27 @@ s32 entity_get_event_video(entity_t *This) {
     return g_ENTITY_TABLE[This->m_EntityID].event_video_id - 1;
 }
 
-void func_8005D9F4(entity_t *This) {
+void entity_enable_link(entity_t *This) {
     This->vtable->Unk23(This, 1);
     This->m_Unk59 = 1;
     This->m_Unk8 = 0;
 }
 
-void func_8005DA3C(entity_t *This) {
+void entity_disable_link(entity_t *This) {
     This->vtable->Unk23(This, 0);
     This->vtable->Unk90(This);
     This->vtable->Unk88(This, 0);
     This->m_Unk59 = 0;
 }
 
-void func_8005DAAC(entity_t *This, s32 Value) {
+void entity_set_triggered(entity_t *This, s32 Value) {
     if (Value) {
         This->vtable->Notify(This, 9);
     }
     This->m_Unk60 = Value;
 }
 
-void func_8005DAFC(entity_t *This) {
+void entity_start_behaviour(entity_t *This) {
     helper_1_set_entity(This->m_Unk21, &This->m_EntityContext, This->m_EntityID + 1, This,
                         g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
 
@@ -332,14 +332,14 @@ void func_8005DAFC(entity_t *This) {
     This->m_Unk61 = 1;
 }
 
-void func_8005DB8C(entity_t *This) {
+void entity_stop_behaviour(entity_t *This) {
     sound_update_entity(This->m_Unk21, &This->m_EntityContext);
     This->vtable->Unk75(This);
     This->vtable->Unk68(This);
     This->m_Unk61 = 0;
 }
 
-s32 func_8005DBF0(entity_t *This) {
+s32 entity_check_interaction(entity_t *This) {
     if (This->m_Unk59 == 0 && This->m_Unk16 != 1) {
         entity_prop_t *property = &g_ENTITY_TABLE[This->m_EntityID];
         s32 flag = 0;
@@ -392,13 +392,13 @@ s32 func_8005DBF0(entity_t *This) {
     return This->m_Unk59;
 }
 
-s32 func_8005DD18(entity_t *This) {
+s32 entity_check_interaction_range(entity_t *This) {
     if (This->m_Unk59 != 0) {
         u8 *data_ptr;
         s32 should_call;
 
         data_ptr = &g_ENTITY_TABLE[This->m_EntityID];
-        func_8005DF9C(This, 0);
+        entity_check_event_video(This, 0);
 
         should_call = 0;
 
@@ -432,7 +432,7 @@ s32 func_8005DD18(entity_t *This) {
     return This->m_Unk59;
 }
 
-s32 func_8005DE18(entity_t *this) {
+s32 entity_check_interaction_angle(entity_t *this) {
     entity_prop_t *property;
     s32 val;
 
@@ -461,7 +461,7 @@ s32 func_8005DE18(entity_t *this) {
     return this->m_Unk60;
 }
 
-s32 func_8005DEE0(entity_t *This) {
+s32 entity_check_link_trigger(entity_t *This) {
     if (This->m_Unk59) {
         if (This->m_Unk61) {
             return This->m_Unk61;
@@ -488,21 +488,21 @@ s32 func_8005DEE0(entity_t *This) {
     return This->m_Unk61;
 }
 
-void func_8005DF9C(entity_t *This, s32 Unk2) {
+void entity_check_event_video(entity_t *This, s32 Unk2) {
     s32 entity_id = This->m_EntityID;
 
     if (g_ENTITY_TABLE[entity_id].link_stage < 0) {
         s8 val = g_ENTITY_TABLE[entity_id].event_video_id;
 
         if (val) {
-            if (func_8005E02C(This, val << 9)) {
+            if (entity_is_facing_target(This, val << 9)) {
                 This->vtable->Notify(This, 10);
             }
         }
     }
 }
 
-s32 func_8005E02C(entity_t *This, s32 Unk2) {
+s32 entity_is_facing_target(entity_t *This, s32 Unk2) {
     s32 v2;
     s32 v3;
     void *ptr_from_unk36;
@@ -538,7 +538,7 @@ s32 func_8005E02C(entity_t *This, s32 Unk2) {
     }
 }
 
-s32 func_8005E0B0(const entity_t *This) {
+s32 entity_check_link_proximity(const entity_t *This) {
     if (This->m_Unk59 != 0 && This->m_Unk61 != 0) {
         entity_prop_t *property;
         s8 link_flag;
@@ -565,11 +565,11 @@ entity_vtable_t *entity_get_vtable() {
 
 // entity_t *, entity_context_t *, -1
 
-void func_8005E160(entity_t *This, s32 *arg1) {
+void entity_astronaut(entity_t *This, s32 *arg1) {
     s32 tick;
 
     if (arg1[1] == 0) {
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 5) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == DREAM_COLOR_PINK) {
             This->m_Unk16 = 0x64;
         }
     }
@@ -623,7 +623,7 @@ void func_8005E160(entity_t *This, s32 *arg1) {
     This->vtable->Unk16(This, 1, &D_80089CF4);
 }
 
-void func_8005E3C4(entity_t *This, s32 *arg1) {
+void entity_gargoyle(entity_t *This, s32 *arg1) {
     arg1[4] = 0;
     if (arg1[1] == 0) {
         arg1[7] = 0x14;
@@ -638,7 +638,7 @@ void func_8005E3C4(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005E480(entity_t *This, s32 *Unk) {
+void entity_futon(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
   s32 v4; // $v1
 
@@ -649,7 +649,7 @@ void func_8005E480(entity_t *This, s32 *Unk) {
     Unk[7] = 23;
 }
 
-void func_8005E4D0(entity_t *This, s32 *arg1) {
+void entity_gargoyle_pit(entity_t *This, s32 *arg1) {
     arg1[4] = This->vtable->Unk81(This);
     if (This->m_Unk32 == (This->m_Unk31 / 2)) {
         arg1[7] = 7;
@@ -678,12 +678,12 @@ void func_8005E4D0(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005E694(entity_t *This) {
+void entity_elephant(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DF0);
     This->vtable->Unk46(This, &D_80089D78);
 }
 
-void func_8005E6F0(entity_t *This, s32 *arg1) {
+void entity_minotaur(entity_t *This, s32 *arg1) {
     u32 temp;
     s32 half;
 
@@ -696,7 +696,7 @@ void func_8005E6F0(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x1E, 0);
 }
 
-void func_8005E7A8(entity_t *This, s32 *Unk) {
+void entity_giant_minotaur(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
 
   v2 = Unk[1];
@@ -710,7 +710,7 @@ void func_8005E7A8(entity_t *This, s32 *Unk) {
   This->vtable->Unk48(This, -30, 0);
 }
 
-void func_8005E7F8(entity_t *This, s32 *arg1) {
+void entity_maiko_giant(entity_t *This, s32 *arg1) {
     s32 *ptr;
     s32 temp;
     u32 utemp;
@@ -738,7 +738,7 @@ void func_8005E7F8(entity_t *This, s32 *arg1) {
             ptr = &D_80089C94;
         }
         if ((u32)(temp - 0xD5D) < 0x78U) {
-            if (This->m_Unk36->vtable->Unk63(This->m_Unk36) != 0) {
+            if (This->m_Unk36->vtable->dream_sys_get_action_pressed(This->m_Unk36) != 0) {
                 This->m_Unk62 = 0;
                 This->m_Unk16 = 0xD;
             }
@@ -773,7 +773,7 @@ void func_8005E7F8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005EA94(entity_t *This) {
+void entity_old_woman(entity_t *This) {
     s32 count;
 
     if (This->m_Unk62 == 0) {
@@ -799,7 +799,7 @@ void func_8005EA94(entity_t *This) {
     }
 }
 
-void func_8005EBB4(entity_t *This, s32 *arg1) {
+void entity_bell_striker(entity_t *This, s32 *arg1) {
     s32 temp;
     s32 r;
 
@@ -819,7 +819,7 @@ void func_8005EBB4(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005EC98(entity_t *This, s32 *Unk) {
+void entity_boatman(entity_t *This, s32 *Unk) {
     Unk[4] = This->vtable->Unk81(This);
     if (This->m_Unk32 == 0xA) {
         Unk[7] = 0xD;
@@ -827,14 +827,14 @@ void func_8005EC98(entity_t *This, s32 *Unk) {
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void func_8005ED10(entity_t *This, s32 *Unk) {
+void entity_drumstick(entity_t *This, s32 *Unk) {
     if (!This->m_Unk62) {
         Unk[4] = 0;
         Unk[7] = 15;
     }
 }
 
-void func_8005ED30(entity_t *This) {
+void entity_fox(entity_t *This) {
     s32 state;
     s32 roll;
     s32 *clip;
@@ -873,11 +873,11 @@ void func_8005ED30(entity_t *This) {
     This->vtable->Unk23(This, (rand() % 7) == 0);
 }
 
-void func_8005EF20(entity_t *This) {
+void entity_halo(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DD8);
 }
 
-void func_8005EF54(entity_t *This, s32 *arg1) {
+void entity_tea_doll(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -888,7 +888,7 @@ void func_8005EF54(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x100, 0);
 }
 
-void func_8005EFF4(entity_t *This, s32 *arg1) {
+void entity_buddha(entity_t *This, s32 *arg1) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
@@ -904,7 +904,7 @@ void func_8005EFF4(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x64, 0);
 }
 
-void func_8005F0D8(entity_t *This, s32 *arg1) {
+void entity_ox_cart(entity_t *This, s32 *arg1) {
     u32 temp;
     s32 half;
     s32 rem;
@@ -921,11 +921,11 @@ void func_8005F0D8(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void func_8005F1A8(entity_t *This) {
+void entity_peacock(entity_t *This) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
 }
 
-void func_8005F1D4(entity_t *This) {
+void entity_tennyo(entity_t *This) {
     s32 count;
 
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
@@ -963,7 +963,7 @@ void func_8005F1D4(entity_t *This) {
     }
 }
 
-void func_8005F368(entity_t *This, s32 *arg1) {
+void entity_bird(entity_t *This, s32 *arg1) {
     s32 temp;
 
     temp = arg1[1];
@@ -977,7 +977,7 @@ void func_8005F368(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x200, 0);
 }
 
-void func_8005F454(entity_t *This, s32 *arg1) {
+void entity_rocket(entity_t *This, s32 *arg1) {
     s32 count;
     s32 n;
 
@@ -1004,7 +1004,7 @@ void func_8005F454(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005F544(entity_t *This, s32 *arg1) {
+void entity_horse(entity_t *This, s32 *arg1) {
     if ((arg1[1] % This->m_Unk31) == 0) {
         arg1[4] = This->vtable->Unk81(This);
         arg1[7] = 0x1A;
@@ -1013,7 +1013,7 @@ void func_8005F544(entity_t *This, s32 *arg1) {
         This, (This->m_Unk62 == 0x6E) ? -0x2D00 : -0x180, 0);
 }
 
-void func_8005F608(entity_t *This, s32 *arg1) {
+void entity_ufo(entity_t *This, s32 *arg1) {
     s32 temp;
     s32 temp_v1;
 
@@ -1031,13 +1031,13 @@ void func_8005F608(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005F6D4(entity_t *This) {
+void entity_siblings_flock(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void func_8005F708(entity_t *This) {
+void entity_rainbow(entity_t *This) {
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 7) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == DREAM_COLOR_WHITE) {
             This->vtable->Unk17(This, 1, &D_80089E74);
             This->vtable->Unk50(This, -0x7800, 0);
         }
@@ -1048,12 +1048,12 @@ void func_8005F708(entity_t *This) {
     }
 }
 
-void func_8005F800(entity_t *This) {
+void entity_boat_bird(entity_t *This) {
     s32 temp;
     s32 a1;
 
     if (This->m_Unk16 == 0) {
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 1) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == DREAM_COLOR_BLUE) {
             This->m_Unk16 = 0xB;
         } else {
             This->m_Unk16 = 0xC;
@@ -1074,13 +1074,13 @@ void func_8005F800(entity_t *This) {
                 This->m_Unk16 = 0xD;
             }
         } else if (temp == 0xD) {
-            This->vtable->Unk45(This, This->m_Unk36->m_Unk4 + 0x18);
+            This->vtable->Unk45(This, This->m_Unk36->m_Transform + 0x18);
             This->vtable->Unk46(This, &D_80089DB4);
         }
     }
 }
 
-void func_8005F970(entity_t *This, s32 *arg1) {
+void entity_demon_king(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
     This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
     if ((arg1[1] % 10) < 3) {
@@ -1095,11 +1095,11 @@ void func_8005F970(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005FA64(entity_t *This) {
+void entity_sailboat(entity_t *This) {
     This->vtable->Unk48(This, -30, 0);
 }
 
-void func_8005FA94(entity_t *This, s32 *arg1) {
+void entity_turtle_giant(entity_t *This, s32 *arg1) {
     s32 temp;
 
     if (This->m_Unk60 != 0) {
@@ -1117,7 +1117,7 @@ void func_8005FA94(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005FB6C(entity_t *This) {
+void entity_shark(entity_t *This) {
     s32 count;
 
     count = This->m_Unk62;
@@ -1138,7 +1138,7 @@ void func_8005FB6C(entity_t *This) {
     }
 }
 
-void func_8005FC58(entity_t *This) {
+void entity_fish(entity_t *This) {
     s32 rem;
     s32 arg;
     s32 nudge;
@@ -1172,7 +1172,7 @@ void func_8005FC58(entity_t *This) {
     }
 }
 
-void func_8005FDFC(entity_t *This) {
+void entity_mirage(entity_t *This) {
     if (This->m_Unk16 == 0) {
         This->vtable->Unk17(This, 1, (rand() & 1) ? &D_80089DF0 : &D_80089E38);
         This->m_Unk16 = 0xB;
@@ -1183,11 +1183,11 @@ void func_8005FDFC(entity_t *This) {
     }
 }
 
-void func_8005FEC8(entity_t *This) {
+void entity_balloon(entity_t *This) {
     This->vtable->Unk50(This, -90, 0);
 }
 
-void func_8005FEF8(entity_t *This, s32 *arg1) {
+void entity_opera_singer(entity_t *This, s32 *arg1) {
     s32 temp;
 
     temp = arg1[1];
@@ -1197,7 +1197,7 @@ void func_8005FEF8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_8005FF7C(entity_t *This, s32 *arg1) {
+void entity_mushroom(entity_t *This, s32 *arg1) {
     s32 roll;
 
     if (This->m_Unk62 == 0) {
@@ -1221,7 +1221,7 @@ void func_8005FF7C(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80060148(entity_t *This, s32 *arg1) {
+void entity_soldier(entity_t *This, s32 *arg1) {
     s32 *ptr;
     s32 temp;
     s32 temp_v1;
@@ -1254,7 +1254,7 @@ void func_80060148(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800602AC(entity_t *This, s32 *arg1) {
+void entity_locomotive_factory(entity_t *This, s32 *arg1) {
     s32 count;
     s32 kind;
     s32 roll;
@@ -1266,7 +1266,7 @@ void func_800602AC(entity_t *This, s32 *arg1) {
     }
     kind = This->m_Unk16;
     if ((kind < 0xE) || (This->m_Unk62 < 0x140)) {
-        func_80064FBC(This, arg1, 0xBB8, 0x1F4, -0x100);
+        entity_locomotive_common(This, arg1, 0xBB8, 0x1F4, -0x100);
     } else if ((kind == 0xE) && ((This->m_Unk62 & 3) == 0)) {
         roll = rand();
         slot = &D_80089EA2;
@@ -1275,7 +1275,7 @@ void func_800602AC(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800603C4(entity_t *This, s32 *arg1) {
+void entity_marching_band(entity_t *This, s32 *arg1) {
     s32 temp;
 
     temp = This->m_Unk62;
@@ -1292,10 +1292,10 @@ void func_800603C4(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800604DC(entity_t *This, s32 *arg1) {
+void entity_bear(entity_t *This, s32 *arg1) {
     s32 temp;
 
-    func_80060710(This);
+    entity_bear_rabbit_common(This);
     arg1[4] = This->vtable->Unk81(This);
     temp = This->m_Unk32;
     if ((temp == 0) || (temp == 0xF)) {
@@ -1308,10 +1308,10 @@ void func_800604DC(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800605D0(entity_t *This, s32 *arg1) {
+void entity_rabbit(entity_t *This, s32 *arg1) {
     s32 temp;
 
-    func_80060710(This);
+    entity_bear_rabbit_common(This);
     arg1[4] = This->vtable->Unk81(This);
     temp = This->m_Unk32;
     if ((temp == 7) || (temp == 0x16)) {
@@ -1330,7 +1330,7 @@ void func_800605D0(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80060710(entity_t *This) {
+void entity_bear_rabbit_common(entity_t *This) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
@@ -1346,10 +1346,10 @@ void func_80060710(entity_t *This) {
     }
 }
 
-void func_800607F8(void) {
+void entity_prince_princess(void) {
 }
 
-void func_80060800(entity_t *This, s32 *arg1) {
+void entity_human_face_flower(entity_t *This, s32 *arg1) {
     s32 rem;
     s32 r;
 
@@ -1371,7 +1371,7 @@ void func_80060800(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
 }
 
-void func_8006090C(entity_t *This) {
+void entity_ferris_wheel(entity_t *This) {
     s32 temp;
 
     if (This->m_Unk60 != 0) {
@@ -1381,7 +1381,7 @@ void func_8006090C(entity_t *This) {
             This->m_Unk62 = 0;
         } else if (temp == 0xC) {
             if (This->m_Unk62 < 0x1E) {
-                if (This->m_Unk36->vtable->Unk63(This->m_Unk36) != 0) {
+                if (This->m_Unk36->vtable->dream_sys_get_action_pressed(This->m_Unk36) != 0) {
                     This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 0);
                     This->m_Unk62 = 0;
                     This->m_Unk16 = 0xB;
@@ -1400,7 +1400,7 @@ void func_8006090C(entity_t *This) {
     }
 }
 
-void func_80060A4C(entity_t *This, s32 *out) {
+void entity_lips_giant(entity_t *This, s32 *out) {
     s32 angle;
 
     if (This->m_Unk32 == 0x26) {
@@ -1421,7 +1421,7 @@ void func_80060A4C(entity_t *This, s32 *out) {
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void func_80060B34(entity_t *This, s32 *arg1) {
+void entity_locomotive_kyoto(entity_t *This, s32 *arg1) {
     s32 link;
 
     if (arg1[1] == 6) {
@@ -1436,7 +1436,7 @@ void func_80060B34(entity_t *This, s32 *arg1) {
             This->m_Unk62 = 0;
         } else if (This->m_Unk16 == 0xA) {
             if (This->m_Unk62 != 0xA) {
-                if (This->m_Unk36->vtable->Unk63(This->m_Unk36) != 0) {
+                if (This->m_Unk36->vtable->dream_sys_get_action_pressed(This->m_Unk36) != 0) {
                     dream_sys_t *sys;
                     dream_sys_vtable_t *vt;
 
@@ -1475,7 +1475,7 @@ void func_80060B34(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x100, 0);
 }
 
-void func_80060CF0(entity_t *This, s32 *arg1) {
+void entity_whale(entity_t *This, s32 *arg1) {
     s32 temp_a0;
 
     if (This->m_Unk62 < (This->m_Unk31 * 5)) {
@@ -1492,7 +1492,7 @@ void func_80060CF0(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80060D80(entity_t *This, s32 *arg1) {
+void entity_standing_penguin(entity_t *This, s32 *arg1) {
     s32 *ptr;
     s32 roll;
     s32 step;
@@ -1524,7 +1524,7 @@ void func_80060D80(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x50, 1);
 }
 
-void func_80060F38(entity_t *This, s32 *arg1) {
+void entity_sliding_penguin(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -1546,7 +1546,7 @@ void func_80060F38(entity_t *This, s32 *arg1) {
     This->vtable->Unk51(This, -0x200, 0);
 }
 
-void func_80061070(entity_t *This, s32 *arg1) {
+void entity_hopscotch_girl(entity_t *This, s32 *arg1) {
     s32 var_s0;
     s32 r;
 
@@ -1569,13 +1569,13 @@ void func_80061070(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80061158(entity_t *This) {
+void entity_corpse(entity_t *This) {
     if ( !This->m_Unk62 ) {
         This->vtable->Unk50(This, -200, 0);
     }
 }
 
-void func_80061198(entity_t *This, s32 *arg1) {
+void entity_airplane(entity_t *This, s32 *arg1) {
     s32 step;
     s32 tick;
 
@@ -1605,7 +1605,7 @@ void func_80061198(entity_t *This, s32 *arg1) {
         }
         if (step == 0x30) {
             if (entity_check_proximity(This, This->m_Unk4 + 24, 0xF, 0xA) != 0) {
-                if (func_8005D108(This, NULL, NULL, 0xA, 0) != NULL) {
+                if (entity_create_effect(This, NULL, NULL, 0xA, 0) != NULL) {
                     This->m_Class_305B0->vtable->Unk52(This->m_Class_305B0, This->m_Unk19, 4, 0);
                 }
                 if (rand() & 1) {
@@ -1634,7 +1634,7 @@ void func_80061198(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80061400(entity_t *This, s32 *arg1) {
+void entity_hanged_woman(entity_t *This, s32 *arg1) {
     s32 state;
 
     if (This->m_Unk62 == 0) {
@@ -1643,7 +1643,7 @@ void func_80061400(entity_t *This, s32 *arg1) {
         pose = 0xC;
         arg1[4] = 0;
         arg1[7] = pose;
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 6) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == DREAM_COLOR_YELLOW) {
             This->m_Unk16 = 0xB;
         } else if ((rand() % 3) == 0) {
             This->m_Unk16 = pose;
@@ -1714,12 +1714,12 @@ void func_80061400(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80061778(entity_t *This, s32 *arg1) {
+void entity_hanged_woman_paralysis(entity_t *This, s32 *arg1) {
     s32 tick;
     s32 nudge;
 
     if (This->m_Unk16 == 0) {
-        if (func_8005E02C(This, 0x800) != 0) {
+        if (entity_is_facing_target(This, 0x800) != 0) {
             This->m_Unk16 = 0xB;
             func_8001EACC(This, This->m_Unk36, 1, 0, 0);
             func_8001EACC(This->m_Unk36, This, 1, 1, 0);
@@ -1779,7 +1779,7 @@ func_80061778_near:
     }
 }
 
-void func_80061A90(entity_t *This, s32 *arg1) {
+void entity_starship(entity_t *This, s32 *arg1) {
     s32 r;
     s32 temp;
 
@@ -1806,7 +1806,7 @@ void func_80061A90(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80061C04(entity_t *This, s32 *Unk) {
+void entity_kicking_man(entity_t *This, s32 *Unk) {
     if (This->m_Unk32 == 30) {
         Unk[7] = 18;
         Unk[4] = 0;
@@ -1814,7 +1814,7 @@ void func_80061C04(entity_t *This, s32 *Unk) {
     }
 }
 
-void func_80061C2C(entity_t *This, s32 *arg1) {
+void entity_triangle_head(entity_t *This, s32 *arg1) {
     s32 tick;
     s32 choice;
     entity_t *link;
@@ -1867,7 +1867,7 @@ func_80061C2C_state:
     }
 }
 
-void func_80061E60(entity_t *This, s32 *arg1) {
+void entity_ship(entity_t *This, s32 *arg1) {
     s32 rem;
 
     rem = arg1[1] % 300;
@@ -1881,7 +1881,7 @@ void func_80061E60(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void func_80061F30(entity_t *This) {
+void entity_maiko_palace(entity_t *This) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
@@ -1901,14 +1901,14 @@ void func_80061F30(entity_t *This) {
     }
 }
 
-void func_8006204C(entity_t *This, s32 *Unk) {
+void entity_acrobats(entity_t *This, s32 *Unk) {
     Unk[4] = This->vtable->Unk81(This);
     if (Unk[1] == ((Unk[1] / 30) * 30)) {
         Unk[7] = 0xD;
     }
 }
 
-void func_800620C4(entity_t *This) {
+void entity_light(entity_t *This) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
@@ -1928,7 +1928,7 @@ void func_800620C4(entity_t *This) {
     }
 }
 
-void func_800621A8(entity_t *This, s32 *arg1) {
+void entity_dog(entity_t *This, s32 *arg1) {
     s32 nudge;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -1954,7 +1954,7 @@ void func_800621A8(entity_t *This, s32 *arg1) {
             arg1[17] = -2;
         }
         if ((This->m_Unk62 & 1) == 0) {
-            if (This->m_Unk36->vtable->Unk63(This->m_Unk36) != 0) {
+            if (This->m_Unk36->vtable->dream_sys_get_action_pressed(This->m_Unk36) != 0) {
                 This->m_Unk62 = -1;
                 This->m_Unk16 = 0xA;
                 arg1[7] = 0x12;
@@ -1977,7 +1977,7 @@ void func_800621A8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800623E8(entity_t *This, s32 *arg1) {
+void entity_gears(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -1996,7 +1996,7 @@ void func_800623E8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800624BC(entity_t *This) {
+void entity_ring(entity_t *This) {
     s32 a1;
     s32 unk16;
     entity_vtable_t *vt;
@@ -2018,7 +2018,7 @@ void func_800624BC(entity_t *This) {
     }
 }
 
-void func_80062570(entity_t *This, s32 *arg1) {
+void entity_hoop_girl(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2033,7 +2033,7 @@ void func_80062570(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x1E, 0);
 }
 
-void func_80062660(entity_t *This, s32 *arg1) {
+void entity_small_room(entity_t *This, s32 *arg1) {
     arg1[4] = 0;
     if (arg1[1] == 0) {
         This->m_Unk36->vtable->Unk16(This->m_Unk36, 1, &D_80089C88);
@@ -2049,16 +2049,16 @@ void func_80062660(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80062730(entity_t *This) {
+void entity_clouds_wind(entity_t *This) {
     u32 temp;
     s32 half;
     s32 unk62;
 
     if (This->m_Unk62 == 0) {
-        (*(void (**)(void *, void **))(*(s32 *)This->m_Unk36->m_Unk22 + 0x64))(
-            (void *)This->m_Unk36->m_Unk22, (void **)&D_8008AC1C);
+        (*(void (**)(void *, void **))(*(s32 *)This->m_Unk36->m_ViewTransform + 0x64))(
+            (void *)This->m_Unk36->m_ViewTransform, (void **)&D_8008AC1C);
         This->m_Unk16 = rand() % 3;
-        if (*(s32 *)((char *)This->m_Unk36->m_Unk4 + 0x20) < 0x262) {
+        if (*(s32 *)((char *)This->m_Unk36->m_Transform + 0x20) < 0x262) {
             This->m_Unk16 = 0;
         }
     }
@@ -2082,7 +2082,7 @@ void func_80062730(entity_t *This) {
     }
 }
 
-void func_800628D4(entity_t *This, s32 *arg1) {
+void entity_window(entity_t *This, s32 *arg1) {
     if (arg1[1] == 0) {
         arg1[4] = 0;
         arg1[7] = 0x19;
@@ -2096,7 +2096,7 @@ void func_800628D4(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80062970(entity_t *This) {
+void entity_flower(entity_t *This) {
     if (This->m_Unk60 != 0) {
         This->vtable->Unk74(This);
         if (This->m_Unk32 == (This->m_Unk31 - 1)) {
@@ -2109,7 +2109,7 @@ void func_80062970(entity_t *This) {
     }
 }
 
-void func_80062A40(entity_t *This, s32 *arg1) {
+void entity_bear_apartment(entity_t *This, s32 *arg1) {
     s32 tick;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2151,7 +2151,7 @@ void func_80062A40(entity_t *This, s32 *arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80062C58);
+INCLUDE_ASM("asm/nonmatchings/entity", entity_paper_sumo);
 
 /*
 Best typed attempt; kept commented out pending a matching source promotion.
@@ -2159,7 +2159,7 @@ Best typed attempt; kept commented out pending a matching source promotion.
 extern s32 D_80089D0C;
 s32 D_8008ACCC;
 
-void func_80062C58(entity_t *This, s32 *arg1) {
+void entity_paper_sumo(entity_t *This, s32 *arg1) {
     s32 *var_a2_2;
     s32 temp_a0;
     s32 temp_a0_2;
@@ -2253,7 +2253,7 @@ end_movement:
 }
 */
 
-void func_80062FAC(entity_t *This, s32 *arg1) {
+void entity_orrery(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2269,7 +2269,7 @@ void func_80062FAC(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063094(entity_t *This, s32 *arg1) {
+void entity_face(entity_t *This, s32 *arg1) {
     if (This->m_Unk62 < This->m_Unk31) {
         if (This->m_Unk32 != 0) {
             if (This->m_Unk32 == 0x14) {
@@ -2284,9 +2284,9 @@ void func_80063094(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/entity", func_80063144);
+INCLUDE_ASM("asm/nonmatchings/entity", entity_lion);
 
-void func_800634A8(entity_t *This, s32 *arg1) {
+void entity_dress_woman(entity_t *This, s32 *arg1) {
     s32 state;
 
     if ((This->m_Unk16 == 0) && (This->m_Unk62 == 0)) {
@@ -2329,7 +2329,7 @@ void func_800634A8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_800636E4(entity_t *This, s32 *arg1) {
+void entity_can(entity_t *This, s32 *arg1) {
     s32 temp;
 
     temp = This->m_Unk32;
@@ -2345,7 +2345,7 @@ void func_800636E4(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063784(entity_t *This, s32 *arg1) {
+void entity_car_water(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2369,12 +2369,12 @@ void func_80063784(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063874(entity_t *This, entity_t *arg1) {
+void entity_gunman(entity_t *This, entity_t *arg1) {
     s32 tick;
 
     if (This->m_Unk16 == 0) {
         if (This->m_Unk32 == 5) {
-            func_80063C84(arg1);
+            entity_set_aim_pose(arg1);
         }
         if (This->m_Unk62 == This->m_Unk31) {
             This->vtable->Unk75(This);
@@ -2386,10 +2386,10 @@ void func_80063874(entity_t *This, entity_t *arg1) {
     if (This->m_Unk16 == 0xA) {
         if (This->m_Unk62 < 0xA) {
             This->vtable->Unk16(This, 0, &D_80089C64);
-            if (This->m_Unk36->vtable->Unk63(This->m_Unk36) == 0) {
+            if (This->m_Unk36->vtable->dream_sys_get_action_pressed(This->m_Unk36) == 0) {
                 return;
             }
-            func_80063C84(arg1);
+            entity_set_aim_pose(arg1);
             This->m_Unk16 = 0xC;
             This->m_Unk62 = -1;
             return;
@@ -2405,8 +2405,8 @@ void func_80063874(entity_t *This, entity_t *arg1) {
             This->vtable->Unk48(This, -0xA, 0);
             return;
         }
-        func_80063C84(arg1);
-        if (func_8005D108(This, NULL, NULL, 0x1E, 0) != NULL) {
+        entity_set_aim_pose(arg1);
+        if (entity_create_effect(This, NULL, NULL, 0x1E, 0) != NULL) {
             This->m_Class_305B0->vtable->Unk52(This->m_Class_305B0, This->m_Unk19, 7, 0);
         }
         This->m_Unk16 = 0xD;
@@ -2417,14 +2417,14 @@ void func_80063874(entity_t *This, entity_t *arg1) {
         tick = This->m_Unk62;
         if (tick < 0x5A) {
             if (tick == 0x1E) {
-                if (func_8005D108(This, NULL, NULL, 0xA, 0) != NULL) {
+                if (entity_create_effect(This, NULL, NULL, 0xA, 0) != NULL) {
                     This->m_Class_305B0->vtable->Unk53(This->m_Class_305B0, This->m_Unk19, 0, 0);
                 }
             }
             This->m_Unk36->vtable->Unk16(This->m_Unk36, 0, &D_80089CD0);
             return;
         }
-        func_80063CAC(arg1);
+        entity_set_fall_pose(arg1);
         This->m_Unk36->vtable->Unk16(This->m_Unk36, 1, &D_80089C7C);
         This->vtable->Notify(This, (rand() % 5) != 0 ? 0xA : 0xC);
         This->m_Unk16 = 0xE;
@@ -2435,20 +2435,20 @@ void func_80063874(entity_t *This, entity_t *arg1) {
             This->vtable->Unk16(This, 0, &D_80089CDC);
             return;
         }
-        func_80063CAC(arg1);
+        entity_set_fall_pose(arg1);
         This->vtable->Unk90(This);
         This->m_Unk16 = 1;
     }
 }
 
-void func_80063BC0(entity_t *This, s32 *arg1) {
+void entity_gunman_victim(entity_t *This, s32 *arg1) {
     if (This->m_Unk62 < 0xA) {
         This->vtable->Unk75(This);
     } else if (This->m_Unk62 == 0xA) {
         This->vtable->Unk74(This);
     }
     if (This->m_Unk32 == 0xA) {
-        func_80063CAC((entity_t *)arg1);
+        entity_set_fall_pose((entity_t *)arg1);
     }
     if (This->m_Unk62 == (This->m_Unk31 + 0xA)) {
         This->vtable->Unk90(This);
@@ -2456,7 +2456,7 @@ void func_80063BC0(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063C84(entity_t *This) {
+void entity_set_aim_pose(entity_t *This) {
     This->m_Unk3 = 0;
     This->m_Unk6 = 7;
     This->m_Unk7 = -2;
@@ -2466,14 +2466,14 @@ void func_80063C84(entity_t *This) {
     This->m_Unk17 = -2;
 }
 
-void func_80063CAC(entity_t *This) {
+void entity_set_fall_pose(entity_t *This) {
     This->m_Unk6 = 18;
     This->m_Unk3 = 0;
     This->m_Unk11 = 3;
     This->m_Unk16 = 3;
 }
 
-void func_80063CC8(entity_t *This, s32 *arg1) {
+void entity_kemari_boy_west(entity_t *This, s32 *arg1) {
     s32 temp_v0;
 
     temp_v0 = This->vtable->Unk81(This);
@@ -2486,7 +2486,7 @@ void func_80063CC8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063D40(entity_t *This, s32 *arg1) {
+void entity_kemari_boy_east(entity_t *This, s32 *arg1) {
     arg1[4] = This->vtable->Unk81(This);
     if (arg1[1] == (This->m_Unk31 / 2)) {
         arg1[7] = 0x12;
@@ -2496,7 +2496,7 @@ void func_80063D40(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063DC8(entity_t *This, s32 *arg1) {
+void entity_trash_can(entity_t *This, s32 *arg1) {
     s32 temp_v1;
 
     temp_v1 = This->m_Unk62;
@@ -2515,7 +2515,7 @@ void func_80063DC8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063E68(entity_t *This, s32 *arg1) {
+void entity_television(entity_t *This, s32 *arg1) {
     s32 v;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2530,11 +2530,11 @@ void func_80063E68(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80063ED4(entity_t *This, s32 *arg1) {
+void entity_big_face_man_hidden(entity_t *This, s32 *arg1) {
     class_305B0_t *child;
 
     if (This->m_Unk62 == 0) {
-        if (func_8005D108(This, NULL, NULL, 5, 0) != NULL) {
+        if (entity_create_effect(This, NULL, NULL, 5, 0) != NULL) {
             if (rand() & 1) {
                 This->vtable->Unk46(This, &D_80089D90);
             }
@@ -2560,7 +2560,7 @@ void func_80063ED4(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DE4);
 }
 
-void func_80064078(entity_t *This, s32 *arg1) {
+void entity_big_face_man(entity_t *This, s32 *arg1) {
     if (This->m_Unk30 == 0) {
         if (This->m_Unk60 != 0) {
             func_8001EACC(This, This->m_Unk36, 1, 0, 0);
@@ -2583,7 +2583,7 @@ void func_80064078(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DE4);
 }
 
-void func_800641C0(entity_t *This, s32 *arg1) {
+void entity_yokai(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->Unk81(This);
@@ -2599,12 +2599,12 @@ void func_800641C0(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80064294(entity_t *This, s32 *arg1) {
+void entity_tengu(entity_t *This, s32 *arg1) {
     s32 temp;
     s32 r;
 
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) != 7) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) != DREAM_COLOR_WHITE) {
             This->m_Unk16 = 0xB;
         }
     }
@@ -2629,7 +2629,7 @@ void func_80064294(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80064450(entity_t *This) {
+void entity_fetus_walk(entity_t *This) {
     if (This->m_Unk62 == 0) {
         This->vtable->Unk73(This, 3);
     } else if (This->m_Unk62 == This->m_Unk31) {
@@ -2640,7 +2640,7 @@ void func_80064450(entity_t *This) {
     }
 }
 
-void func_800644E8(entity_t *This, s32 *arg1) {
+void entity_fetus_jump(entity_t *This, s32 *arg1) {
     s32 temp;
 
     temp = This->m_Unk62;
@@ -2658,9 +2658,9 @@ void func_800644E8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80064618(entity_t *This) {
+void entity_gray_man(entity_t *This) {
     if (This->m_Unk60 != 0) {
-        if (func_8005D108(This, NULL, NULL, 0xA, 0) != NULL) {
+        if (entity_create_effect(This, NULL, NULL, 0xA, 0) != NULL) {
             This->m_Class_305B0->vtable->Unk52(
                 This->m_Class_305B0, This->m_Unk19, 7, 0);
             This->vtable->Unk87(This);
@@ -2670,7 +2670,7 @@ void func_80064618(entity_t *This) {
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void func_800646D8(entity_t *This, s32 *arg1) {
+void entity_winged_minotaur(entity_t *This, s32 *arg1) {
     s32 *ptr;
     u32 utemp;
     s32 half;
@@ -2724,7 +2724,7 @@ void func_800646D8(entity_t *This, s32 *arg1) {
     }
 }
 
-void func_80064928(entity_t *This) {
+void entity_airship(entity_t *This) {
     s32 count;
     entity_t *child;
 
@@ -2761,18 +2761,18 @@ tail:
     This->vtable->Unk48(This, -0x1E, 0);
 }
 
-void func_80064AA4(entity_t *This) {
+void entity_maiko_small(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DCC);
     if ((u32)(This->m_Unk62 - 0xC9) < 0x63U) {
         This->vtable->Unk50(This, -0x20, 0);
     }
 }
 
-void func_80064B14(entity_t *This) {
+void entity_bed_bone_dead(entity_t *This) {
     This->vtable->Unk23(This, (rand() % 20) == 0);
 }
 
-void func_80064B80(entity_t *This) {
+void entity_yokai_bartender(entity_t *This) {
     s32 count;
 
     if (This->m_Unk62 == 0) {
@@ -2794,17 +2794,17 @@ void func_80064B80(entity_t *This) {
     }
 }
 
-void func_80064CA4(entity_t *This) {
-    func_80062570();
+void entity_hoop_girl_giant(entity_t *This) {
+    entity_hoop_girl();
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void func_80064CEC(entity_t *This) {
+void entity_elephant_small(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DD8);
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void func_80064D48(entity_t *This) {
+void entity_maiko_bridge(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E44);
     This->vtable->Unk75(This);
     if ((This->m_Unk16 == 0) && (This->vtable->entity_get_distance(This, This->m_Unk36) < 0x800)) {
@@ -2821,11 +2821,11 @@ void func_80064D48(entity_t *This) {
     }
 }
 
-void func_80064E34(entity_t *This, s32 *arg1) {
+void entity_locomotive_natural(entity_t *This, s32 *arg1) {
     s32 temp;
 
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 5) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == DREAM_COLOR_PINK) {
             This->m_Unk16 = 0xB;
         }
     }
@@ -2852,14 +2852,14 @@ void func_80064E34(entity_t *This, s32 *arg1) {
             if (temp >= 0xAF1) {
                 This->vtable->Unk50(This, -0x20, 0);
             }
-            func_80064FBC(This, arg1, 0x1E1, 0xFA0, -0x3C);
+            entity_locomotive_common(This, arg1, 0x1E1, 0xFA0, -0x3C);
         }
     } else {
-        func_80064FBC(This, arg1, 0x1E1, 0x884, -0x3C);
+        entity_locomotive_common(This, arg1, 0x1E1, 0x884, -0x3C);
     }
 }
 
-void func_80064FBC(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+void entity_locomotive_common(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 temp;
 
     arg1[4] = 0;
@@ -2881,30 +2881,30 @@ void func_80064FBC(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
 }
 
-void func_800650D4(entity_t *This, void *Unk) {
-    func_80060D80(This, Unk);
+void entity_question_mark_penguin(entity_t *This, void *Unk) {
+    entity_standing_penguin(This, Unk);
 }
 
-void func_800650F4(entity_t *This) {
+void entity_standing_penguin_flock(entity_t *This) {
     if ((rand() % 3) == 0) {
         return;
     }
     This->vtable->Unk16(This, 0, (rand() % 3) != 0 ? &D_80089C64 : &D_80089C70);
 }
 
-void func_8006519C(entity_t *This) {
+void entity_triangle_head_giant(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void func_800651D0(entity_t *This) {
+void entity_fish_giant(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void func_80065204(entity_t *This) {
+void entity_turtle_small(entity_t *This) {
     This->vtable->Unk17(This, 1, &D_80089DCC);
 }
 
-void func_80065238(entity_t *This) {
+void entity_car(entity_t *This) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
@@ -2925,7 +2925,7 @@ void func_80065238(entity_t *This) {
     }
 }
 
-void func_8006536C(entity_t *This, s32 *arg1) {
+void entity_maiko_plain(entity_t *This, s32 *arg1) {
     u32 temp;
     s32 half;
 
@@ -2944,13 +2944,13 @@ void func_8006536C(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void func_800654A0(entity_t *This) {
+void entity_lips_small(entity_t *This) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
     This->vtable->Unk17(This, 1, &D_80089E80);
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void func_80065514(entity_t *This) {
+void entity_paper_sumo_wait(entity_t *This) {
     u32 r;
     s32 rem;
 

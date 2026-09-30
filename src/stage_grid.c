@@ -3,20 +3,20 @@
 // https://github.com/FirecatFG/lsddecomp/blob/main/src/lsdde/StageGrid.c
 
 static stage_grid_dimensions_t g_STAGE_GRID_DIMENSIONS[STAGE_GRID_DIMENSION_COUNT] = {
-    { 1, 5, true },    // Apartment
-    { 3, 2, false },   // Pit
-    { 6, 6, false },   // Kyoto
-    { 16, 16, false }, // Natural
-    { 6, 5, false },   // Happy
-    { 5, 6, false },   // Violence
-    { 1, 6, true },    // Tower
-    { 5, 1, false },   // Palace
-    { 1, 3, false },   // Flesh
-    { 1, 2, false },   // Clockwork
-    { 3, 1, false },   // Hallway
-    { 4, 3, false },   // Heaven
-    { 4, 5, false },   // Void
-    { 2, 2, false }    // Park
+    { 1, 5, true },    // STG00 Bright Moon Cottage
+    { 3, 2, false },   // STG01 Pit & Temple
+    { 6, 6, false },   // STG02 Kyoto
+    { 16, 16, false }, // STG03 The Natural World
+    { 6, 5, false },   // STG04 Happy Town
+    { 5, 6, false },   // STG05 Violence District
+    { 1, 6, true },    // STG06 Moonlight Tower
+    { 5, 1, false },   // STG07 Temple Dojo
+    { 1, 3, false },   // STG08 Flesh Tunnels
+    { 1, 2, false },   // STG09 Clockwork Machines
+    { 3, 1, false },   // STG10 Long Hallway
+    { 4, 3, false },   // STG11 Sun Faces Heave
+    { 4, 5, false },   // STG12 Black Space
+    { 2, 2, false }    // STG13 Monument Park
 };
 
 /* Per-stage mood grids, one entry per grid cell in row-major order.

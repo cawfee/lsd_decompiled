@@ -16,7 +16,7 @@ class_477E4_t *func_80056FE4() {
     class_477E4_t *allocated = (class_477E4_t *) memory_allocate_mem(0x58);
 
     if (allocated) {
-        if (func_80057C84()->Construct(allocated)) {
+        if (class_477E4_get_vtable()->Construct(allocated)) {
             return allocated;
         }
         memory_free_mem(allocated);
@@ -27,7 +27,7 @@ class_477E4_t *func_80056FE4() {
 
 void *func_80057044(class_477E4_t *This) {
     if (func_8001E57C()->Construct(This)) {
-        This->vtable = func_80057C84();
+        This->vtable = class_477E4_get_vtable();
         This->m_Unk16 = 0;
         This->m_Unk18 = 0;
         This->m_Unk19 = 0;
@@ -325,6 +325,6 @@ void func_80057C7C(class_477E4_t *This, s32 Unk) {
     This->m_Unk20 = Unk;
 }
 
-class_477E4_vtable_t *func_80057C84(void) {
+class_477E4_vtable_t *class_477E4_get_vtable(void) {
     return &D_800878D4;
 }

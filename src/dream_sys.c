@@ -24,7 +24,7 @@ extern s16 STAGE_TIME_LIMITS[];
 extern s16 *STAGE_SPAWNPOINTS[];
 extern u8 LEN_STAGE_SPAWNPOINTS[];
 extern s32 g_TeleportLinksEnabled;
-extern s32 D_8008ABE8;
+extern s32 g_ViolenceLinkTile;
 extern s32 g_DefaultLinkTransform[];
 extern s32 gpNavChallengesComplete;
 extern s32 gpDynamicLinkPenalty;
@@ -63,7 +63,7 @@ s32 test_for_static_link(s32 *Unk0, s32 Unk1, s32 Unk2);
 s32 get_static_spawn(void *dst, s16 *key, s32 chunk, s32 *counts, s32 *records, s32 *entries, s32 flag);
 s32 execute_link(dream_sys_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 s32 test_4_tunnel_links(void *Unk0, s32 Unk1, s32 Unk2);
-void func_8001E6F8(void *This, void *out);
+void object_get_rotation_360(void *This, void *out);
 s32 get_tunnel_link(void *a, void *b, void *c);
 s32 dream_sys_translate_toward(dream_sys_t *This, s16 *a, s16 *b);
 s32 is_facing_angle(s16 *arg0, s32 arg1);
@@ -74,34 +74,16 @@ void init_nav_challenges_array(s32 *Unk1, s32 *Unk2);
 void *memset(void *s, int c, u32 n);
 
 typedef struct {
-    u8 m_data[8];
-    s16 m_hi;
-} dream_sys_fb_pkt10_t;
-
-typedef struct {
-    u8 m_data[12];
-} dream_sys_fb_pkt12_t;
-
-typedef struct {
-    u8 m_data[4];
-} dream_sys_pkt4_t;
-
-typedef struct {
-    u8 m_data[4];
-    s16 m_hi;
-} dream_sys_pkt6_t;
-
-typedef struct {
-    s16 m_Unk0;
-    s16 m_Unk1;
-    s8 m_Unk2;
-    u8 m_Unk3;
+    s16 m_Chunk;
+    s16 m_Tile;
+    s8 m_TargetStage;
+    u8 m_TargetSpawn;
 } dream_sys_static_spawn_t;
 
 typedef struct {
-    dream_sys_pkt4_t m_Unk0;
-    u8 m_Unk1;
-    s8 m_Unk2;
+    dream_sys_pkt4_t m_ChunkTile;
+    u8 m_Adjustment;
+    s8 m_NavChallenge;
 } dream_sys_spawn_entry_t;
 
 dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
@@ -116,18 +98,18 @@ dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void dream_sys_construct(dream_sys_t *This, void *Unk1, s32 Unk2, s32 Unk3) {
-    func_80057C84()->Construct(This);
+    class_477E4_get_vtable()->Construct(This);
     This->vtable = dream_sys_get_vtable();
-    This->m_Unk21 = Unk2;
-    This->m_Unk22 = Unk3;
-    This->m_Unk24 = 0;
-    This->m_Unk23 = (s32)Unk1;
+    This->m_Actor = Unk2;
+    This->m_ViewTransform = Unk3;
+    This->m_Texture = 0;
+    This->m_Model = (s32)Unk1;
     This->vtable->Attach(
         This, (*(s32(**)(void *, s32))(*(u32 *)Unk1 + 0x80))(Unk1, 0));
     This->vtable->dream_sys_get_set_dream_time_limit(This, -1);
-    This->m_Unk27 = 1;
-    This->m_Unk26 = 0;
-    This->m_Unk541 = 1;
+    This->m_InputLocked = 1;
+    This->m_Paused = 0;
+    This->m_IsNewGame = 1;
     This->vtable->dream_sys_init_new_game(This);
     This->vtable->dream_sys_unk15(This);
 }
@@ -135,14 +117,14 @@ void dream_sys_construct(dream_sys_t *This, void *Unk1, s32 Unk2, s32 Unk3) {
 void dream_sys_unk15(dream_sys_t *This) {
     This->vtable->Unk23(This, 0);
     This->vtable->Unk16(This, 1, &g_DreamStartTransform);
-    This->m_Unk31 = 0;
-    This->m_Unk37 = 0;
-    This->m_Unk50 = 0;
-    This->m_Unk577 = 0;
-    This->m_Unk578 = 0;
-    This->m_Unk579 = 0;
-    This->m_Unk29 = 0;
-    This->m_UnkFlag = 0;
+    This->m_ViewUpdateCallback = 0;
+    This->m_MoveUpdateCallback = 0;
+    This->m_EntityContext = 0;
+    This->m_AutoMoveLocked = 0;
+    This->m_AutoMoveActive = 0;
+    This->m_AutoMoveCallback = 0;
+    This->m_ResetFlag78 = 0;
+    This->m_Flag = 0;
 }
 
 void dream_sys_unk18(dream_sys_t *This, void **arg1) {
@@ -152,16 +134,16 @@ void dream_sys_unk18(dream_sys_t *This, void **arg1) {
 
     ((void (*)(void **, void *, void *, void *))*(void **)((u8 *)*arg1 + 0xE4))(
         arg1, sp10, This, (u8 *)This + 0x16C);
-    ((void (*)(void *, void **, void *))func_80057C84()->Unk18)(This, arg1, sp10);
+    ((void (*)(void *, void **, void *))class_477E4_get_vtable()->Unk18)(This, arg1, sp10);
     This->vtable->Attach(This, arg1);
-    if (This->m_Unk16 == 0xE) {
+    if (This->m_LinkState == 0xE) {
         off = *(s32 *)((u8 *)This + 0x87C) * 0x24 + 0x470;
         slot = (u8 *)This + off;
         This->vtable->Unk16(This, 1, (s32 *)(slot + 0xE));
         This->vtable->dream_sys_get_set_dream_time_limit(This, *(s16 *)(slot + 0x1A) + 4);
         *(s32 *)((u8 *)This + 0x87C) = *(s32 *)((u8 *)This + 0x87C) + 1;
     }
-    if (This->m_Unk26 != 0) {
+    if (This->m_Paused != 0) {
         if (*(s32 *)((u8 *)This + 0x888) != 0) {
             This->vtable->Unk16(This, 1, (s32 *)*(s32 *)((u8 *)This + 0x888));
         }
@@ -171,10 +153,10 @@ void dream_sys_unk18(dream_sys_t *This, void **arg1) {
 void dream_sys_detach_actor(dream_sys_t *This) {
     void **temp_a0;
 
-    temp_a0 = (void **)This->m_Unk18;
+    temp_a0 = (void **)This->m_AttachedActor;
     ((void (*)(void **))(*(void **)((s8 *)*temp_a0 + 0xF0)))(temp_a0);
-    This->vtable->Detach(This, (void *)This->m_Unk18);
-    func_80057C84()->Unk19(This);
+    This->vtable->Detach(This, (void *)This->m_AttachedActor);
+    class_477E4_get_vtable()->Unk19(This);
 }
 
 void dream_sys_on_floor_event(dream_sys_t *This, s32 arg1) {
@@ -183,19 +165,19 @@ void dream_sys_on_floor_event(dream_sys_t *This, s32 arg1) {
     s32 value;
     s32 surface;
 
-    func_80057C84()->Unk33(This, arg1);
+    class_477E4_get_vtable()->Unk33(This, arg1);
     if (arg1 == -2) {
         goto neg2;
     }
     if (arg1 != -1) {
         return;
     }
-    surface = *(u16 *)(This->m_Unk9 + 0x36) & 0x7F;
+    surface = *(u16 *)(This->m_FloorObject + 0x36) & 0x7F;
     This->m_FloorSurfaceType = surface;
     if (surface >= 0x18) {
         This->m_FloorSurfaceType = 0;
     }
-    if (This->m_Unk16 == 0xF && This->m_FloorSurfaceType == 0) {
+    if (This->m_LinkState == 0xF && This->m_FloorSurfaceType == 0) {
         This->m_FloorSurfaceType = 2;
     }
     if (This->m_NextMap == 9) {
@@ -203,13 +185,13 @@ void dream_sys_on_floor_event(dream_sys_t *This, s32 arg1) {
     }
     return;
 neg2:
-    obj = (void **)This->m_Unk18;
-    link = ((s32 *(*)(void *, s32))(*(void **)((u8 *)*obj + 0x11C)))(obj, This->m_Unk4 + 0x18);
+    obj = (void **)This->m_AttachedActor;
+    link = ((s32 *(*)(void *, s32))(*(void **)((u8 *)*obj + 0x11C)))(obj, This->m_Transform + 0x18);
     if (*(s16 *)(link[1] + 0x2C) != 2) {
         goto other;
     }
 shared:
-    obj = (void **)This->m_Unk18;
+    obj = (void **)This->m_AttachedActor;
     value = (*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x10C))(obj, 0, 0);
     This->vtable->dream_sys_random_spawn_link(This, value);
     return;
@@ -218,13 +200,13 @@ other:
 }
 
 void set_move_from_pad(dream_sys_t *This, s32 arg1, s32 arg2) {
-    if (This->m_Unk26 != 0) {
+    if (This->m_Paused != 0) {
         return;
     }
-    if (This->m_Unk27 != 0) {
+    if (This->m_InputLocked != 0) {
         return;
     }
-    if (This->m_Unk577 != 0) {
+    if (This->m_AutoMoveLocked != 0) {
         return;
     }
     arg2 -= 2;
@@ -254,19 +236,19 @@ void set_move_from_pad(dream_sys_t *This, s32 arg1, s32 arg2) {
         This->m_LookUpDownState = 2;
         return;
     case 11:
-        This->m_Unk35 = 2;
+        This->m_TurnState = 2;
         return;
     case 12:
         This->m_MoveState = MOVE_RIGHT;
         return;
     case 13:
-        This->m_Unk35 = 1;
+        This->m_TurnState = 1;
         return;
     case 14:
         This->m_MoveState = MOVE_LEFT;
         return;
     case 23:
-        This->m_Unk28 = 1;
+        This->m_ActionPressed = 1;
         return;
     case 32:
         ((void (*)(dream_sys_t *))This->vtable->dream_sys_restore_move_direction)(This);
@@ -284,20 +266,20 @@ s32 dream_sys_timer_tick(dream_sys_t *This, s32 arg1, s32 arg2) {
 
     temp = 2;
     if (arg2 == 2) {
-        tick = This->m_GameTick;
-        This->m_GameTick = tick + 1;
+        tick = This->m_DreamTimer;
+        This->m_DreamTimer = tick + 1;
         if (tick >= (u32)This->m_DreamTimeLimit) {
-            if (This->m_Unk25 != 0) {
-                temp = This->m_Unk16;
+            if (This->m_IsFlashbackSession != 0) {
+                temp = This->m_LinkState;
                 if ((temp != 0) || ((temp = This->vtable->dream_sys_load_next_flashback(This, 0)) != 0)) {
-                    This->m_GameTick = 0;
+                    This->m_DreamTimer = 0;
                     return temp;
                 }
             } else {
                 This->vtable->dream_sys_flashback_saving(This, 0, 0x10);
             }
             This->vtable->Notify(This, 0xA);
-            This->m_GameTick = 0;
+            This->m_DreamTimer = 0;
         } else {
             This->vtable->dream_sys_update_link_timer(This);
             This->vtable->dream_sys_run_callbacks(This);
@@ -309,7 +291,7 @@ s32 dream_sys_timer_tick(dream_sys_t *This, s32 arg1, s32 arg2) {
 }
 
 void dream_sys_on_chunk_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
-    func_80057C84()->Unk38(This, Unk2, Unk3);
+    class_477E4_get_vtable()->Unk38(This, Unk2, Unk3);
 
     if ((*(u32 *) *Unk2 & 0xFFF) == 0x114) {
         This->vtable->dream_sys_process_chunk_change(This, Unk2, Unk3);
@@ -317,7 +299,7 @@ void dream_sys_on_chunk_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
 }
 
 void dream_sys_on_journal_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
-    func_80057C84()->Unk54(This, Unk2, Unk3);
+    class_477E4_get_vtable()->Unk54(This, Unk2, Unk3);
 
     if ((*(u32 *) *Unk2 & 0xFFFFF) == 0x1F234) {
         This->vtable->dream_sys_instance_effects_on_journal(This, Unk2, Unk3);
@@ -328,13 +310,13 @@ void dream_sys_wall_link(dream_sys_t *This, s32 arg1, s32 arg2) {
     void **obj;
     void *pkt;
 
-    ((void (*)(void *, s32, s32))func_80057C84()->Unk55)(This, arg1, arg2);
-    if ((arg2 == 4) && (This->m_Unk16 == 0)) {
-        obj = (void **)This->m_Unk18;
+    ((void (*)(void *, s32, s32))class_477E4_get_vtable()->Unk55)(This, arg1, arg2);
+    if ((arg2 == 4) && (This->m_LinkState == 0)) {
+        obj = (void **)This->m_AttachedActor;
         pkt = ((void *(*)(void *, s32))(*(void **)((u8 *)*obj + 0xD4)))(obj, arg1);
-        *(dream_sys_fb_pkt10_t *)&This->m_Unk90 = *(dream_sys_fb_pkt10_t *)pkt;
-        if (This->vtable->dream_sys_static_wall_link(This, (s32)&This->m_Unk90) == 0) {
-            if (This->m_Unk72 != 0) {
+        *(dream_sys_fb_pkt10_t *)&This->m_SpawnCoordinates = *(dream_sys_fb_pkt10_t *)pkt;
+        if (This->vtable->dream_sys_static_wall_link(This, (s32)&This->m_SpawnCoordinates) == 0) {
+            if (This->m_CanDynamicLink != 0) {
                 This->vtable->dream_sys_dynamic_link(This);
             }
         }
@@ -349,22 +331,22 @@ void dream_sys_nop(void) {
 s32 dream_sys_get_set_flashback(dream_sys_t *This, void **Unk2, s32 Unk3) {
     s32 value;
 
-    value = This->m_Unk25;
+    value = This->m_IsFlashbackSession;
     if (Unk3 < 0) {
-        *Unk2 = (void *) calc_dream_color((char *) &This->m_Unk99 + 2 * This->m_DayOfYear);
+        *Unk2 = (void *) calc_dream_color((char *) &This->m_MoodHistory + 2 * This->m_DayOfYear);
     } else {
-        This->m_Unk25 = Unk3;
+        This->m_IsFlashbackSession = Unk3;
     }
 
     return value;
 }
 
 void dream_sys_set_paused(dream_sys_t *This, s32 arg1) {
-    This->m_Unk26 = arg1;
+    This->m_Paused = arg1;
     if (arg1 != 0) {
         This->vtable->dream_sys_get_set_move_direction(This, 1);
-        if (This->m_Unk544 != 0) {
-            This->vtable->Unk16(This, 1, (s32 *)This->m_Unk544);
+        if (This->m_SourceLinkTransform != 0) {
+            This->vtable->Unk16(This, 1, (s32 *)This->m_SourceLinkTransform);
         }
     }
 }
@@ -380,41 +362,41 @@ typedef struct {
 void reset_motion_for_link(dream_sys_t *This, s32 arg1, s32 arg2) {
     dream_sys_link_buf_t buf;
 
-    This->vtable->dream_sys_log_chunk_mood(This, &This->m_Unk90);
+    This->vtable->dream_sys_log_chunk_mood(This, &This->m_SpawnCoordinates);
     This->vtable->dream_sys_set_view_callback(This, 1);
     This->vtable->dream_sys_set_move_callback(This, 1);
     This->vtable->dream_sys_get_set_move_direction(This, arg1);
-    This->m_Unk46 = -1;
-    This->m_Unk44 = 0;
+    This->m_FloorEffect = -1;
+    This->m_MoveStep = 0;
     This->m_FloorSurfaceType = 0;
     This->m_MoveState = MOVE_NONE;
     This->m_LeftRightState = 0;
     This->m_LookUpDownState = 0;
-    This->m_Unk35 = 0;
+    This->m_TurnState = 0;
     This->m_LookVerticalPosition = 0;
-    This->m_Unk36 = 0;
+    This->m_TurnOffset = 0;
     This->vtable->dream_sys_set_link_params(This, 0, 1, 1, 1);
     This->vtable->dream_sys_set_link_interval(This, arg2);
-    *(s16 *)((u8 *)&This->m_Unk89 + 2) = -1;
-    This->m_Unk27 = 0;
-    This->m_Unk16 = 0;
-    This->m_Unk28 = 0;
-    This->m_Unk577 = 0;
-    This->m_Unk578 = 0;
-    This->m_Unk579 = 0;
-    This->m_Unk29 = 0;
-    func_8001E6F8(This, &buf);
+    *(s16 *)((u8 *)&This->m_SpecialCinematic + 2) = -1;
+    This->m_InputLocked = 0;
+    This->m_LinkState = 0;
+    This->m_ActionPressed = 0;
+    This->m_AutoMoveLocked = 0;
+    This->m_AutoMoveActive = 0;
+    This->m_AutoMoveCallback = 0;
+    This->m_ResetFlag78 = 0;
+    object_get_rotation_360(This, &buf);
     buf.m_A = 0;
     buf.m_B = 1;
     This->vtable->Unk16(This, 1, (s32 *)&buf);
 }
 
 void dream_sys_lock_input(dream_sys_t *This) {
-    This->m_Unk27 = 1;
+    This->m_InputLocked = 1;
 }
 
-s32 func_8005931C(dream_sys_t *This) {
-    return This->m_Unk28;
+s32 dream_sys_get_action_pressed(dream_sys_t *This) {
+    return This->m_ActionPressed;
 }
 
 s32 dream_sys_get_set_dream_time_limit(dream_sys_t *This, s32 Limit) {
@@ -435,46 +417,46 @@ s32 dream_sys_get_set_dream_time_limit(dream_sys_t *This, s32 Limit) {
 }
 
 s32 dream_sys_get_elapsed_seconds(dream_sys_t *This) {
-    return This->m_GameTick / 15;
+    return This->m_DreamTimer / 15;
 }
 
 void dream_sys_set_actor(dream_sys_t *This, s32 Value) {
-    This->m_Unk21 = Value;
+    This->m_Actor = Value;
 }
 
 void dream_sys_set_transform(dream_sys_t *This, s32 Value) {
-    This->m_Unk22 = Value;
+    This->m_ViewTransform = Value;
 }
 
 void dream_sys_set_texture(dream_sys_t *This, s32 Value) {
-    This->m_Unk24 = Value;
+    This->m_Texture = Value;
 }
 
 void dream_sys_update_link_timer(dream_sys_t *This) {
-    if (This->m_Unk27 == 0) {
-        This->m_Unk28 = 0;
-        This->m_Unk72 = This->m_GameTick % This->m_Unk71 == 0;
+    if (This->m_InputLocked == 0) {
+        This->m_ActionPressed = 0;
+        This->m_CanDynamicLink = This->m_DreamTimer % This->m_LinkInterval == 0;
     }
 }
 
 void dream_sys_run_callbacks(dream_sys_t *This) {
-    void (*m_Unk31)(void);
-  void (*m_Unk37)(dream_sys_t *);
+    void (*viewCallback)(void);
+  void (*moveCallback)(dream_sys_t *);
 
-    m_Unk31 = (void (*)(void))This->m_Unk31;
-  if ( m_Unk31 )
-    m_Unk31();
+    viewCallback = (void (*)(void))This->m_ViewUpdateCallback;
+  if ( viewCallback )
+    viewCallback();
     
-  m_Unk37 = (void ( *)(dream_sys_t *))This->m_Unk37;
-  if ( m_Unk37 )
-    m_Unk37(This);
+  moveCallback = (void ( *)(dream_sys_t *))This->m_MoveUpdateCallback;
+  if ( moveCallback )
+    moveCallback(This);
 }
 
 
 extern s32 g_LinkTargetPos[];
 
-void func_8001E600(void *arg0, void *arg1, void *arg2, s32 arg3);
-s32 func_8001EF14(s32 *arg0, s32 arg1, s32 *arg2);
+void transform_local_to_world(void *arg0, void *arg1, void *arg2, s32 arg3);
+s32 is_point_within_radius(s32 *arg0, s32 arg1, s32 *arg2);
 
 s32 dream_sys_resolve_target_position(dream_sys_t *This, vec3d_t *arg1, s32 arg2, s32 *arg3, s32 arg4) {
     vec3d_t pos;
@@ -482,10 +464,10 @@ s32 dream_sys_resolve_target_position(dream_sys_t *This, vec3d_t *arg1, s32 arg2
     s32 *p;
 
     g_LinkTargetPos[0] = arg2;
-    func_8001E600(This, &pos, &g_LinkTargetPos[-2], 0);
-    temp = lerp_position((s32 *)(This->m_Unk22 + 0x14), (s32 *)(This->m_Unk22 + 0x20), arg2);
-    if (This->m_Unk2 != 0) {
-        p = (s32 *)(This->m_Unk4 + 0x38);
+    transform_local_to_world(This, &pos, &g_LinkTargetPos[-2], 0);
+    temp = lerp_position((s32 *)(This->m_ViewTransform + 0x14), (s32 *)(This->m_ViewTransform + 0x20), arg2);
+    if (This->m_HasTransform != 0) {
+        p = (s32 *)(This->m_Transform + 0x38);
     } else {
         p = NULL;
     }
@@ -494,7 +476,7 @@ s32 dream_sys_resolve_target_position(dream_sys_t *This, vec3d_t *arg1, s32 arg2
         *arg1 = pos;
     }
     if (arg3 != NULL) {
-        return func_8001EF14((s32 *)&pos, arg4, arg3);
+        return is_point_within_radius((s32 *)&pos, arg4, arg3);
     } else {
         return 0;
     }
@@ -523,15 +505,15 @@ s32 lerp_position(s32 *arg0, s32 *arg1, s32 arg2) {
     return ((arg1[1] - arg0[1]) * mult) / divisor + arg0[1];
 }
 
-void func_80059590(dream_sys_t *This) {
-    This->m_Unk30 = 0;
+void dream_sys_reset_flag7c(dream_sys_t *This) {
+    This->m_ResetFlag7C = 0;
 }
 
-void func_80059598(dream_sys_t *This) {
-    This->m_Unk29 = 0;
+void dream_sys_reset_flag78(dream_sys_t *This) {
+    This->m_ResetFlag78 = 0;
 }
 
-s32 func_800595A0(dream_sys_t *This) {
+s32 dream_sys_link_action_hook(dream_sys_t *This) {
     return 0;
 }
 
@@ -551,23 +533,23 @@ void dream_sys_set_callbacks(dream_sys_t *This, s32 Unk2, s32 Unk3) {
 void dream_sys_set_view_callback(dream_sys_t *This, s32 Unk) {
     dream_sys_vtable_t *vtable = This->vtable;
 
-    This->m_Unk32 = Unk;
+    This->m_ViewMode = Unk;
 
     switch (Unk) {
         case 0:
-            This->m_Unk31 = 0;
+            This->m_ViewUpdateCallback = 0;
             break;
 
         case 1:
-            This->m_Unk31 = vtable->dream_sys_update_view;
+            This->m_ViewUpdateCallback = vtable->dream_sys_update_view;
             break;
 
         case 2:
-            This->m_Unk31 = vtable->Unk82;
+            This->m_ViewUpdateCallback = vtable->dream_sys_update_view_mode2;
             break;
 
         case 3:
-            This->m_Unk31 = vtable->Unk83;
+            This->m_ViewUpdateCallback = vtable->dream_sys_update_view_mode3;
             break;
 
         default:
@@ -579,27 +561,27 @@ void dream_sys_set_move_callback(dream_sys_t *This, s32 Unk) {
     s32 fnc;
     dream_sys_vtable_t *vtable = This->vtable;
 
-    if (This->m_Unk38 == 2) {
+    if (This->m_MoveMode == 2) {
         vtable->dream_sys_set_view_mode(This, 0);
     }
 
-    This->m_Unk38 = Unk;
+    This->m_MoveMode = Unk;
 
     switch (Unk) {
         case 0:
-            This->m_Unk37 = 0;
+            This->m_MoveUpdateCallback = 0;
             break;
 
         case 1:
-            This->m_Unk37 = vtable->dream_sys_update_movement;
+            This->m_MoveUpdateCallback = vtable->dream_sys_update_movement;
             break;
 
         case 2:
             fnc = vtable->dream_sys_reset_view;
-            This->m_Unk48 = 1;
-            This->m_Unk49 = 1;
-            This->m_Unk37 = fnc;
-            helper_1_set_entity(This->m_Unk21, &This->m_Unk50, 1, This, This->vtable->dream_sys_configure_entity_link);
+            This->m_ResetViewPending = 1;
+            This->m_ViewActive = 1;
+            This->m_MoveUpdateCallback = fnc;
+            helper_1_set_entity(This->m_Actor, &This->m_EntityContext, 1, This, This->vtable->dream_sys_configure_entity_link);
             break;
 
         default:
@@ -634,7 +616,7 @@ void dream_sys_update_look(dream_sys_t *This) {
         }
         goto clear;
     apply:
-        obj = (s32 *)This->m_Unk22;
+        obj = (s32 *)This->m_ViewTransform;
         obj[9] += delta;
         This->m_LookVerticalPosition = sum;
     clear:
@@ -647,7 +629,7 @@ void dream_sys_update_look(dream_sys_t *This) {
             } else {
                 delta = -0x258;
             }
-            ((s32 *)This->m_Unk22)[9] = ((s32 *)This->m_Unk22)[9] + delta;
+            ((s32 *)This->m_ViewTransform)[9] = ((s32 *)This->m_ViewTransform)[9] + delta;
             This->m_LookVerticalPosition += delta;
         }
     }
@@ -663,12 +645,12 @@ void dream_sys_update_turn(dream_sys_t *This) {
     s32 sum;
     s32 pos;
 
-    This->m_Unk41 = This->m_MoveState == MOVE_FORWARD;
-    index = This->m_Unk35;
+    This->m_IsForward = This->m_MoveState == MOVE_FORWARD;
+    index = This->m_TurnState;
     if (index != 0) {
         delta = g_TurnDelta[index];
         limit = g_TurnLimit[index];
-        sum = This->m_Unk36 + delta;
+        sum = This->m_TurnOffset + delta;
         if (sum >= 0) {
             if (sum < limit) {
                 goto apply;
@@ -680,12 +662,12 @@ void dream_sys_update_turn(dream_sys_t *This) {
     apply:
         g_TurnTransformYaw[0] = delta;
         This->vtable->Unk16(This, 0, (s32 *)((u8 *)&g_TurnTransformYaw[0] - 4));
-        This->m_Unk36 = sum;
+        This->m_TurnOffset = sum;
     clear:
-        This->m_Unk35 = 0;
+        This->m_TurnState = 0;
         dream_sys_decay_turn(This);
     } else {
-        pos = This->m_Unk36;
+        pos = This->m_TurnOffset;
         if (pos != 0) {
             if (pos < 0) {
                 delta = 0x2D;
@@ -694,14 +676,14 @@ void dream_sys_update_turn(dream_sys_t *This) {
             }
             g_TurnTransformYaw[0] = delta;
             This->vtable->Unk16(This, 0, (s32 *)((u8 *)&g_TurnTransformYaw[0] - 4));
-            This->m_Unk36 += delta;
+            This->m_TurnOffset += delta;
             dream_sys_decay_turn(This);
         }
     }
 }
 
 void dream_sys_decay_turn(dream_sys_t *This) {
-    This->m_Unk41 = 0;
+    This->m_IsForward = 0;
 
     if (This->m_MoveState) {
         if ((This->m_MoveState & 1) == 0) {
@@ -712,17 +694,21 @@ void dream_sys_decay_turn(dream_sys_t *This) {
     }
 }
 
-void func_80059A48(void) {
+/* Empty view-update callback installed for view mode 2 by
+   dream_sys_set_view_callback. */
+void dream_sys_update_view_mode2(void) {
 }
 
-void func_80059A50(void) {
+/* Empty view-update callback installed for view mode 3 by
+   dream_sys_set_view_callback. */
+void dream_sys_update_view_mode3(void) {
 }
 
 void dream_sys_update_movement(dream_sys_t *This) {
-    if (This->m_Unk26 == 0) {
+    if (This->m_Paused == 0) {
         This->vtable->dream_sys_update_turn_delta(This);
         This->vtable->dream_sys_move_step(This);
-    } else if (This->m_Unk26 == 2) {
+    } else if (This->m_Paused == 2) {
         This->vtable->dream_sys_set_move_forward(This);
     } else {
         This->vtable->dream_sys_move_forward(This);
@@ -732,7 +718,7 @@ void dream_sys_update_movement(dream_sys_t *This) {
 void dream_sys_move_step(dream_sys_t *This) {
     s32 value;
 
-    if (!This->m_Unk27) {
+    if (!This->m_InputLocked) {
         value = This->vtable->dream_sys_process_move(This, 1);
         This->vtable->dream_sys_trigger_link_action(This, value);
     }
@@ -743,7 +729,7 @@ void dream_sys_move_forward(dream_sys_t *This) {
 
     This->m_MoveState = MOVE_FORWARD;
 
-    if (!This->m_Unk27) {
+    if (!This->m_InputLocked) {
         value = This->vtable->dream_sys_process_move(This, 1);
         This->vtable->dream_sys_trigger_link_action(This, value);
     } else {
@@ -766,12 +752,12 @@ s32 dream_sys_process_move(dream_sys_t *This, s32 arg1) {
     saved = 0;
     if (This->m_MoveState != 0) {
         saved = This->m_MoveState;
-        count = This->m_Unk44 + 1;
-        This->m_Unk44 = count;
+        count = This->m_MoveStep + 1;
+        This->m_MoveStep = count;
         if (count >= 4) {
             goto wrap;
         }
-        if (This->m_Unk42 != MOVE_RIGHT) {
+        if (This->m_MoveDirection != MOVE_RIGHT) {
             goto step;
         }
         {
@@ -788,17 +774,17 @@ s32 dream_sys_process_move(dream_sys_t *This, s32 arg1) {
         if (flag != 0) {
             This->vtable->dream_sys_apply_floor_surface(This);
         }
-        obj = (s32 *)This->m_Unk22;
-        if (obj != 0 && This->screen_shake_enabled != 0 && arg1 != 0) {
+        obj = (s32 *)This->m_ViewTransform;
+        if (obj != 0 && This->m_ScreenShakeEnabled != 0 && arg1 != 0) {
             delta = -0x32;
-            if (This->m_Unk44 >= 3) {
+            if (This->m_MoveStep >= 3) {
                 delta = 0x32;
             }
             obj[6] += delta;
             obj[9] += delta;
         }
         if (This->m_MoveState == MOVE_NONE) {
-            This->m_Unk44 = 0;
+            This->m_MoveStep = 0;
         }
     }
     if (flag == 0) {
@@ -813,15 +799,15 @@ void dream_sys_apply_floor_surface(dream_sys_t *This) {
     void **vtable;
     s32 offset;
 
-    link = (s32 *)This->m_Unk21;
+    link = (s32 *)This->m_Actor;
     surface = This->m_FloorSurfaceType;
     vtable = (void **)*link;
     if (surface != 0) {
         offset = g_FloorSurfaceAnim[surface] * 0x10;
         ((void (*)(s32 *, s32))vtable[0x9C / 4])(link, g_FloorSurfaceParam[surface]);
-        This->m_Unk46 = ((s32 (*)(s32 *, s32, s32, s32))vtable[0x80 / 4])(link, offset, 0x6E, 0x6E);
+        This->m_FloorEffect = ((s32 (*)(s32 *, s32, s32, s32))vtable[0x80 / 4])(link, offset, 0x6E, 0x6E);
         if (This->m_FloorSurfaceType != 0x16) {
-            This->m_Unk46 = -1;
+            This->m_FloorEffect = -1;
         }
         if (This->m_FloorSurfaceType == 0xB) {
             ((void (*)(s32 *, s32))vtable[0x9C / 4])(link, 1);
@@ -833,9 +819,9 @@ void dream_sys_apply_floor_surface(dream_sys_t *This) {
 }
 
 void dream_sys_release_floor_effect(dream_sys_t *This) {
-    if (This->m_Unk46 >= 0) {
-        (*(void ( **)(s32, s32))(*(s32 *)This->m_Unk21 + 132))(This->m_Unk21, This->m_Unk46);
-        This->m_Unk46 = -1;
+    if (This->m_FloorEffect >= 0) {
+        (*(void ( **)(s32, s32))(*(s32 *)This->m_Actor + 132))(This->m_Actor, This->m_FloorEffect);
+        This->m_FloorEffect = -1;
     }
 }
 
@@ -847,7 +833,7 @@ typedef struct link_actor link_actor_t;
 
 typedef struct link_actor_vtable {
     /* 0x00 */ u8 pad[0x10C];
-    /* 0x10C */ s32 (*Unk66)(link_actor_t *, s32, s32);
+    /* 0x10C */ s32 (*get_spawn_key)(link_actor_t *, s32, s32);
 } link_actor_vtable_t;
 
 typedef struct link_actor {
@@ -870,21 +856,21 @@ void dream_sys_trigger_link_action(dream_sys_t *This, s32 arg) {
     if (arg == 0) {
         return;
     }
-    product = g_LinkDistanceSign[arg] * g_LinkDistanceByDirection[This->m_Unk42];
-    This->vtable->Unk74(This);
-    link = (link_actor_t *)This->m_Unk18;
-    ret = link->vtable->Unk66(link, 0, 0);
+    product = g_LinkDistanceSign[arg] * g_LinkDistanceByDirection[This->m_MoveDirection];
+    This->vtable->dream_sys_link_action_hook(This);
+    link = (link_actor_t *)This->m_AttachedActor;
+    ret = link->vtable->get_spawn_key(link, 0, 0);
     if (This->vtable->dream_sys_staircase_link(This, ret) == 0 && This->vtable->dream_sys_teleport_link(This, ret) == 0 && This->vtable->dream_sys_tunnel_link(This, ret) == 0) {
         This->vtable->dream_sys_save_link_state(This);
-        g_LinkActionTable[arg](This, product, This->m_Unk578 == 0);
+        g_LinkActionTable[arg](This, product, This->m_AutoMoveActive == 0);
         if (This->m_NextMap == 0) {
-            inner = (link_actor_transform_t *)This->m_Unk4;
+            inner = (link_actor_transform_t *)This->m_Transform;
             if (inner->field_1C < -0x7D0 && inner->field_18 >= -0x1F3) {
                 This->vtable->dream_sys_wall_link(This, This, 4);
             }
         }
     }
-    *(s32 *)This->m_Unk4 = 0;
+    *(s32 *)This->m_Transform = 0;
 }
 
 void dream_sys_update_turn_delta(dream_sys_t *This) {
@@ -900,31 +886,31 @@ void dream_sys_update_turn_delta(dream_sys_t *This) {
 void dream_sys_reset_view(dream_sys_t *This) {
     s32 *temp_v1;
 
-    if (This->m_Unk48 != 0) {
+    if (This->m_ResetViewPending != 0) {
         This->vtable->Unk46(This, g_ViewResetOffset);
-        temp_v1 = (s32 *)This->m_Unk22;
+        temp_v1 = (s32 *)This->m_ViewTransform;
         temp_v1[9] = temp_v1[9] - 0x258;
     }
-    if (This->m_Unk49 != 0) {
-        helper_1_update_entity(This->m_Unk21, (u8 *)This + 0xCC);
+    if (This->m_ViewActive != 0) {
+        helper_1_update_entity(This->m_Actor, (u8 *)This + 0xCC);
     }
 }
 
 void dream_sys_set_view_mode(dream_sys_t *This, s32 Unk) {
-    This->m_Unk48 = 0;
-    This->m_Unk49 = Unk;
+    This->m_ResetViewPending = 0;
+    This->m_ViewActive = Unk;
 
     if (Unk) {
-        sound_update_entity(This->m_Unk21, &This->m_Unk50);
+        sound_update_entity(This->m_Actor, &This->m_EntityContext);
     }
 }
 
 s32 dream_sys_get_set_move_direction(dream_sys_t *This, s32 Value) {
-    s32 old_value = This->m_Unk42;
+    s32 old_value = This->m_MoveDirection;
 
     if (Value >= 0) {
-        This->m_Unk42 = Value;
-        This->m_Unk43 = Value;
+        This->m_MoveDirection = Value;
+        This->m_PrevMoveDirection = Value;
     }
 
     return old_value;
@@ -933,35 +919,35 @@ s32 dream_sys_get_set_move_direction(dream_sys_t *This, s32 Value) {
 s32 dream_sys_set_move_direction(dream_sys_t *This, s32 Value) {
     s32 next_value;
 
-    next_value = This->m_Unk42;
+    next_value = This->m_MoveDirection;
     if (next_value != Value) {
-        This->m_Unk43 = next_value;
-        This->m_Unk42 = Value;
+        This->m_PrevMoveDirection = next_value;
+        This->m_MoveDirection = Value;
     }
     return next_value;
 }
 
 void dream_sys_restore_move_direction(dream_sys_t *This) {
-    This->m_Unk42 = This->m_Unk43;
+    This->m_MoveDirection = This->m_PrevMoveDirection;
 }
 
 void dream_sys_set_link_params(dream_sys_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     if (Unk2 >= 0) {
-        This->m_Unk72 = Unk2;
+        This->m_CanDynamicLink = Unk2;
     }
     if (Unk3 >= 0) {
-        This->m_Unk73 = Unk3;
+        This->m_LinkParam128 = Unk3;
     }
     if (Unk4 >= 0) {
-        This->m_Unk74 = Unk4;
+        This->m_LinkParam12C = Unk4;
     }
     if (Unk5 >= 0) {
-        This->m_Unk75 = Unk5;
+        This->m_LinkParam130 = Unk5;
     }
 }
 
 void dream_sys_set_link_interval(dream_sys_t *This, s32 Value) {
-    This->m_Unk71 = Value;
+    This->m_LinkInterval = Value;
 }
 
 void dream_sys_configure_entity_link(dream_sys_t *This, s32 *arg1) {
@@ -986,23 +972,23 @@ void dream_sys_init_new_game(dream_sys_t *This) {
     temp_v1 = g_SaveDataMagic;
     This->m_Year = 0;
     This->m_DayOfYear = 0;
-    This->m_Unk96 = 0;
-    This->m_Unk97 = 0;
-    This->m_Unk98 = 0;
-    This->m_Unk282 = 0;
+    This->m_TotalUnlockScore = 0;
+    This->m_NavigationScore = 0;
+    This->m_InstanceScore = 0;
+    This->m_FlashbackCount = 0;
     *((u8 *)This + 0x5DF) = 0;
     *((u8 *)This + 0x5D8) = 0;
-    This->screen_shake_enabled = 1;
-    This->m_Unk414 = 0;
-    This->m_Unk415 = 0;
-    This->m_Unk93 = temp_v1;
-    init_nav_challenges_array(&This->m_Unk375, &This->m_Unk383);
-    memset(&This->m_Unk416, 0, 0x1F4);
+    This->m_ScreenShakeEnabled = 1;
+    This->m_Reserved67C = 0;
+    This->m_Reserved680 = 0;
+    This->m_SaveDataMagic = temp_v1;
+    init_nav_challenges_array((s32 *)&This->m_NavChallenges, &This->m_DynamicLinkCount);
+    memset(&This->m_Reserved684, 0, 0x1F4);
 }
 
 void dream_sys_get_set_screen_shake(dream_sys_t *This, s32 *Value) {
-    s32 old_value = This->screen_shake_enabled;
-    This->screen_shake_enabled = *Value;
+    s32 old_value = This->m_ScreenShakeEnabled;
+    This->m_ScreenShakeEnabled = *Value;
     *Value = old_value;
 }
 
@@ -1026,11 +1012,11 @@ s32 dream_sys_advance_day(dream_sys_t *This) {
 }
 
 void dream_sys_clear_new_game(dream_sys_t *This) {
-    This->m_Unk541 = 0;
+    This->m_IsNewGame = 0;
 }
 
 s32 dream_sys_is_new_game(dream_sys_t *This) {
-    return This->m_Unk541;
+    return This->m_IsNewGame;
 }
 
 s32 *dream_sys_get_save_data(dream_sys_t *This, s32 *Size) {
@@ -1038,7 +1024,7 @@ s32 *dream_sys_get_save_data(dream_sys_t *This, s32 *Size) {
         *Size = 0x700;
     }
 
-    return &This->m_Unk93;
+    return &This->m_SaveDataMagic;
 }
 
 s32 is_day_special(s16 *out, s32 day);
@@ -1047,10 +1033,10 @@ s32 is_day_special(s16 *out, s32 day);
 s32 dream_sys_start_day(dream_sys_t *This) {
     s32 special;
 
-    This->m_Unk542 = 0;
-    This->m_GameTick = 0;
-    This->m_Unk546 = This->m_DayOfYear;
-    if (This->m_Unk25 != 0) {
+    This->m_FlashbackIndex = 0;
+    This->m_DreamTimer = 0;
+    This->m_StoredDay = This->m_DayOfYear;
+    if (This->m_IsFlashbackSession != 0) {
         ((void (*)(void *, s32))This->vtable->dream_sys_load_next_flashback)(This, 1);
     } else {
         special = is_day_special((u8 *)This + 0x168, This->m_DayOfYear + 1);
@@ -1066,8 +1052,8 @@ s32 dream_sys_start_day(dream_sys_t *This) {
 s32 dream_sys_end_day(dream_sys_t *This, s32 arg1) {
     s32 off;
 
-    This->m_DayOfYear = This->m_Unk546;
-    if (This->m_Unk25 == 0) {
+    This->m_DayOfYear = This->m_StoredDay;
+    if (This->m_IsFlashbackSession == 0) {
         if (arg1 == 0) {
             This->vtable->dream_sys_calc_unlock_score(This);
             off = This->m_DayOfYear * 2;
@@ -1079,10 +1065,10 @@ s32 dream_sys_end_day(dream_sys_t *This, s32 arg1) {
     }
     if (arg1 == 2) {
         This->vtable->dream_sys_init_new_game(This);
-        This->m_Unk541 = 1;
+        This->m_IsNewGame = 1;
     }
 done:
-    return This->m_Unk25;
+    return This->m_IsFlashbackSession;
 }
 
 dream_sys_t *dream_sys_get_cinematic(dream_sys_t *This, void *Unk) {
@@ -1097,17 +1083,17 @@ void dream_sys_init_spawn_loc(dream_sys_t *This) {
 
     This->vtable->dream_sys_get_previous_day_mood(This, &sp10, 1);
     This->m_NextMap =
-        generate_initial_spawn(&This->m_Unk90, &sp14, &sp10, This->m_DayOfYear);
+        generate_initial_spawn(&This->m_SpawnCoordinates, &sp14, &sp10, This->m_DayOfYear);
     sp14 = This->vtable->dream_sys_get_set_dream_time_limit(This, sp14);
-    This->m_Unk16 = 0xB;
+    This->m_LinkState = 0xB;
 }
 
 void dream_sys_dynamic_link(dream_sys_t *This) {
     s32 RandomSpawnFromStage;;
     
-    if ( !This->m_Unk16 )
+    if ( !This->m_LinkState )
   {
-    RandomSpawnFromStage = get_random_spawn_from_stage(&This->m_Unk90, This->m_NextMap, This->m_GameTick);
+    RandomSpawnFromStage = get_random_spawn_from_stage(&This->m_SpawnCoordinates, This->m_NextMap, This->m_DreamTimer);
     execute_link(This, RandomSpawnFromStage, 12, 1);
   }
 }
@@ -1115,10 +1101,10 @@ void dream_sys_dynamic_link(dream_sys_t *This) {
 s32 dream_sys_static_wall_link(dream_sys_t *This, s32 arg1) {
     s32 temp_v0;
 
-    if (This->m_Unk16 != 0) {
+    if (This->m_LinkState != 0) {
         return 0;
     }
-    temp_v0 = test_for_static_link(&This->m_Unk90, arg1, This->m_NextMap);
+    temp_v0 = test_for_static_link((s32 *)&This->m_SpawnCoordinates, arg1, This->m_NextMap);
     if (temp_v0 < 0) {
         return 0;
     }
@@ -1132,7 +1118,7 @@ s32 dream_sys_load_next_flashback(dream_sys_t *This, s32 arg1) {
     u8 *slot;
 
     idx = *(s32 *)((u8 *)This + 0x87C);
-    if (idx < This->m_Unk282) {
+    if (idx < This->m_FlashbackCount) {
         *(s32 *)((u8 *)This + 0x44) = 0xE;
         off = idx * 0x24 + 0x470;
         slot = (u8 *)This + off;
@@ -1151,18 +1137,18 @@ s32 dream_sys_tunnel_link(dream_sys_t *This, s32 arg1) {
     s32 idx;
     s32 buf[4];
 
-    if (This->m_Unk16 != 0) {
+    if (This->m_LinkState != 0) {
         return 0;
     }
-    idx = test_4_tunnel_links(&This->m_Unk90, arg1, This->m_NextMap);
+    idx = test_4_tunnel_links(&This->m_SpawnCoordinates, arg1, This->m_NextMap);
     if (idx < 0) {
         return 0;
     }
-    func_8001E6F8(This, buf);
-    if (get_tunnel_link(&This->m_Unk545, &This->m_Unk544, buf) == 0) {
+    object_get_rotation_360(This, buf);
+    if (get_tunnel_link(&This->m_TargetLinkTransform, &This->m_SourceLinkTransform, buf) == 0) {
         return 0;
     }
-    if (This->m_Unk41 == 0) {
+    if (This->m_IsForward == 0) {
         return 0;
     }
     execute_link(This, idx, 0xF, 0);
@@ -1172,16 +1158,16 @@ s32 dream_sys_tunnel_link(dream_sys_t *This, s32 arg1) {
 s32 dream_sys_random_spawn_link(dream_sys_t *This, s32 arg1) {
     s32 idx;
 
-    if (This->m_Unk16 != 0) {
+    if (This->m_LinkState != 0) {
         return 0;
     }
-    idx = get_dynamic_link_spawn(&This->m_Unk90, This->m_NextMap, arg1, This->m_GameTick);
+    idx = get_dynamic_link_spawn(&This->m_SpawnCoordinates, This->m_NextMap, arg1, This->m_DreamTimer);
     if (idx < 0) {
         return 0;
     }
-    This->m_Unk543 = (s32)get_teleport_link_data();
-    This->m_Unk544 = 0;
-    This->m_Unk545 = 0;
+    This->m_TeleportData = (s32)get_teleport_link_data();
+    This->m_SourceLinkTransform = 0;
+    This->m_TargetLinkTransform = 0;
     execute_link(This, idx, 0x10, 0);
     return 1;
 }
@@ -1191,17 +1177,17 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_teleport_link);
 s32 execute_link(dream_sys_t *This, s32 arg1, s32 arg2, s32 arg3) {
     void *temp_a0;
 
-    This->m_Unk16 = arg2;
+    This->m_LinkState = arg2;
     This->vtable->Notify(This, arg2);
-    if (This->m_Unk16 == 0) {
+    if (This->m_LinkState == 0) {
         return 0;
     }
     This->m_NextMap = arg1;
-    if (This->m_Unk25 != 0) {
-        This->m_GameTick = 0;
+    if (This->m_IsFlashbackSession != 0) {
+        This->m_DreamTimer = 0;
     }
     if (arg3 != 0) {
-        temp_a0 = (void *)This->m_Unk21;
+        temp_a0 = (void *)This->m_Actor;
         (*(void (**)(void *, s32, s32, s32))(*(s32 *)temp_a0 + 0x80))(
             temp_a0, 0x90, 0x6E, 0x6E);
     }
@@ -1213,11 +1199,11 @@ INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_staircase_link);
 s32 dream_sys_auto_move_0(dream_sys_t *This) {
     s32 v;
 
-    if (This->m_Unk580 == 0) {
-        dream_sys_translate_toward(This, g_AutoMoveTarget0, (s16 *)&This->m_Unk582);
+    if (This->m_AutoMoveStep == 0) {
+        dream_sys_translate_toward(This, g_AutoMoveTarget0, (s16 *)&This->m_AutoMoveTarget.position);
     }
-    if (This->m_Unk42 != 4) {
-        v = This->m_Unk580;
+    if (This->m_MoveDirection != 4) {
+        v = This->m_AutoMoveStep;
         if (v >= 0x85) {
             return 1;
         }
@@ -1225,7 +1211,7 @@ s32 dream_sys_auto_move_0(dream_sys_t *This) {
             This->m_LeftRightState = 2;
         }
     } else {
-        v = This->m_Unk580;
+        v = This->m_AutoMoveStep;
         if (v >= 0x13) {
             return 1;
         }
@@ -1234,7 +1220,7 @@ s32 dream_sys_auto_move_0(dream_sys_t *This) {
         }
     }
     This->m_MoveState = MOVE_FORWARD;
-    This->m_Unk580 += 1;
+    This->m_AutoMoveStep += 1;
     return 0;
 }
 
@@ -1242,44 +1228,44 @@ s32 dream_sys_auto_move_1(dream_sys_t *This) {
     s32 v;
     s32 turn;
 
-    if (This->m_Unk580 == 0) {
-        dream_sys_translate_toward(This, g_AutoMoveTarget1, (s16 *)&This->m_Unk582);
+    if (This->m_AutoMoveStep == 0) {
+        dream_sys_translate_toward(This, g_AutoMoveTarget1, (s16 *)&This->m_AutoMoveTarget.position);
     }
-    if (This->m_Unk42 != 4) {
-        v = This->m_Unk580;
+    if (This->m_MoveDirection != 4) {
+        v = This->m_AutoMoveStep;
         if (v >= 0x95) {
             return 1;
         }
         if (((u32)(v - 0x16) < 0xF) || ((u32)(v - 0x39) < 0x10) || ((u32)(v - 0x6E) < 0xF)) {
             This->m_LeftRightState = 1;
         }
-        turn = (u32)(This->m_Unk580 - 0x39) < 0x35;
+        turn = (u32)(This->m_AutoMoveStep - 0x39) < 0x35;
     } else {
-        v = This->m_Unk580;
+        v = This->m_AutoMoveStep;
         if (v >= 0x19) {
             return 1;
         }
         if (((u32)(v - 6) < 2) || ((u32)(v - 0xB) < 2) || ((u32)(v - 0x14) < 2)) {
             This->vtable->Unk16(This, 0, g_TurnStepCcw);
         }
-        turn = (u32)(This->m_Unk580 - 3) < 0xE;
+        turn = (u32)(This->m_AutoMoveStep - 3) < 0xE;
     }
     if (turn != 0) {
         This->m_LookUpDownState = 2;
     }
     This->m_MoveState = MOVE_FORWARD;
-    This->m_Unk580 += 1;
+    This->m_AutoMoveStep += 1;
     return 0;
 }
 
 s32 dream_sys_auto_move_2(dream_sys_t *This) {
     s32 v;
 
-    if (This->m_Unk580 == 0) {
-        dream_sys_translate_toward(This, g_AutoMoveTarget2, (s16 *)&This->m_Unk582);
+    if (This->m_AutoMoveStep == 0) {
+        dream_sys_translate_toward(This, g_AutoMoveTarget2, (s16 *)&This->m_AutoMoveTarget.position);
     }
-    if (This->m_Unk42 != 4) {
-        v = This->m_Unk580;
+    if (This->m_MoveDirection != 4) {
+        v = This->m_AutoMoveStep;
         if (v >= 0x65) {
             return 1;
         }
@@ -1287,7 +1273,7 @@ s32 dream_sys_auto_move_2(dream_sys_t *This) {
             This->m_LeftRightState = 2;
         }
     } else {
-        v = This->m_Unk580;
+        v = This->m_AutoMoveStep;
         if (v >= 0xF) {
             return 1;
         }
@@ -1296,7 +1282,7 @@ s32 dream_sys_auto_move_2(dream_sys_t *This) {
         }
     }
     This->m_MoveState = MOVE_FORWARD;
-    This->m_Unk580 += 1;
+    This->m_AutoMoveStep += 1;
     return 0;
 }
 
@@ -1304,33 +1290,33 @@ s32 dream_sys_auto_move_3(dream_sys_t *This) {
     s32 v;
     s32 turn;
 
-    if (This->m_Unk580 == 0) {
-        dream_sys_translate_toward(This, g_AutoMoveTarget3, (s16 *)&This->m_Unk582);
+    if (This->m_AutoMoveStep == 0) {
+        dream_sys_translate_toward(This, g_AutoMoveTarget3, (s16 *)&This->m_AutoMoveTarget.position);
     }
-    if (This->m_Unk42 != 4) {
-        v = This->m_Unk580;
+    if (This->m_MoveDirection != 4) {
+        v = This->m_AutoMoveStep;
         if (v >= 0x71) {
             return 1;
         }
         if (((u32)(v - 0x1E) < 0xF) || ((u32)(v - 0x52) < 0xF)) {
             This->m_LeftRightState = 1;
         }
-        turn = (u32)(This->m_Unk580 - 0x1E) < 0x34;
+        turn = (u32)(This->m_AutoMoveStep - 0x1E) < 0x34;
     } else {
-        v = This->m_Unk580;
+        v = This->m_AutoMoveStep;
         if (v >= 0x13) {
             return 1;
         }
         if (((u32)(v - 6) < 2) || ((u32)(v - 0xF) < 2)) {
             This->vtable->Unk16(This, 0, g_TurnStepCcw);
         }
-        turn = (u32)This->m_Unk580 < 9;
+        turn = (u32)This->m_AutoMoveStep < 9;
     }
     if (turn != 0) {
         This->m_LookUpDownState = 2;
     }
     This->m_MoveState = MOVE_FORWARD;
-    This->m_Unk580 += 1;
+    This->m_AutoMoveStep += 1;
     return 0;
 }
 
@@ -1432,20 +1418,20 @@ void dream_sys_init_mood_contributors(dream_sys_t *This, s32 arg1) {
 
 void dream_sys_log_chunk_mood(dream_sys_t *This, void *CurrentPosition) {
     dream_sys_mood_graph_point_t *point = get_mood_from_stage_chunk(This->m_NextMap, CurrentPosition);
-    This->vtable->dream_sys_log_mood(This, &This->m_Unk80, point);
+    This->vtable->dream_sys_log_mood(This, &This->m_ChunkMoods, point);
 }
 
 void dream_sys_log_instance_mood(dream_sys_t *This, dream_sys_mood_graph_point_t *Source) {
-    This->vtable->dream_sys_log_mood(This, &This->m_Unk84, Source);
+    This->vtable->dream_sys_log_mood(This, &This->m_InstanceMoods, Source);
 }
 
 void dream_sys_update_dream_chart(dream_sys_t *This, dream_sys_mood_graph_point_t *out) {
     dream_sys_mood_graph_point_t sp10;
     dream_sys_mood_graph_point_t sp12;
 
-    This->vtable->dream_sys_get_mood_average(This, (dream_sys_mood_graph_contrib_t *)&This->m_Unk80, &sp10);
-    This->vtable->dream_sys_get_mood_average(This, (dream_sys_mood_graph_contrib_t *)&This->m_Unk84, &sp12);
-    if (This->m_Unk87 == 0) {
+    This->vtable->dream_sys_get_mood_average(This, (dream_sys_mood_graph_contrib_t *)&This->m_ChunkMoods, &sp10);
+    This->vtable->dream_sys_get_mood_average(This, (dream_sys_mood_graph_contrib_t *)&This->m_InstanceMoods, &sp12);
+    if (This->m_InstanceMoods.amount_mood == 0) {
         sp12.value = sp10.value;
     }
     out->axis.dynamic = (s8)((sp10.axis.dynamic + sp12.axis.dynamic) / 2);
@@ -1533,14 +1519,14 @@ s32 calc_mood_axis(s32 arg0, s32 arg1, s32 arg2) {
 void dream_sys_calc_unlock_score(dream_sys_t *This) {
     s32 temp_a0;
 
-    This->m_Unk97 = calc_navigation_score();
-    temp_a0 = This->m_Unk98;
+    This->m_NavigationScore = calc_navigation_score();
+    temp_a0 = This->m_InstanceScore;
     if (temp_a0 < 0) {
-        This->m_Unk98 = 0;
+        This->m_InstanceScore = 0;
     } else if (temp_a0 > 50000000) {
-        This->m_Unk98 = 50000000;
+        This->m_InstanceScore = 50000000;
     }
-    This->m_Unk96 = This->m_Unk97 + This->m_Unk98;
+    This->m_TotalUnlockScore = This->m_NavigationScore + This->m_InstanceScore;
 }
 
 void dream_sys_add_flashback(dream_sys_t *This, s32 arg1, void *arg2, void *arg3, s32 arg4,
@@ -1572,12 +1558,12 @@ void dream_sys_flashback_saving(dream_sys_t *This, s32 arg1, s32 arg2) {
     void **obj;
     s32 sp20[4];
 
-    if (This->m_Unk18 != 0) {
+    if (This->m_AttachedActor != 0) {
         r = rand();
         if (r % 3 == 0) {
-            obj = (void **)This->m_Unk18;
+            obj = (void **)This->m_AttachedActor;
             temp = (*(s32 (**)(void **, s32, s32))(*(u32 *)obj + 0x10C))(obj, 0, 0);
-            func_8001E6F8(This, sp20);
+            object_get_rotation_360(This, sp20);
             ((void (*)(void *, s32, s32, void *, s32, s32, s32))This->vtable->dream_sys_add_flashback)(
                 This, This->m_NextMap, temp, sp20, arg1, arg2, This->m_DayOfYear);
         }
@@ -1585,7 +1571,7 @@ void dream_sys_flashback_saving(dream_sys_t *This, s32 arg1, s32 arg2) {
 }
 
 void dream_sys_reset_flashback_list(dream_sys_t *This) {
-    This->m_Unk282 = 0;
+    This->m_FlashbackCount = 0;
 }
 
 typedef struct dream_link {
@@ -1604,17 +1590,17 @@ typedef struct {
 void dream_sys_save_link_state(dream_sys_t *This) {
     dream_link_t *link;
 
-    link = (dream_link_t *)This->m_Unk4;
-    *(dream_blk50_t *)&This->m_Unk547 = *(dream_blk50_t *)link;
-    *(dream_blk28_t *)&This->m_Unk567 = *(dream_blk28_t *)link->tail;
+    link = (dream_link_t *)This->m_Transform;
+    *(dream_blk50_t *)&This->m_SavedLinkHead = *(dream_blk50_t *)link;
+    *(dream_blk28_t *)&This->m_SavedLinkTail = *(dream_blk28_t *)link->tail;
 }
 
 void dream_sys_restore_link_state(dream_sys_t *This) {
     dream_link_t *link;
 
-    link = (dream_link_t *)This->m_Unk4;
-    *(dream_blk50_t *)link = *(dream_blk50_t *)&This->m_Unk547;
-    *(dream_blk28_t *)link->tail = *(dream_blk28_t *)&This->m_Unk567;
+    link = (dream_link_t *)This->m_Transform;
+    *(dream_blk50_t *)link = *(dream_blk50_t *)&This->m_SavedLinkHead;
+    *(dream_blk28_t *)link->tail = *(dream_blk28_t *)&This->m_SavedLinkTail;
     link->head[0] = 0;
 }
 
@@ -1622,10 +1608,10 @@ s32 dream_sys_get_set_flag(dream_sys_t *This, s32 Value) {
     s32 out;
 
     if (Value >= 0) {
-        out = This->m_UnkFlag;
-        This->m_UnkFlag = Value;
+        out = This->m_Flag;
+        This->m_Flag = Value;
     } else {
-        out = This->m_UnkFlag;
+        out = This->m_Flag;
     }
 
     return out;
@@ -1780,7 +1766,7 @@ case5:
     if (*(s16 *)((u8 *)arg2 + 6) < -0xFFF) {
         goto do_spawn;
     }
-    if (*(s32 *)arg2 == D_8008ABE8) {
+    if (*(s32 *)arg2 == g_ViolenceLinkTile) {
         goto do_spawn;
     }
     return -1;
@@ -1867,19 +1853,19 @@ s32 get_static_spawn(void *dst, s16 *key, s32 chunk, s32 *counts, s32 *records, 
         rec = ((dream_sys_static_spawn_t **)records)[chunk];
         i = 0;
         while (i < count) {
-            if (key[0] == rec->m_Unk0 && (key[1] == rec->m_Unk1 || rec->m_Unk1 < 0)) {
+            if (key[0] == rec->m_Chunk && (key[1] == rec->m_Tile || rec->m_Tile < 0)) {
                 g_LinkSourceStage = chunk;
                 g_LinkSourceIndex = i;
-                table = rec->m_Unk2;
+                table = rec->m_TargetStage;
                 g_LinkTargetStage = table;
-                sub = rec->m_Unk3;
+                sub = rec->m_TargetSpawn;
                 entry = (dream_sys_spawn_entry_t *)((u8 *)entries[table] + sub * 6);
                 g_LinkTargetIndex = sub;
-                *(dream_sys_pkt4_t *)dst = entry->m_Unk0;
+                *(dream_sys_pkt4_t *)dst = entry->m_ChunkTile;
                 *(dream_sys_pkt6_t *)((u8 *)dst + 4) =
-                    *(dream_sys_pkt6_t *)((u8 *)SPAWN_POS_ADJUST + entry->m_Unk1 * 6);
+                    *(dream_sys_pkt6_t *)((u8 *)SPAWN_POS_ADJUST + entry->m_Adjustment * 6);
                 if (flag != 0) {
-                    ((u8 *)gpNavChallengesComplete)[entry->m_Unk2] = 1;
+                    ((u8 *)gpNavChallengesComplete)[entry->m_NavChallenge] = 1;
                 }
                 return g_LinkTargetStage;
             }

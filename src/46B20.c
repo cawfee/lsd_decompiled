@@ -22,7 +22,7 @@ class_46B20_t *func_80056320(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
 void *func_800563C0(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     class_46B20_vtable_t *vtable;
 
-    if (func_80057C84()->Construct(This)) {
+    if (class_477E4_get_vtable()->Construct(This)) {
         This->vtable = func_80056F4C();
 
         This->m_Unk16 = 0;
@@ -38,7 +38,7 @@ void *func_800563C0(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4)
 
 void func_80056464(class_46B20_t *This) {
     func_80056718();
-    func_80057C84()->Cleanup(This);
+    class_477E4_get_vtable()->Cleanup(This);
 }
 
 void func_800564A4(class_46B20_t *This, s32 *Unk) {

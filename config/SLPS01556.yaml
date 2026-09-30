@@ -313,7 +313,7 @@ segments:
       - [0x48494, c]
       - [0x48768, c, graph_screen]
       - [0x48F74, c, dream_sys]
-      - [0x4CD08, c, 4cd08]
+      - [0x4CD08, c, link]
       - [0x4D7DC, c, entity]
       - [0x55DD4, c] #class
       - [0x57028, .data, main]

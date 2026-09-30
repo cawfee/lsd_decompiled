@@ -383,9 +383,9 @@ void func_8004DB18(main_menu_t *This, void *Unk) {
         func_80040FC0(mem, g_DAY_STR);
 
         This->m_Unk43 = text_line_create(*((u32 *) Unk + 1), len, mem);
-        This->m_Unk43->m_Unk41_4 = 8;
-        This->m_Unk43->m_Unk42_1 = 4;
-        This->m_Unk43->m_Unk41_3 = 9;
+        This->m_Unk43->m_Length = 8;
+        This->m_Unk43->m_StartIndex = 4;
+        This->m_Unk43->m_GapPosition = 9;
         memory_free_mem(mem);
     }
 }
@@ -468,7 +468,7 @@ void func_8004DE08(main_menu_t *This) {
     s32 shake[2];
     u8 size;
 
-    size = This->m_Unk43->m_Unk41_2;
+    size = This->m_Unk43->m_GlyphCount;
     saved_unk21 = This->m_Unk21;
     mem = memory_allocate_mem(size);
     func_80040FC0(mem, g_DAY_STR);

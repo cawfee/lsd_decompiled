@@ -127,13 +127,13 @@ void text_line_construct(text_line_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
 
     glyph_get_vtable()->Construct(This, Unk1, 0x20);
     This->vtable = text_line_get_vtable();
-    This->m_Unk41_2 = Unk2;
-    This->m_Unk41_4 = Unk2;
-    This->m_Unk42_1 = 0;
-    This->m_Unk41_3 = 0;
+    This->m_GlyphCount = Unk2;
+    This->m_Length = Unk2;
+    This->m_StartIndex = 0;
+    This->m_GapPosition = 0;
     arr = memory_allocate_mem(Unk2 * 4);
     if (arr != NULL) {
-        This->m_Unk44 = arr;
+        This->m_Glyphs = arr;
         for (i = 0; i < Unk2; i++) {
             *arr = (s32)glyph_create(Unk1, 0x20);
             arr += 1;
@@ -143,8 +143,8 @@ void text_line_construct(text_line_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void text_line_cleanup(text_line_t *This) {
-    destroy_list(This->m_Unk44, This->m_Unk41_2);
-    This->m_Unk44 = memory_free_mem(This->m_Unk44);
+    destroy_list(This->m_Glyphs, This->m_GlyphCount);
+    This->m_Glyphs = memory_free_mem(This->m_Glyphs);
     glyph_get_vtable()->Cleanup(This);
 }
 
@@ -160,22 +160,22 @@ void func_80040AE8(text_line_t *This, s32 arg1, s32 *arg2) {
     s32 i;
     class_322B4_t *obj;
 
-    if (This->m_Unk2 == 0) {
+    if (This->m_Visible == 0) {
         ((void (*)(void *, s32, s32 *))glyph_get_vtable()->Unk18)(This, arg1, arg2);
         __builtin_memcpy(pos, arg2, 8);
-        start = (u8)This->m_Unk42_1;
-        p = (class_322B4_t **)((u8 *)This->m_Unk44 + (start * 4));
+        start = (u8)This->m_StartIndex;
+        p = (class_322B4_t **)((u8 *)This->m_Glyphs + (start * 4));
         i = start;
-        if (i < (s32)(start + (u8)This->m_Unk41_4)) {
+        if (i < (s32)(start + (u8)This->m_Length)) {
             do {
-                if ((u8)This->m_Unk41_3 != 0 && i == (u8)This->m_Unk41_3) {
+                if ((u8)This->m_GapPosition != 0 && i == (u8)This->m_GapPosition) {
                     pos[0] += 0x10;
                 }
                 obj = *p;
                 ((void (*)(void *, void *, s32 *))obj->vtable->Unk18)(obj, This, pos);
-                pos[0] += This->m_Unk43;
+                pos[0] += This->m_Spacing;
                 p++;
-            } while (++i < (s32)((u8)This->m_Unk42_1 + (u8)This->m_Unk41_4));
+            } while (++i < (s32)((u8)This->m_StartIndex + (u8)This->m_Length));
         }
     }
 }
@@ -186,18 +186,18 @@ void func_80040C00(text_line_t *This) {
     s32 i;
     void *obj;
 
-    if (This->m_Unk2 != 0) {
-        if (This->m_Unk44 != 0) {
-            start = (u8)This->m_Unk42_1;
-            p = (void **)((u8 *)This->m_Unk44 + (start * 4));
+    if (This->m_Visible != 0) {
+        if (This->m_Glyphs != 0) {
+            start = (u8)This->m_StartIndex;
+            p = (void **)((u8 *)This->m_Glyphs + (start * 4));
             i = start;
-            if (i < (s32)(start + (u8)This->m_Unk41_4)) {
+            if (i < (s32)(start + (u8)This->m_Length)) {
                 do {
                     obj = *p;
                     p++;
                     (*(void (**)(void *))(*(u32 *)obj + 0x50))(obj);
                     i++;
-                } while (i < (s32)((u8)This->m_Unk42_1 + (u8)This->m_Unk41_4));
+                } while (i < (s32)((u8)This->m_StartIndex + (u8)This->m_Length));
             }
         }
         ((void (*)(void *))glyph_get_vtable()->Unk19)(This);
@@ -209,16 +209,16 @@ s32 func_80040CD0(text_line_t *This, s32 arg1, s32 arg2) {
     void **p;
     s32 i;
 
-    start = (u8)This->m_Unk42_1;
-    p = (void **)((u8 *)This->m_Unk44 + (start * 4));
+    start = (u8)This->m_StartIndex;
+    p = (void **)((u8 *)This->m_Glyphs + (start * 4));
     i = start;
-    if (i < (s32)(start + (u8)This->m_Unk41_4)) {
+    if (i < (s32)(start + (u8)This->m_Length)) {
         do {
             void *obj = *p;
             p++;
             i++;
             arg2 = (*(s32 (**)(void *, s32))(*(u32 *)obj + 0x60))(obj, arg1);
-        } while (i < (s32)((u8)This->m_Unk42_1 + (u8)This->m_Unk41_4));
+        } while (i < (s32)((u8)This->m_StartIndex + (u8)This->m_Length));
     }
     return arg2;
 }
@@ -228,16 +228,16 @@ void func_80040D74(text_line_t *This, s32 arg) {
     void **p;
     s32 i;
 
-    start = (u8)This->m_Unk42_1;
-    p = (void **)((u8 *)This->m_Unk44 + (start * 4));
+    start = (u8)This->m_StartIndex;
+    p = (void **)((u8 *)This->m_Glyphs + (start * 4));
     i = start;
-    if (i < (s32)(start + (u8)This->m_Unk41_4)) {
+    if (i < (s32)(start + (u8)This->m_Length)) {
         do {
             void *obj = *p;
             p++;
             (*(void (**)(void *, s32))(*(u32 *)obj + 0xB8))(obj, arg);
             i++;
-        } while (i < (s32)((u8)This->m_Unk42_1 + (u8)This->m_Unk41_4));
+        } while (i < (s32)((u8)This->m_StartIndex + (u8)This->m_Length));
     }
 }
 
@@ -247,25 +247,25 @@ void func_80040E14(text_line_t *This, s32 *arg1) {
     s32 i;
     class_322B4_t *obj;
 
-    if (This->m_Unk2 != 0) {
+    if (This->m_Visible != 0) {
         i = 0;
         ((void (*)(void *, s32 *))glyph_get_vtable()->Unk46)(This, arg1);
         __builtin_memcpy(pos, arg1, 8);
-        p = (class_322B4_t **)This->m_Unk44;
-        if (i < (s32)This->m_Unk41_2) {
+        p = (class_322B4_t **)This->m_Glyphs;
+        if (i < (s32)This->m_GlyphCount) {
             do {
                 obj = *p;
                 ((void (*)(void *, s32 *))obj->vtable->Unk46)(obj, pos);
-                pos[0] += This->m_Unk43;
+                pos[0] += This->m_Spacing;
                 p++;
-            } while (++i < (s32)This->m_Unk41_2);
+            } while (++i < (s32)This->m_GlyphCount);
         }
     }
 }
 
 s32 func_80040EDC(text_line_t *This, u8 Unk2, s32 Unk3) {
-    return (*(int ( **)(s32, s32))(**((s32 **)This->m_Unk44 + Unk3) + 196))(
-           *((s32 *)This->m_Unk44 + Unk3),
+    return (*(int ( **)(s32, s32))(**((s32 **)This->m_Glyphs + Unk3) + 196))(
+           *((s32 *)This->m_Glyphs + Unk3),
            Unk2);
 }
 
@@ -275,7 +275,7 @@ void func_80040F20(void *) {
 void text_line_set_string(text_line_t *This, u8 *Str) {
     void **arr;
 
-    arr = This->m_Unk44;
+    arr = This->m_Glyphs;
     if (Str != NULL && *Str != 0) {
         do {
             void **obj = *arr;
@@ -290,7 +290,7 @@ void func_80040FA0(void *) {
 }
 
 void text_line_set_spacing(text_line_t *This, s32 Unk) {
-    This->m_Unk43 = Unk;
+    This->m_Spacing = Unk;
 }
 
 text_line_vtable_t *text_line_get_vtable(void) {

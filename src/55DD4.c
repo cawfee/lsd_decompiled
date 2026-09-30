@@ -21,7 +21,7 @@ class_55DD4_t *class_55DD4_create(s32 Unk1, s32 Unk2) {
 }
 
 class_55DD4_t *class_55DD4_construct(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
-    if (func_80057C84()->Construct(This)) {
+    if (class_477E4_get_vtable()->Construct(This)) {
         This->vtable = class_55DD4_get_vtable();
         This->m_Unk21 = Unk3;
         This->m_Unk22 = 0;
@@ -35,7 +35,7 @@ class_55DD4_t *class_55DD4_construct(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
             return This;
         }
 
-        func_80057C84()->Cleanup(This);
+        class_477E4_get_vtable()->Cleanup(This);
     }
 
     return NULL;
@@ -43,11 +43,11 @@ class_55DD4_t *class_55DD4_construct(class_55DD4_t *This, s32 Unk2, s32 Unk3) {
 
 void class_55DD4_cleanup(class_55DD4_t *This) {
     This->vtable->Unk61(This);
-    func_80057C84()->Cleanup(This);
+    class_477E4_get_vtable()->Cleanup(This);
 }
 
 void func_80065790(class_55DD4_t *This, u16 **Unk2, s32 Unk3) {
-    func_80057C84()->OnNotify(This, Unk2, Unk3);
+    class_477E4_get_vtable()->OnNotify(This, Unk2, Unk3);
 
     if (**Unk2 == 0x5F03 && Unk3 == 1 && !This->m_Unk23) {
         This->vtable->Destroy(This);
@@ -55,7 +55,7 @@ void func_80065790(class_55DD4_t *This, u16 **Unk2, s32 Unk3) {
 }
 
 void func_80065830(class_55DD4_t *This) {
-    func_80057C84()->Unk23(This, 0);
+    class_477E4_get_vtable()->Unk23(This, 0);
     This->vtable->Unk59(This, 1);
     This->vtable->Unk56(This, 300);
     This->vtable->Unk68(This);
@@ -70,7 +70,7 @@ void func_80065830(class_55DD4_t *This) {
 
 void func_80065918(class_55DD4_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     if (!This->m_Unk2) {
-        func_80057C84()->Unk18(This, Unk4, Unk5);
+        class_477E4_get_vtable()->Unk18(This, Unk4, Unk5);
 
         if (Unk3 && !This->m_Unk19) {
             This->vtable->Attach(This, Unk3);
@@ -88,7 +88,7 @@ void func_800659D0(class_55DD4_t *This) {
             This->vtable->Detach(This, This->m_Unk19);
         }
 
-        func_80057C84()->Unk19(This);
+        class_477E4_get_vtable()->Unk19(This);
     }
 }
 
@@ -122,7 +122,7 @@ void func_80065AE0(class_55DD4_t *This, s32 Unk2) {
         ((void (*)(void *, s32))((void **) vtable)[28])(current_obj, Unk2);
     }
 
-    func_80057C84()->Unk27(This, Unk2);
+    class_477E4_get_vtable()->Unk27(This, Unk2);
 }
 
 void func_80065B80(class_55DD4_t *This, s32 Unk2, s32 Unk3) {

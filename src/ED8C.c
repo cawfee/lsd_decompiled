@@ -67,7 +67,9 @@ void func_8001E58C(void *arg0, s32 *arg1, s16 *arg2) {
     func_8001EE98((u8 *)arg1, (u8 *)arg1, 1, (u8 *)buf);
 }
 
-void func_8001E600(void *arg0, s32 *arg1, void *arg2) {
+/* Transforms a local point by the object's matrix and adds the object's world
+   position, writing the result to arg1. */
+void transform_local_to_world(void *arg0, s32 *arg1, void *arg2) {
     s32 buf[8];
     void (*method)(void *, void *, s32);
 
@@ -79,7 +81,9 @@ void func_8001E600(void *arg0, s32 *arg1, void *arg2) {
     arg1[2] += ((vec_t *)(*(s32 *)((u8 *)arg0 + 0xC) ? (u8 *)*(void **)((u8 *)arg0 + 0x14) + 0x38 : 0))->z;
 }
 
-void func_8001E6F8(void *arg0, s16 *arg1) {
+/* Reads the object's Euler rotation, converting GTE angle units (4096/rev) to
+   degrees (360/rev), and writes three (angle, 1) pairs into arg1. */
+void object_get_rotation_360(void *arg0, s16 *arg1) {
     s16 *src;
 
     src = *(s16 **)((u8 *)*(void **)((u8 *)arg0 + 0x14) + 0x44);
@@ -278,7 +282,8 @@ void func_8001EE98(u8 *arg0, u8 *arg1, s32 arg2, u8 *arg3) {
     }
 }
 
-s32 func_8001EF14(s32 *arg0, s32 arg1, s32 *arg2) {
+/* Returns non-zero when arg2 lies within +/- arg1 on every axis of arg0. */
+s32 is_point_within_radius(s32 *arg0, s32 arg1, s32 *arg2) {
     s32 i;
 
     for (i = 0; i < 3; i++, arg0++, arg2++) {

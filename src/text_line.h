@@ -66,7 +66,7 @@ typedef struct text_line {
     /* 0x00 */ text_line_vtable_t *vtable;
     /* 0x04 */ s32 m_Unk0;
     /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ s32 m_Unk2;
+    /* 0x0C */ s32 m_Visible;
     /* 0x10 */ s32 m_Unk3;
     /* 0x14 */ s32 m_Unk4;
     /* 0x18 */ s32 m_Unk5;
@@ -106,15 +106,15 @@ typedef struct text_line {
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
     /* 0xA8 */ s8 m_Unk41_1;
-    /* 0xA9 */ u8 m_Unk41_2;
-    /* 0xAA */ s8 m_Unk41_3;
-    /* 0xAB */ s8 m_Unk41_4;
-    /* 0xAC */ s8 m_Unk42_1;
+    /* 0xA9 */ u8 m_GlyphCount;
+    /* 0xAA */ s8 m_GapPosition;
+    /* 0xAB */ s8 m_Length;
+    /* 0xAC */ s8 m_StartIndex;
     /* 0xAD */ s8 m_Unk42_2;
     /* 0xAE */ s8 m_Unk42_3;
     /* 0xAF */ s8 m_Unk42_4;
-    /* 0xB0 */ s32 m_Unk43;
-    /* 0xB4 */ void *m_Unk44;
+    /* 0xB0 */ s32 m_Spacing;
+    /* 0xB4 */ void *m_Glyphs;
     /* 0xB8 */ s32 m_Unk45;
 } text_line_t;
 

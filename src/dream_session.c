@@ -90,7 +90,7 @@ void dream_session_construct(dream_session_t *This,
     func_8004A4B8()->Construct(This, get_se_path(0), 0);
     This->vtable = dream_session_get_vtable();
 
-    func_8005C508();
+    link_init_stage_objects();
     This->m_TextureHelper = tim_image_create("ETC\\ETC.TIM");
     This->m_TextureHelper->vtable->Unk14(This->m_TextureHelper);
     This->m_TextureHelper->vtable->Unk7(This->m_TextureHelper);
@@ -116,7 +116,7 @@ void dream_session_construct(dream_session_t *This,
     This->vtable->Unk15(This);
 }
 
-void func_8005C5E8(void);
+void link_destroy_models(void);
 
 void dream_session_cleanup(dream_session_t *This) {
     game_graphics_ctx_t *gfx;
@@ -133,7 +133,7 @@ void dream_session_cleanup(dream_session_t *This) {
     model = (tmd_model_t *)This->m_Unk17;
     model->vtable->Destroy(model);
     This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
-    func_8005C5E8();
+    link_destroy_models();
     func_8004A4B8()->Cleanup(This);
 }
 
