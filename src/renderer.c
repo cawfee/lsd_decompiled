@@ -1,7 +1,7 @@
 #include "renderer.h"
 #include "base_class.h"
 #include "effect.h"
-#include "D294.h"
+#include "transform.h"
 
 #include <psx/libgte.h>
 
@@ -13,7 +13,7 @@ extern s32 D_8008A8FC;
 extern s32 D_8008A900;
 extern s32 D_8008A8F4[];
 
-class_D294_t *func_8001CA94(void);
+transform_t *func_8001CA94(void);
 s32 GsSetRefView2(void *);
 
 renderer_t *renderer_create(void) {

@@ -1,6 +1,6 @@
 #include "ui_screen.h"
 
-#include "30CD0.h"
+#include "effect_base.h"
 #include "text_line.h"
 #include "timer.h"
 
@@ -284,7 +284,7 @@ void func_8003C794(ui_screen_t *This, s32 Unk2) {
 
 void func_8003C7B4(ui_screen_t *This, int Unk2) {
     if (This->m_Unk17) {
-        This->m_Unk17->vtable->func_8002CA3C(This->m_Unk17, Unk2, 96, 96);
+        This->m_Unk17->vtable->sound_play_note(This->m_Unk17, Unk2, 96, 96);
     }
 }
 
@@ -833,6 +833,7 @@ void func_8003D6D4(ui_screen_t *This) {
     memory_free_mem((void *)This->m_Unk24[This->m_Unk21]);
 }
 
+
 INCLUDE_ASM("asm/nonmatchings/ui_screen", func_8003D73C);
 
 /* Best match: 144/145 insns.  Uses the target's do/while idiom (increment
@@ -849,7 +850,7 @@ void func_8003D73C(ui_screen_t *This, s32 Unk2, s32 Unk3) {
     text_line_t *obj;
     s32 pos[2];
     s32 tmp[2];
-    class_30CD0_t *sound;
+    effect_base_t *sound;
     char pad[16];
 
     (void)pad;
@@ -872,7 +873,7 @@ void func_8003D73C(ui_screen_t *This, s32 Unk2, s32 Unk3) {
     pos[1] = ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[5];
     pos[1] -= v9 * 10;
 
-    sound = (class_30CD0_t *)This->m_Unk25;
+    sound = (effect_base_t *)This->m_Unk25;
     if (Unk3) {
         sound->vtable->Unk18(sound, This->m_Unk4, pos);
         tmp[0] = 0x28;
@@ -898,7 +899,6 @@ void func_8003D73C(ui_screen_t *This, s32 Unk2, s32 Unk3) {
     obj->vtable->Unk23(obj, 1);
 }
 */
-
 
 void func_8003D980(ui_screen_t *This, char *arg1) {
     s32 count;
@@ -948,7 +948,7 @@ void func_8003DAD4(ui_screen_t *This) {
     text_line_t **row;
     s32 pos[2];
     s32 *entry;
-    class_30CD0_t *sound;
+    effect_base_t *sound;
     char pad[8];
 
     (void)pad;
@@ -983,7 +983,7 @@ void func_8003DAD4(ui_screen_t *This) {
         obj->vtable->Unk45(obj, (char *)This->m_Unk18 + 0x10);
     }
     ((s32 *)((func_8003CE98_arg_t *)This->m_Unk18)->table[idx])[1] = sel;
-    sound = (class_30CD0_t *)This->m_Unk25;
+    sound = (effect_base_t *)This->m_Unk25;
     sound->vtable->Unk19(sound);
     This->m_HasIdleTimeout = 1;
     This->vtable->Unk23(This, 0x10);

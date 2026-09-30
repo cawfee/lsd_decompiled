@@ -948,12 +948,28 @@ tim_image_create = 0x8003B39C;
 tim_get_info = 0x8003B5F0;
 tim_image_set_loaded = 0x8003B5E4;
 
-// Sound engine?
+// Sound engine (VAB sound-bank playback + per-entity auto sounds)
 g_SOUND_VTABLE = 0x8006DA34;
 sound_get_vtable = 0x8002CC0C;
 sound_create = 0x8002C480;
+sound_update_vab_load = 0x8002C6FC;
+sound_finish_vab_load = 0x8002C824;
+sound_build_program_table = 0x8002C890;
+sound_play_note = 0x8002CA3C;
+sound_stop_note = 0x8002CB18;
 sound_mute = 0x8002CB58;
 sound_unmute = 0x8002CB9C;
+sound_nop_1 = 0x8002CBDC;
+sound_nop_2 = 0x8002CBE4;
+sound_nop_3 = 0x8002CBEC;
+g_SpuInitialized = 0x8008A8B8;
+g_SndEngineInitialized = 0x8008A8BC;
+g_MasterVolumeSet = 0x8008A8C0;
+g_SoundInstanceCount = 0x8008A8C4;
+g_VabHeaderPtr = 0x8008A8C8;
+g_CrescendoTimeMod = 0x8008A8CC;
+g_VabHeaderExt = 0x8008A8D0;
+g_VabBodyExt = 0x8008A8D4;
 
 // GS Helper?
 g_DISPLAY_VTABLE = 0x8006C070;
@@ -1013,8 +1029,8 @@ base_class_nop = 0x80018350;
 base_class_on_notify = 0x80018358;
 linked_list_next = 0x800183a0;
 
-// Scene node (class_D294/class_477E4) helpers
-class_477E4_get_vtable = 0x80057C84;
+// Scene node (transform/scene_node) helpers
+scene_node_get_vtable = 0x80057C84;
 transform_local_to_world = 0x8001E600;
 object_get_rotation_360 = 0x8001E6F8;
 is_point_within_radius = 0x8001EF14;
@@ -1109,6 +1125,8 @@ seq_stop = 0x80039D14;
 seq_pause = 0x80039D68;
 seq_resume = 0x80039DB0;
 seq_set_vol = 0x80039DF4;
+bgm_is_active = 0x8003A05C;
+bgm_get_sequence_work = 0x8003A068;
 bgm_unk21 = 0x8006E4E4;
 bgm_set_sequence = 0x80039E7C;
 bgm_set_sound = 0x80039F64;
@@ -1133,6 +1151,8 @@ str_stream_sync_callback = 0x80047388;
 str_stream_play = 0x800473E4;
 str_stream_stop = 0x800474C8;
 str_stream_reset = 0x80047574;
+str_stream_nop_1 = 0x800475C8;
+str_stream_nop_2 = 0x800475D0;
 str_stream_pause = 0x800475D8;
 str_stream_resume = 0x80047638;
 str_stream_get_next = 0x80047694;
@@ -1142,10 +1162,12 @@ str_stream_free_ring = 0x80047870;
 str_stream_unset_ring = 0x80047890;
 str_stream_clear_ring = 0x800478B0;
 str_stream_sync = 0x800478D0;
+str_stream_nop_3 = 0x800478F8;
 str_stream_get_vtable = 0x80047900;
 g_STR_STREAM_VTABLE = 0x800817E0;
 g_StreamActive = 0x8008A950;
 g_StreamState = 0x8008A94C;
+g_StreamFileSuffix = 0x8008A954;
 
 // Text line (text layout/rendering)
 text_line_create = 0x800408CC;
@@ -1168,15 +1190,15 @@ glyph_set_char = 0x80041BDC;
 glyph_get_char = 0x80041C28;
 glyph_get_vtable = 0x80041C3C;
 
-// Text/icon node class 3249C (derives from glyph, type_id 0x144)
-g_CLASS_3249C_VTABLE = 0x8006ED4C;
-class_3249C_create = 0x80041C9C;
-class_3249C_construct = 0x80041D18;
-class_3249C_cleanup = 0x80041DA4;
-class_3249C_run = 0x80041DAC;
-class_3249C_set_offset = 0x80041E2C;
-class_3249C_set_anchor = 0x80041E58;
-class_3249C_get_vtable = 0x80041ED8;
+// Positioned 2D sprite node (unit sprite_node, base of glyph, type_id 0x144)
+g_SPRITE_NODE_VTABLE = 0x8006ED4C;
+sprite_node_create = 0x80041C9C;
+sprite_node_construct = 0x80041D18;
+sprite_node_cleanup = 0x80041DA4;
+sprite_node_run = 0x80041DAC;
+sprite_node_set_offset = 0x80041E2C;
+sprite_node_set_anchor = 0x80041E58;
+sprite_node_get_vtable = 0x80041ED8;
 
 // MDEC movie decoder
 mdec_movie_create = 0x80045438;
@@ -1243,12 +1265,12 @@ entity_create = 0x8005cfdc;
 entity_get_vtable = 0x8005e150;
 entity_construct = 0x8005d068;
 
-// Class 55DD4
-g_CLASS_55DD4_VTABLE = 0x8008A6C4;
-class_55DD4_create = 0x800655D4;
-class_55DD4_get_vtable = 0x80066818;
-class_55DD4_construct = 0x80065650;
-class_55DD4_cleanup = 0x8006573C;
+// Actor (unit actor, formerly 55DD4)
+g_ACTOR_VTABLE = 0x8008A6C4;
+actor_create = 0x800655D4;
+actor_get_vtable = 0x80066818;
+actor_construct = 0x80065650;
+actor_cleanup = 0x8006573C;
 
 // Effect object
 g_EFFECT_VTABLE = 0x8006E99C;
@@ -1399,10 +1421,10 @@ entity_maiko_plain = 0x8006536C;
 entity_lips_small = 0x800654A0;
 entity_paper_sumo_wait = 0x80065514;
 
-// Unknown helper 1
-helper_1_update_entity = 0x8002CD08;
-helper_1_get_crescendo_time_mod = 0x8002CC28;
-helper_1_set_entity = 0x8002CC34;
+// Sound engine entity-sound slots (engaged/updated per frame by dream objects)
+sound_entity_update = 0x8002CD08;
+sound_get_crescendo_time_mod = 0x8002CC28;
+sound_entity_init = 0x8002CC34;
 
 // Renderer?
 renderer_create = 0x8003E5D8;
@@ -1522,7 +1544,7 @@ sound_construct = 0x8002C4E0;
 sound_close = 0x8002C638;
 sound_get_instance_count = 0x8002CC1C;
 sound_set_volume_offset = 0x8002CBF4;
-sound_update_entity = 0x8002CC84;
+sound_entity_stop = 0x8002CC84;
 tim_construct = 0x8003B3FC;
 tmd_create = 0x80043840;
 tmd_map = 0x80043B18;

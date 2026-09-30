@@ -65,12 +65,12 @@ void func_80043954(tmd_model_t *This) {
  * the index.)
  *
  * s32 func_800439EC(tmd_model_t *This) {
- *     class_FA50_t **array;
- *     class_FA50_t **p;
+ *     tmd_prim_t **array;
+ *     tmd_prim_t **p;
  *     u32 i;
  *     s32 off;
  *
- *     array = (class_FA50_t **)memory_allocate_mem((*(u32 *)(This->m_Unk3 + 8) + 1) * 4);
+ *     array = (tmd_prim_t **)memory_allocate_mem((*(u32 *)(This->m_Unk3 + 8) + 1) * 4);
  *     if (array == NULL) {
  *         return 1;
  *     }

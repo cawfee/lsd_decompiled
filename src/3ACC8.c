@@ -1,5 +1,5 @@
 #include "3ACC8.h"
-#include "D294.h"
+#include "transform.h"
 
 extern class_3ACC8_vtable_t D_800866E8;
 
@@ -742,6 +742,66 @@ void *func_8004C158(class_3ACC8_t *This, s32 arg1, s32 *arg2) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C1C0);
+// Best match: 106/106 insns, same length. Residual: (1) GCC local_alloc
+// keeps the second coord pointer in $a3 where the target uses $a1;
+// (2) GCC cse-hoists the -0x400 constant into $a2 (li a2,0xfc00) and emits
+// addu instead of the target's addiu; (3) tail scheduling of out->y/out->obj
+// differs. All operand shapes and the lb/sll<->lbu/sll24/sra13 shift form match.
+// typedef struct func_8004C1C0_out {
+//     /* 0x00 */ s8 b0;
+//     /* 0x01 */ s8 b1;
+//     /* 0x02 */ s8 dx;
+//     /* 0x03 */ s8 dz;
+//     /* 0x04 */ s16 x;
+//     /* 0x06 */ u16 y;
+//     /* 0x08 */ s16 z;
+//     /* 0x0C */ s32 vx;
+//     /* 0x10 */ s32 vy;
+//     /* 0x14 */ s32 vz;
+//     /* 0x18 */ s32 rx;
+//     /* 0x1C */ s32 ry;
+//     /* 0x20 */ s32 rz;
+//     /* 0x24 */ void *obj;
+//     /* 0x28 */ s32 divisor;
+// } func_8004C1C0_out_t;
+//
+// typedef struct func_8004C1C0_pos {
+//     /* 0x00 */ s32 x;
+//     /* 0x04 */ s32 y;
+//     /* 0x08 */ s32 z;
+// } func_8004C1C0_pos_t;
+//
+// s32 func_8004C1C0(class_3ACC8_t *This, func_8004C1C0_out_t *out, func_8004C1C0_pos_t *pos) {
+//     void *obj;
+//     s32 *coordB;
+//     s32 *coordA;
+//     s16 val;
+//
+//     obj = This->vtable->Unk70(This, pos);
+//     if (obj != NULL) {
+//         val = *(s16 *)((u8 *)(*(s32 **)((u8 *)obj + 4)) + 0x30);
+//         out->divisor = val;
+//         func_8004C368(This, (s8 *)out, val);
+//         coordA = *(s32 **)((u8 *)(*(s32 **)((u8 *)This->vtable->Unk69(
+//                      This, *(s16 *)((u8 *)(*(s32 **)((u8 *)obj + 4)) + 0x32)) + 0xC)) + 0x14);
+//         out->vx = coordA[0x18 / 4] + 0x5000;
+//         out->vy = coordA[0x1C / 4];
+//         out->vz = coordA[0x20 / 4] + 0x5000;
+//         coordB = *(s32 **)((u8 *)(*(s32 **)((u8 *)obj + 0xC)) + 0x14);
+//         out->rx = pos->x - out->vx;
+//         out->ry = pos->y;
+//         out->rz = pos->z - out->vz;
+//         out->dx = (pos->x - coordB[0x18 / 4]) / 2048;
+//         out->dz = (pos->z - coordB[0x20 / 4]) / 2048;
+//         out->x = ((u16)pos->x - 0x400) - ((u16)coordB[0x18 / 4] + (out->dx * 2048));
+//         out->y = (u16)pos->y;
+//         out->obj = obj;
+//         out->z = ((u16)pos->z - 0x400) - ((u16)coordB[0x20 / 4] + (out->dz * 2048));
+//         return 0;
+//     }
+//     return 1;
+// }
+//
 
 s16 func_8004C368(class_3ACC8_t *This, s8 *out, s32 val) {
     s16 d;
@@ -986,7 +1046,44 @@ s32 func_8004CDA4(class_3ACC8_t *This, s32 unused, s32 index, s32 arg3) {
     return index + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CE24);
+void func_8004CE24(class_3ACC8_t *This, s32 arg1) {
+    u8 *rec;
+    u8 *sl;
+    u8 *grid;
+    u8 *q;
+    s32 i;
+    s32 j;
+    s32 k;
+
+    rec = (u8 *)This + 0x8C;
+    for (i = 0; i < This->m_Unk33; i++) {
+        sl = (u8 *)This + (*(s32 *)rec * 0x1C + 0xEC);
+        if (*(s16 *)(*(u8 **)(sl + 4) + 0x2C) != 0) {
+            grid = *(u8 **)(sl + 0x10) + *(s16 *)(rec + 4) * 4 + *(s16 *)(rec + 6) * 0x50;
+            for (j = 0; j < *(s16 *)(rec + 0xA); j++) {
+                for (k = 0; k < *(s16 *)(rec + 8); k++) {
+                    if (arg1 != 0) {
+                        *(s32 *)(*(u8 **)grid + 0x10) &= 0x7FFFFFFF;
+                    } else {
+                        *(s32 *)(*(u8 **)grid + 0x10) |= 0x80000000;
+                    }
+                    q = *(u8 **)(*(u8 **)grid + 0x38);
+                    while (q != 0) {
+                        if (arg1 != 0) {
+                            *(s32 *)(q + 0x10) &= 0x7FFFFFFF;
+                        } else {
+                            *(s32 *)(q + 0x10) |= 0x80000000;
+                        }
+                        q = *(u8 **)(q + 0x38);
+                    }
+                    grid += 4;
+                }
+                grid += (0x14 - *(s16 *)(rec + 8)) * 4;
+            }
+        }
+        rec += 0xC;
+    }
+}
 
 void *func_8004CFA8(class_3ACC8_t *This) {
     return &This->m_Unk114;

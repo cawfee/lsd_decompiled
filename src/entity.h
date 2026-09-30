@@ -17,8 +17,8 @@ typedef enum {
 } entity_notify_t;
 
 
-/* entity_vtable is a superset of class_55DD4_vtable:
- *   slots 0x004..0x140   inherited base_class -> D294 -> 477E4 -> 55DD4 methods
+/* entity_vtable is a superset of actor_vtable:
+ *   slots 0x004..0x140   inherited base_class -> transform -> scene_node -> actor methods
  *   slot  0x008/0x00C    overridden by entity_construct/entity_cleanup
  *   slots 0x144..0x180   entity-specific (distance, dream effects, link/trigger
  *                        and per-frame behaviour control).  See g_ENTITY_TABLE.
@@ -26,8 +26,8 @@ typedef enum {
 typedef struct entity_vtable {
     /* 0x000 80089ad4 */ u32 type_id;
     /* 0x004 80089ad8 */ base_class_t *(*Destroy)(base_class_t *);
-    /* 0x008 80089adc */ void *(*entity_construct)(void *, s32, s32, s32);
-    /* 0x00C 80089ae0 */ void (*entity_cleanup)(void *);
+    /* 0x008 80089adc */ entity_t *(*entity_construct)(entity_t *, s32, s32, s32);
+    /* 0x00C 80089ae0 */ void (*entity_cleanup)(entity_t *);
     /* 0x010 80089ae4 */ void (*Attach)(base_class_t *, base_class_t *);
     /* 0x014 80089ae8 */ void (*Detach)(base_class_t *, base_class_t *);
     /* 0x018 80089aec */ void (*DetachAll)(base_class_t *);
@@ -40,11 +40,11 @@ typedef struct entity_vtable {
     /* 0x034 80089b08 */ void (*Nop)(base_class_t *);
     /* 0x038 80089b0c */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 80089b10 */ s32 dummy1;
-    /* 0x040 80089b14 */ void (*Unk15)(void *);
+    /* 0x040 80089b14 */ void (*Unk15)(entity_t *);
     /* 0x044 80089b18 */ void (*Unk16)(void *, s32, s32 *);
     /* 0x048 80089b1c */ void (*Unk17)(void *, s32, s32 *);
-    /* 0x04C 80089b20 */ void (*Unk18)(void *, s32, s32, s32, s32);
-    /* 0x050 80089b24 */ void (*Unk19)(void *);
+    /* 0x04C 80089b20 */ void (*Unk18)(entity_t *, s32, s32, s32, s32);
+    /* 0x050 80089b24 */ void (*Unk19)(entity_t *);
     /* 0x054 80089b28 */ void (*Unk20)(void *);
     /* 0x058 80089b2c */ void (*Unk21)(void *);
     /* 0x05C 80089b30 */ void (*Unk22)(void *);
@@ -62,7 +62,7 @@ typedef struct entity_vtable {
     /* 0x08C 80089b60 */ void (*Unk34)(void *);
     /* 0x090 80089b64 */ void (*Unk35)(void *);
     /* 0x094 80089b68 */ void (*Unk36)(void *);
-    /* 0x098 80089b6c */ void (*Unk37)(void *);
+    /* 0x098 80089b6c */ void (*Unk37)(entity_t *, s32, s32);
     /* 0x09C 80089b70 */ void (*Unk38)(void *);
     /* 0x0A0 80089b74 */ void (*Unk39)(void *);
     /* 0x0A4 80089b78 */ void (*Unk40)(void *);
@@ -74,13 +74,13 @@ typedef struct entity_vtable {
     /* 0x0BC 80089b90 */ void (*Unk46)(void *, s32 *);
     /* 0x0C0 80089b94 */ void (*Unk47)(void *);
     /* 0x0C4 80089b98 */ void (*Unk48)(void *, s32, s32);
-    /* 0x0C8 80089b9c */ void (*Unk49)(void *, s32, s32, s32);
+    /* 0x0C8 80089b9c */ void (*Unk49)(void *, s32, s32);
     /* 0x0CC 80089ba0 */ void (*Unk50)(void *, s32, s32);
     /* 0x0D0 80089ba4 */ void (*Unk51)(void *, s32, s32);
     /* 0x0D4 80089ba8 */ void (*Unk52)(void *);
     /* 0x0D8 80089bac */ void (*Unk53)(void *);
-    /* 0x0DC 80089bb0 */ void (*Unk54)(void *);
-    /* 0x0E0 80089bb4 */ void (*Unk55)(void *);
+    /* 0x0DC 80089bb0 */ void (*Unk54)(entity_t *, s32, s32);
+    /* 0x0E0 80089bb4 */ void (*Unk55)(entity_t *, s32, s32);
     /* 0x0E4 80089bb8 */ void (*Unk56)(void *);
     /* 0x0E8 80089bbc */ void (*Unk57)(void *);
     /* 0x0EC 80089bc0 */ void (*Unk58)(void *);
@@ -95,14 +95,14 @@ typedef struct entity_vtable {
     /* 0x110 80089be4 */ void (*Unk67)(void *);
     /* 0x114 80089be8 */ void (*Unk68)(void *);
     /* 0x118 80089bec */ void (*Unk69)(void *);
-    /* 0x11C 80089bf0 */ void (*Unk70)(void *);
+    /* 0x11C 80089bf0 */ void (*Unk70)(entity_t *);
     /* 0x120 80089bf4 */ void (*Unk71)(void *);
     /* 0x124 80089bf8 */ void (*Unk72)(void *);
-    /* 0x128 80089bfc */ void (*Unk73)(void *, s32);
+    /* 0x128 80089bfc */ void (*set_motion)(void *, s32);
     /* 0x12C 80089c00 */ void (*Unk74)(void *);
     /* 0x130 80089c04 */ void (*Unk75)(void *);
-    /* 0x134 80089c08 */ s32 (*Unk76)(void *, s32, s32);
-    /* 0x138 80089c0c */ void (*Unk77)(void *, s32, s32);
+    /* 0x134 80089c08 */ s32 (*tick_anim)(void *, s32, s32);
+    /* 0x138 80089c0c */ void (*set_motion_blend)(void *, s32, s32);
     /* 0x13C 80089c10 */ void (*Unk78)(void *);
     /* 0x140 80089c14 */ void (*Unk79)(void *);
     /* 0x144 80089c18 */ s32 (*entity_get_distance)(entity_t *, void *);
@@ -133,8 +133,8 @@ typedef struct entity {
     /* 0x18 */ s32 m_Unk5;
     /* 0x1C */ s32 m_Unk6;
     /* 0x20 */ s32 m_Unk7;
-    /* 0x24 */ s32 m_Unk8;
-    /* 0x28 */ s32 m_Unk9;
+    /* 0x24 */ s32 m_InteractionTimer;
+    /* 0x28 */ s32 m_FrameOffsetX;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
@@ -143,24 +143,24 @@ typedef struct entity {
     /* 0x40 */ s32 m_Unk15;
     /* 0x44 */ s32 m_State;
     /* 0x48 */ s32 m_Unk17;
-    /* 0x4C */ s32 m_Unk18;
-    /* 0x50 */ s32 m_Unk19;
+    /* 0x4C */ struct entity *m_LinkTarget;
+    /* 0x50 */ s32 m_EffectColor;
     /* 0x54 */ s32 m_Unk20;
-    /* 0x58 */ s32 m_Helper;
+    /* 0x58 */ void *m_Helper;
     /* 0x5C */ s32 m_Unk22;
     /* 0x60 */ s32 m_Unk23;
     /* 0x64 */ s32 m_Unk24;
     /* 0x68 */ s32 m_Unk25;
     /* 0x6C */ s32 m_Unk26;
-    /* 0x70 */ s32 m_Unk27;
+    /* 0x70 */ struct entity **m_Unk27;
     /* 0x74 */ s32 m_Unk28;
     /* 0x78 */ s32 m_Unk29;
-    /* 0x7C */ s32 m_Unk30;
-    /* 0x80 */ s32 m_Unk31;
-    /* 0x84 */ s32 m_Unk32;
-    /* 0x88 */ s32 m_Unk33;
-    /* 0x8C */ s32 m_Unk34;
-    /* 0x90 */ s32 m_Unk35;
+    /* 0x7C */ s32 m_Variant;
+    /* 0x80 */ s32 m_Duration;
+    /* 0x84 */ s32 m_Frame;
+    /* 0x88 */ s32 m_AnimCursor;
+    /* 0x8C */ s32 m_ModelLoaded;
+    /* 0x90 */ s32 m_AnimPlaying;
     /* 0x94 */ dream_sys_t *m_DreamSys;
     /* 0x98 */ s32 m_EntityID;
     /* 0x9C */ s32 m_EntityContext;
@@ -168,7 +168,7 @@ typedef struct entity {
     /* 0xA4 */ s32 m_Unk40;
     /* 0xA8 */ s32 m_Unk41;
     /* 0xAC */ s32 m_Unk42;
-    /* 0xB0 */ s32 m_Unk43;
+    /* 0xB0 */ s32 m_ProximityScale;
     /* 0xB4 */ s32 m_Unk44;
     /* 0xB8 */ s32 m_Unk45;
     /* 0xBC */ s32 m_Unk46;
@@ -189,7 +189,7 @@ typedef struct entity {
     /* 0xF8 */ s32 m_BehaviourActive;
     /* 0xFC */ s32 m_Tick;
     /* 0x100 */ effect_t *m_Effect;
-    /* 0x104 */ s32 m_Unk64;
+    /* 0x104 */ base_class_t *m_Unk64;
 } entity_t;
 
 typedef struct {
@@ -205,19 +205,19 @@ typedef struct {
     /* 0x0A */ s8 proximity;
     /* 0x0B */ s8 link_flag;
 
-    /* 0x0C */ void (*behaviour_fn)(entity_t *This, void *);
+    /* 0x0C */ void (*behaviour_fn)(entity_t *This, s32 *arg1);
 } entity_prop_t;
 
-/* Per-object effect driver registered with helper_1_set_entity
- * (src/sound.c) and updated once per frame by helper_1_update_entity.
+/* Per-object effect driver registered with sound_entity_init
+ * (src/sound.c) and updated once per frame by sound_entity_update.
  * The behaviour function (g_ENTITY_TABLE[].behaviour_fn) is invoked as
  * callback(owner, &context) and writes effect ids into the three slots. */
 typedef struct {
     /* 0x00 */ s32 handle;   /* effect/sound handle, -1 when free */
     /* 0x04 */ s32 id;       /* effect id chosen by the behaviour */
     /* 0x08 */ s32 param;    /* effect parameter chosen by the behaviour */
-    /* 0x0C */ s32 period;   /* reset to 0x7F by helper_1_update_entity */
-    /* 0x10 */ s32 counter;  /* reset to 0x40 by helper_1_update_entity */
+    /* 0x0C */ s32 period;   /* reset to 0x7F by sound_entity_update */
+    /* 0x10 */ s32 counter;  /* reset to 0x40 by sound_entity_update */
 } entity_effect_slot_t;
 
 typedef struct {
@@ -226,7 +226,7 @@ typedef struct {
     /* 0x08 */ void *owner;  /* object passed as the callback's first arg */
     /* 0x0C */ void (*callback)(void *, s32 *);
     /* 0x10 */ s32 motion;   /* current motion/pose id */
-    /* 0x14 */ s32 divisor;  /* period used by helper_1_update_entity */
+    /* 0x14 */ s32 divisor;  /* period used by sound_entity_update */
     /* 0x18 */ entity_effect_slot_t slots[3];
 } entity_context_t;
 

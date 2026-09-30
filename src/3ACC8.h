@@ -77,7 +77,7 @@ typedef struct class_3ACC8_vtable {
     /* 0x110 800867f8 */ s32 (*Unk67)(void *, void *, s32);
     /* 0x114 800867fc */ void (*Unk68)(void *);
     /* 0x118 80086800 */ void *(*Unk69)(void *, s32);
-    /* 0x11C 80086804 */ void (*Unk70)(void *);
+    /* 0x11C 80086804 */ void *(*Unk70)(void *, void *);
     /* 0x120 80086808 */ s32 (*Unk71)(void *, s32);
     /* 0x124 8008680c */ s32 (*Unk72)(void *, s32);
     /* 0x128 80086810 */ void (*Unk73)(void *);

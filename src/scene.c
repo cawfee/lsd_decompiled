@@ -130,7 +130,7 @@ void func_8004A458(scene_t *This, s32 Unk) {
 
 void func_8004A478(scene_t *This, s32 Unk) {
     if (This->m_Sound) {
-        This->m_Sound->vtable->func_8002CA3C(This->m_Sound, Unk, 127, 127);
+        This->m_Sound->vtable->sound_play_note(This->m_Sound, Unk, 127, 127);
     }
 }
 

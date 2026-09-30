@@ -5,9 +5,9 @@
 
 #include "base_class.h"
 
-#include "349B4.h"
-#include "354D4.h"
-#include "35730.h"
+#include "ui_sprite.h"
+#include "tile_buffer.h"
+#include "sprite_atlas.h"
 #include "sound.h"
 #include "tim_image.h"
 
@@ -118,9 +118,9 @@ typedef struct ui_screen {
     /* 0x6C */ s32 m_Unk26;
     /* 0x70 */ s8 *m_Unk27;
     /* 0x74 */ tim_image_t *m_Unk28;
-    /* 0x78 */ class_349B4_t *m_Unk29;
-    /* 0x7C */ class_354D4_t *m_Unk30;
-    /* 0x80 */ class_35730_t *m_Unk31;
+    /* 0x78 */ ui_sprite_t *m_Unk29;
+    /* 0x7C */ tile_buffer_t *m_Unk30;
+    /* 0x80 */ sprite_atlas_t *m_Unk31;
     /* 0x84 */ s32 m_Unk32;
     /* 0x88 */ s32 (*m_Unk33)();
     /* 0x8C */ s32 (*m_Unk34)();

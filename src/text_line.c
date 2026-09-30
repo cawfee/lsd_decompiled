@@ -1,5 +1,5 @@
 #include "text_line.h"
-#include "322B4.h"
+#include "glyph.h"
 
 #include "base_class.h"
 
@@ -29,7 +29,7 @@ void func_8001DA28(void *);
 void func_8001DDF4(void *);
 void func_8001E49C(void *);
 void func_8001E4A4(void *);
-void class_3249C_set_anchor(void *);
+void sprite_node_set_anchor(void *);
 void func_80042170(void *);
 void func_8004223C(void *);
 void func_80042268(void *);
@@ -102,7 +102,7 @@ text_line_vtable_t g_TEXT_LINE_VTABLE = {
     func_8001E4A4,
     func_80040D74,
     func_80040E14,
-    class_3249C_set_anchor,
+    sprite_node_set_anchor,
     (void (*)(void *))func_80040EDC,
     func_80040F20,
     text_line_set_string,
@@ -156,15 +156,15 @@ void func_80040A88(text_line_t *This, s32 Unk) {
 void func_80040AE8(text_line_t *This, s32 arg1, s32 *arg2) {
     s32 pos[2];
     u8 start;
-    class_322B4_t **p;
+    class_glyph_t **p;
     s32 i;
-    class_322B4_t *obj;
+    class_glyph_t *obj;
 
     if (This->m_Visible == 0) {
         ((void (*)(void *, s32, s32 *))glyph_get_vtable()->Unk18)(This, arg1, arg2);
         __builtin_memcpy(pos, arg2, 8);
         start = (u8)This->m_StartIndex;
-        p = (class_322B4_t **)((u8 *)This->m_Glyphs + (start * 4));
+        p = (class_glyph_t **)((u8 *)This->m_Glyphs + (start * 4));
         i = start;
         if (i < (s32)(start + (u8)This->m_Length)) {
             do {
@@ -243,15 +243,15 @@ void func_80040D74(text_line_t *This, s32 arg) {
 
 void func_80040E14(text_line_t *This, s32 *arg1) {
     s32 pos[2];
-    class_322B4_t **p;
+    class_glyph_t **p;
     s32 i;
-    class_322B4_t *obj;
+    class_glyph_t *obj;
 
     if (This->m_Visible != 0) {
         i = 0;
         ((void (*)(void *, s32 *))glyph_get_vtable()->Unk46)(This, arg1);
         __builtin_memcpy(pos, arg1, 8);
-        p = (class_322B4_t **)This->m_Glyphs;
+        p = (class_glyph_t **)This->m_Glyphs;
         if (i < (s32)This->m_GlyphCount) {
             do {
                 obj = *p;

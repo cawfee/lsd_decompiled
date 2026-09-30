@@ -2,7 +2,7 @@
 #include "dream_sys.h"
 
 
-#include "477E4.h"
+#include "scene_node.h"
 #include "base_class.h"
 #include "stage_grid.h"
 
@@ -69,7 +69,7 @@ s32 dream_sys_translate_toward(dream_sys_t *This, s16 *a, s16 *b);
 s32 is_facing_angle(s16 *arg0, s32 arg1);
 s32 get_random_spawn_from_stage(void *dst, s32 chunk, s32 tick);
 s32 calc_navigation_score(void);
-void helper_1_update_entity(sound_t *This, void *Ctx);
+void sound_entity_update(sound_t *This, void *Ctx);
 void init_nav_challenges_array(s32 *Unk1, s32 *Unk2);
 void *memset(void *s, int c, u32 n);
 
@@ -98,7 +98,7 @@ dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void dream_sys_construct(dream_sys_t *This, void *Unk1, s32 Unk2, s32 Unk3) {
-    class_477E4_get_vtable()->Construct(This);
+    scene_node_get_vtable()->Construct(This);
     This->vtable = dream_sys_get_vtable();
     This->m_Actor = Unk2;
     This->m_ViewTransform = Unk3;
@@ -134,7 +134,7 @@ void dream_sys_unk18(dream_sys_t *This, void **arg1) {
 
     ((void (*)(void **, void *, void *, void *))*(void **)((u8 *)*arg1 + 0xE4))(
         arg1, sp10, This, (u8 *)This + 0x16C);
-    ((void (*)(void *, void **, void *))class_477E4_get_vtable()->Unk18)(This, arg1, sp10);
+    ((void (*)(void *, void **, void *))scene_node_get_vtable()->Unk18)(This, arg1, sp10);
     This->vtable->Attach(This, arg1);
     if (This->m_LinkState == 0xE) {
         off = *(s32 *)((u8 *)This + 0x87C) * 0x24 + 0x470;
@@ -156,7 +156,7 @@ void dream_sys_detach_actor(dream_sys_t *This) {
     temp_a0 = (void **)This->m_AttachedActor;
     ((void (*)(void **))(*(void **)((s8 *)*temp_a0 + 0xF0)))(temp_a0);
     This->vtable->Detach(This, (void *)This->m_AttachedActor);
-    class_477E4_get_vtable()->Unk19(This);
+    scene_node_get_vtable()->Unk19(This);
 }
 
 void dream_sys_on_floor_event(dream_sys_t *This, s32 arg1) {
@@ -165,7 +165,7 @@ void dream_sys_on_floor_event(dream_sys_t *This, s32 arg1) {
     s32 value;
     s32 surface;
 
-    class_477E4_get_vtable()->Unk33(This, arg1);
+    scene_node_get_vtable()->Unk33(This, arg1);
     if (arg1 == -2) {
         goto neg2;
     }
@@ -291,7 +291,7 @@ s32 dream_sys_timer_tick(dream_sys_t *This, s32 arg1, s32 arg2) {
 }
 
 void dream_sys_on_chunk_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
-    class_477E4_get_vtable()->Unk38(This, Unk2, Unk3);
+    scene_node_get_vtable()->Unk38(This, Unk2, Unk3);
 
     if ((*(u32 *) *Unk2 & 0xFFF) == 0x114) {
         This->vtable->dream_sys_process_chunk_change(This, Unk2, Unk3);
@@ -299,7 +299,7 @@ void dream_sys_on_chunk_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
 }
 
 void dream_sys_on_journal_event(dream_sys_t *This, void **Unk2, s32 Unk3) {
-    class_477E4_get_vtable()->Unk54(This, Unk2, Unk3);
+    scene_node_get_vtable()->Unk54(This, Unk2, Unk3);
 
     if ((*(u32 *) *Unk2 & 0xFFFFF) == 0x1F234) {
         This->vtable->dream_sys_instance_effects_on_journal(This, Unk2, Unk3);
@@ -310,7 +310,7 @@ void dream_sys_wall_link(dream_sys_t *This, s32 arg1, s32 arg2) {
     void **obj;
     void *pkt;
 
-    ((void (*)(void *, s32, s32))class_477E4_get_vtable()->Unk55)(This, arg1, arg2);
+    ((void (*)(void *, s32, s32))scene_node_get_vtable()->Unk55)(This, arg1, arg2);
     if ((arg2 == 4) && (This->m_LinkState == 0)) {
         obj = (void **)This->m_AttachedActor;
         pkt = ((void *(*)(void *, s32))(*(void **)((u8 *)*obj + 0xD4)))(obj, arg1);
@@ -581,7 +581,7 @@ void dream_sys_set_move_callback(dream_sys_t *This, s32 Unk) {
             This->m_ResetViewPending = 1;
             This->m_ViewActive = 1;
             This->m_MoveUpdateCallback = fnc;
-            helper_1_set_entity(This->m_Actor, &This->m_EntityContext, 1, This, This->vtable->dream_sys_configure_entity_link);
+            sound_entity_init(This->m_Actor, &This->m_EntityContext, 1, This, This->vtable->dream_sys_configure_entity_link);
             break;
 
         default:
@@ -892,7 +892,7 @@ void dream_sys_reset_view(dream_sys_t *This) {
         temp_v1[9] = temp_v1[9] - 0x258;
     }
     if (This->m_ViewActive != 0) {
-        helper_1_update_entity(This->m_Actor, (u8 *)This + 0xCC);
+        sound_entity_update(This->m_Actor, (u8 *)This + 0xCC);
     }
 }
 
@@ -901,7 +901,7 @@ void dream_sys_set_view_mode(dream_sys_t *This, s32 Unk) {
     This->m_ViewActive = Unk;
 
     if (Unk) {
-        sound_update_entity(This->m_Actor, &This->m_EntityContext);
+        sound_entity_stop(This->m_Actor, &This->m_EntityContext);
     }
 }
 
@@ -1346,6 +1346,47 @@ void dream_sys_process_chunk_change(dream_sys_t *This, void *arg1, s32 arg2) {
     }
 }
 
+/*
+ * Best-known C (109/110 insns; jump table, all five case bodies, offsets and
+ * relocations correct). Only differences are a register/schedule tie:
+ * target computes switch index into $v1 and preserves $a2 (`addiu v1,a2,-4`),
+ * gcc 2.6.3 propagates the value back into $a2 (`addiu a2,a2,-4`) even with a
+ * separate index variable/initializer; and in case 4 the target sets the call
+ * this-pointer `addu a0,s1` before loading the method, gcc loads from $s1 first.
+ *
+ * s32 temp;
+ * if (This->m_LinkState == 0) {
+ *     switch (arg2) {
+ *     case 4:
+ *         (*(void (**)(void **, s32))(*(u32 *)arg1 + 0x38))(arg1, (s32)This);
+ *         break;
+ *     case 9:
+ *         if (This->m_IsFlashbackSession == 0) {
+ *             This->vtable->dream_sys_log_instance_mood(This,
+ *                 (dream_sys_mood_graph_point_t *)(*(s32 (**)(void **))(*(u32 *)arg1 + 0x14C))(arg1));
+ *             This->m_InstanceScore += (*(s32 (**)(void **))(*(u32 *)arg1 + 0x150))(arg1);
+ *             This->vtable->dream_sys_flashback_saving(This, 0, 0x10);
+ *         }
+ *         break;
+ *     case 10:
+ *         temp = This->m_NextMap;
+ *         This->m_NextMap = -(*(s32 (**)(void **))(*(u32 *)arg1 + 0x154))(arg1);
+ *         This->vtable->dream_sys_dynamic_link(This);
+ *         if (This->m_NextMap < 0) This->m_NextMap = temp;
+ *         break;
+ *     case 11:
+ *         if (This->m_IsFlashbackSession == 0) {
+ *             *(s16 *)((u8 *)This + 0x168) = -1;
+ *             This->m_DreamTimer = This->m_DreamTimeLimit;
+ *             *(s16 *)((u8 *)This + 0x16A) = (*(s32 (**)(void **))(*(u32 *)arg1 + 0x158))(arg1);
+ *         }
+ *         break;
+ *     case 12:
+ *         if (This->m_IsFlashbackSession == 0) This->m_DreamTimer = This->m_DreamTimeLimit;
+ *         break;
+ *     }
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/dream_sys", dream_sys_instance_effects_on_journal);
 
 void dream_sys_get_previous_day_mood(dream_sys_t *This, s8 *out, s32 mode) {

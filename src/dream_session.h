@@ -8,7 +8,7 @@
 #include "pad.h"
 #include "frame_phase.h"
 #include "3ACC8.h"
-#include "3DA54.h"
+#include "scene_renderer.h"
 #include "dream_sys.h"
 #include "display.h"
 #include "tim_image.h"
@@ -19,7 +19,7 @@ typedef struct {
     pad_t *cls_16634;
     frame_phase_t *cls_32c00;
     class_3ACC8_t *cls_3acc8;
-    class_3DA54_t *cls_3da54;
+    scene_renderer_t *cls_3da54;
 } game_graphics_ctx_t;
 
 typedef struct dream_session_vtable {

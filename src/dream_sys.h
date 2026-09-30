@@ -225,7 +225,7 @@ typedef struct dream_sys_flashback {
 
 typedef struct dream_sys {
     /* 0x000 */ dream_sys_vtable_t *vtable;
-    /* 0x004 */ s32 m_Unk0; /* class_477E4 base state */
+    /* 0x004 */ s32 m_Unk0; /* scene_node base state */
     /* 0x008 */ s32 m_Unk1;
     /* 0x00C */ s32 m_HasTransform;
     /* 0x010 */ s32 m_Unk3;
@@ -246,7 +246,7 @@ typedef struct dream_sys {
     /* 0x04C */ s32 m_AttachedActor; /* scene actor attached by the link system */
     /* 0x050 */ s32 m_Unk19;
     /* 0x054 */ s32 m_Unk20;
-    /* 0x058 */ s32 m_Actor; /* sound/entity actor used by helper_1_* helpers */
+    /* 0x058 */ s32 m_Actor; /* sound/entity actor used by the sound_entity_* helpers */
     /* 0x05C */ s32 m_ViewTransform; /* transform modified by look/turn */
     /* 0x060 */ s32 m_Model; /* model object passed to dream_sys_create */
     /* 0x064 */ s32 m_Texture;

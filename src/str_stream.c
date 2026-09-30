@@ -14,7 +14,7 @@ extern str_stream_vtable_t g_STR_STREAM_VTABLE;
 
 extern str_stream_t *g_StreamActive;
 extern s32 g_StreamState;
-extern char D_8008A954[];
+extern char g_StreamFileSuffix[];
 
 extern char *strcpy(char *, char *);
 extern char *strcat(char *, char *);
@@ -83,7 +83,7 @@ s32 str_stream_open(str_stream_t *This, char *name, s32 retries) {
                 path[0] = 0x5C;
                 strcpy(&path[1], (char *)get_current_data_folder());
                 strcat(path, name);
-                strcat(path, D_8008A954);
+                strcat(path, g_StreamFileSuffix);
                 file = &This->m_Unk2;
                 while (CdSearchFile(file, path) == 0) {
                     if (orig >= 0) {
@@ -209,10 +209,10 @@ void str_stream_reset(str_stream_t *This) {
     }
 }
 
-void func_800475C8(void) {
+void str_stream_nop_1(void) {
 }
 
-void func_800475D0(void) {
+void str_stream_nop_2(void) {
 }
 
 void str_stream_pause(str_stream_t *This) {
@@ -309,7 +309,7 @@ s32 str_stream_sync(str_stream_t *This, s32 Mode) {
     return CdSync(Mode, &This->m_Unk8);
 }
 
-void func_800478F8(void) {
+void str_stream_nop_3(void) {
 }
 
 str_stream_vtable_t *str_stream_get_vtable(void) {

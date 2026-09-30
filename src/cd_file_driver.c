@@ -24,6 +24,15 @@ extern char *strcat(char *, char *);
 extern char *strstr(char *, char *);
 extern s32 CdSetDebug(s32);
 extern s32 CdControlB(s32, u8 *, s32 *);
+extern s32 CdControl(s32, u8 *, s32);
+extern s32 CdControlF(s32, u8 *);
+extern s32 CdSync(s32, u8 *);
+extern s32 CdReadSync(s32, u8 *);
+extern s32 CdFlush();
+extern s32 CdPosToInt(u8 *);
+extern void CdIntToPos(s32, u8 *);
+extern u8 D_8006D574[];
+extern s32 func_80029274(s32, s32, s32);
 
 s32 cd_file_driver_tick(void);
 void cd_file_driver_lock(void);
@@ -31,6 +40,8 @@ void cd_file_driver_unlock(void);
 void cd_file_driver_stop_read(void);
 void cd_file_driver_read_state1(void);
 void cd_file_driver_read_state2(void);
+void cd_file_driver_set_read_result(s32 arg0);
+s32 cd_file_driver_read_sectors();
 s32 func_80018458(void);
 
 extern s32 g_CdInitialized;
@@ -50,6 +61,8 @@ extern s32 g_CdLocked;
 extern s32 g_CdCallbackActive;
 extern cd_file_request_t *g_CdRequestList;
 extern s32 g_CdReadPhase;
+extern u32 g_CdReadDest;
+extern s32 g_CdReadLba;
 extern s32 g_CdTimeoutCounter;
 extern s32 g_CdFrameMode;
 extern s32 g_CD_FILE_DRIVER_VTABLE[];
@@ -99,12 +112,89 @@ void cd_file_driver_close(file_buf_t *arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_seek);
+s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
+    u32 temp_v0;
+    u32 var_s0;
+    s32 status;
+
+    if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
+        return cd_file_driver_get_aligned_size();
+    }
+    cd_file_driver_lock();
+    if (arg0->m_Unk9 != 0) {
+        if (g_CdReadBusy == 0 && arg0->m_Unk2 != 0) {
+            cd_file_driver_begin_read(2, 1);
+            var_s0 = arg1 >> 11;
+            if (arg1 & 0x7FF) {
+                var_s0 += 1;
+            }
+            CdIntToPos(CdPosToInt((u8 *)&arg0->m_Unk5) + var_s0, D_8006D574);
+            if (arg2 == 0) {
+                if (g_CdFrameActive != 0) {
+                    g_CdReadPos = (s32)D_8006D574 - 0x14;
+                    g_CdReadPhase = 1;
+                } else {
+                    do {
+                        CdControl(2, D_8006D574, 0);
+                        do {
+                            status = CdSync(0, 0);
+                        } while (status == 0);
+                    } while (status == 5);
+                    cd_file_driver_end_read();
+                }
+            } else {
+                cd_file_driver_end_read();
+                cd_file_driver_unlock();
+                temp_v0 = arg0->m_Unk6;
+                if (temp_v0 & 0x7FF) {
+                    return ((temp_v0 >> 11) + 1) << 11;
+                }
+                return temp_v0;
+            }
+        }
+    } else {
+        cd_file_driver_queue_request(arg0, 0, 4, arg1, arg2);
+    }
+    cd_file_driver_unlock();
+    return 0;
+}
 
 void cd_file_driver_unk19(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_read);
+s32 cd_file_driver_read(file_buf_t *arg0, s32 arg1, u32 arg2) {
+    s32 status;
+
+    if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
+        cd_file_driver_read_sectors();
+        return 0;
+    }
+    cd_file_driver_lock();
+    if (arg0->m_Unk9 != 0) {
+        if (g_CdReadBusy == 0 && arg0->m_Unk2 != 0) {
+            cd_file_driver_begin_read(3, 7);
+            if (g_CdFrameActive != 0) {
+                g_CdReadDest = arg2 >> 11;
+                g_CdReadLba = arg1;
+                g_CdReadPhase = 1;
+            } else {
+            retry2:
+                func_80029274(arg2 >> 11, arg1, 0x80);
+                do {
+                    status = CdReadSync(0, 0);
+                } while (status > 0);
+                if (status == -1) {
+                    goto retry2;
+                }
+                cd_file_driver_end_read();
+            }
+        }
+    } else {
+        cd_file_driver_queue_request(arg0, 0, 5, arg1, arg2);
+    }
+    cd_file_driver_unlock();
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_unk21);
 
@@ -443,10 +533,151 @@ s32 cd_file_driver_get_disc_record(s32 arg0) {
     return result;
 }
 
+/*
+ * Best match (not matching): the full nested switch reproduces 86/86
+ * instructions, the outer state dispatch, the shared set_result/end_read tails
+ * and the status<3 layout exactly. The only difference is the status==5 leaf:
+ * gcc 2.6.3 emits `beq v1,5,set_read_result; li a0,1; j unlock` while the
+ * target emits `bne v1,5,unlock; ori a0,1; j set_read_result`. Wrapping case 5
+ * as `default: if (status != 5) goto done;` (83 insns), a flat if/else chain
+ * (84 insns, correct case-5 leaf but the status<3 timeout block is placed
+ * inline instead of out of line), explicit gotos, and reordered cases all fail
+ * to move the case-5 leaf ordering. The difference is gcc's switch block
+ * ordering, not a source shape we can express.
+ *
+void cd_file_driver_read_state1(void) {
+    s32 state;
+    s32 status;
+    s32 result;
+    s32 timeout;
+
+    cd_file_driver_lock();
+    state = g_CdReadState;
+    switch (state) {
+    case 1:
+        if (CdControlF(2, (u8 *)(g_CdReadPos + 0x14)) != 0) {
+            result = 2;
+            goto set_result;
+        }
+        break;
+    case 2:
+        switch (CdSync(1, 0)) {
+        default:
+            goto done;
+        case 0:
+            timeout = g_CdTimeoutCounter + 1;
+            g_CdTimeoutCounter = timeout;
+            if (timeout >= 0x259) {
+                result = 1;
+                goto set_result;
+            }
+            break;
+        case 2:
+            cd_file_driver_end_read();
+            break;
+        case 5:
+            result = 1;
+            goto set_result;
+            break;
+        }
+        break;
+    case 7:
+        if (func_80029274(g_CdReadDest, g_CdReadLba, 0x80) != 0) {
+            result = 8;
+            goto set_result;
+        }
+        break;
+    case 8:
+        status = CdReadSync(1, 0);
+        if (status == -1) {
+            CdFlush();
+            result = 1;
+            goto set_result;
+        } else if (status == 0) {
+            cd_file_driver_end_read();
+        }
+        break;
+    }
+    goto done;
+set_result:
+    cd_file_driver_set_read_result(result);
+done:
+    cd_file_driver_unlock();
+}
+*/
 INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_read_state1);
 
+/*
+ * Best match (not matching): all 88 instructions match except the placement of
+ * the case-2 `result = 7` leaf. Target lays out: ge3(r==5) block, then set7
+ * (`j set_result; ori a0,7`), then timeout(r==0) block. gcc 2.6.3 always emits
+ * ge3, timeout, set7 (set7 last) regardless of source shape. Tried: nested
+ * switch (all 6 case orders), if/else `<3` and `>=3` forms, flat if chain,
+ * every outer case order, and separate labels. Same gcc block-ordering class as
+ * cd_file_driver_read_state1. Everything else (dispatch, case 1/7/8, tails,
+ * gp_rel globals) is exact.
+ *
+ * void cd_file_driver_read_state2(void) {
+ *     s32 state;
+ *     s32 status;
+ *     s32 result;
+ *     s32 timeout;
+ *
+ *     cd_file_driver_lock();
+ *     state = g_CdReadState;
+ *     switch (state) {
+ *     case 1:
+ *         if (CdControlF(2, (u8 *)(g_CdReadPos + 0x14)) != 0) {
+ *             result = 2;
+ *             goto set_result;
+ *         }
+ *         break;
+ *     case 2:
+ *         switch (CdSync(1, 0)) {
+ *         case 0:
+ *             timeout = g_CdTimeoutCounter + 1;
+ *             g_CdTimeoutCounter = timeout;
+ *             if (timeout >= 0x259) {
+ *                 result = 1;
+ *                 goto set_result;
+ *             }
+ *             break;
+ *         case 2:
+ *             result = 7;
+ *             goto set_result;
+ *             break;
+ *         case 5:
+ *             result = 1;
+ *             goto set_result;
+ *             break;
+ *         }
+ *         break;
+ *     case 7:
+ *         if (func_80029274(g_CdReadDest, g_CdReadLba, 0x80) != 0) {
+ *             result = 8;
+ *             goto set_result;
+ *         }
+ *         break;
+ *     case 8:
+ *         status = CdReadSync(1, 0);
+ *         if (status == -1) {
+ *             result = 1;
+ *             goto set_result;
+ *         } else if (status == 0) {
+ *             cd_file_driver_end_read();
+ *             g_CdReadPos = g_CdReadTarget;
+ *             g_CdReadTarget = 0;
+ *         }
+ *         break;
+ *     }
+ *     goto done;
+ * set_result:
+ *     cd_file_driver_set_read_result(result);
+ * done:
+ *     cd_file_driver_unlock();
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_read_state2);
-
 void cd_file_driver_begin_read(s32 arg0, s32 arg1) {
     g_CdReadBusy = 1;
     g_CdReadParam = arg0;
@@ -541,7 +772,49 @@ s32 cd_file_driver_get_aligned_size(file_buf_t *This) {
 void cd_file_driver_nullsub17(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/cd_file_driver", cd_file_driver_read_sectors);
+/*
+ * Reads `arg2` bytes of CD data into `arg1` using the frame-driven
+ * control/sync path. The unused `sector[0x800]` local is required: gcc 2.6.3
+ * keeps a declared array even when unreferenced, and it produces the target's
+ * 0x838 frame. The goto-based retry loop (both the sync==5 and read==-1 paths)
+ * is required to keep `sectors = arg2 >> 11` and the CdSync call setup inside
+ * the loop instead of hoisting them.
+ */
+s32 cd_file_driver_read_sectors(file_buf_t *arg0, void *arg1, u32 arg2) {
+    u8 sector[0x800];
+    s32 result[4];
+    s32 status;
+    u32 sectors;
+
+    if (arg0->m_Unk2 != 0) {
+    retry:
+        sectors = arg2 >> 11;
+        CdControl(2, (u8 *)&arg0->m_Unk5, 0);
+    syncloop:
+        status = CdSync(0, (u8 *)result);
+        if (status == 0) {
+            goto syncloop;
+        }
+        if (status == 5) {
+            goto retry;
+        }
+        if (sectors == 0) {
+            goto done;
+        }
+        func_80029274(sectors, arg1, 0x80);
+        do {
+            status = CdReadSync(0, 0);
+        } while (status > 0);
+        if (status == -1) {
+            goto retry;
+        }
+    done:
+        ;
+    } else {
+        arg0->vtable->Close(arg0);
+    }
+    return 0;
+}
 
 void cd_file_driver_nullsub18(void) {
 }

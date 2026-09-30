@@ -1,10 +1,10 @@
 #include "timer.h"
 #include "base_class.h"
 #include "frame_phase.h"
-#include "32E94.h"
+#include "light.h"
 #include "renderer.h"
 
-extern class_32E94_t *func_80042694(void);
+extern class_light_t *func_80042694(void);
 extern renderer_t *renderer_create(void);
 
 

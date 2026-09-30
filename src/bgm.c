@@ -6,7 +6,7 @@
 #include "base_class.h"
 #include "sound.h"
 
-const char D_80010FEC[0x2C] = "Seq Open error in WBgmHandleMonitorEvent";
+const char g_SeqOpenErrorFmt[0x2C] = "Seq Open error in WBgmHandleMonitorEvent";
 
 s32 g_BgmActive = 0;
 
@@ -139,7 +139,7 @@ s32 seq_open(bgm_t *This) {
     seq = SsSeqOpen(*(u32 *)(unk3 + 0x10), *(s16 *)((u8 *)engine + 0x54));
     This->m_SeqAccess = seq;
     if (seq == -1) {
-        printf(D_80010FEC);
+        printf(g_SeqOpenErrorFmt);
     }
     SsSeqSetVol(This->m_SeqAccess, 0x34, 0x34);
     *(u16 *)((u8 *)This + 0x1A) = 2;
@@ -182,7 +182,7 @@ void seq_set_vol(bgm_t *This, s16 Unk1, s16 Unk2) {
 }
 
 void bgm_set_crescendo(bgm_t *This, s16 Volume, s32 Time) {
-    SsSeqSetCrescendo(This->m_SeqAccess, Volume, helper_1_get_crescendo_time_mod() * Time);
+    SsSeqSetCrescendo(This->m_SeqAccess, Volume, sound_get_crescendo_time_mod() * Time);
 }
 
 void bgm_set_sequence(bgm_t *This, s32 Unk) {
@@ -247,12 +247,12 @@ bgm_vtable_t *bgm_get_vtable(void) {
 #endif
 }
 
-s32 func_8003A05C(void) {
+s32 bgm_is_active(void) {
     return g_BgmActive;
 }
 
 extern u8 D_8008DF38[];
 
-u8 *func_8003A068(void) {
+u8 *bgm_get_sequence_work(void) {
     return D_8008DF38;
 }

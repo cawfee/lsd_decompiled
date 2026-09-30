@@ -6,7 +6,7 @@
 
 /* Effect: a short-lived colour-cycling primitive attached to an entity.
  * Created by entity_create_effect() when an entity triggers (hit spark / link
- * marker) and removed when its life counter expires.  Derives from class_30CD0
+ * marker) and removed when its life counter expires.  Derives from effect_base
  * (a coloured vertex primitive); m_Color/m_ColorStep/m_ColorChannels drive the
  * RGB cycle.  Slots/vtable entries still named Unk are not yet understood. */
 
@@ -39,7 +39,7 @@ typedef struct effect_vtable {
     /* 0x05C 8006e9f8 */ void (*Unk22)(void *);
     /* 0x060 8006e9fc */ void (*Unk23)(void *, s32);
     /* 0x064 8006ea00 */ void (*Unk24)(void *, s32);
-    /* 0x068 8006ea04 */ void (*Unk25)(void *);
+    /* 0x068 8006ea04 */ void (*Unk25)(void *, s32);
     /* 0x06C 8006ea08 */ void (*Unk26)(void *);
     /* 0x070 8006ea0c */ void (*Unk27)(void *);
     /* 0x074 8006ea10 */ void (*Unk28)(void *);
@@ -68,7 +68,7 @@ typedef struct effect_vtable {
     /* 0x0D0 8006ea6c */ void (*effect_set_color_step)(void *, s32);
     /* 0x0D4 8006ea70 */ void (*Unk52)(void *, s32, s32, s32);
     /* 0x0D8 8006ea74 */ void (*Unk53)(void *, s32, s32, s32);
-    /* 0x0DC 8006ea78 */ void (*Unk54)(void *);
+    /* 0x0DC 8006ea78 */ s32 (*Unk54)(void *);
     /* 0x0E0 8006ea7c */ void (*Unk55)(void *, s32);
     /* 0x0E4 8006ea80 */ void (*Unk56)(void *);
     /* 0x0E8 8006ea84 */ s32 (*effect_get_color)(void *);

@@ -1,5 +1,5 @@
 #include "46B20.h"
-#include "477E4.h"
+#include "scene_node.h"
 
 extern class_46B20_vtable_t D_800876FC;
 
@@ -22,7 +22,7 @@ class_46B20_t *func_80056320(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
 void *func_800563C0(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     class_46B20_vtable_t *vtable;
 
-    if (class_477E4_get_vtable()->Construct(This)) {
+    if (scene_node_get_vtable()->Construct(This)) {
         This->vtable = func_80056F4C();
 
         This->m_Unk16 = 0;
@@ -38,7 +38,7 @@ void *func_800563C0(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4)
 
 void func_80056464(class_46B20_t *This) {
     func_80056718();
-    class_477E4_get_vtable()->Cleanup(This);
+    scene_node_get_vtable()->Cleanup(This);
 }
 
 void func_800564A4(class_46B20_t *This, s32 *Unk) {
@@ -125,7 +125,7 @@ void func_80056640(class_46B20_t *This, s32 Unk1) {
 }
 
 #include "46B20.h"
-#include "477E4.h"
+#include "scene_node.h"
 
 #include <psx/rand.h>
 
@@ -167,7 +167,7 @@ void func_800567D4(class_46B20_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) 
 extern s32 D_800877EC[];
 extern s32 D_800877F8[];
 void func_8001E770(void *obj, s32 arg);
-class_477E4_t *func_80056FE4(void);
+scene_node_t *func_80056FE4(void);
 
 typedef struct {
     s32 x;
@@ -177,20 +177,20 @@ typedef struct {
 
 void func_80056858(class_46B20_t *This, s32 arg1) {
     func_80056858_vec_t local;
-    class_477E4_t **slot;
+    scene_node_t **slot;
     s32 mode;
     s32 *scale;
     s32 *table;
     s32 i;
     s16 *half;
-    class_477E4_t *obj;
+    scene_node_t *obj;
 
     mode = This->m_Unk26;
     if (mode == 0) {
         return;
     }
     local = *(func_80056858_vec_t *)D_800877EC;
-    slot = (class_477E4_t **)&This->m_Unk30;
+    slot = (scene_node_t **)&This->m_Unk30;
     i = 0;
     table = D_800877F8;
     scale = table + mode;
@@ -232,16 +232,16 @@ extern s32 D_8008785C[];
 extern s32 D_80087868[];
 extern s32 D_80087874[];
 extern s32 D_80087880[3];
-void func_800573A8(class_477E4_t *This, void *Unk);
+void func_800573A8(scene_node_t *This, void *Unk);
 
 void func_80056BBC(class_46B20_t *This, s32 unused) {
     s32 parity;
     s32 *extra;
-    class_477E4_t *obj;
+    scene_node_t *obj;
     s32 mode;
     s32 arg;
     s32 *table;
-    class_477E4_vtable_t *vt;
+    scene_node_vtable_t *vt;
 
     parity = rand() % 2;
     extra = NULL;
@@ -254,7 +254,7 @@ void func_80056BBC(class_46B20_t *This, s32 unused) {
     if (mode < 2) {
         goto low;
     }
-    obj = (class_477E4_t *)This->m_Unk33;
+    obj = (scene_node_t *)This->m_Unk33;
     {
         s32 *p = D_80087880;
         *p = D_80087844[mode];
@@ -268,7 +268,7 @@ void func_80056BBC(class_46B20_t *This, s32 unused) {
     vt->Unk45(obj, (void *)arg);
     goto end;
 low:
-    obj = (class_477E4_t *)This->m_Unk33;
+    obj = (scene_node_t *)This->m_Unk33;
     ((void (*)(void *, s32))obj->vtable->Unk24)(obj, arg);
     ((void (*)(void *, s32))obj->vtable->Unk25)(obj, 0);
     table = D_80087874;
@@ -278,7 +278,7 @@ low:
     }
     ((void (*)(void *, s32, s32 *))vt->Unk17)(obj, 1, table);
 end:
-    ((class_477E4_t *)This->m_Unk34)->vtable->Unk23((class_477E4_t *)This->m_Unk34, 0);
+    ((scene_node_t *)This->m_Unk34)->vtable->Unk23((scene_node_t *)This->m_Unk34, 0);
 }
 
 #include "46B20.h"

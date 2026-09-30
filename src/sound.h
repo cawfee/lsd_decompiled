@@ -31,20 +31,20 @@ typedef struct sound_vtable {
     /* 0x058 8006da8c */ void (*Unk6)(void *, char *);
     /* 0x05C 8006da90 */ void (*file_buf_release)(void *);
     /* 0x060 8006da94 */ void (*nullsub13)(void *);
-    /* 0x064 8006da98 */ void (*func_8002C6FC)(void *);
+    /* 0x064 8006da98 */ void (*sound_update_vab_load)(void *);
     /* 0x068 8006da9c */ void (*Unk10)(void *);
     /* 0x06C 8006daa0 */ void (*Unk11)(void *, char *);
     /* 0x070 8006daa4 */ void (*Unk12)(void *);
     /* 0x074 8006daa8 */ void (*Unk13)(void *);
-    /* 0x078 8006daac */ void (*func_8002C824)(void *, s32);
-    /* 0x07C 8006dab0 */ void (*func_8002C890)(void *);
-    /* 0x080 8006dab4 */ void (*func_8002CA3C)(void *, s32, s32, s32);
-    /* 0x084 8006dab8 */ s32 (*func_8002CB18)(void *, s32);
+    /* 0x078 8006daac */ void (*sound_finish_vab_load)(void *, s32);
+    /* 0x07C 8006dab0 */ void (*sound_build_program_table)(void *);
+    /* 0x080 8006dab4 */ void (*sound_play_note)(void *, s32, s32, s32);
+    /* 0x084 8006dab8 */ s32 (*sound_stop_note)(void *, s32);
     /* 0x088 8006dabc */ void (*sound_mute)(void *);
     /* 0x08C 8006dac0 */ void (*sound_unmute)(void *);
-    /* 0x090 8006dac4 */ void (*func_8002CBDC)(void *);
-    /* 0x094 8006dac8 */ void (*func_8002CBE4)(void *);
-    /* 0x098 8006dacc */ void (*func_8002CBEC)(void *);
+    /* 0x090 8006dac4 */ void (*sound_nop_1)(void *);
+    /* 0x094 8006dac8 */ void (*sound_nop_2)(void *);
+    /* 0x098 8006dacc */ void (*sound_nop_3)(void *);
     /* 0x09C 8006dad0 */ void (*sound_set_volume_offset)(void *, s32);
 } sound_vtable_t;
 

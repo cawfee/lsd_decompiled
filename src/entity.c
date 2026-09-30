@@ -1,61 +1,509 @@
+#include <psx/rand.h>
+
 #include "entity.h"
-#include "55DD4.h"
+#include "actor.h"
 #include "dream_sys.h"
+#include "memory.h"
 
-extern entity_vtable_t g_ENTITY_VTABLE;
+entity_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Unk4);
+s8 *entity_get_mood_effect(entity_t *This);
+void entity_acrobats(entity_t *This, s32 *Unk);
+void entity_airplane(entity_t *This, s32 *arg1);
+void entity_airship(entity_t *This, s32 *arg1);
+void entity_astronaut(entity_t *This, s32 *arg1);
+void entity_balloon(entity_t *This, s32 *arg1);
+void entity_bear(entity_t *This, s32 *arg1);
+void entity_bear_apartment(entity_t *This, s32 *arg1);
+void entity_bed_bone_dead(entity_t *This, s32 *arg1);
+void entity_bell_striker(entity_t *This, s32 *arg1);
+void entity_big_face_man(entity_t *This, s32 *arg1);
+void entity_big_face_man_hidden(entity_t *This, s32 *arg1);
+void entity_bird(entity_t *This, s32 *arg1);
+void entity_boat_bird(entity_t *This, s32 *arg1);
+void entity_boatman(entity_t *This, s32 *Unk);
+void entity_buddha(entity_t *This, s32 *arg1);
+void entity_can(entity_t *This, s32 *arg1);
+void entity_car(entity_t *This, s32 *arg1);
+void entity_car_water(entity_t *This, s32 *arg1);
+s32 entity_check_interaction(entity_t *This);
+s32 entity_check_interaction_angle(entity_t *this);
+s32 entity_check_interaction_range(entity_t *This);
+s32 entity_check_link_proximity(const entity_t *This);
+s32 entity_check_link_trigger(entity_t *This);
+void entity_cleanup(entity_t *This);
+void entity_clouds_wind(entity_t *This, s32 *arg1);
+void entity_corpse(entity_t *This, s32 *arg1);
+void entity_demon_king(entity_t *This, s32 *arg1);
+void entity_disable_link(entity_t *This);
+void entity_dog(entity_t *This, s32 *arg1);
+void entity_dress_woman(entity_t *This, s32 *arg1);
+void entity_drumstick(entity_t *This, s32 *Unk);
+void entity_elephant(entity_t *This, s32 *arg1);
+void entity_elephant_small(entity_t *This, s32 *arg1);
+void entity_enable_link(entity_t *This);
+void entity_face(entity_t *This, s32 *arg1);
+void entity_ferris_wheel(entity_t *This, s32 *arg1);
+void entity_fetus_jump(entity_t *This, s32 *arg1);
+void entity_fetus_walk(entity_t *This, s32 *arg1);
+void entity_fish(entity_t *This, s32 *arg1);
+void entity_fish_giant(entity_t *This, s32 *arg1);
+void entity_flower(entity_t *This, s32 *arg1);
+void entity_fox(entity_t *This, s32 *arg1);
+void entity_futon(entity_t *This, s32 *Unk);
+void entity_gargoyle(entity_t *This, s32 *arg1);
+void entity_gargoyle_pit(entity_t *This, s32 *arg1);
+void entity_gears(entity_t *This, s32 *arg1);
+s32 entity_get_distance(entity_t *This, void *a1);
+s32 entity_get_event_video(entity_t *This);
+s32 entity_get_link_stage(entity_t *This);
+s32 entity_get_trigger_ratio(entity_t *This);
+s32 entity_get_unlock_effect(entity_t *This);
+void entity_giant_minotaur(entity_t *This, s32 *Unk);
+void entity_gray_man(entity_t *This, s32 *arg1);
+void entity_gunman(entity_t *This, s32 *arg1);
+void entity_gunman_victim(entity_t *This, s32 *arg1);
+void entity_halo(entity_t *This, s32 *arg1);
+void entity_hanged_woman(entity_t *This, s32 *arg1);
+void entity_hanged_woman_paralysis(entity_t *This, s32 *arg1);
+void entity_hoop_girl(entity_t *This, s32 *arg1);
+void entity_hoop_girl_giant(entity_t *This, s32 *arg1);
+void entity_hopscotch_girl(entity_t *This, s32 *arg1);
+void entity_horse(entity_t *This, s32 *arg1);
+void entity_human_face_flower(entity_t *This, s32 *arg1);
+void entity_init(entity_t *This);
+void entity_kemari_boy_east(entity_t *This, s32 *arg1);
+void entity_kemari_boy_west(entity_t *This, s32 *arg1);
+void entity_kicking_man(entity_t *This, s32 *Unk);
+void entity_light(entity_t *This, s32 *arg1);
+void entity_lips_giant(entity_t *This, s32 *out);
+void entity_lips_small(entity_t *This, s32 *arg1);
+void entity_locomotive_factory(entity_t *This, s32 *arg1);
+void entity_locomotive_kyoto(entity_t *This, s32 *arg1);
+void entity_locomotive_natural(entity_t *This, s32 *arg1);
+void entity_maiko_bridge(entity_t *This, s32 *arg1);
+void entity_maiko_giant(entity_t *This, s32 *arg1);
+void entity_maiko_palace(entity_t *This, s32 *arg1);
+void entity_maiko_plain(entity_t *This, s32 *arg1);
+void entity_maiko_small(entity_t *This, s32 *arg1);
+void entity_marching_band(entity_t *This, s32 *arg1);
+void entity_minotaur(entity_t *This, s32 *arg1);
+void entity_mirage(entity_t *This, s32 *arg1);
+void entity_mushroom(entity_t *This, s32 *arg1);
+void entity_notify_interaction(entity_t *This, s32 Unk2, s32 Unk3);
+void entity_notify_interaction_done(entity_t *This, s32 Unk2, s32 Unk3);
+void entity_old_woman(entity_t *This, s32 *arg1);
+void entity_opera_singer(entity_t *This, s32 *arg1);
+void entity_orrery(entity_t *This, s32 *arg1);
+void entity_ox_cart(entity_t *This, s32 *arg1);
+void entity_paper_sumo(entity_t *This, s32 *arg1);
+void entity_paper_sumo_wait(entity_t *This, s32 *arg1);
+void entity_peacock(entity_t *This, s32 *arg1);
+void entity_prince_princess(entity_t *This, s32 *arg1);
+void entity_question_mark_penguin(entity_t *This, s32 *arg1);
+void entity_rabbit(entity_t *This, s32 *arg1);
+void entity_rainbow(entity_t *This, s32 *arg1);
+void entity_ring(entity_t *This, s32 *arg1);
+void entity_rocket(entity_t *This, s32 *arg1);
+void entity_sailboat(entity_t *This, s32 *arg1);
+void entity_set_triggered(entity_t *This, s32 Value);
+void entity_shark(entity_t *This, s32 *arg1);
+void entity_ship(entity_t *This, s32 *arg1);
+void entity_siblings_flock(entity_t *This, s32 *arg1);
+void entity_sliding_penguin(entity_t *This, s32 *arg1);
+void entity_small_room(entity_t *This, s32 *arg1);
+void entity_soldier(entity_t *This, s32 *arg1);
+void entity_standing_penguin(entity_t *This, s32 *arg1);
+void entity_standing_penguin_flock(entity_t *This, s32 *arg1);
+void entity_starship(entity_t *This, s32 *arg1);
+void entity_start(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5);
+void entity_start_behaviour(entity_t *This);
+void entity_stop(entity_t *This);
+void entity_stop_behaviour(entity_t *This);
+void entity_tea_doll(entity_t *This, s32 *arg1);
+void entity_television(entity_t *This, s32 *arg1);
+void entity_tengu(entity_t *This, s32 *arg1);
+void entity_tennyo(entity_t *This, s32 *arg1);
+void entity_tick(entity_t *This);
+void entity_trash_can(entity_t *This, s32 *arg1);
+void entity_triangle_head(entity_t *This, s32 *arg1);
+void entity_triangle_head_giant(entity_t *This, s32 *arg1);
+void entity_turtle_giant(entity_t *This, s32 *arg1);
+void entity_turtle_small(entity_t *This, s32 *arg1);
+void entity_ufo(entity_t *This, s32 *arg1);
+void entity_update(entity_t *This, s32 Unk2, s32 Unk3);
+void entity_whale(entity_t *This, s32 *arg1);
+void entity_window(entity_t *This, s32 *arg1);
+void entity_winged_minotaur(entity_t *This, s32 *arg1);
+void entity_yokai(entity_t *This, s32 *arg1);
+void entity_yokai_bartender(entity_t *This, s32 *arg1);
 
-extern s32 D_80089C58[3];
-extern s32 D_80089C64[3];
-extern s32 D_80089C70[3];
-extern s32 D_80089C7C[3];
-extern s32 D_80089C88[3];
-extern s32 D_80089C94[3];
-extern s32 D_80089CA0[3];
-extern s32 D_80089CAC[3];
-extern s32 D_80089CB8[3];
-extern s32 D_80089CC4[3];
-extern s32 D_80089CD0[3];
-extern s32 D_80089CDC[3];
-extern s32 D_80089CE8[3];
-extern s32 D_80089CF4[3];
-extern s32 D_80089D00[3];
-extern s32 D_80089D18[3];
-extern s32 D_80089D24[6];
-extern s32 D_80089D3C[3];
-extern s32 D_80089D48[3];
-extern s32 D_80089D54[3];
-extern s32 D_80089D60[3];
-extern s32 D_80089D6C[3];
-extern s32 D_80089D78[6];
-extern s32 D_80089D90[3];
-extern s32 D_80089D9C[3];
-extern s32 D_80089DA8[3];
-extern s32 D_80089DB4[3];
-extern s32 D_80089DC0[3];
-extern s32 D_80089DCC[3];
-extern s32 D_80089DD8[3];
-extern s32 D_80089DE4[3];
-extern s32 D_80089DF0[3];
-extern s32 D_80089DFC[3];
-extern s32 D_80089E14[3];
-extern s32 D_80089E20[3];
-extern s32 D_80089E2C[3];
-extern s32 D_80089E38[3];
-extern s32 D_80089E44[3];
-extern s32 D_80089E50[3];
-extern s32 D_80089E5C[6];
-extern s32 D_80089E74[3];
-extern s32 D_80089E80[3];
-extern u8 D_80089E8C[22];
-extern s16 D_80089EA2;
+void entity_lion(entity_t *This, s32 *arg1);
+
+/* Entity vtable, animation/pose tables and the per-type property table.
+ * Kept in memory order (vtable, pose tables, property table) so the
+ * linker places each symbol at its fixed [.data, entity] address; the
+ * prototypes above exist only so the (lower-address) vtable can
+ * reference the behaviour functions defined below. */
+extern void func_8001CEB4();
+extern void func_8001D008();
+extern void func_8001D204();
+extern void func_8001D280();
+extern void func_8001D33C();
+extern void func_8001D374();
+extern void func_8001D3A0();
+extern void func_8001D3CC();
+extern void func_8001D424();
+extern void func_8001D450();
+extern void func_8001D480();
+extern void func_8001D4AC();
+extern void func_8001D4DC();
+extern void func_8001D600();
+extern void func_8001D624();
+extern void func_8001D6A4();
+extern void func_8001D714();
+extern void func_8001D950();
+extern void func_8001DA28();
+extern void func_8001DDF4();
+extern void func_8001E4A4();
+extern void func_800570B4();
+extern void func_80057130();
+extern void func_800571A8();
+extern void func_800571F8();
+extern void func_80057320();
+extern void func_80057384();
+extern void func_800573A8();
+extern void func_80057444();
+extern void func_8005748C();
+extern void func_800574C4();
+extern void func_800574FC();
+extern void func_800575B0();
+extern void func_800575E0();
+extern void func_80057610();
+extern void func_80057C6C();
+extern void func_80057C74();
+extern void func_80057C7C();
+extern void func_80065790();
+extern void func_80065A5C();
+extern void func_80065AE0();
+extern void func_80065BF4();
+extern void func_80065BFC();
+extern void func_80065C2C();
+extern void func_80065D64();
+extern void func_80065DBC();
+extern void func_80065DEC();
+extern void func_80065FD8();
+extern void func_800660BC();
+extern void func_8006613C();
+extern void func_80066148();
+extern void func_80066150();
+extern void func_800661CC();
+extern void func_800661D4();
+extern void func_80066214();
+extern void func_800662A8();
+extern void func_800662B4();
+extern void func_800662BC();
+extern void func_80066340();
+extern void func_80066748();
+extern void func_800667B0();
+
+entity_vtable_t g_ENTITY_VTABLE = {
+    0x0001F234,
+    base_class_destructor,
+    entity_construct,
+    entity_cleanup,
+    (void(*)(base_class_t *, base_class_t *))func_800570B4,
+    (void(*)(base_class_t *, base_class_t *))func_80057130,
+    (void(*)(base_class_t *))func_800571A8,
+    base_class_iter_children,
+    base_class_add_parent,
+    base_class_remove_parent,
+    base_class_clear_parents,
+    base_class_iter_parents,
+    base_class_notify,
+    base_class_nop,
+    (void(*)(base_class_t *, base_class_t *, s32))func_80065790,
+    0x00000000,
+    entity_init,
+    (void(*)(void *, s32, s32 *))func_8001CEB4,
+    (void(*)(void *, s32, s32 *))func_8001D008,
+    entity_start,
+    entity_stop,
+    (void(*)(void *))func_8001D204,
+    (void(*)(void *))func_8001D280,
+    (void(*)(void *))func_8001D33C,
+    (void(*)(void *, s32))func_80065A5C,
+    (void(*)(void *))func_8001D374,
+    (void(*)(void *))func_8001D3A0,
+    (void(*)(void *))func_8001D3CC,
+    (void(*)(void *, s32))func_80065AE0,
+    (void(*)(void *))func_8001D424,
+    (void(*)(void *))func_8001D450,
+    (void(*)(void *))func_8001D480,
+    (void(*)(void *))func_8001D4AC,
+    (void(*)(void *))func_8001D4DC,
+    (void(*)(void *))func_800571F8,
+    (void(*)(void *))func_8001D600,
+    (void(*)(void *))func_8001D624,
+    (void(*)(void *))func_8001D6A4,
+    entity_update,
+    (void(*)(void *))func_80057320,
+    (void(*)(void *))func_8001D714,
+    (void(*)(void *))func_8001D950,
+    (void(*)(void *))func_8001DA28,
+    (void(*)(void *))func_8001DDF4,
+    0x00000000,
+    (void(*)(void *))func_8001E4A4,
+    (void(*)(void *, s32))func_80057384,
+    (void(*)(void *, s32 *))func_800573A8,
+    (void(*)(void *))func_80057444,
+    (void(*)(void *, s32, s32))func_8005748C,
+    func_800574C4,
+    (void(*)(void *, s32, s32))func_800574FC,
+    (void(*)(void *, s32, s32))func_800575B0,
+    (void(*)(void *))func_800575E0,
+    (void(*)(void *))func_80057610,
+    entity_notify_interaction,
+    entity_notify_interaction_done,
+    (void(*)(void *))func_80057C6C,
+    (void(*)(void *))func_80057C74,
+    (void(*)(void *))func_80057C7C,
+    (void(*)(void *))func_80065BF4,
+    (void(*)(void *))func_80065BFC,
+    (void(*)(void *))func_80065C2C,
+    (void(*)(void *))func_80065D64,
+    (void(*)(void *))func_80065DBC,
+    (void(*)(void *))func_80065DEC,
+    (void(*)(void *))func_80065FD8,
+    (void(*)(void *, s32))func_800660BC,
+    (void(*)(void *))func_8006613C,
+    (void(*)(void *))func_80066148,
+    (void(*)(void *))func_80066150,
+    entity_tick,
+    (void(*)(void *))func_800661CC,
+    (void(*)(void *))func_800661D4,
+    (void(*)(void *, s32))func_80066214,
+    (void(*)(void *))func_800662A8,
+    (void(*)(void *))func_800662B4,
+    (s32(*)(void *, s32, s32))func_800662BC,
+    func_80066340,
+    (void(*)(void *))func_80066748,
+    (void(*)(void *))func_800667B0,
+    entity_get_distance,
+    entity_get_trigger_ratio,
+    entity_get_mood_effect,
+    entity_get_unlock_effect,
+    entity_get_link_stage,
+    entity_get_event_video,
+    entity_enable_link,
+    entity_disable_link,
+    entity_set_triggered,
+    entity_start_behaviour,
+    entity_stop_behaviour,
+    entity_check_interaction,
+    entity_check_interaction_range,
+    entity_check_interaction_angle,
+    entity_check_link_trigger,
+    entity_check_link_proximity,
+};
+
+s32 D_80089C58[3] = { 0x00080001, 0x00010000, 0x00010000 };
+s32 D_80089C64[3] = { 0x00010000, 0x00010009, 0x00010000 };
+s32 D_80089C70[3] = { 0x00010000, 0x0001FFF7, 0x00010000 };
+s32 D_80089C7C[3] = { 0x00010000, 0x000100B4, 0x00010000 };
+s32 D_80089C88[3] = { 0x00010000, 0x0001005A, 0x00010000 };
+s32 D_80089C94[3] = { 0x00010000, 0x0001FFA6, 0x00010000 };
+s32 D_80089CA0[3] = { 0x00010000, 0x00010002, 0x00010000 };
+s32 D_80089CAC[3] = { 0x00010000, 0x0003FFFF, 0x00010000 };
+s32 D_80089CB8[3] = { 0x00010000, 0x0002FFFF, 0x00010000 };
+s32 D_80089CC4[3] = { 0x00010000, 0x00010000, 0x00010009 };
+s32 D_80089CD0[3] = { 0x00010000, 0x00010000, 0x00010001 };
+s32 D_80089CDC[3] = { 0x00010000, 0x00010000, 0x0001FFF7 };
+s32 D_80089CE8[3] = { 0x00010000, 0x0001FF88, 0x00010000 };
+s32 D_80089CF4[3] = { 0x00010032, 0x0001FF88, 0x0001001E };
+s32 D_80089D00[3] = { 0x00010000, 0x00010004, 0x00010000 };
+s32 D_80089D0C[3] = { 0x0001005A, 0x00010000, 0x00010000 };
+s32 D_80089D18[3] = { 0x00010000, 0x00010001, 0x00010000 };
+s32 D_80089D24[6] = { 0x00010000, 0x00010000, 0x0001FFA6, 0x00010000, 0x0001010E, 0x00010000 };
+s32 D_80089D3C[3] = { 0x00000000, 0x00000100, 0x00000000 };
+s32 D_80089D48[3] = { 0x00000000, 0xFFFFF000, 0x00000000 };
+s32 D_80089D54[3] = { 0x00000000, 0xFFFFFE00, 0x00000000 };
+s32 D_80089D60[3] = { 0x00000000, 0x00000040, 0x00000000 };
+s32 D_80089D6C[3] = { 0x00000000, 0x00000008, 0x00000000 };
+s32 D_80089D78[6] = { 0x00000000, 0xFFFFFFC0, 0x00000000, 0x00000000, 0xFFFFFFE0, 0x00000000 };
+s32 D_80089D90[3] = { 0x00000000, 0xFFFFFF00, 0x00000000 };
+s32 D_80089D9C[3] = { 0xFFFFFFC0, 0x00000000, 0x00000000 };
+s32 D_80089DA8[3] = { 0x00000000, 0x00000040, 0xFFFFFFC0 };
+s32 D_80089DB4[3] = { 0x00000000, 0xFFFFFA24, 0x00000400 };
+s32 D_80089DC0[3] = { 0x00000000, 0x00000000, 0xFFFFFF00 };
+s32 D_80089DCC[3] = { 0x00040001, 0x00040001, 0x00040001 };
+s32 D_80089DD8[3] = { 0x00020001, 0x00020001, 0x00020001 };
+s32 D_80089DE4[3] = { 0x00050004, 0x00050006, 0x00050005 };
+s32 D_80089DF0[3] = { 0x00010002, 0x00010002, 0x00010002 };
+s32 D_80089DFC[3] = { 0x0040FFFF, 0x0040FFFF, 0x0040FFFF };
+s32 D_80089E08[3] = { 0x00070008, 0x00070008, 0x00070008 };
+s32 D_80089E14[3] = { 0x00010001, 0x00010001, 0x00010001 };
+s32 D_80089E20[3] = { 0x00080001, 0x00080001, 0x00080001 };
+s32 D_80089E2C[3] = { 0x00080001, 0x00010002, 0x00080001 };
+s32 D_80089E38[3] = { 0x00010006, 0x00010006, 0x00010006 };
+s32 D_80089E44[3] = { 0x00050002, 0x00050002, 0x00050002 };
+s32 D_80089E50[3] = { 0x00010001, 0x00010002, 0x00010001 };
+s32 D_80089E5C[6] = { 0x00010001, 0x00010004, 0x00010001, 0x00040001, 0x00010001, 0x00020001 };
+s32 D_80089E74[3] = { 0x00010003, 0x00010003, 0x00010003 };
+s32 D_80089E80[3] = { 0x00200001, 0x00200001, 0x00200001 };
+u8 D_80089E8C[22] = { 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 };
+s16 D_80089EA2 = 0x0001;
+
+entity_prop_t g_ENTITY_TABLE[130] = {
+    { { 0, 2 }, 20, 0, 0, 0, 2, -13, 4, 1, 10, 0, entity_astronaut },
+    { { -2, 5 }, -1, 0, 0, 0, 1, -2, 0, -6, 10, 1, entity_gargoyle },
+    { { 0, 0 }, -100, 0, 0, 0, 1, -5, 1, 1, 0, 0, NULL },
+    { { 0, -3 }, -100, 0, 0, 0, 1, -6, 1, 1, 0, 0, NULL },
+    { { 0, -7 }, -100, 0, 0, 0, 1, -13, 1, 1, 0, 0, NULL },
+    { { -4, 4 }, -50, 0, 0, 0, 1, -14, 1, -2, 10, -1, entity_futon },
+    { { 0, 0 }, 100, 0, 0, 0, 0, 0, 0, 3, 0, -1, NULL },
+    { { -5, 0 }, 20, 3, -76, 5, 5, 0, 0, 3, 30, 5, entity_gargoyle_pit },
+    { { 3, 3 }, 100, 3, -76, 7, 7, 0, 0, 5, 0, 7, entity_elephant },
+    { { -3, -1 }, 20, 1, -76, 12, 6, -3, 3, 3, 30, 12, entity_minotaur },
+    { { -7, 3 }, 50, 0, -76, 0, 10, 0, 0, 3, 60, 0, entity_giant_minotaur },
+    { { 3, 0 }, 9, 0, -1, 0, 5, 8, 4, 3, 20, 0, entity_maiko_giant },
+    { { -3, -5 }, 5, 0, 0, 0, 3, 0, 0, 2, 0, 0, entity_old_woman },
+    { { -5, 5 }, 100, 0, 0, 0, 5, 0, 4, 3, 30, 5, entity_bell_striker },
+    { { 0, 1 }, -100, 0, 120, 0, 5, 0, 0, 3, 20, 5, entity_boatman },
+    { { -2, -1 }, -20, 0, 0, 0, 4, 0, 0, 3, 30, -5, entity_drumstick },
+    { { -3, 2 }, 50, 1, 24, 3, 3, 0, 0, 1, 30, 3, entity_fox },
+    { { 1, 0 }, 100, 0, 0, 0, 5, 0, 0, 3, 0, 0, entity_halo },
+    { { 0, 0 }, -100, 0, 0, 0, 2, 0, 0, 1, 0, 0, NULL },
+    { { 2, 3 }, -50, 1, 30, 7, 5, -2, 2, 3, 30, 7, entity_tea_doll },
+    { { 0, -4 }, 8, 1, -76, 12, 5, -2, 1, 3, 30, 12, entity_buddha },
+    { { -1, -2 }, 20, 0, -1, 0, 6, -4, 4, 3, 30, 0, entity_ox_cart },
+    { { 1, 4 }, -20, 0, 0, 0, 2, -5, 2, 1, 0, 1, entity_peacock },
+    { { 5, 1 }, -20, 1, -1, 8, 1, 0, 0, 1, 0, 8, entity_tennyo },
+    { { 2, -7 }, 20, 0, 0, 0, 5, 0, 0, 3, 30, 0, entity_bird },
+    { { -5, -1 }, 50, 0, -76, 0, 3, 0, 0, 3, 30, 3, entity_rocket },
+    { { -3, 1 }, 7, 1, 60, 10, 7, 0, 0, 3, 30, 10, entity_horse },
+    { { 8, -1 }, -100, 1, 60, 8, 8, 0, 0, 5, 30, 8, entity_ufo },
+    { { 7, 1 }, 20, 0, 0, 0, -2, -11, 1, 1, 0, 0, NULL },
+    { { -8, 1 }, 100, 0, 0, 0, 12, 0, 0, 5, 0, 0, entity_rainbow },
+    { { 0, -1 }, -50, 0, -76, 0, 5, 0, 0, 3, 0, 3, entity_boat_bird },
+    { { 2, -5 }, -100, 1, 120, 1, 1, -3, 0, 1, 30, 1, entity_demon_king },
+    { { 0, 4 }, 50, 1, 0, 15, 15, 0, 0, 5, 0, 15, entity_sailboat },
+    { { 2, 8 }, 8, 1, -76, 12, 2, -8, 1, 2, 30, 12, entity_turtle_giant },
+    { { -8, 4 }, -50, 0, 60, 3, 3, -14, 2, 1, 0, 3, entity_shark },
+    { { 6, 0 }, -20, 0, 0, 0, 2, 0, 0, 1, 0, 0, entity_fish },
+    { { 0, 7 }, 7, 1, 2, 17, 12, 0, 0, 8, 0, 17, entity_mirage },
+    { { -2, 6 }, 100, 1, 120, 6, 6, 0, 0, 5, 0, 6, entity_balloon },
+    { { -5, 2 }, -100, 1, 120, 10, 10, 0, 0, 3, 30, 10, entity_opera_singer },
+    { { -1, -1 }, 20, 1, 120, 20, 20, -5, 1, 3, 20, 20, entity_mushroom },
+    { { 3, 3 }, -100, 0, -76, 0, 4, -14, 2, 3, 30, 0, entity_soldier },
+    { { -9, 5 }, -50, 1, 0, 15, 15, -10, 8, 3, 50, 15, entity_locomotive_factory },
+    { { 2, 1 }, 1, 0, 120, 0, 4, 0, 0, 4, 30, 4, entity_marching_band },
+    { { -3, 0 }, 20, 1, -76, 6, 6, -4, 2, 2, 10, 6, entity_bear },
+    { { 0, -2 }, -20, 1, -76, 6, 6, -7, 2, 2, 10, 6, entity_rabbit },
+    { { 5, 3 }, -20, 1, 0, 8, 6, 0, 0, 3, 10, 8, entity_prince_princess },
+    { { 3, -1 }, -20, 1, 0, 2, 2, -6, 2, 1, 20, 2, entity_human_face_flower },
+    { { 9, 9 }, -50, 0, 0, 0, 1, 0, 2, 1, 30, 0, entity_ferris_wheel },
+    { { -4, -4 }, 50, 1, 90, 1, 1, -9, 1, 1, 30, 1, entity_lips_giant },
+    { { -2, -6 }, -100, 1, 30, 5, 1, -3, 0, 1, 30, 5, entity_locomotive_kyoto },
+    { { 9, 0 }, 20, 1, 0, 6, 6, 0, 0, 1, 0, 6, entity_whale },
+    { { 1, -1 }, -50, 1, 30, 6, 6, -5, 1, 3, 20, 6, entity_standing_penguin },
+    { { -3, 1 }, -50, 1, 30, 8, 8, -5, 1, 3, 30, 8, entity_sliding_penguin },
+    { { 0, 0 }, 50, 0, 0, 0, 4, 0, 0, 2, 30, 0, NULL },
+    { { 0, 0 }, -50, 0, 0, 0, 4, 0, 0, 2, 30, 0, NULL },
+    { { 7, 0 }, 100, 1, 0, 15, 8, -13, 2, 2, 20, 15, entity_hopscotch_girl },
+    { { 0, -4 }, -100, 0, 0, 0, 5, -6, 2, 3, 0, 0, entity_corpse },
+    { { -9, -3 }, -50, 1, 0, 15, 15, 0, 3, 3, 30, 15, entity_airplane },
+    { { -3, -6 }, -20, 1, 0, 1, 1, 0, 0, 1, 30, 1, entity_hanged_woman },
+    { { -3, 1 }, -50, 1, -76, 15, 8, 0, 0, 3, 30, 15, entity_starship },
+    { { 0, -9 }, -100, 0, 0, 0, 5, 0, 0, 3, 0, 5, NULL },
+    { { 5, -1 }, 20, 1, 0, 10, 1, -6, 3, 3, 30, 10, entity_kicking_man },
+    { { -4, -5 }, -1, 1, 60, 2, 2, 0, 5, 1, 10, 2, entity_triangle_head },
+    { { 0, 8 }, 20, 2, 1, 1, 3, 0, 0, 2, 0, 0, NULL },
+    { { 2, 1 }, 50, 0, 0, 0, 12, 0, 0, 5, 40, 0, entity_ship },
+    { { 1, 0 }, -20, 0, -1, 0, 3, -3, 2, 1, 0, 0, entity_maiko_palace },
+    { { -4, -1 }, 20, 0, 0, 0, 3, -8, 1, 1, 20, 0, entity_acrobats },
+    { { 0, 0 }, -50, 0, -36, 0, 3, 0, 0, 1, 0, 0, entity_light },
+    { { 0, -1 }, 50, 1, -76, 5, 5, 12, 0, 1, 30, 3, entity_dog },
+    { { 0, 0 }, -4, 0, 0, 0, 3, 0, 0, 3, 100, 3, entity_gears },
+    { { 2, 2 }, 50, 0, -76, 0, 10, 0, 0, 6, 30, 0, entity_ring },
+    { { 9, 0 }, 100, 1, -76, 6, 3, -3, 1, 1, 10, 6, entity_hoop_girl },
+    { { 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
+    { { 4, 0 }, 9, 0, 0, 0, 1, 0, 0, 1, 30, -1, entity_small_room },
+    { { 0, 1 }, 100, 0, 0, 0, 1, -4, 0, 1, 30, 1, entity_clouds_wind },
+    { { 0, 0 }, 100, 0, 0, 0, 3, 13, 0, 1, 10, 3, entity_window },
+    { { 6, 2 }, -20, 1, 60, 17, 3, -5, 6, 2, 0, 17, entity_flower },
+    { { 9, 0 }, 100, 0, 60, 0, 1, -5, 1, -2, 10, 1, entity_bear_apartment },
+    { { -2, 3 }, 20, 0, 0, 0, 1, 0, 0, 1, 10, 0, entity_paper_sumo },
+    { { -6, 7 }, -6, 0, 0, 0, 2, 0, 1, 1, 20, 0, entity_orrery },
+    { { 5, 5 }, -100, 0, 120, 0, 2, -3, 4, 1, 10, 1, entity_face },
+    { { -3, 3 }, 50, 0, -76, 0, 1, 127, 0, 1, 30, 0, entity_lion },
+    { { 4, -5 }, -20, 0, 0, 0, 3, -5, 0, 1, 0, 1, entity_dress_woman },
+    { { 3, -1 }, -50, 1, 0, 1, 1, 0, 0, 3, 10, 1, entity_can },
+    { { -5, 5 }, -50, 1, 120, 3, 3, 0, 3, 3, 30, 3, entity_car_water },
+    { { 3, 0 }, 20, 1, 0, 8, 1, -10, 3, 1, 0, 1, entity_gunman },
+    { { 0, -8 }, -100, 1, 0, 10, 3, 0, 0, 1, 0, 3, entity_gunman_victim },
+    { { 3, 0 }, -50, 0, 0, 0, 3, 8, 0, 1, 20, 0, entity_kemari_boy_west },
+    { { 0, 3 }, -50, 0, 0, 0, 3, 11, 0, 1, 20, 0, entity_kemari_boy_east },
+    { { 0, -7 }, 0, 0, 0, 0, 2, 0, 5, -4, 10, 1, entity_trash_can },
+    { { 0, 5 }, -1, 0, 0, 0, 1, -9, 1, -2, 10, -1, entity_television },
+    { { 0, 1 }, -100, 1, 0, 1, 1, -6, 0, -4, 10, 1, entity_big_face_man_hidden },
+    { { -3, -4 }, -1, 0, 0, 0, 1, -6, 2, -8, 10, 0, entity_big_face_man },
+    { { 2, 8 }, 50, 0, 60, 0, 3, 0, 0, 1, 20, 3, entity_yokai },
+    { { 0, 5 }, 100, 0, 40, 8, 8, -11, 3, 3, 30, 0, entity_tengu },
+    { { 4, 2 }, -100, 1, 20, 3, 1, 0, 0, 2, 10, 1, entity_fetus_walk },
+    { { 2, 0 }, -100, 0, 0, 0, 2, -14, 2, 1, 20, 0, entity_fetus_jump },
+    { { 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
+    { { -10, -10 }, 20, 0, -76, 0, 1, 0, 0, 1, 0, 0, entity_gray_man },
+    { { 10, 10 }, -20, 0, 0, 0, -2, 0, 0, 1, 30, -1, NULL },
+    { { -10, -10 }, 100, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
+    { { 9, 9 }, 100, 1, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
+    { { -5, 0 }, 20, 3, -76, 5, 1, -13, 0, 3, 30, 5, entity_winged_minotaur },
+    { { -6, 7 }, 100, 1, -76, 5, 5, -10, 0, 2, 0, 5, entity_airship },
+    { { 2, 2 }, -4, 1, 0, 2, 2, 0, 0, 1, 0, 2, entity_maiko_small },
+    { { 0, -3 }, -100, 0, 60, 0, 2, 0, 0, 1, 0, 0, entity_bed_bone_dead },
+    { { 0, 5 }, -1, 0, 60, 0, 1, 0, 0, -2, 10, 1, entity_yokai_bartender },
+    { { 0, 5 }, -1, 0, 60, 0, 1, -2, 1, -2, 10, -1, entity_yokai },
+    { { 9, 0 }, 100, 1, -76, 6, 3, -3, 1, 1, 10, 6, entity_hoop_girl_giant },
+    { { 3, 3 }, 100, 0, -76, 0, 7, -2, 4, 5, 0, 0, entity_elephant_small },
+    { { 3, 0 }, 9, 0, 120, 0, 5, -13, 1, 3, 0, 0, entity_maiko_bridge },
+    { { -9, 5 }, -50, 1, 0, 15, 15, -4, 8, 3, 50, 15, entity_locomotive_natural },
+    { { 8, 8 }, 100, 0, -76, 0, 15, -6, 2, 3, 50, 0, NULL },
+    { { 1, -1 }, -50, 1, 30, 6, 6, -5, 1, 3, 20, 6, entity_question_mark_penguin },
+    { { 1, 1 }, -80, 1, 90, 6, 6, -5, 1, 3, 20, 6, entity_standing_penguin_flock },
+    { { -3, -6 }, -20, 1, 0, 1, 1, -6, 1, 1, 30, 1, entity_hanged_woman_paralysis },
+    { { -3, -6 }, -20, 1, 0, 1, 1, -6, 3, 1, 30, 1, NULL },
+    { { -4, -5 }, -1, 1, 60, 8, 8, -11, 8, 3, 10, 8, entity_triangle_head_giant },
+    { { 6, 0 }, -20, 0, 0, 0, 2, -3, 8, 1, 0, 0, entity_fish_giant },
+    { { 7, 1 }, 20, 0, 0, 0, -10, 0, 0, 5, 0, 0, entity_siblings_flock },
+    { { -6, 8 }, 20, 1, 120, 8, 1, 8, 0, 1, 30, 8, entity_lion },
+    { { 1, 1 }, 20, 1, 90, 8, 3, -4, 1, 3, 30, 8, entity_turtle_small },
+    { { 0, -1 }, -50, 1, 90, 3, 5, 0, 0, 3, 0, 3, entity_boat_bird },
+    { { -7, 6 }, 8, 0, -116, 0, 3, 0, 0, 3, 0, 3, entity_car },
+    { { 4, 4 }, -100, 0, 120, 0, 5, 0, 0, 3, 20, 5, NULL },
+    { { -5, 6 }, 9, 1, -1, 5, 5, -14, 1, 3, 20, 5, entity_maiko_plain },
+    { { -5, 4 }, 9, 0, -116, 0, 5, -4, 3, 3, 0, 0, entity_car },
+    { { 5, 1 }, -20, 0, 120, 0, 3, -5, 1, 1, 0, 0, NULL },
+    { { -4, -4 }, 50, 1, 0, 1, 1, -14, 1, 1, 0, 1, entity_lips_small },
+    { { 2, -3 }, -20, 0, 120, 0, 2, -14, 1, 1, 0, 1, entity_paper_sumo_wait },
+};
+
+
+
 extern void *D_8008AC14;
 extern void *D_8008AC0C;
 extern void *D_8008AC1C;
 
-extern entity_prop_t g_ENTITY_TABLE[];
 
 void entity_check_event_video(entity_t *This, s32 Unk2);
 s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4);
+s32 entity_is_facing_target(entity_t *This, s32 Unk2);
+void entity_set_aim_pose(s32 *arg1);
+void entity_set_fall_pose(s32 *arg1);
+void entity_bear_rabbit_common(entity_t *This);
+void entity_locomotive_common(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32 arg4);
+void func_8001EACC(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4);
+s32 sound_entity_init(void *This, s32 *Unk2, s32 Unk3, s32 Unk4, void (*callback)(entity_t *, s32 *));
+void sound_entity_update(void *This, s32 *Ctx);
+void sound_entity_stop(void **This, s32 *Unk2);
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     entity_t *allocated = (entity_t *) memory_allocate_mem(0x108);
@@ -72,8 +520,8 @@ entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
     return NULL;
 }
 
-entity_vtable_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Unk4) {
-    if (class_55DD4_get_vtable()->class_55DD4_construct(This, Unk3, Unk4)) {
+entity_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Unk4) {
+    if (actor_get_vtable()->actor_construct(This, Unk3, Unk4)) {
         This->vtable = entity_get_vtable();
         This->m_EntityID = EntityID;
         This->m_EntityContext = 0;
@@ -121,10 +569,10 @@ void entity_cleanup(entity_t *This) {
     }
 
     if (This->m_Unk64) {
-        (*(void (**)(s32))(*(s32 *) This->m_Unk64 + 4))(This->m_Unk64);
+        This->m_Unk64->vtable->Destroy(This->m_Unk64);
     }
 
-    class_55DD4_get_vtable()->class_55DD4_cleanup(This);
+    actor_get_vtable()->actor_cleanup(This);
 }
 
 void entity_init(entity_t *This) {
@@ -140,10 +588,10 @@ void entity_start(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
     if (This->m_Unk2 == 0) {
         s32 entity_id;
 
-        class_55DD4_get_vtable()->Unk18(This, Unk2, Unk3, Unk4, Unk5);
+        actor_get_vtable()->Unk18(This, Unk2, Unk3, Unk4, Unk5);
 
         entity_id = This->m_EntityID;
-        This->m_Unk18 = Unk4;
+        This->m_LinkTarget = (entity_t *) Unk4;
 
         if (g_ENTITY_TABLE[entity_id].behaviour == 0) {
             This->vtable->entity_enable_link(This);
@@ -158,8 +606,8 @@ void entity_start(entity_t *This, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
 void entity_stop(entity_t *This) {
     if (This->m_Unk2) {
         This->vtable->entity_disable_link(This);
-        class_55DD4_get_vtable()->Unk19(This);
-        This->m_Unk18 = 0;
+        actor_get_vtable()->Unk19(This);
+        This->m_LinkTarget = 0;
     }
 }
 
@@ -171,7 +619,7 @@ void entity_update(entity_t *This, s32 Unk2, s32 Unk3) {
         This->vtable->entity_check_link_proximity(This);
     }
     This->vtable->entity_check_interaction_angle(This);
-    class_55DD4_get_vtable()->Unk37(This, Unk2, Unk3);
+    actor_get_vtable()->Unk37(This, Unk2, Unk3);
 }
 
 void entity_notify_interaction(entity_t *This, s32 Unk2, s32 Unk3) {
@@ -180,7 +628,7 @@ void entity_notify_interaction(entity_t *This, s32 Unk2, s32 Unk3) {
     v5 = g_ENTITY_TABLE[This->m_EntityID].link_stage;
 
     if (((u32) (Unk3 - 2) >= 7U) || (v5 > 0)) {
-        class_55DD4_get_vtable()->Unk54(This, Unk2, Unk3);
+        actor_get_vtable()->Unk54(This, Unk2, Unk3);
 
         if ((Unk3 == 4) && (v5 > 0)) {
             if (v5 != 127) {
@@ -197,14 +645,14 @@ void entity_notify_interaction(entity_t *This, s32 Unk2, s32 Unk3) {
 }
 
 void entity_notify_interaction_done(entity_t *This, s32 Unk2, s32 Unk3) {
-    class_55DD4_get_vtable()->Unk55(This, Unk2, Unk3);
+    actor_get_vtable()->Unk55(This, Unk2, Unk3);
     if (Unk3 == 4) {
         This->vtable->entity_disable_link(This);
     }
 }
 
 void entity_tick(entity_t *This) {
-    helper_1_update_entity(This->m_Helper, &This->m_EntityContext);
+    sound_entity_update(This->m_Helper, &This->m_EntityContext);
     ++This->m_Tick;
 }
 
@@ -272,7 +720,7 @@ s32 entity_get_trigger_ratio(entity_t *This) {
         s32 array_val_shifted = (s32) g_ENTITY_TABLE[This->m_EntityID].proximity << 11;
 
         if (array_val_shifted >= vcall_result) {
-            s32 temp_quotient = array_val_shifted / This->m_Unk43;
+            s32 temp_quotient = array_val_shifted / This->m_ProximityScale;
 
             return vcall_result / temp_quotient;
         }
@@ -306,7 +754,7 @@ s32 entity_get_event_video(entity_t *This) {
 void entity_enable_link(entity_t *This) {
     This->vtable->Unk23(This, 1);
     This->m_LinkEnabled = 1;
-    This->m_Unk8 = 0;
+    This->m_InteractionTimer = 0;
 }
 
 void entity_disable_link(entity_t *This) {
@@ -324,18 +772,18 @@ void entity_set_triggered(entity_t *This, s32 Value) {
 }
 
 void entity_start_behaviour(entity_t *This) {
-    helper_1_set_entity(This->m_Helper, &This->m_EntityContext, This->m_EntityID + 1, This,
+    sound_entity_init(This->m_Helper, &This->m_EntityContext, This->m_EntityID + 1, This,
                         g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
 
-    This->vtable->Unk74(This); // This->m_Unk35 = 1
-    This->vtable->Unk67(This); // This->m_Unk34 = 1
+    This->vtable->Unk74(This); // This->m_AnimPlaying = 1
+    This->vtable->Unk67(This); // This->m_ModelLoaded = 1
 
     This->m_Tick = 0;
     This->m_BehaviourActive = 1;
 }
 
 void entity_stop_behaviour(entity_t *This) {
-    sound_update_entity(This->m_Helper, &This->m_EntityContext);
+    sound_entity_stop(This->m_Helper, &This->m_EntityContext);
     This->vtable->Unk75(This);
     This->vtable->Unk68(This);
     This->m_BehaviourActive = 0;
@@ -406,7 +854,7 @@ s32 entity_check_interaction_range(entity_t *This) {
 
         if ((data_ptr[4] != 0) && (data_ptr[4] != 3)) {
             if (data_ptr[4] >= 10) {
-                should_call = (This->m_Unk8 == (data_ptr[4] * 15));
+                should_call = (This->m_InteractionTimer == (data_ptr[4] * 15));
             } else {
                 s8 val5 = ((s8 *) data_ptr)[5];
 
@@ -528,8 +976,7 @@ s32 entity_is_facing_target(entity_t *This, s32 Unk2) {
         s32 call_result;
         s32 ret_val;
 
-        call_result =
-            ((s32(*)(entity_t *, void *, s32))This->vtable->entity_get_distance)(This, ptr_from_unk36, v2);
+        call_result = This->vtable->entity_get_distance(This, ptr_from_unk36);
 
         if (call_result < Unk2) {
             ret_val = 1;
@@ -653,7 +1100,7 @@ void entity_futon(entity_t *This, s32 *Unk) {
 
 void entity_gargoyle_pit(entity_t *This, s32 *arg1) {
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    if (This->m_Unk32 == (This->m_Unk31 / 2)) {
+    if (This->m_Frame == (This->m_Duration / 2)) {
         arg1[7] = 7;
         arg1[8] = -2;
         arg1[12] = 3;
@@ -680,7 +1127,7 @@ void entity_gargoyle_pit(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_elephant(entity_t *This) {
+void entity_elephant(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DF0);
     This->vtable->Unk46(This, &D_80089D78);
 }
@@ -690,7 +1137,7 @@ void entity_minotaur(entity_t *This, s32 *arg1) {
     s32 half;
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk31;
+    temp = This->m_Duration;
     half = ((s32)(temp + (temp >> 31))) >> 1;
     if ((arg1[1] % half) == 0) {
         arg1[7] = 0xA;
@@ -720,7 +1167,7 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
 
     *(s16 *)&This->m_Unk17 = -0x14;
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    utemp = This->m_Unk31;
+    utemp = This->m_Duration;
     half = ((s32)(utemp + (utemp >> 31))) >> 1;
     ptr = NULL;
     if ((arg1[1] % half) == 0) {
@@ -770,12 +1217,12 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
         This->vtable->Unk16(This, 0, ptr);
     }
     This->vtable->Unk51(This, *(s16 *)&This->m_Unk17, 0);
-    if ((This->m_State != 0xC) && (This->m_Unk9 != 0)) {
+    if ((This->m_State != 0xC) && (This->m_FrameOffsetX != 0)) {
         This->vtable->Unk50(This, -0xC8, 0);
     }
 }
 
-void entity_old_woman(entity_t *This) {
+void entity_old_woman(entity_t *This, s32 *arg1) {
     s32 count;
 
     if (This->m_Tick == 0) {
@@ -788,7 +1235,7 @@ void entity_old_woman(entity_t *This) {
     }
     if (This->m_State == 0xB) {
         if (This->vtable->entity_get_distance(This, This->m_DreamSys) < 0xA00) {
-            (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk18 + 0x138))(This->m_Unk18, 1, 1);
+            This->m_LinkTarget->vtable->set_motion_blend(This->m_LinkTarget, 1, 1);
             This->m_Tick = 1;
             This->m_State = 0xC;
         }
@@ -810,7 +1257,7 @@ void entity_bell_striker(entity_t *This, s32 *arg1) {
     if (temp == 0) {
         arg1[7] = 0xC;
         This->m_State++;
-    } else if (temp >= (This->m_Unk31 - 1)) {
+    } else if (temp >= (This->m_Duration - 1)) {
         arg1[1] = -1;
     }
     if (This->m_State == 0x24) {
@@ -823,7 +1270,7 @@ void entity_bell_striker(entity_t *This, s32 *arg1) {
 
 void entity_boatman(entity_t *This, s32 *Unk) {
     Unk[4] = This->vtable->entity_get_trigger_ratio(This);
-    if (This->m_Unk32 == 0xA) {
+    if (This->m_Frame == 0xA) {
         Unk[7] = 0xD;
     }
     This->vtable->Unk48(This, -0xA, 0);
@@ -836,7 +1283,7 @@ void entity_drumstick(entity_t *This, s32 *Unk) {
     }
 }
 
-void entity_fox(entity_t *This) {
+void entity_fox(entity_t *This, s32 *arg1) {
     s32 state;
     s32 roll;
     s32 *clip;
@@ -875,7 +1322,7 @@ void entity_fox(entity_t *This) {
     This->vtable->Unk23(This, (rand() % 7) == 0);
 }
 
-void entity_halo(entity_t *This) {
+void entity_halo(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DD8);
 }
 
@@ -912,7 +1359,7 @@ void entity_ox_cart(entity_t *This, s32 *arg1) {
     s32 rem;
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk31;
+    temp = This->m_Duration;
     half = ((s32)(temp + (temp >> 31))) >> 1;
     rem = arg1[1] % half;
     if (rem == 0) {
@@ -923,11 +1370,11 @@ void entity_ox_cart(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void entity_peacock(entity_t *This) {
+void entity_peacock(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
 }
 
-void entity_tennyo(entity_t *This) {
+void entity_tennyo(entity_t *This, s32 *arg1) {
     s32 count;
 
     func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
@@ -1007,7 +1454,7 @@ void entity_rocket(entity_t *This, s32 *arg1) {
 }
 
 void entity_horse(entity_t *This, s32 *arg1) {
-    if ((arg1[1] % This->m_Unk31) == 0) {
+    if ((arg1[1] % This->m_Duration) == 0) {
         arg1[4] = This->vtable->entity_get_trigger_ratio(This);
         arg1[7] = 0x1A;
     }
@@ -1033,11 +1480,11 @@ void entity_ufo(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_siblings_flock(entity_t *This) {
+void entity_siblings_flock(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void entity_rainbow(entity_t *This) {
+void entity_rainbow(entity_t *This, s32 *arg1) {
     if (This->m_Tick == 0) {
         if (This->m_DreamSys->vtable->dream_sys_get_dream_color(This->m_DreamSys) == DREAM_COLOR_WHITE) {
             This->vtable->Unk17(This, 1, &D_80089E74);
@@ -1050,9 +1497,8 @@ void entity_rainbow(entity_t *This) {
     }
 }
 
-void entity_boat_bird(entity_t *This) {
+void entity_boat_bird(entity_t *This, s32 *arg1) {
     s32 temp;
-    s32 a1;
 
     if (This->m_State == 0) {
         if (This->m_DreamSys->vtable->dream_sys_get_dream_color(This->m_DreamSys) == DREAM_COLOR_BLUE) {
@@ -1091,13 +1537,13 @@ void entity_demon_king(entity_t *This, s32 *arg1) {
         arg1[12] = 0xD;
         arg1[17] = 0xD;
     }
-    if (This->m_Tick == This->m_Unk31) {
+    if (This->m_Tick == This->m_Duration) {
         This->vtable->Unk75(This);
         This->vtable->Notify(This, ENTITY_NOTIFY_LINK);
     }
 }
 
-void entity_sailboat(entity_t *This) {
+void entity_sailboat(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -30, 0);
 }
 
@@ -1114,12 +1560,12 @@ void entity_turtle_giant(entity_t *This, s32 *arg1) {
         }
     }
     This->vtable->Unk51(This, -0x1E, 0);
-    if (This->m_Unk9 != 0) {
+    if (This->m_FrameOffsetX != 0) {
         This->vtable->Unk50(This, -0xC8, 0);
     }
 }
 
-void entity_shark(entity_t *This) {
+void entity_shark(entity_t *This, s32 *arg1) {
     s32 count;
 
     count = This->m_Tick;
@@ -1140,7 +1586,7 @@ void entity_shark(entity_t *This) {
     }
 }
 
-void entity_fish(entity_t *This) {
+void entity_fish(entity_t *This, s32 *arg1) {
     s32 rem;
     s32 arg;
     s32 nudge;
@@ -1174,7 +1620,7 @@ void entity_fish(entity_t *This) {
     }
 }
 
-void entity_mirage(entity_t *This) {
+void entity_mirage(entity_t *This, s32 *arg1) {
     if (This->m_State == 0) {
         This->vtable->Unk17(This, 1, (rand() & 1) ? &D_80089DF0 : &D_80089E38);
         This->m_State = 0xB;
@@ -1185,7 +1631,7 @@ void entity_mirage(entity_t *This) {
     }
 }
 
-void entity_balloon(entity_t *This) {
+void entity_balloon(entity_t *This, s32 *arg1) {
     This->vtable->Unk50(This, -90, 0);
 }
 
@@ -1251,7 +1697,7 @@ void entity_soldier(entity_t *This, s32 *arg1) {
         This->vtable->Unk16(This, 0, ptr);
     }
     This->vtable->Unk51(This, -0x1E, 0);
-    if (This->m_Unk9 != 0) {
+    if (This->m_FrameOffsetX != 0) {
         This->vtable->Unk50(This, -0xC8, 0);
     }
 }
@@ -1288,7 +1734,7 @@ void entity_marching_band(entity_t *This, s32 *arg1) {
         This->vtable->Unk74(This);
         arg1[4] = 0;
         arg1[7] = 5;
-    } else if ((temp % ((This->m_Unk31 * 3) + 0x14)) == 0) {
+    } else if ((temp % ((This->m_Duration * 3) + 0x14)) == 0) {
         This->vtable->Unk75(This);
         arg1[7] = -2;
     }
@@ -1299,7 +1745,7 @@ void entity_bear(entity_t *This, s32 *arg1) {
 
     entity_bear_rabbit_common(This);
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk32;
+    temp = This->m_Frame;
     if ((temp == 0) || (temp == 0xF)) {
         arg1[7] = 0x12;
         arg1[12] = 0x12;
@@ -1315,7 +1761,7 @@ void entity_rabbit(entity_t *This, s32 *arg1) {
 
     entity_bear_rabbit_common(This);
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk32;
+    temp = This->m_Frame;
     if ((temp == 7) || (temp == 0x16)) {
         arg1[7] = 3;
     }
@@ -1325,8 +1771,7 @@ void entity_rabbit(entity_t *This, s32 *arg1) {
     } else if ((u32)(temp - 0x141) < 0x13U) {
         This->vtable->Unk16(This, 0, &D_80089C70);
     } else if (temp >= 0x141) {
-        ((void (*)(void *, s32, s32))This->vtable->Unk49)(
-            This, (rand() & 1) ? 0x80 : -0x80, 1);
+        This->vtable->Unk49(This, (rand() & 1) ? 0x80 : -0x80, 1);
         This->vtable->Unk16(
             This, 0, (rand() & 3) ? &D_80089C70 : &D_80089C64);
     }
@@ -1348,7 +1793,7 @@ void entity_bear_rabbit_common(entity_t *This) {
     }
 }
 
-void entity_prince_princess(void) {
+void entity_prince_princess(entity_t *This, s32 *arg1) {
 }
 
 void entity_human_face_flower(entity_t *This, s32 *arg1) {
@@ -1379,7 +1824,7 @@ void entity_human_face_flower(entity_t *This, s32 *arg1) {
  * entity_get_event_video by dream_sys_instance_effects_on_journal, stored in
  * the dream_sys cinematic field at +0x168, and game_flow_play_special_day then
  * plays FILM\EVENT2.STR (low half -1 -> get_event_movie_path). */
-void entity_ferris_wheel(entity_t *This) {
+void entity_ferris_wheel(entity_t *This, s32 *arg1) {
     s32 temp;
 
     if (This->m_Triggered != 0) {
@@ -1411,7 +1856,7 @@ void entity_ferris_wheel(entity_t *This) {
 void entity_lips_giant(entity_t *This, s32 *out) {
     s32 angle;
 
-    if (This->m_Unk32 == 0x26) {
+    if (This->m_Frame == 0x26) {
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
         out[4] = This->vtable->entity_get_trigger_ratio(This);
         out[7] = 6;
@@ -1486,8 +1931,8 @@ void entity_locomotive_kyoto(entity_t *This, s32 *arg1) {
 void entity_whale(entity_t *This, s32 *arg1) {
     s32 temp_a0;
 
-    if (This->m_Tick < (This->m_Unk31 * 5)) {
-        temp_a0 = This->m_Unk32;
+    if (This->m_Tick < (This->m_Duration * 5)) {
+        temp_a0 = This->m_Frame;
         if ((temp_a0 == 0xF) || (temp_a0 == 0x46)) {
             arg1[4] = 0;
             arg1[7] = 7;
@@ -1558,7 +2003,7 @@ void entity_hopscotch_girl(entity_t *This, s32 *arg1) {
     s32 var_s0;
     s32 r;
 
-    var_s0 = This->m_Unk32;
+    var_s0 = This->m_Frame;
     if (This->m_Tick == 0) {
         r = rand();
         if (r == ((r / 3) * 3)) {
@@ -1577,7 +2022,7 @@ void entity_hopscotch_girl(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_corpse(entity_t *This) {
+void entity_corpse(entity_t *This, s32 *arg1) {
     if ( !This->m_Tick ) {
         This->vtable->Unk50(This, -200, 0);
     }
@@ -1596,7 +2041,7 @@ void entity_airplane(entity_t *This, s32 *arg1) {
     }
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     if (This->m_State != 0) {
-        step = This->m_Unk32;
+        step = This->m_Frame;
         if (step < 0x1E) {
             arg1[7] = 0xC;
             arg1[8] = -1;
@@ -1614,7 +2059,7 @@ void entity_airplane(entity_t *This, s32 *arg1) {
         if (step == 0x30) {
             if (entity_check_proximity(This, This->m_Transform + 24, 0xF, 0xA) != 0) {
                 if (entity_create_effect(This, NULL, NULL, EFFECT_COLOR_STEP_NORMAL, 0) != NULL) {
-                    This->m_Effect->vtable->Unk52(This->m_Effect, This->m_Unk19, 4, 0);
+                    This->m_Effect->vtable->Unk52(This->m_Effect, This->m_EffectColor, 4, 0);
                 }
                 if (rand() & 1) {
                     This->vtable->Notify(This, ENTITY_NOTIFY_LINK_VIDEO);
@@ -1715,7 +2160,7 @@ void entity_hanged_woman(entity_t *This, s32 *arg1) {
             This->vtable->Unk16(This, 1, &D_80089D24);
             This->vtable->Unk49(This, 0x960, 0);
             This->vtable->Unk50(This, 0x5DC, 0);
-            held = ((entity_t **)This->m_Unk27)[1];
+            held = This->m_Unk27[1];
             held->vtable->Unk23(held, 0);
             This->m_State = 1;
         }
@@ -1810,12 +2255,12 @@ void entity_starship(entity_t *This, s32 *arg1) {
     }
     This->vtable->Unk48(This, -0x80, 0);
     if ((This->m_State == 0xC) && (This->m_Tick == 0x12C)) {
-        (*(void (**)(s32, s32, s32))(*(s32 *)This->m_Unk18 + 0x138))(This->m_Unk18, 1, 1);
+        This->m_LinkTarget->vtable->set_motion_blend(This->m_LinkTarget, 1, 1);
     }
 }
 
 void entity_kicking_man(entity_t *This, s32 *Unk) {
-    if (This->m_Unk32 == 30) {
+    if (This->m_Frame == 30) {
         Unk[7] = 18;
         Unk[4] = 0;
         Unk[8] = -1;
@@ -1827,7 +2272,7 @@ void entity_triangle_head(entity_t *This, s32 *arg1) {
     s32 choice;
     entity_t *link;
 
-    if ((This->m_Unk32 % 30) == 0) {
+    if ((This->m_Frame % 30) == 0) {
         arg1[7] = 3;
         arg1[4] = 0;
         arg1[8] = -2;
@@ -1855,8 +2300,8 @@ func_80061C2C_state:
                 arg1[4] = 0;
                 arg1[13] = -1;
                 if (rand() & 1) {
-                    link = (entity_t *)This->m_Unk18;
-                    link->vtable->Unk77(link, -1, 0);
+                    link = This->m_LinkTarget;
+                    link->vtable->set_motion_blend(link, -1, 0);
                 }
                 This->m_Tick = 0;
                 This->m_State = 0xA;
@@ -1889,7 +2334,7 @@ void entity_ship(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void entity_maiko_palace(entity_t *This) {
+void entity_maiko_palace(entity_t *This, s32 *arg1) {
     s32 r;
 
     if (This->m_Tick == 0) {
@@ -1916,7 +2361,7 @@ void entity_acrobats(entity_t *This, s32 *Unk) {
     }
 }
 
-void entity_light(entity_t *This) {
+void entity_light(entity_t *This, s32 *arg1) {
     s32 r;
 
     if (This->m_Tick == 0) {
@@ -1989,7 +2434,7 @@ void entity_gears(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+    if (This->m_Frame == (This->m_Duration - 1)) {
         arg1[7] = 0x19;
         arg1[8] = -2;
     }
@@ -2004,7 +2449,7 @@ void entity_gears(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_ring(entity_t *This) {
+void entity_ring(entity_t *This, s32 *arg1) {
     s32 a1;
     s32 unk16;
     entity_vtable_t *vt;
@@ -2033,7 +2478,7 @@ void entity_hoop_girl(entity_t *This, s32 *arg1) {
     if (arg1[1] == 0) {
         arg1[7] = 0;
         temp = rand() % 3;
-        This->vtable->Unk49(This, temp * 0xC800, 0, temp);
+        This->vtable->Unk49(This, temp * 0xC800, 0);
     }
     if (This->m_Tick >= 0x961) {
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
@@ -2052,12 +2497,12 @@ void entity_small_room(entity_t *This, s32 *arg1) {
     } else if (arg1[1] == 0x14) {
         arg1[12] = 0xD;
     }
-    if (This->m_Tick == (This->m_Unk31 - 1)) {
+    if (This->m_Tick == (This->m_Duration - 1)) {
         This->vtable->entity_disable_link(This);
     }
 }
 
-void entity_clouds_wind(entity_t *This) {
+void entity_clouds_wind(entity_t *This, s32 *arg1) {
     u32 temp;
     s32 half;
     s32 unk62;
@@ -2071,12 +2516,12 @@ void entity_clouds_wind(entity_t *This) {
         }
     }
     if (This->m_State != 0) {
-        temp = This->m_Unk31;
+        temp = This->m_Duration;
         half = ((s32)(temp + (temp >> 31))) >> 1;
         if (half < This->m_Tick) {
             This->m_DreamSys->vtable->Unk48(This->m_DreamSys, 0x80, 0);
         }
-        if (This->m_Tick == (This->m_Unk31 - 0x1E)) {
+        if (This->m_Tick == (This->m_Duration - 0x1E)) {
             This->vtable->Notify(This, ENTITY_NOTIFY_LINK);
         }
     } else {
@@ -2098,16 +2543,16 @@ void entity_window(entity_t *This, s32 *arg1) {
         arg1[17] = 0x19;
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
     }
-    if (This->m_Tick == This->m_Unk31) {
+    if (This->m_Tick == This->m_Duration) {
         This->vtable->Unk75(This);
         This->vtable->Notify(This, ENTITY_NOTIFY_LINK);
     }
 }
 
-void entity_flower(entity_t *This) {
+void entity_flower(entity_t *This, s32 *arg1) {
     if (This->m_Triggered != 0) {
         This->vtable->Unk74(This);
-        if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+        if (This->m_Frame == (This->m_Duration - 1)) {
             This->vtable->Unk75(This);
             This->vtable->Unk17(This, 0, &D_80089DFC);
         }
@@ -2125,9 +2570,9 @@ void entity_bear_apartment(entity_t *This, s32 *arg1) {
         arg1[7] = 0x11;
         arg1[8] = -2;
     }
-    if (This->m_Unk30 == 0) {
-        if (This->m_Tick == This->m_Unk31) {
-            This->vtable->Unk73(This, 1);
+    if (This->m_Variant == 0) {
+        if (This->m_Tick == This->m_Duration) {
+            This->vtable->set_motion(This, 1);
             if (rand() & 1) {
                 This->m_State = 0xB;
             }
@@ -2164,7 +2609,6 @@ INCLUDE_ASM("asm/nonmatchings/entity", entity_paper_sumo);
 /*
 Best typed attempt; kept commented out pending a matching source promotion.
 
-extern s32 D_80089D0C;
 s32 D_8008ACCC;
 
 void entity_paper_sumo(entity_t *This, s32 *arg1) {
@@ -2191,10 +2635,10 @@ void entity_paper_sumo(entity_t *This, s32 *arg1) {
         }
     }
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    if ((This->m_Unk35 != 0) && !(arg1[1] & 3)) {
+    if ((This->m_AnimPlaying != 0) && !(arg1[1] & 3)) {
         arg1[7] = 0x1C;
     }
-    temp_v1 = This->m_Unk31;
+    temp_v1 = This->m_Duration;
     temp_a1 = This->m_Tick;
     var_a2 = temp_v1;
     if (temp_a1 == (temp_v1 - 1)) {
@@ -2278,9 +2722,9 @@ void entity_orrery(entity_t *This, s32 *arg1) {
 }
 
 void entity_face(entity_t *This, s32 *arg1) {
-    if (This->m_Tick < This->m_Unk31) {
-        if (This->m_Unk32 != 0) {
-            if (This->m_Unk32 == 0x14) {
+    if (This->m_Tick < This->m_Duration) {
+        if (This->m_Frame != 0) {
+            if (This->m_Frame == 0x14) {
                 arg1[4] = 0;
                 arg1[7] = 0x10;
             }
@@ -2340,13 +2784,13 @@ void entity_dress_woman(entity_t *This, s32 *arg1) {
 void entity_can(entity_t *This, s32 *arg1) {
     s32 temp;
 
-    temp = This->m_Unk32;
+    temp = This->m_Frame;
     if (temp == ((temp / 15) * 15)) {
         arg1[7] = 0xC;
         arg1[4] = 0;
         arg1[8] = 2;
     }
-    if (This->m_Tick == This->m_Unk31) {
+    if (This->m_Tick == This->m_Duration) {
         arg1[7] = -2;
         This->vtable->entity_stop_behaviour(This);
         This->m_State = 1;
@@ -2357,7 +2801,7 @@ void entity_car_water(entity_t *This, s32 *arg1) {
     s32 temp;
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk32;
+    temp = This->m_Frame;
     if (temp < 0x28) {
         arg1[7] = 0xC;
         arg1[8] = -2;
@@ -2377,14 +2821,14 @@ void entity_car_water(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_gunman(entity_t *This, entity_t *arg1) {
+void entity_gunman(entity_t *This, s32 *arg1) {
     s32 tick;
 
     if (This->m_State == 0) {
-        if (This->m_Unk32 == 5) {
+        if (This->m_Frame == 5) {
             entity_set_aim_pose(arg1);
         }
-        if (This->m_Tick == This->m_Unk31) {
+        if (This->m_Tick == This->m_Duration) {
             This->vtable->Unk75(This);
             This->m_State = 0xA;
             This->m_Tick = -1;
@@ -2415,7 +2859,7 @@ void entity_gunman(entity_t *This, entity_t *arg1) {
         }
         entity_set_aim_pose(arg1);
         if (entity_create_effect(This, NULL, NULL, EFFECT_COLOR_STEP_FAST, 0) != NULL) {
-            This->m_Effect->vtable->Unk52(This->m_Effect, This->m_Unk19, 7, 0);
+            This->m_Effect->vtable->Unk52(This->m_Effect, This->m_EffectColor, 7, 0);
         }
         This->m_State = 0xD;
         This->m_Tick = -1;
@@ -2426,7 +2870,7 @@ void entity_gunman(entity_t *This, entity_t *arg1) {
         if (tick < 0x5A) {
             if (tick == 0x1E) {
                 if (entity_create_effect(This, NULL, NULL, EFFECT_COLOR_STEP_NORMAL, 0) != NULL) {
-                    This->m_Effect->vtable->Unk53(This->m_Effect, This->m_Unk19, 0, 0);
+                    This->m_Effect->vtable->Unk53(This->m_Effect, This->m_EffectColor, 0, 0);
                 }
             }
             This->m_DreamSys->vtable->Unk16(This->m_DreamSys, 0, &D_80089CD0);
@@ -2455,30 +2899,30 @@ void entity_gunman_victim(entity_t *This, s32 *arg1) {
     } else if (This->m_Tick == 0xA) {
         This->vtable->Unk74(This);
     }
-    if (This->m_Unk32 == 0xA) {
-        entity_set_fall_pose((entity_t *)arg1);
+    if (This->m_Frame == 0xA) {
+        entity_set_fall_pose(arg1);
     }
-    if (This->m_Tick == (This->m_Unk31 + 0xA)) {
+    if (This->m_Tick == (This->m_Duration + 0xA)) {
         This->vtable->entity_stop_behaviour(This);
         This->m_State = 1;
     }
 }
 
-void entity_set_aim_pose(entity_t *This) {
-    This->m_Unk3 = 0;
-    This->m_Unk6 = 7;
-    This->m_Unk7 = -2;
-    This->m_Unk11 = 7;
-    This->m_Unk12 = -2;
-    This->m_State = 7;
-    This->m_Unk17 = -2;
+void entity_set_aim_pose(s32 *arg1) {
+    arg1[4] = 0;
+    arg1[7] = 7;
+    arg1[8] = -2;
+    arg1[12] = 7;
+    arg1[13] = -2;
+    arg1[17] = 7;
+    arg1[18] = -2;
 }
 
-void entity_set_fall_pose(entity_t *This) {
-    This->m_Unk6 = 18;
-    This->m_Unk3 = 0;
-    This->m_Unk11 = 3;
-    This->m_State = 3;
+void entity_set_fall_pose(s32 *arg1) {
+    arg1[7] = 18;
+    arg1[4] = 0;
+    arg1[12] = 3;
+    arg1[17] = 3;
 }
 
 void entity_kemari_boy_west(entity_t *This, s32 *arg1) {
@@ -2489,17 +2933,17 @@ void entity_kemari_boy_west(entity_t *This, s32 *arg1) {
     if (arg1[1] == 0) {
         arg1[7] = 0x12;
     }
-    if (arg1[1] >= (This->m_Unk31 - 1)) {
+    if (arg1[1] >= (This->m_Duration - 1)) {
         arg1[1] = -1;
     }
 }
 
 void entity_kemari_boy_east(entity_t *This, s32 *arg1) {
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    if (arg1[1] == (This->m_Unk31 / 2)) {
+    if (arg1[1] == (This->m_Duration / 2)) {
         arg1[7] = 0x12;
     }
-    if (arg1[1] >= (This->m_Unk31 - 1)) {
+    if (arg1[1] >= (This->m_Duration - 1)) {
         arg1[1] = -1;
     }
 }
@@ -2514,7 +2958,7 @@ void entity_trash_can(entity_t *This, s32 *arg1) {
         arg1[12] = 3;
         return;
     }
-    if (temp_v1 == This->m_Unk31) {
+    if (temp_v1 == This->m_Duration) {
         This->vtable->entity_stop_behaviour(This);
         This->m_State = 1;
         if (rand() & 1) {
@@ -2547,15 +2991,15 @@ void entity_big_face_man_hidden(entity_t *This, s32 *arg1) {
                 This->vtable->Unk46(This, &D_80089D90);
             }
             child = This->m_Effect;
-            child->vtable->Unk52(child, This->m_Unk19, 0, 0);
+            child->vtable->Unk52(child, This->m_EffectColor, 0, 0);
         }
-    } else if (This->m_Unk32 == 0) {
+    } else if (This->m_Frame == 0) {
         do {
-            This->m_Unk33 = This->vtable->Unk76(This, This->m_Unk33, 0);
-            This->m_Unk32 += 1;
-        } while (This->m_Unk32 < 0x18);
+            This->m_AnimCursor = This->vtable->tick_anim(This, This->m_AnimCursor, 0);
+            This->m_Frame += 1;
+        } while (This->m_Frame < 0x18);
     }
-    if (This->m_Unk32 >= 0x19) {
+    if (This->m_Frame >= 0x19) {
         This->vtable->Unk48(This, -0x14, 0);
         This->m_DreamSys->vtable->dream_sys_clear_callbacks(This->m_DreamSys, 1);
     }
@@ -2569,21 +3013,21 @@ void entity_big_face_man_hidden(entity_t *This, s32 *arg1) {
 }
 
 void entity_big_face_man(entity_t *This, s32 *arg1) {
-    if (This->m_Unk30 == 0) {
+    if (This->m_Variant == 0) {
         if (This->m_Triggered != 0) {
             func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
-            This->vtable->Unk73(This, 1);
+            This->vtable->set_motion(This, 1);
             This->m_DreamSys->vtable->dream_sys_clear_callbacks(This->m_DreamSys, 1);
-        } else if (This->m_Unk32 == 0) {
+        } else if (This->m_Frame == 0) {
             do {
-                This->m_Unk33 = This->vtable->Unk76(This, This->m_Unk33, 0);
-                This->m_Unk32++;
-            } while (This->m_Unk32 < 0x18);
+                This->m_AnimCursor = This->vtable->tick_anim(This, This->m_AnimCursor, 0);
+                This->m_Frame++;
+            } while (This->m_Frame < 0x18);
         }
-    } else if (This->m_Unk32 == 0) {
+    } else if (This->m_Frame == 0) {
         arg1[4] = 0;
         arg1[7] = 0x16;
-    } else if (This->m_Unk32 == (This->m_Unk31 - 1)) {
+    } else if (This->m_Frame == (This->m_Duration - 1)) {
         arg1[4] = 0;
         arg1[12] = 0x12;
         This->vtable->Notify(This, ENTITY_NOTIFY_LINK);
@@ -2599,10 +3043,10 @@ void entity_yokai(entity_t *This, s32 *arg1) {
     if (temp == ((temp / 10) * 10)) {
         arg1[7] = 3;
     }
-    if (This->m_Tick == This->m_Unk31) {
-        This->vtable->Unk73(This, 1);
+    if (This->m_Tick == This->m_Duration) {
+        This->vtable->set_motion(This, 1);
     }
-    if (This->m_Unk30 == 1) {
+    if (This->m_Variant == 1) {
         This->vtable->Unk48(This, -0x80, 1);
     }
 }
@@ -2621,8 +3065,8 @@ void entity_tengu(entity_t *This, s32 *arg1) {
     if (temp == ((temp / 10) * 10)) {
         arg1[7] = 0xE;
     }
-    if (This->m_Tick == This->m_Unk31) {
-        This->vtable->Unk73(This, 1);
+    if (This->m_Tick == This->m_Duration) {
+        This->vtable->set_motion(This, 1);
         if ((This->m_State != 0) && !(rand() & 1)) {
             This->vtable->Unk17(This, 1, &D_80089E38);
             This->vtable->Unk50(This, 0x800, 0);
@@ -2632,18 +3076,18 @@ void entity_tengu(entity_t *This, s32 *arg1) {
             This->vtable->Unk16(This, 0, &D_80089C7C);
         }
     }
-    if (This->m_Unk30 != 0) {
+    if (This->m_Variant != 0) {
         This->vtable->Unk48(This, -0x80, 1);
     }
 }
 
-void entity_fetus_walk(entity_t *This) {
+void entity_fetus_walk(entity_t *This, s32 *arg1) {
     if (This->m_Tick == 0) {
-        This->vtable->Unk73(This, 3);
-    } else if (This->m_Tick == This->m_Unk31) {
-        This->vtable->Unk73(This, 1);
+        This->vtable->set_motion(This, 3);
+    } else if (This->m_Tick == This->m_Duration) {
+        This->vtable->set_motion(This, 1);
     }
-    if (This->m_Unk30 == 1) {
+    if (This->m_Variant == 1) {
         This->vtable->Unk48(This, -0x80, 0);
     }
 }
@@ -2653,11 +3097,11 @@ void entity_fetus_jump(entity_t *This, s32 *arg1) {
 
     temp = This->m_Tick;
     if (temp == 0) {
-        This->vtable->Unk73(This, rand() % 4);
+        This->vtable->set_motion(This, rand() % 4);
         return;
     }
-    if ((temp % This->m_Unk31) == 0) {
-        This->vtable->Unk73(This, rand() % 4);
+    if ((temp % This->m_Duration) == 0) {
+        This->vtable->set_motion(This, rand() % 4);
         arg1[4] = This->vtable->entity_get_trigger_ratio(This);
         arg1[7] = 0x16;
         arg1[8] = 2;
@@ -2666,11 +3110,11 @@ void entity_fetus_jump(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_gray_man(entity_t *This) {
+void entity_gray_man(entity_t *This, s32 *arg1) {
     if (This->m_Triggered != 0) {
         if (entity_create_effect(This, NULL, NULL, EFFECT_COLOR_STEP_NORMAL, 0) != NULL) {
             This->m_Effect->vtable->Unk52(
-                This->m_Effect, This->m_Unk19, 7, 0);
+                This->m_Effect, This->m_EffectColor, 7, 0);
             This->vtable->entity_disable_link(This);
             This->m_DreamSys->vtable->dream_sys_reset_flashback_list(This->m_DreamSys);
         }
@@ -2688,9 +3132,9 @@ void entity_winged_minotaur(entity_t *This, s32 *arg1) {
         This->vtable->Unk50(This, -0x200, 0);
     }
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    utemp = This->m_Unk31;
+    utemp = This->m_Duration;
     half = ((s32)(utemp + (utemp >> 31))) >> 1;
-    if (This->m_Unk32 == half) {
+    if (This->m_Frame == half) {
         arg1[7] = 7;
         arg1[8] = -2;
         arg1[12] = 3;
@@ -2732,7 +3176,7 @@ void entity_winged_minotaur(entity_t *This, s32 *arg1) {
     }
 }
 
-void entity_airship(entity_t *This) {
+void entity_airship(entity_t *This, s32 *arg1) {
     s32 count;
     entity_t *child;
 
@@ -2761,26 +3205,26 @@ other:
     count = This->m_Tick;
     if (count == 0x64 || count == 0x320) {
         if ((rand() % 5) == 0) {
-            child = (entity_t *)This->m_Unk18;
-            child->vtable->Unk77(child, 4, 0);
+            child = This->m_LinkTarget;
+            child->vtable->set_motion_blend(child, 4, 0);
         }
     }
 tail:
     This->vtable->Unk48(This, -0x1E, 0);
 }
 
-void entity_maiko_small(entity_t *This) {
+void entity_maiko_small(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DCC);
     if ((u32)(This->m_Tick - 0xC9) < 0x63U) {
         This->vtable->Unk50(This, -0x20, 0);
     }
 }
 
-void entity_bed_bone_dead(entity_t *This) {
+void entity_bed_bone_dead(entity_t *This, s32 *arg1) {
     This->vtable->Unk23(This, (rand() % 20) == 0);
 }
 
-void entity_yokai_bartender(entity_t *This) {
+void entity_yokai_bartender(entity_t *This, s32 *arg1) {
     s32 count;
 
     if (This->m_Tick == 0) {
@@ -2795,24 +3239,24 @@ void entity_yokai_bartender(entity_t *This) {
         This->vtable->Unk17(This, 1, &D_80089E2C);
     } else {
         if (This->m_Tick == 0) {
-            This->vtable->Unk73(This, 1);
+            This->vtable->set_motion(This, 1);
         }
         count = This->m_Tick;
         This->vtable->Unk49(This, (count % 20) < 10 ? 0x20 : -0x20, 0);
     }
 }
 
-void entity_hoop_girl_giant(entity_t *This) {
-    entity_hoop_girl();
+void entity_hoop_girl_giant(entity_t *This, s32 *arg1) {
+    entity_hoop_girl(This, arg1);
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void entity_elephant_small(entity_t *This) {
+void entity_elephant_small(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DD8);
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void entity_maiko_bridge(entity_t *This) {
+void entity_maiko_bridge(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089E44);
     This->vtable->Unk75(This);
     if ((This->m_State == 0) && (This->vtable->entity_get_distance(This, This->m_DreamSys) < 0x800)) {
@@ -2889,30 +3333,30 @@ void entity_locomotive_common(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32
     }
 }
 
-void entity_question_mark_penguin(entity_t *This, void *Unk) {
-    entity_standing_penguin(This, Unk);
+void entity_question_mark_penguin(entity_t *This, s32 *arg1) {
+    entity_standing_penguin(This, arg1);
 }
 
-void entity_standing_penguin_flock(entity_t *This) {
+void entity_standing_penguin_flock(entity_t *This, s32 *arg1) {
     if ((rand() % 3) == 0) {
         return;
     }
     This->vtable->Unk16(This, 0, (rand() % 3) != 0 ? &D_80089C64 : &D_80089C70);
 }
 
-void entity_triangle_head_giant(entity_t *This) {
+void entity_triangle_head_giant(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void entity_fish_giant(entity_t *This) {
+void entity_fish_giant(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089E38);
 }
 
-void entity_turtle_small(entity_t *This) {
+void entity_turtle_small(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &D_80089DCC);
 }
 
-void entity_car(entity_t *This) {
+void entity_car(entity_t *This, s32 *arg1) {
     s32 r;
 
     if (This->m_Tick == 0) {
@@ -2943,7 +3387,7 @@ void entity_maiko_plain(entity_t *This, s32 *arg1) {
     }
     This->vtable->Unk17(This, 1, &D_80089E44);
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
-    temp = This->m_Unk31;
+    temp = This->m_Duration;
     half = ((s32)(temp + (temp >> 31))) >> 1;
     if ((arg1[1] % half) == 0) {
         arg1[7] = 0xA;
@@ -2952,13 +3396,13 @@ void entity_maiko_plain(entity_t *This, s32 *arg1) {
     This->vtable->Unk48(This, -0xA, 0);
 }
 
-void entity_lips_small(entity_t *This) {
+void entity_lips_small(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
     This->vtable->Unk17(This, 1, &D_80089E80);
     This->vtable->Unk48(This, -0x1E, 1);
 }
 
-void entity_paper_sumo_wait(entity_t *This) {
+void entity_paper_sumo_wait(entity_t *This, s32 *arg1) {
     u32 r;
     s32 rem;
 
@@ -2975,354 +3419,3 @@ void entity_paper_sumo_wait(entity_t *This) {
         }
     }
 }
-
-/* Defined by INCLUDE_ASM below; declared so g_ENTITY_TABLE can reference them. */
-void entity_paper_sumo(entity_t *This, s32 *arg1);
-void entity_lion(entity_t *This, s32 *arg1);
-
-/* Entity vtable, animation/pose tables and the per-type property table.
- * These live at the bottom of the file because the vtable and table take the
- * address of the behaviour functions defined above; the linker places them at
- * their fixed addresses via the [.data, entity] subsegment in the splat config,
- * so file position does not affect the layout. */
-extern void func_8001CEB4();
-extern void func_8001D008();
-extern void func_8001D204();
-extern void func_8001D280();
-extern void func_8001D33C();
-extern void func_8001D374();
-extern void func_8001D3A0();
-extern void func_8001D3CC();
-extern void func_8001D424();
-extern void func_8001D450();
-extern void func_8001D480();
-extern void func_8001D4AC();
-extern void func_8001D4DC();
-extern void func_8001D600();
-extern void func_8001D624();
-extern void func_8001D6A4();
-extern void func_8001D714();
-extern void func_8001D950();
-extern void func_8001DA28();
-extern void func_8001DDF4();
-extern void func_8001E4A4();
-extern void func_800570B4();
-extern void func_80057130();
-extern void func_800571A8();
-extern void func_800571F8();
-extern void func_80057320();
-extern void func_80057384();
-extern void func_800573A8();
-extern void func_80057444();
-extern void func_8005748C();
-extern void func_800574C4();
-extern void func_800574FC();
-extern void func_800575B0();
-extern void func_800575E0();
-extern void func_80057610();
-extern void func_80057C6C();
-extern void func_80057C74();
-extern void func_80057C7C();
-extern void func_80065790();
-extern void func_80065A5C();
-extern void func_80065AE0();
-extern void func_80065BF4();
-extern void func_80065BFC();
-extern void func_80065C2C();
-extern void func_80065D64();
-extern void func_80065DBC();
-extern void func_80065DEC();
-extern void func_80065FD8();
-extern void func_800660BC();
-extern void func_8006613C();
-extern void func_80066148();
-extern void func_80066150();
-extern void func_800661CC();
-extern void func_800661D4();
-extern void func_80066214();
-extern void func_800662A8();
-extern void func_800662B4();
-extern void func_800662BC();
-extern void func_80066340();
-extern void func_80066748();
-extern void func_800667B0();
-
-entity_vtable_t g_ENTITY_VTABLE = {
-    0x0001F234,
-    base_class_destructor,
-    (void *(*)(void *, s32, s32, s32))entity_construct,
-    (void(*)(void *))entity_cleanup,
-    (void(*)(base_class_t *, base_class_t *))func_800570B4,
-    (void(*)(base_class_t *, base_class_t *))func_80057130,
-    (void(*)(base_class_t *))func_800571A8,
-    (void(*)(base_class_t *, void **, void **))base_class_iter_children,
-    (void(*)(base_class_t *, base_class_t *))base_class_add_parent,
-    (void(*)(base_class_t *, base_class_t *))base_class_remove_parent,
-    (void(*)(base_class_t *))base_class_clear_parents,
-    (void(*)(base_class_t *, void **, void **))base_class_iter_parents,
-    (void(*)(base_class_t *, s32))base_class_notify,
-    (void(*)(base_class_t *))base_class_nop,
-    (void(*)(base_class_t *, base_class_t *, s32))func_80065790,
-    0x00000000,
-    (void(*)(void *))entity_init,
-    (void(*)(void *, s32, s32 *))func_8001CEB4,
-    (void(*)(void *, s32, s32 *))func_8001D008,
-    (void(*)(void *, s32, s32, s32, s32))entity_start,
-    (void(*)(void *))entity_stop,
-    (void(*)(void *))func_8001D204,
-    (void(*)(void *))func_8001D280,
-    (void(*)(void *))func_8001D33C,
-    (void(*)(void *, s32))func_80065A5C,
-    (void(*)(void *))func_8001D374,
-    (void(*)(void *))func_8001D3A0,
-    (void(*)(void *))func_8001D3CC,
-    (void(*)(void *, s32))func_80065AE0,
-    (void(*)(void *))func_8001D424,
-    (void(*)(void *))func_8001D450,
-    (void(*)(void *))func_8001D480,
-    (void(*)(void *))func_8001D4AC,
-    (void(*)(void *))func_8001D4DC,
-    (void(*)(void *))func_800571F8,
-    (void(*)(void *))func_8001D600,
-    (void(*)(void *))func_8001D624,
-    (void(*)(void *))func_8001D6A4,
-    (void(*)(void *))entity_update,
-    (void(*)(void *))func_80057320,
-    (void(*)(void *))func_8001D714,
-    (void(*)(void *))func_8001D950,
-    (void(*)(void *))func_8001DA28,
-    (void(*)(void *))func_8001DDF4,
-    0x00000000,
-    (void(*)(void *))func_8001E4A4,
-    (void(*)(void *, s32))func_80057384,
-    (void(*)(void *, s32 *))func_800573A8,
-    (void(*)(void *))func_80057444,
-    (void(*)(void *, s32, s32))func_8005748C,
-    (void(*)(void *, s32, s32, s32))func_800574C4,
-    (void(*)(void *, s32, s32))func_800574FC,
-    (void(*)(void *, s32, s32))func_800575B0,
-    (void(*)(void *))func_800575E0,
-    (void(*)(void *))func_80057610,
-    (void(*)(void *))entity_notify_interaction,
-    (void(*)(void *))entity_notify_interaction_done,
-    (void(*)(void *))func_80057C6C,
-    (void(*)(void *))func_80057C74,
-    (void(*)(void *))func_80057C7C,
-    (void(*)(void *))func_80065BF4,
-    (void(*)(void *))func_80065BFC,
-    (void(*)(void *))func_80065C2C,
-    (void(*)(void *))func_80065D64,
-    (void(*)(void *))func_80065DBC,
-    (void(*)(void *))func_80065DEC,
-    (void(*)(void *))func_80065FD8,
-    (void(*)(void *, s32))func_800660BC,
-    (void(*)(void *))func_8006613C,
-    (void(*)(void *))func_80066148,
-    (void(*)(void *))func_80066150,
-    (void(*)(void *))entity_tick,
-    (void(*)(void *))func_800661CC,
-    (void(*)(void *))func_800661D4,
-    (void(*)(void *, s32))func_80066214,
-    (void(*)(void *))func_800662A8,
-    (void(*)(void *))func_800662B4,
-    (s32(*)(void *, s32, s32))func_800662BC,
-    (void(*)(void *, s32, s32))func_80066340,
-    (void(*)(void *))func_80066748,
-    (void(*)(void *))func_800667B0,
-    entity_get_distance,
-    entity_get_trigger_ratio,
-    entity_get_mood_effect,
-    entity_get_unlock_effect,
-    entity_get_link_stage,
-    entity_get_event_video,
-    entity_enable_link,
-    entity_disable_link,
-    entity_set_triggered,
-    entity_start_behaviour,
-    entity_stop_behaviour,
-    entity_check_interaction,
-    entity_check_interaction_range,
-    entity_check_interaction_angle,
-    entity_check_link_trigger,
-    entity_check_link_proximity,
-};
-
-s32 D_80089C58[3] = { 0x00080001, 0x00010000, 0x00010000 };
-s32 D_80089C64[3] = { 0x00010000, 0x00010009, 0x00010000 };
-s32 D_80089C70[3] = { 0x00010000, 0x0001FFF7, 0x00010000 };
-s32 D_80089C7C[3] = { 0x00010000, 0x000100B4, 0x00010000 };
-s32 D_80089C88[3] = { 0x00010000, 0x0001005A, 0x00010000 };
-s32 D_80089C94[3] = { 0x00010000, 0x0001FFA6, 0x00010000 };
-s32 D_80089CA0[3] = { 0x00010000, 0x00010002, 0x00010000 };
-s32 D_80089CAC[3] = { 0x00010000, 0x0003FFFF, 0x00010000 };
-s32 D_80089CB8[3] = { 0x00010000, 0x0002FFFF, 0x00010000 };
-s32 D_80089CC4[3] = { 0x00010000, 0x00010000, 0x00010009 };
-s32 D_80089CD0[3] = { 0x00010000, 0x00010000, 0x00010001 };
-s32 D_80089CDC[3] = { 0x00010000, 0x00010000, 0x0001FFF7 };
-s32 D_80089CE8[3] = { 0x00010000, 0x0001FF88, 0x00010000 };
-s32 D_80089CF4[3] = { 0x00010032, 0x0001FF88, 0x0001001E };
-s32 D_80089D00[3] = { 0x00010000, 0x00010004, 0x00010000 };
-s32 D_80089D0C[3] = { 0x0001005A, 0x00010000, 0x00010000 };
-s32 D_80089D18[3] = { 0x00010000, 0x00010001, 0x00010000 };
-s32 D_80089D24[6] = { 0x00010000, 0x00010000, 0x0001FFA6, 0x00010000, 0x0001010E, 0x00010000 };
-s32 D_80089D3C[3] = { 0x00000000, 0x00000100, 0x00000000 };
-s32 D_80089D48[3] = { 0x00000000, 0xFFFFF000, 0x00000000 };
-s32 D_80089D54[3] = { 0x00000000, 0xFFFFFE00, 0x00000000 };
-s32 D_80089D60[3] = { 0x00000000, 0x00000040, 0x00000000 };
-s32 D_80089D6C[3] = { 0x00000000, 0x00000008, 0x00000000 };
-s32 D_80089D78[6] = { 0x00000000, 0xFFFFFFC0, 0x00000000, 0x00000000, 0xFFFFFFE0, 0x00000000 };
-s32 D_80089D90[3] = { 0x00000000, 0xFFFFFF00, 0x00000000 };
-s32 D_80089D9C[3] = { 0xFFFFFFC0, 0x00000000, 0x00000000 };
-s32 D_80089DA8[3] = { 0x00000000, 0x00000040, 0xFFFFFFC0 };
-s32 D_80089DB4[3] = { 0x00000000, 0xFFFFFA24, 0x00000400 };
-s32 D_80089DC0[3] = { 0x00000000, 0x00000000, 0xFFFFFF00 };
-s32 D_80089DCC[3] = { 0x00040001, 0x00040001, 0x00040001 };
-s32 D_80089DD8[3] = { 0x00020001, 0x00020001, 0x00020001 };
-s32 D_80089DE4[3] = { 0x00050004, 0x00050006, 0x00050005 };
-s32 D_80089DF0[3] = { 0x00010002, 0x00010002, 0x00010002 };
-s32 D_80089DFC[3] = { 0x0040FFFF, 0x0040FFFF, 0x0040FFFF };
-s32 D_80089E08[3] = { 0x00070008, 0x00070008, 0x00070008 };
-s32 D_80089E14[3] = { 0x00010001, 0x00010001, 0x00010001 };
-s32 D_80089E20[3] = { 0x00080001, 0x00080001, 0x00080001 };
-s32 D_80089E2C[3] = { 0x00080001, 0x00010002, 0x00080001 };
-s32 D_80089E38[3] = { 0x00010006, 0x00010006, 0x00010006 };
-s32 D_80089E44[3] = { 0x00050002, 0x00050002, 0x00050002 };
-s32 D_80089E50[3] = { 0x00010001, 0x00010002, 0x00010001 };
-s32 D_80089E5C[6] = { 0x00010001, 0x00010004, 0x00010001, 0x00040001, 0x00010001, 0x00020001 };
-s32 D_80089E74[3] = { 0x00010003, 0x00010003, 0x00010003 };
-s32 D_80089E80[3] = { 0x00200001, 0x00200001, 0x00200001 };
-u8 D_80089E8C[22] = { 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 };
-s16 D_80089EA2 = 0x0001;
-
-entity_prop_t g_ENTITY_TABLE[130] = {
-    { { 0, 2 }, 20, 0, 0, 0, 2, -13, 4, 1, 10, 0, (void (*)(entity_t *, void *))entity_astronaut },
-    { { -2, 5 }, -1, 0, 0, 0, 1, -2, 0, -6, 10, 1, (void (*)(entity_t *, void *))entity_gargoyle },
-    { { 0, 0 }, -100, 0, 0, 0, 1, -5, 1, 1, 0, 0, NULL },
-    { { 0, -3 }, -100, 0, 0, 0, 1, -6, 1, 1, 0, 0, NULL },
-    { { 0, -7 }, -100, 0, 0, 0, 1, -13, 1, 1, 0, 0, NULL },
-    { { -4, 4 }, -50, 0, 0, 0, 1, -14, 1, -2, 10, -1, (void (*)(entity_t *, void *))entity_futon },
-    { { 0, 0 }, 100, 0, 0, 0, 0, 0, 0, 3, 0, -1, NULL },
-    { { -5, 0 }, 20, 3, -76, 5, 5, 0, 0, 3, 30, 5, (void (*)(entity_t *, void *))entity_gargoyle_pit },
-    { { 3, 3 }, 100, 3, -76, 7, 7, 0, 0, 5, 0, 7, (void (*)(entity_t *, void *))entity_elephant },
-    { { -3, -1 }, 20, 1, -76, 12, 6, -3, 3, 3, 30, 12, (void (*)(entity_t *, void *))entity_minotaur },
-    { { -7, 3 }, 50, 0, -76, 0, 10, 0, 0, 3, 60, 0, (void (*)(entity_t *, void *))entity_giant_minotaur },
-    { { 3, 0 }, 9, 0, -1, 0, 5, 8, 4, 3, 20, 0, (void (*)(entity_t *, void *))entity_maiko_giant },
-    { { -3, -5 }, 5, 0, 0, 0, 3, 0, 0, 2, 0, 0, (void (*)(entity_t *, void *))entity_old_woman },
-    { { -5, 5 }, 100, 0, 0, 0, 5, 0, 4, 3, 30, 5, (void (*)(entity_t *, void *))entity_bell_striker },
-    { { 0, 1 }, -100, 0, 120, 0, 5, 0, 0, 3, 20, 5, (void (*)(entity_t *, void *))entity_boatman },
-    { { -2, -1 }, -20, 0, 0, 0, 4, 0, 0, 3, 30, -5, (void (*)(entity_t *, void *))entity_drumstick },
-    { { -3, 2 }, 50, 1, 24, 3, 3, 0, 0, 1, 30, 3, (void (*)(entity_t *, void *))entity_fox },
-    { { 1, 0 }, 100, 0, 0, 0, 5, 0, 0, 3, 0, 0, (void (*)(entity_t *, void *))entity_halo },
-    { { 0, 0 }, -100, 0, 0, 0, 2, 0, 0, 1, 0, 0, NULL },
-    { { 2, 3 }, -50, 1, 30, 7, 5, -2, 2, 3, 30, 7, (void (*)(entity_t *, void *))entity_tea_doll },
-    { { 0, -4 }, 8, 1, -76, 12, 5, -2, 1, 3, 30, 12, (void (*)(entity_t *, void *))entity_buddha },
-    { { -1, -2 }, 20, 0, -1, 0, 6, -4, 4, 3, 30, 0, (void (*)(entity_t *, void *))entity_ox_cart },
-    { { 1, 4 }, -20, 0, 0, 0, 2, -5, 2, 1, 0, 1, (void (*)(entity_t *, void *))entity_peacock },
-    { { 5, 1 }, -20, 1, -1, 8, 1, 0, 0, 1, 0, 8, (void (*)(entity_t *, void *))entity_tennyo },
-    { { 2, -7 }, 20, 0, 0, 0, 5, 0, 0, 3, 30, 0, (void (*)(entity_t *, void *))entity_bird },
-    { { -5, -1 }, 50, 0, -76, 0, 3, 0, 0, 3, 30, 3, (void (*)(entity_t *, void *))entity_rocket },
-    { { -3, 1 }, 7, 1, 60, 10, 7, 0, 0, 3, 30, 10, (void (*)(entity_t *, void *))entity_horse },
-    { { 8, -1 }, -100, 1, 60, 8, 8, 0, 0, 5, 30, 8, (void (*)(entity_t *, void *))entity_ufo },
-    { { 7, 1 }, 20, 0, 0, 0, -2, -11, 1, 1, 0, 0, NULL },
-    { { -8, 1 }, 100, 0, 0, 0, 12, 0, 0, 5, 0, 0, (void (*)(entity_t *, void *))entity_rainbow },
-    { { 0, -1 }, -50, 0, -76, 0, 5, 0, 0, 3, 0, 3, (void (*)(entity_t *, void *))entity_boat_bird },
-    { { 2, -5 }, -100, 1, 120, 1, 1, -3, 0, 1, 30, 1, (void (*)(entity_t *, void *))entity_demon_king },
-    { { 0, 4 }, 50, 1, 0, 15, 15, 0, 0, 5, 0, 15, (void (*)(entity_t *, void *))entity_sailboat },
-    { { 2, 8 }, 8, 1, -76, 12, 2, -8, 1, 2, 30, 12, (void (*)(entity_t *, void *))entity_turtle_giant },
-    { { -8, 4 }, -50, 0, 60, 3, 3, -14, 2, 1, 0, 3, (void (*)(entity_t *, void *))entity_shark },
-    { { 6, 0 }, -20, 0, 0, 0, 2, 0, 0, 1, 0, 0, (void (*)(entity_t *, void *))entity_fish },
-    { { 0, 7 }, 7, 1, 2, 17, 12, 0, 0, 8, 0, 17, (void (*)(entity_t *, void *))entity_mirage },
-    { { -2, 6 }, 100, 1, 120, 6, 6, 0, 0, 5, 0, 6, (void (*)(entity_t *, void *))entity_balloon },
-    { { -5, 2 }, -100, 1, 120, 10, 10, 0, 0, 3, 30, 10, (void (*)(entity_t *, void *))entity_opera_singer },
-    { { -1, -1 }, 20, 1, 120, 20, 20, -5, 1, 3, 20, 20, (void (*)(entity_t *, void *))entity_mushroom },
-    { { 3, 3 }, -100, 0, -76, 0, 4, -14, 2, 3, 30, 0, (void (*)(entity_t *, void *))entity_soldier },
-    { { -9, 5 }, -50, 1, 0, 15, 15, -10, 8, 3, 50, 15, (void (*)(entity_t *, void *))entity_locomotive_factory },
-    { { 2, 1 }, 1, 0, 120, 0, 4, 0, 0, 4, 30, 4, (void (*)(entity_t *, void *))entity_marching_band },
-    { { -3, 0 }, 20, 1, -76, 6, 6, -4, 2, 2, 10, 6, (void (*)(entity_t *, void *))entity_bear },
-    { { 0, -2 }, -20, 1, -76, 6, 6, -7, 2, 2, 10, 6, (void (*)(entity_t *, void *))entity_rabbit },
-    { { 5, 3 }, -20, 1, 0, 8, 6, 0, 0, 3, 10, 8, (void (*)(entity_t *, void *))entity_prince_princess },
-    { { 3, -1 }, -20, 1, 0, 2, 2, -6, 2, 1, 20, 2, (void (*)(entity_t *, void *))entity_human_face_flower },
-    { { 9, 9 }, -50, 0, 0, 0, 1, 0, 2, 1, 30, 0, (void (*)(entity_t *, void *))entity_ferris_wheel },
-    { { -4, -4 }, 50, 1, 90, 1, 1, -9, 1, 1, 30, 1, (void (*)(entity_t *, void *))entity_lips_giant },
-    { { -2, -6 }, -100, 1, 30, 5, 1, -3, 0, 1, 30, 5, (void (*)(entity_t *, void *))entity_locomotive_kyoto },
-    { { 9, 0 }, 20, 1, 0, 6, 6, 0, 0, 1, 0, 6, (void (*)(entity_t *, void *))entity_whale },
-    { { 1, -1 }, -50, 1, 30, 6, 6, -5, 1, 3, 20, 6, (void (*)(entity_t *, void *))entity_standing_penguin },
-    { { -3, 1 }, -50, 1, 30, 8, 8, -5, 1, 3, 30, 8, (void (*)(entity_t *, void *))entity_sliding_penguin },
-    { { 0, 0 }, 50, 0, 0, 0, 4, 0, 0, 2, 30, 0, NULL },
-    { { 0, 0 }, -50, 0, 0, 0, 4, 0, 0, 2, 30, 0, NULL },
-    { { 7, 0 }, 100, 1, 0, 15, 8, -13, 2, 2, 20, 15, (void (*)(entity_t *, void *))entity_hopscotch_girl },
-    { { 0, -4 }, -100, 0, 0, 0, 5, -6, 2, 3, 0, 0, (void (*)(entity_t *, void *))entity_corpse },
-    { { -9, -3 }, -50, 1, 0, 15, 15, 0, 3, 3, 30, 15, (void (*)(entity_t *, void *))entity_airplane },
-    { { -3, -6 }, -20, 1, 0, 1, 1, 0, 0, 1, 30, 1, (void (*)(entity_t *, void *))entity_hanged_woman },
-    { { -3, 1 }, -50, 1, -76, 15, 8, 0, 0, 3, 30, 15, (void (*)(entity_t *, void *))entity_starship },
-    { { 0, -9 }, -100, 0, 0, 0, 5, 0, 0, 3, 0, 5, NULL },
-    { { 5, -1 }, 20, 1, 0, 10, 1, -6, 3, 3, 30, 10, (void (*)(entity_t *, void *))entity_kicking_man },
-    { { -4, -5 }, -1, 1, 60, 2, 2, 0, 5, 1, 10, 2, (void (*)(entity_t *, void *))entity_triangle_head },
-    { { 0, 8 }, 20, 2, 1, 1, 3, 0, 0, 2, 0, 0, NULL },
-    { { 2, 1 }, 50, 0, 0, 0, 12, 0, 0, 5, 40, 0, (void (*)(entity_t *, void *))entity_ship },
-    { { 1, 0 }, -20, 0, -1, 0, 3, -3, 2, 1, 0, 0, (void (*)(entity_t *, void *))entity_maiko_palace },
-    { { -4, -1 }, 20, 0, 0, 0, 3, -8, 1, 1, 20, 0, (void (*)(entity_t *, void *))entity_acrobats },
-    { { 0, 0 }, -50, 0, -36, 0, 3, 0, 0, 1, 0, 0, (void (*)(entity_t *, void *))entity_light },
-    { { 0, -1 }, 50, 1, -76, 5, 5, 12, 0, 1, 30, 3, (void (*)(entity_t *, void *))entity_dog },
-    { { 0, 0 }, -4, 0, 0, 0, 3, 0, 0, 3, 100, 3, (void (*)(entity_t *, void *))entity_gears },
-    { { 2, 2 }, 50, 0, -76, 0, 10, 0, 0, 6, 30, 0, (void (*)(entity_t *, void *))entity_ring },
-    { { 9, 0 }, 100, 1, -76, 6, 3, -3, 1, 1, 10, 6, (void (*)(entity_t *, void *))entity_hoop_girl },
-    { { 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
-    { { 4, 0 }, 9, 0, 0, 0, 1, 0, 0, 1, 30, -1, (void (*)(entity_t *, void *))entity_small_room },
-    { { 0, 1 }, 100, 0, 0, 0, 1, -4, 0, 1, 30, 1, (void (*)(entity_t *, void *))entity_clouds_wind },
-    { { 0, 0 }, 100, 0, 0, 0, 3, 13, 0, 1, 10, 3, (void (*)(entity_t *, void *))entity_window },
-    { { 6, 2 }, -20, 1, 60, 17, 3, -5, 6, 2, 0, 17, (void (*)(entity_t *, void *))entity_flower },
-    { { 9, 0 }, 100, 0, 60, 0, 1, -5, 1, -2, 10, 1, (void (*)(entity_t *, void *))entity_bear_apartment },
-    { { -2, 3 }, 20, 0, 0, 0, 1, 0, 0, 1, 10, 0, (void (*)(entity_t *, void *))entity_paper_sumo },
-    { { -6, 7 }, -6, 0, 0, 0, 2, 0, 1, 1, 20, 0, (void (*)(entity_t *, void *))entity_orrery },
-    { { 5, 5 }, -100, 0, 120, 0, 2, -3, 4, 1, 10, 1, (void (*)(entity_t *, void *))entity_face },
-    { { -3, 3 }, 50, 0, -76, 0, 1, 127, 0, 1, 30, 0, (void (*)(entity_t *, void *))entity_lion },
-    { { 4, -5 }, -20, 0, 0, 0, 3, -5, 0, 1, 0, 1, (void (*)(entity_t *, void *))entity_dress_woman },
-    { { 3, -1 }, -50, 1, 0, 1, 1, 0, 0, 3, 10, 1, (void (*)(entity_t *, void *))entity_can },
-    { { -5, 5 }, -50, 1, 120, 3, 3, 0, 3, 3, 30, 3, (void (*)(entity_t *, void *))entity_car_water },
-    { { 3, 0 }, 20, 1, 0, 8, 1, -10, 3, 1, 0, 1, (void (*)(entity_t *, void *))entity_gunman },
-    { { 0, -8 }, -100, 1, 0, 10, 3, 0, 0, 1, 0, 3, (void (*)(entity_t *, void *))entity_gunman_victim },
-    { { 3, 0 }, -50, 0, 0, 0, 3, 8, 0, 1, 20, 0, (void (*)(entity_t *, void *))entity_kemari_boy_west },
-    { { 0, 3 }, -50, 0, 0, 0, 3, 11, 0, 1, 20, 0, (void (*)(entity_t *, void *))entity_kemari_boy_east },
-    { { 0, -7 }, 0, 0, 0, 0, 2, 0, 5, -4, 10, 1, (void (*)(entity_t *, void *))entity_trash_can },
-    { { 0, 5 }, -1, 0, 0, 0, 1, -9, 1, -2, 10, -1, (void (*)(entity_t *, void *))entity_television },
-    { { 0, 1 }, -100, 1, 0, 1, 1, -6, 0, -4, 10, 1, (void (*)(entity_t *, void *))entity_big_face_man_hidden },
-    { { -3, -4 }, -1, 0, 0, 0, 1, -6, 2, -8, 10, 0, (void (*)(entity_t *, void *))entity_big_face_man },
-    { { 2, 8 }, 50, 0, 60, 0, 3, 0, 0, 1, 20, 3, (void (*)(entity_t *, void *))entity_yokai },
-    { { 0, 5 }, 100, 0, 40, 8, 8, -11, 3, 3, 30, 0, (void (*)(entity_t *, void *))entity_tengu },
-    { { 4, 2 }, -100, 1, 20, 3, 1, 0, 0, 2, 10, 1, (void (*)(entity_t *, void *))entity_fetus_walk },
-    { { 2, 0 }, -100, 0, 0, 0, 2, -14, 2, 1, 20, 0, (void (*)(entity_t *, void *))entity_fetus_jump },
-    { { 0, 0 }, 0, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
-    { { -10, -10 }, 20, 0, -76, 0, 1, 0, 0, 1, 0, 0, (void (*)(entity_t *, void *))entity_gray_man },
-    { { 10, 10 }, -20, 0, 0, 0, -2, 0, 0, 1, 30, -1, NULL },
-    { { -10, -10 }, 100, 0, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
-    { { 9, 9 }, 100, 1, 0, 0, 0, 0, 0, 3, 30, 0, NULL },
-    { { -5, 0 }, 20, 3, -76, 5, 1, -13, 0, 3, 30, 5, (void (*)(entity_t *, void *))entity_winged_minotaur },
-    { { -6, 7 }, 100, 1, -76, 5, 5, -10, 0, 2, 0, 5, (void (*)(entity_t *, void *))entity_airship },
-    { { 2, 2 }, -4, 1, 0, 2, 2, 0, 0, 1, 0, 2, (void (*)(entity_t *, void *))entity_maiko_small },
-    { { 0, -3 }, -100, 0, 60, 0, 2, 0, 0, 1, 0, 0, (void (*)(entity_t *, void *))entity_bed_bone_dead },
-    { { 0, 5 }, -1, 0, 60, 0, 1, 0, 0, -2, 10, 1, (void (*)(entity_t *, void *))entity_yokai_bartender },
-    { { 0, 5 }, -1, 0, 60, 0, 1, -2, 1, -2, 10, -1, (void (*)(entity_t *, void *))entity_yokai },
-    { { 9, 0 }, 100, 1, -76, 6, 3, -3, 1, 1, 10, 6, (void (*)(entity_t *, void *))entity_hoop_girl_giant },
-    { { 3, 3 }, 100, 0, -76, 0, 7, -2, 4, 5, 0, 0, (void (*)(entity_t *, void *))entity_elephant_small },
-    { { 3, 0 }, 9, 0, 120, 0, 5, -13, 1, 3, 0, 0, (void (*)(entity_t *, void *))entity_maiko_bridge },
-    { { -9, 5 }, -50, 1, 0, 15, 15, -4, 8, 3, 50, 15, (void (*)(entity_t *, void *))entity_locomotive_natural },
-    { { 8, 8 }, 100, 0, -76, 0, 15, -6, 2, 3, 50, 0, NULL },
-    { { 1, -1 }, -50, 1, 30, 6, 6, -5, 1, 3, 20, 6, (void (*)(entity_t *, void *))entity_question_mark_penguin },
-    { { 1, 1 }, -80, 1, 90, 6, 6, -5, 1, 3, 20, 6, (void (*)(entity_t *, void *))entity_standing_penguin_flock },
-    { { -3, -6 }, -20, 1, 0, 1, 1, -6, 1, 1, 30, 1, (void (*)(entity_t *, void *))entity_hanged_woman_paralysis },
-    { { -3, -6 }, -20, 1, 0, 1, 1, -6, 3, 1, 30, 1, NULL },
-    { { -4, -5 }, -1, 1, 60, 8, 8, -11, 8, 3, 10, 8, (void (*)(entity_t *, void *))entity_triangle_head_giant },
-    { { 6, 0 }, -20, 0, 0, 0, 2, -3, 8, 1, 0, 0, (void (*)(entity_t *, void *))entity_fish_giant },
-    { { 7, 1 }, 20, 0, 0, 0, -10, 0, 0, 5, 0, 0, (void (*)(entity_t *, void *))entity_siblings_flock },
-    { { -6, 8 }, 20, 1, 120, 8, 1, 8, 0, 1, 30, 8, (void (*)(entity_t *, void *))entity_lion },
-    { { 1, 1 }, 20, 1, 90, 8, 3, -4, 1, 3, 30, 8, (void (*)(entity_t *, void *))entity_turtle_small },
-    { { 0, -1 }, -50, 1, 90, 3, 5, 0, 0, 3, 0, 3, (void (*)(entity_t *, void *))entity_boat_bird },
-    { { -7, 6 }, 8, 0, -116, 0, 3, 0, 0, 3, 0, 3, (void (*)(entity_t *, void *))entity_car },
-    { { 4, 4 }, -100, 0, 120, 0, 5, 0, 0, 3, 20, 5, NULL },
-    { { -5, 6 }, 9, 1, -1, 5, 5, -14, 1, 3, 20, 5, (void (*)(entity_t *, void *))entity_maiko_plain },
-    { { -5, 4 }, 9, 0, -116, 0, 5, -4, 3, 3, 0, 0, (void (*)(entity_t *, void *))entity_car },
-    { { 5, 1 }, -20, 0, 120, 0, 3, -5, 1, 1, 0, 0, NULL },
-    { { -4, -4 }, 50, 1, 0, 1, 1, -14, 1, 1, 0, 1, (void (*)(entity_t *, void *))entity_lips_small },
-    { { 2, -3 }, -20, 0, 120, 0, 2, -14, 1, 1, 0, 1, (void (*)(entity_t *, void *))entity_paper_sumo_wait },
-};

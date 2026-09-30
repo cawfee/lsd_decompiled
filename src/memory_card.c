@@ -37,8 +37,8 @@ extern char D_8008AABC[]; /* ".TIM" */
 
 #include "tim_image.h"
 
-typedef struct class_3249C class_3249C_t;
-class_3249C_t *class_3249C_create(void *, void *, s32);
+typedef struct sprite_node sprite_node_t;
+sprite_node_t *sprite_node_create(void *, void *, s32);
 
 s32 func_8004E77C(memory_card_t *, s32 *, s32 *, s32 *);
 s32 func_8004E7D0(memory_card_t *, s32 *, s32 *);
@@ -819,7 +819,7 @@ void func_8004FE24(memory_card_t *This, s32 idx) {
                 strcat(pathp, D_8008AABC);
                 tex = tim_image_create(pathp);
                 tex->vtable->Unk14(tex);
-                obj = class_3249C_create(tex, D_80086EC4, 0);
+                obj = sprite_node_create(tex, D_80086EC4, 0);
                 This->m_Unk27 = (s32)obj;
                 tex->vtable->Destruct(tex);
                 (*(void (**)(void *, s32, s32 *))(*(u32 *)obj + 0x4C))(obj, This->m_Unk25, D_8008AA94);

@@ -1,5 +1,5 @@
 #include "effect.h"
-#include "30CD0.h"
+#include "effect_base.h"
 
 extern effect_vtable_t g_EFFECT_VTABLE;
 
@@ -18,7 +18,7 @@ effect_t *effect_create(s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void effect_construct(effect_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
-    class_30CD0_vtable_t *parent;
+    effect_base_vtable_t *parent;
     void *color;
 
     parent = func_800408BC();
@@ -75,15 +75,21 @@ void func_8004001C(effect_t *This, s32 Value) {
 
 INCLUDE_ASM("asm/nonmatchings/effect", func_80040024);
 // Best attempt: all 35 instructions present and equal; only a scheduling
-// tie-break differs. Target sets arg1 (ori a1,1) right after arg0 and loads
-// the D_8006EA90 lui/addiu after lw v0,0(s0); GCC 2.6.3 emits sll/addu,
-// lui/addiu a2, lw v0,0(s0), li a1,1 instead.
-// s32 temp = ((s32 (*)(effect_t *))This->vtable->Unk54)(This);
-// s32 *color = (s32 *)((u8 *)D_8006EA90 + (temp * 3));
-// This->vtable->Unk45(This, 1, color);
-// This->m_State = 1;
-// This->m_ColorStep = -This->m_ColorStep;
-// Tried: inline vs temp, function-scope decls, local `one` variable.
+// tie-break differs. Target sets arg1 (ori a1,1) right after the Unk54 call and
+// loads the D_8006EA90 lui/addiu after lw v0,0(s0); GCC 2.6.3 emits
+// sll/addu, lui/addiu a2, lw v0,0(s0), li a1,1 instead. Reconfirmed with
+// inline color, temp local, and `one` local (which lands in s1, 36 insns).
+// void func_80040024(effect_t *This) {
+//     s32 temp;
+//     s32 *color;
+//     if (This->m_State == 0) {
+//         temp = This->vtable->Unk54(This);
+//         color = (s32 *)((u8 *)D_8006EA90 + (temp * 3));
+//         This->vtable->Unk45(This, 1, color);
+//         This->m_State = 1;
+//         This->m_ColorStep = -This->m_ColorStep;
+//     }
+// }
 
 /*
  * Best attempt (not matching: target is 41 insns, compiled 40. The only real
@@ -110,7 +116,43 @@ INCLUDE_ASM("asm/nonmatchings/effect", func_80040024);
  */
 INCLUDE_ASM("asm/nonmatchings/effect", func_800400B0);
 
-INCLUDE_ASM("asm/nonmatchings/effect", func_80040154);
+s32 func_80040154(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
+    effect_vtable_t *vtable;
+    s32 state;
+    s32 life;
+    s32 variant;
+
+    vtable = This->vtable;
+    variant = arg2;
+    if (variant < 0) {
+        variant = This->m_Variant;
+    } else {
+        This->m_Variant = variant;
+    }
+    state = 1;
+    if (variant != 0) {
+        This->m_ColorChannels = variant;
+    } else {
+        state = 2;
+        This->m_ColorChannels = 0xF;
+    }
+    This->m_ColorChannels = variant;
+    if (variant == 0) {
+        This->m_ColorChannels = 0xF;
+    }
+    life = 0x100 / This->m_ColorStep;
+    This->m_Mode = arg3;
+    This->m_Life = life;
+    if (This->m_Unk37 != 0) {
+        This->m_Life = life - life / This->m_Unk38;
+    }
+    This->m_Unk32 = This->m_ColorMask / This->m_Life;
+    vtable->Attach((base_class_t *)This, arg1);
+    vtable->Unk24((void *)This, 1);
+    vtable->Unk25((void *)This, state);
+    vtable->Unk23((void *)This, 1);
+    return variant;
+}
 
 void func_800402F0(effect_t *This, s32 arg1) {
     effect_vtable_t *vt;

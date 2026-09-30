@@ -1,7 +1,7 @@
 #include "common.h"
 #include "dream_sys.h"
 #include "entity.h"
-#include "3520C.h"
+#include "object_model_list.h"
 
 s32 g_CurrentLocation = -1;
 void *g_LinkScene = NULL;
@@ -15,7 +15,7 @@ void func_8001EACC(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4);
 s8 *link_find_teleport(s16 *arg0);
 s32 link_check_teleport_condition(s32 arg0, s8 *arg1);
 s32 link_spawn_object_group(s32 arg0, s8 *arg1, s32 arg2);
-s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_3520C_t *arg3);
+s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_object_model_list_t *arg3);
 s32 func_80044A0C(s32 arg0);
 s32 link_check_object(s32 arg0, void *arg1);
 s32 link_create_object(s32 arg0, void *arg1, s32 arg2, s32 arg3);
@@ -250,7 +250,7 @@ s32 link_spawn_object_group(s32 arg0, s8 *arg1, s32 arg2) {
     return 0;
 }
 
-s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_3520C_t *arg3) {
+s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_object_model_list_t *arg3) {
     entity_spawn_args_t sp10;
     s32 temp_v0;
     s8 *var_s0;
@@ -281,6 +281,61 @@ s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_3520C_t *arg3) {
     return 0;
 }
 
+/*
+ * Best-known C (95/100 insns; switch/jump table, all case bodies, offsets and
+ * relocations correct). Only difference is register allocation: target keeps
+ * arg0 in $a2 and loads arg1[1] into $a0 (extra `addu a2,a0,zero` + `addu
+ * a1,a0,zero`), gcc 2.6.3 coalesces arg0 into $a0 and loads into $a1 for every
+ * ordering tried (named arg0 local before/after the load, direct parameter,
+ * swapped declaration order, s32/s8 forms). Switch table grouping confirmed
+ * from jtbl_8001188C: 2-4 day-offset, 5/6 mod3, 7 func_8005630C, 8/9 mod3==v6-7,
+ * 10-19 default, 20/21 parity.
+ *
+ * s32 link_check_object(s32 arg0, s8 *arg1) {
+ *     s32 v6;
+ *     s32 v5;
+ *     s32 v7;
+ *
+ *     v6 = arg1[1];
+ *     v5 = arg0;
+ *     if (v6 == 1) goto success;
+ *     if (v6 < 0) {
+ *         if (arg1[0] != 0) return 0;
+ *         v6 = ~v6 + 1;
+ *     }
+ *     switch (v6) {
+ *     case 2: case 3: case 4:
+ *         v7 = link_check_day_offset(v5, v6 - 1);
+ *         break;
+ *     case 5:
+ *         if (v5 % 3 != 0) return 0;
+ *         goto success;
+ *     case 6:
+ *         if (v5 % 3 == 0) return 0;
+ *         goto success;
+ *     case 7:
+ *         v7 = func_8005630C();
+ *         break;
+ *     case 8: case 9:
+ *         if (v5 % 3 != v6 - 7) return 0;
+ *         goto success;
+ *     case 20:
+ *         if ((v5 & 1) != 0) return 0;
+ *         goto success;
+ *     case 21:
+ *         v7 = v5 & 1;
+ *         break;
+ *     default:
+ *         if (v6 < 10) goto success;
+ *         v7 = link_is_special_color(v6);
+ *         break;
+ *     }
+ *     if (v7 == 0) return 0;
+ * success:
+ *     arg1[0] = 1;
+ *     return 1;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/link", link_check_object);
 
 extern s16 SPECIAL_DAYS[];
@@ -304,7 +359,45 @@ s32 link_check_day_offset(s32 arg0, s32 arg1) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/link", link_create_object);
+typedef struct {
+    /* 0x00 */ u16 m_Unk0;
+    /* 0x02 */ s8 m_Unk2;
+    /* 0x03 */ s8 m_Unk3;
+} object_variant_entry_t;
+
+typedef struct {
+    /* 0x00 */ u16 m_Unk0;
+    /* 0x02 */ u16 m_Unk1;
+    /* 0x04 */ dream_sys_pkt6_t m_Position;
+} link_spawn_t;
+
+extern object_variant_entry_t g_ObjectVariantTable[];
+extern u8 g_ObjectColorTable[];
+extern u8 g_ObjectAnimTable[];
+
+s32 link_create_object(s32 arg0, void *arg1, s32 arg2, s32 arg3) {
+    entity_t *ent;
+    link_spawn_t spawn;
+    s32 transform[4];
+    object_variant_entry_t *variant;
+
+    ent = entity_create(arg0, (s32)arg1, g_EntityHelper);
+    if (ent != NULL) {
+        spawn.m_Unk0 = ((u16 *)arg2)[0];
+        variant = &g_ObjectVariantTable[arg3];
+        spawn.m_Unk1 = variant->m_Unk0;
+        spawn.m_Position = *(dream_sys_pkt6_t *)((u8 *)g_ObjectColorTable +
+                                                 variant->m_Unk3 * 6);
+        (*(void (**)(void *, void *, void *))(*(u32 *)g_LinkScene + 0xE8))(
+            g_LinkScene, &transform, &spawn);
+        ent->vtable->Unk16(ent, 1,
+                           (s32 *)&g_ObjectAnimTable[variant->m_Unk2 * 0xC]);
+        ent->vtable->Unk18(ent, (s32)g_LinkDreamSys, (s32)g_LinkSceneData,
+                           (s32)g_LinkScene, (s32)&transform);
+        return 0;
+    }
+    return 1;
+}
 
 void link_activate_object(u8 *arg0) {
     vec3d_t pos;
