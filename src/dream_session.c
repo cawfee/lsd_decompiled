@@ -111,8 +111,8 @@ void dream_session_construct(dream_session_t *This,
 
     This->m_DreamSys = DreamSys;
     This->vtable->Attach(This, DreamSys);
-    DreamSys->vtable->Unk66(DreamSys, This->m_Unk12);
-    DreamSys->vtable->Unk68(DreamSys, This->m_TextureHelper);
+    DreamSys->vtable->dream_sys_set_actor(DreamSys, This->m_Unk12);
+    DreamSys->vtable->dream_sys_set_texture(DreamSys, This->m_TextureHelper);
     This->vtable->Unk15(This);
 }
 
@@ -160,7 +160,7 @@ void dream_session_execute(dream_session_t *This) {
     dream_sys_t *dream_sys = This->m_DreamSys;
     dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_16634);
     dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_32c00);
-    dream_sys->vtable->Unk67(dream_sys, This->m_GraphicsCtx->cls_3da54);
+    dream_sys->vtable->dream_sys_set_transform(dream_sys, This->m_GraphicsCtx->cls_3da54);
     func_8004A4B8()->scene_run(This, This->m_GraphicsCtx, 0);
 }
 
@@ -169,7 +169,7 @@ void func_80049AC0(dream_session_t *This) {
 
     dream_sys = This->m_DreamSys;
     func_8004A4B8()->Unk17(This);
-    dream_sys->vtable->Unk67(dream_sys, 0);
+    dream_sys->vtable->dream_sys_set_transform(dream_sys, 0);
     dream_sys->vtable->Detach(dream_sys, This->m_GraphicsCtx->cls_16634);
     dream_sys->vtable->Detach(dream_sys, This->m_Unk3);
 }
@@ -255,12 +255,12 @@ void func_80049CA8(dream_session_t *This, void *arg1, s32 arg2) {
     }
     return;
 state1:
-    result = This->m_DreamSys->vtable->dream_sys__start_day(This->m_DreamSys);
+    result = This->m_DreamSys->vtable->dream_sys_start_day(This->m_DreamSys);
     if (result >= 0) {
         open_map(This, result);
         return;
     }
-    This->m_DreamSys->vtable->dream_sys__end_day(This->m_DreamSys, 0);
+    This->m_DreamSys->vtable->dream_sys_end_day(This->m_DreamSys, 0);
     This->m_Unk9 = arg2;
     This->vtable->Unk23(This, 3);
     return;
@@ -269,7 +269,7 @@ state3:
     ((void (*)(map_scene_t *))obj->vtable->Unk17)(obj);
     obj = (map_scene_t *)This->m_Unk18;
     obj->vtable->Destroy(obj);
-    open_map(This, This->m_DreamSys->vtable->Unk119(This->m_DreamSys));
+    open_map(This, This->m_DreamSys->vtable->dream_sys_get_current_map(This->m_DreamSys));
 }
 
 void open_map(dream_session_t *This, s32 Unk) {
@@ -300,8 +300,8 @@ void on_link_code(dream_session_t *This, s32 Unk2, s32 Unk3) {
         case 4:
             (*(void (**)(s32, s32))(*(s32 *) This->m_Unk18 + 0x48))(This->m_Unk18, Unk2);
             (*(void (**)(s32))(*(s32 *) This->m_Unk18 + 4))(This->m_Unk18);
-            if (This->m_DreamSys->vtable->dream_sys__end_day(This->m_DreamSys, 0) == 0) {
-                This->m_DreamSys->vtable->dream_sys__get_cinematic(sp10, This->m_DreamSys);
+            if (This->m_DreamSys->vtable->dream_sys_end_day(This->m_DreamSys, 0) == 0) {
+                This->m_DreamSys->vtable->dream_sys_get_cinematic(sp10, This->m_DreamSys);
                 unk4 = 2;
                 if (sp10[1] < 0) {
                     unk4 = 1;
@@ -330,7 +330,7 @@ void on_link_code(dream_session_t *This, s32 Unk2, s32 Unk3) {
             if (Unk3 != 12) {
                 unk = 2;
             }
-            vtable->dream_sys__end_day(dream_sys, unk);
+            vtable->dream_sys_end_day(dream_sys, unk);
             This->m_Unk9 = 3;
             This->vtable->Unk23(This, 3);
             break;

@@ -175,8 +175,8 @@ void func_800531CC(map_scene_t *This, dream_sys_t *arg1) {
     arg1->vtable->Destroy(arg1);
     This->m_Unk23 = 0;
     This->vtable->Unk31(This);
-    limit = This->m_Unk14->vtable->Unk65(This->m_Unk14);
-    This->m_Unk14->vtable->dream_sys__get_set_dream_time_limit(This->m_Unk14, limit + 0x1E);
+    limit = This->m_Unk14->vtable->dream_sys_get_elapsed_seconds(This->m_Unk14);
+    This->m_Unk14->vtable->dream_sys_get_set_dream_time_limit(This->m_Unk14, limit + 0x1E);
     goto check;
 other:
     if (arg1->m_Unk14 == 0) {

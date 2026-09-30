@@ -19,9 +19,9 @@ void func_800536B0(map_scene_t *This) {
 
     This->vtable->Unk52(This);
     dream_sys = This->m_Unk14;
-    dream_sys->vtable->Unk62(dream_sys);
+    dream_sys->vtable->dream_sys_lock_input(dream_sys);
     dream_sys = This->m_Unk14;
-    dream_sys->vtable->Unk19(dream_sys);
+    dream_sys->vtable->dream_sys_detach_actor(dream_sys);
     (*(void (**)(void *))(*(s32 *)This->m_Unk5 + 0x74))(This->m_Unk5);
     This->vtable->Detach(This, This->m_Unk4);
 }
@@ -58,7 +58,7 @@ void func_80053764(map_scene_t *This) {
     (*(void (**)(void *, s32))(*(s32 *)obj5 + 0xB4))(obj5, 1);
     This->vtable->Attach(
         This, created = (*(void *(**)(void *))(*(s32 *)obj5 + 0xAC))(obj5));
-    ret = This->m_Unk14->vtable->Unk59(This->m_Unk14, &sp10, -1);
+    ret = This->m_Unk14->vtable->dream_sys_get_set_flashback(This->m_Unk14, &sp10, -1);
     (*(void (**)(void *, s32, s32))(*(s32 *)created + 0xF0))(
         created, ret, -(ret != 0) & 3);
     {
@@ -128,7 +128,7 @@ void func_80053ACC(map_scene_t *This) {
 
     dream_sys = This->m_Unk14;
     This->m_Unk7 = 4;
-    if (dream_sys->vtable->Unk59(dream_sys, &sp18, -1) == 0) {
+    if (dream_sys->vtable->dream_sys_get_set_flashback(dream_sys, &sp18, -1) == 0) {
         temp_v1 = (This->m_Unk6 + This->m_Unk13) & 3;
         if (temp_v1 == 0) {
             This->vtable->Notify(This, 4);
@@ -168,10 +168,10 @@ void func_80053BE8(map_scene_t *This) {
     } else {
         This->m_Unk7 = 5;
         dream_sys = This->m_Unk14;
-        v = dream_sys->vtable->dream_sys__get_dream_color(dream_sys);
+        v = dream_sys->vtable->dream_sys_get_dream_color(dream_sys);
         func_80053EB4(This, v, 0, 0xA, 1);
         dream_sys = This->m_Unk14;
-        dream_sys->vtable->Unk62(dream_sys);
+        dream_sys->vtable->dream_sys_lock_input(dream_sys);
     }
 }
 
@@ -180,9 +180,9 @@ void func_80053C94(map_scene_t *This) {
 
     This->m_Unk7 = 6;
     dream_sys = This->m_Unk14;
-    func_80053EB4(This, dream_sys->vtable->dream_sys__get_dream_color(dream_sys), 0, 0x1E, 1);
+    func_80053EB4(This, dream_sys->vtable->dream_sys_get_dream_color(dream_sys), 0, 0x1E, 1);
     dream_sys = This->m_Unk14;
-    dream_sys->vtable->Unk62(dream_sys);
+    dream_sys->vtable->dream_sys_lock_input(dream_sys);
 }
 
 void func_80053D18(map_scene_t *This) {
@@ -191,23 +191,23 @@ void func_80053D18(map_scene_t *This) {
 
     This->m_Unk7 = 7;
     dream_sys = This->m_Unk14;
-    dream_sys->vtable->Unk59(dream_sys, &sp18, -1);
+    dream_sys->vtable->dream_sys_get_set_flashback(dream_sys, &sp18, -1);
     func_80053EB4(This, sp18, 0, 5, 1);
     dream_sys = This->m_Unk14;
-    dream_sys->vtable->Unk62(dream_sys);
+    dream_sys->vtable->dream_sys_lock_input(dream_sys);
 }
 
 void func_80053D9C(map_scene_t *This) {
     This->m_Unk7 = 8;
     func_80053EB4(This, 0, 0, 6, 1);
-    This->m_Unk14->vtable->Unk60(This->m_Unk14, 1);
+    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 1);
 }
 
 void func_80053E00(map_scene_t *This) {
     This->m_Unk7 = 0xA;
     func_80053EB4(This, 0, 0, 6, 1);
-    This->m_Unk14->vtable->Unk78(This->m_Unk14, 2);
-    This->m_Unk14->vtable->Unk60(This->m_Unk14, 2);
+    This->m_Unk14->vtable->dream_sys_set_move_callback(This->m_Unk14, 2);
+    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 2);
 }
 
 void func_80053E84(map_scene_t *This) {
@@ -246,7 +246,7 @@ void func_80053F84(map_scene_t *This, dream_sys_t *arg1, s32 arg2) {
     return;
 kind5:
     This->vtable->Detach(This, arg1);
-    This->m_Unk14->vtable->Unk60(This->m_Unk14, 0);
+    This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 0);
     This->m_Unk7 = 0;
     return;
 kind6:
@@ -256,8 +256,8 @@ kind6:
     ((void (*)(void *, s32))(*(u32 *)((u8 *)*(void **)obj + 0x64)))(obj, value);
     state = This->m_Unk7;
     if (state != five && state != 8 && state == 10) {
-        This->m_Unk14->vtable->Unk94(This->m_Unk14, 1);
-        This->m_Unk14->vtable->Unk60(This->m_Unk14, 0);
+        This->m_Unk14->vtable->dream_sys_set_view_mode(This->m_Unk14, 1);
+        This->m_Unk14->vtable->dream_sys_set_paused(This->m_Unk14, 0);
         This->m_Unk7 = 4;
     }
     This->vtable->Notify(This, This->m_Unk7);

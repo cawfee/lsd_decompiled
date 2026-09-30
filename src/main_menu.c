@@ -208,7 +208,7 @@ void func_8004D578(main_menu_t *This, dream_sys_t *DreamSys) {
     This->m_Sound->vtable->sound_set_volume_offset(This->m_Sound, -1);
     This->m_DreamSys = DreamSys;
     This->m_MemoryCard = 0;
-    This->m_RegionCode = DreamSys->vtable->GetRegionCode(DreamSys, &This->m_RegionCodeParam);
+    This->m_RegionCode = DreamSys->vtable->dream_sys_get_save_data(DreamSys, &This->m_RegionCodeParam);
     write_day_digits(DreamSys->vtable->get_day_number(DreamSys, 0));
 
     This->vtable->Unk53(This, font_icon_path);
@@ -255,7 +255,7 @@ void show_title(main_menu_t *This) {
     This->m_Unk10 = 400;
     This->vtable->Unk52(This, "ETC\\TITLE.TIM", 0);
     This->vtable->Unk26(This, 10);
-    This->m_DreamSys->vtable->Unk59(This->m_DreamSys, 0, 0);
+    This->m_DreamSys->vtable->dream_sys_get_set_flashback(This->m_DreamSys, 0, 0);
 }
 
 void func_8004D898(main_menu_t *This) {
@@ -330,7 +330,7 @@ L_handle_ge3:
 L_case1_Unk59_Unk36: {
     dream_sys_t *local_dream_sys = This->m_DreamSys;
     This->m_Unk13 = 0;
-    local_dream_sys->vtable->Unk59(local_dream_sys, 0, 1);
+    local_dream_sys->vtable->dream_sys_get_set_flashback(local_dream_sys, 0, 1);
 
     method_to_call_ptr = This->vtable->Unk36;
     goto L_common_call_point;
@@ -364,7 +364,7 @@ void func_8004DABC(main_menu_t *This) {
 
     func_8003DFBC()->Unk36(This);
     unk = *(u32 *) (This->m_Unk23 + 20);
-    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, &unk);
+    This->m_DreamSys->vtable->dream_sys_get_set_screen_shake(This->m_DreamSys, &unk);
 }
 
 void func_8004DB18(main_menu_t *This, void *Unk) {
@@ -373,7 +373,7 @@ void func_8004DB18(main_menu_t *This, void *Unk) {
     text_line_t *unk_class;
 
     if (Unk) {
-        if (This->m_DreamSys->vtable->Unk106(This->m_DreamSys)) {
+        if (This->m_DreamSys->vtable->dream_sys_is_new_game(This->m_DreamSys)) {
             strcpy(g_DAY_STR + 0x18, g_SPACES);
             func_800507F8(g_DAY_STR, 0);
         }
@@ -476,13 +476,13 @@ void func_8004DE08(main_menu_t *This) {
     memory_free_mem(mem);
     func_8004D678(This, This->m_Unk18, This->m_DreamSys);
     This->vtable->Unk55(This, (void *)This->m_Unk4);
-    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, shake);
+    This->m_DreamSys->vtable->dream_sys_get_set_screen_shake(This->m_DreamSys, shake);
     This->m_Unk21 = 5;
     This->vtable->Unk23(This, 11);
     This->vtable->Unk70(This, shake[0], 1);
     This->vtable->Unk23(This, 15);
     This->vtable->Unk59(This, saved_unk21, 0);
-    This->m_DreamSys->vtable->dream_sys__get_set_screen_shake(This->m_DreamSys, shake);
+    This->m_DreamSys->vtable->dream_sys_get_set_screen_shake(This->m_DreamSys, shake);
 }
 
 void attach_memory_card(main_menu_t *This, s32 Unk) {
@@ -515,12 +515,12 @@ void write_save(main_menu_t *This) {
 
     dream_sys_obj = This->m_DreamSys;
     title_ptr = *(u32 *) ((char *) This->m_Unk23 + 0x14);
-    func_ptr = dream_sys_obj->vtable->dream_sys__get_set_screen_shake;
+    func_ptr = dream_sys_obj->vtable->dream_sys_get_set_screen_shake;
     unk_struct[0] = title_ptr;
     func_ptr(dream_sys_obj, &unk_struct[0]);
     This->vtable->attach_memory_card(This);
 
-    if (This->m_DreamSys->vtable->Unk106(This->m_DreamSys)) {
+    if (This->m_DreamSys->vtable->dream_sys_is_new_game(This->m_DreamSys)) {
         *(u8 *) D_8008AA10 = 0;
     }
 
@@ -547,7 +547,7 @@ void func_8004E230(main_menu_t *This, void *Unk2, s32 Unk3) {
     This->vtable->Unk74(This, Unk2);
 
     if (Unk3 == 0x16) {
-        This->m_DreamSys->vtable->Unk105(This->m_DreamSys);
+        This->m_DreamSys->vtable->dream_sys_clear_new_game(This->m_DreamSys);
         This->vtable->Unk72(This, 22);
     }
 }

@@ -231,7 +231,7 @@ s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4
     call_arg_1 = 0;
     call_arg_2 = Unk3 << 11;
 
-    return This->m_Unk36->vtable->Unk71(This->m_Unk36, call_arg_1, call_arg_2, &local_data, Unk4);
+    return This->m_Unk36->vtable->dream_sys_resolve_target_position(This->m_Unk36, call_arg_1, call_arg_2, &local_data, Unk4);
 }
 
 s32 entity_get_distance(entity_t *This, void *a1) {
@@ -569,7 +569,7 @@ void func_8005E160(entity_t *This, s32 *arg1) {
     s32 tick;
 
     if (arg1[1] == 0) {
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) == 5) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 5) {
             This->m_Unk16 = 0x64;
         }
     }
@@ -629,7 +629,7 @@ void func_8005E3C4(entity_t *This, s32 *arg1) {
         arg1[7] = 0x14;
         arg1[12] = 0x14;
         arg1[17] = 0x14;
-        This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+        This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
     }
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
     This->vtable->Unk48(This, -0x5A, 0);
@@ -1037,7 +1037,7 @@ void func_8005F6D4(entity_t *This) {
 
 void func_8005F708(entity_t *This) {
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) == 7) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 7) {
             This->vtable->Unk17(This, 1, &D_80089E74);
             This->vtable->Unk50(This, -0x7800, 0);
         }
@@ -1053,7 +1053,7 @@ void func_8005F800(entity_t *This) {
     s32 a1;
 
     if (This->m_Unk16 == 0) {
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) == 1) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 1) {
             This->m_Unk16 = 0xB;
         } else {
             This->m_Unk16 = 0xC;
@@ -1082,7 +1082,7 @@ void func_8005F800(entity_t *This) {
 
 void func_8005F970(entity_t *This, s32 *arg1) {
     func_8001EACC(This, This->m_Unk36, 1, 0, 0);
-    This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+    This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
     if ((arg1[1] % 10) < 3) {
         arg1[4] = 0;
         arg1[7] = 0xD;
@@ -1382,7 +1382,7 @@ void func_8006090C(entity_t *This) {
         } else if (temp == 0xC) {
             if (This->m_Unk62 < 0x1E) {
                 if (This->m_Unk36->vtable->Unk63(This->m_Unk36) != 0) {
-                    This->m_Unk36->vtable->Unk75(This->m_Unk36, 0);
+                    This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 0);
                     This->m_Unk62 = 0;
                     This->m_Unk16 = 0xB;
                 }
@@ -1449,7 +1449,7 @@ void func_80060B34(entity_t *This, s32 *arg1) {
                     }
                     vt->Unk45(This->m_Unk36, link);
                     This->m_Unk36->vtable->Unk16(This->m_Unk36, 1, &D_80089C94);
-                    This->m_Unk36->vtable->Unk75(This->m_Unk36, 0);
+                    This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 0);
                     This->m_Unk62 = 0;
                     This->m_Unk16 = 0xB;
                 }
@@ -1643,7 +1643,7 @@ void func_80061400(entity_t *This, s32 *arg1) {
         pose = 0xC;
         arg1[4] = 0;
         arg1[7] = pose;
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) == 6) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 6) {
             This->m_Unk16 = 0xB;
         } else if ((rand() % 3) == 0) {
             This->m_Unk16 = pose;
@@ -1657,7 +1657,7 @@ void func_80061400(entity_t *This, s32 *arg1) {
     state = This->m_Unk16;
     if (state == 0xB) {
         if (This->vtable->entity_get_distance(This, This->m_Unk36) < 0x400) {
-            This->m_Unk36->vtable->Unk75(This->m_Unk36, 0);
+            This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 0);
             This->m_Unk16 = 0xD;
             This->m_Unk62 = 0;
         }
@@ -1725,7 +1725,7 @@ void func_80061778(entity_t *This, s32 *arg1) {
             func_8001EACC(This->m_Unk36, This, 1, 1, 0);
             This->vtable->Unk86(This);
             This->vtable->Unk89(This);
-            This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+            This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
             arg1[4] = 0;
             arg1[7] = 0xC;
             This->m_Unk62 = 0;
@@ -1759,7 +1759,7 @@ void func_80061778(entity_t *This, s32 *arg1) {
             This->vtable->Unk75(This);
         }
     } else if (tick == 0xF0) {
-        This->m_Unk36->vtable->Unk76(This->m_Unk36, 1, 1);
+        This->m_Unk36->vtable->dream_sys_set_callbacks(This->m_Unk36, 1, 1);
     }
     if (This->m_Unk16 == 0xC) {
         tick = This->m_Unk62;
@@ -1831,13 +1831,13 @@ void func_80061C2C(entity_t *This, s32 *arg1) {
     tick = This->m_Unk62;
     if (tick == 0x12C) {
         if (This->vtable->entity_get_distance(This, This->m_Unk36) < 0x1000) {
-            This->m_Unk36->vtable->Unk75(This->m_Unk36, 0);
+            This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 0);
             goto func_80061C2C_state;
         }
         tick = This->m_Unk62;
     }
     if (tick == 0x1F4) {
-        This->m_Unk36->vtable->Unk76(This->m_Unk36, 1, 1);
+        This->m_Unk36->vtable->dream_sys_set_callbacks(This->m_Unk36, 1, 1);
     }
 func_80061C2C_state:
     if (This->m_Unk16 == 0) {
@@ -2037,7 +2037,7 @@ void func_80062660(entity_t *This, s32 *arg1) {
     arg1[4] = 0;
     if (arg1[1] == 0) {
         This->m_Unk36->vtable->Unk16(This->m_Unk36, 1, &D_80089C88);
-        This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+        This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
         arg1[7] = 0x19;
         arg1[12] = 0x19;
         arg1[17] = 0x19;
@@ -2076,7 +2076,7 @@ void func_80062730(entity_t *This) {
         if ((u32)(unk62 - 0x14) < 0x64U) {
             This->m_Unk36->vtable->Unk48(This->m_Unk36, -((unk62 - 0x13) << 5), 1);
             if (This->m_Unk62 == 0x55) {
-                This->m_Unk36->vtable->Unk76(This->m_Unk36, 1, 1);
+                This->m_Unk36->vtable->dream_sys_set_callbacks(This->m_Unk36, 1, 1);
             }
         }
     }
@@ -2309,7 +2309,7 @@ void func_800634A8(entity_t *This, s32 *arg1) {
             arg1[7] = 0x12;
             arg1[4] = 0;
             arg1[12] = 3;
-            This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+            This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
         }
         if (This->m_Unk62 >= 0x15) {
             This->vtable->Unk48(This, -0x28, 0);
@@ -2394,7 +2394,7 @@ void func_80063874(entity_t *This, entity_t *arg1) {
             This->m_Unk62 = -1;
             return;
         }
-        This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+        This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
         This->m_Unk16 = 0xB;
         This->m_Unk62 = -1;
         return;
@@ -2549,7 +2549,7 @@ void func_80063ED4(entity_t *This, s32 *arg1) {
     }
     if (This->m_Unk32 >= 0x19) {
         This->vtable->Unk48(This, -0x14, 0);
-        This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+        This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
     }
     if (This->m_Unk62 == 0x32) {
         This->vtable->Notify(This, 0xA);
@@ -2565,7 +2565,7 @@ void func_80064078(entity_t *This, s32 *arg1) {
         if (This->m_Unk60 != 0) {
             func_8001EACC(This, This->m_Unk36, 1, 0, 0);
             This->vtable->Unk73(This, 1);
-            This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+            This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
         } else if (This->m_Unk32 == 0) {
             do {
                 This->m_Unk33 = This->vtable->Unk76(This, This->m_Unk33, 0);
@@ -2604,7 +2604,7 @@ void func_80064294(entity_t *This, s32 *arg1) {
     s32 r;
 
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) != 7) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) != 7) {
             This->m_Unk16 = 0xB;
         }
     }
@@ -2664,7 +2664,7 @@ void func_80064618(entity_t *This) {
             This->m_Class_305B0->vtable->Unk52(
                 This->m_Class_305B0, This->m_Unk19, 7, 0);
             This->vtable->Unk87(This);
-            This->m_Unk36->vtable->dream_sys__reset_flashback_list(This->m_Unk36);
+            This->m_Unk36->vtable->dream_sys_reset_flashback_list(This->m_Unk36);
         }
     }
     This->vtable->Unk48(This, -0x1E, 1);
@@ -2716,7 +2716,7 @@ void func_800646D8(entity_t *This, s32 *arg1) {
     }
     if ((This->m_Unk60 != 0) && (This->m_Unk16 == 0)) {
         This->m_Unk16 = 0xC;
-        This->m_Unk36->vtable->Unk75(This->m_Unk36, 1);
+        This->m_Unk36->vtable->dream_sys_clear_callbacks(This->m_Unk36, 1);
         This->vtable->Notify(This, 0xA);
     }
     if (This->m_Unk16 == 0xC) {
@@ -2825,7 +2825,7 @@ void func_80064E34(entity_t *This, s32 *arg1) {
     s32 temp;
 
     if (This->m_Unk62 == 0) {
-        if (This->m_Unk36->vtable->dream_sys__get_dream_color(This->m_Unk36) == 5) {
+        if (This->m_Unk36->vtable->dream_sys_get_dream_color(This->m_Unk36) == 5) {
             This->m_Unk16 = 0xB;
         }
     }

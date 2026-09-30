@@ -121,7 +121,7 @@ void func_8005C650(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     set_teleports_enabled(arg0);
 }
 
-void func_8005BF68(s32);
+void set_teleport_links_enabled(s32);
 
 void set_teleports_enabled(s32 arg0) {
     s32 enable = 0;
@@ -129,7 +129,7 @@ void set_teleports_enabled(s32 arg0) {
     if (arg0 == 0xB || arg0 == 3) {
         enable = 1;
     }
-    func_8005BF68(enable);
+    set_teleport_links_enabled(enable);
 }
 
 void func_8005C714(s32 arg0) {
@@ -137,10 +137,10 @@ void func_8005C714(s32 arg0) {
     case 0x4E:
     case 0xB:
     case 0x38:
-        func_8005BF68(1);
+        set_teleport_links_enabled(1);
         break;
     case 0x5D:
-        func_8005BF68(1);
+        set_teleport_links_enabled(1);
         break;
     }
 }
@@ -205,7 +205,7 @@ s32 func_8005C930(s32 arg0, s32 arg1) {
     s32 var_s1 = D_8008ABF8;
 
     if (var_s1 == 4 && arg1 == 0x10 &&
-        D_8008AC00->vtable->dream_sys__get_dream_color(D_8008AC00) == var_s1) {
+        D_8008AC00->vtable->dream_sys_get_dream_color(D_8008AC00) == var_s1) {
         var_s0 += 0x1E;
     }
     return var_s0;
@@ -287,7 +287,7 @@ extern s16 SPECIAL_DAYS[];
 s32 func_8005CD58(s32 arg0) {
     s32 temp_s0 = ((s8 *)SPECIAL_DAYS)[0x4A + arg0];
 
-    return temp_s0 == D_8008AC00->vtable->dream_sys__get_dream_color(D_8008AC00);
+    return temp_s0 == D_8008AC00->vtable->dream_sys_get_dream_color(D_8008AC00);
 }
 
 s32 func_8005CDA8(s32 arg0, s32 arg1) {

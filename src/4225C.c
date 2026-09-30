@@ -1,6 +1,8 @@
 #include "4225C.h"
 #include "text_line.h"
 #include "base_class.h"
+#include "3249C.h"
+#include "tim_image.h"
 
 extern class_4225C_vtable_t D_80086F88;
 
@@ -15,7 +17,49 @@ class_4225C_t *func_80051A5C(s32 Unk1, s32 Unk2) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_80051AC8);
+void func_80051AC8(class_4225C_t *This, char **arg1, s32 arg2) {
+    s32 index = 0;
+    char **cursor;
+    s32 len;
+    char dummy_stack_padding[8];
+
+    if (&dummy_stack_padding[0] == &dummy_stack_padding[7]) {
+    }
+
+    cursor = arg1;
+    base_class_get_vtable()->Construct(This);
+    This->vtable = func_80052B60();
+    while (*cursor++ != 0) {
+        index += 1;
+    }
+    This->m_Unk3 = index;
+    This->m_Unk5 = (s32)memory_allocate_mem(This->m_Unk3 * 4);
+    This->m_Unk6 = (s32)memory_allocate_mem(This->m_Unk3 * 4);
+    This->m_Unk4 = 0;
+    cursor = arg1;
+    index = 0;
+    if (This->m_Unk3 > 0) {
+        do {
+            len = strlen((char *)*cursor);
+            if (arg2 == 1) {
+                len /= 2;
+            }
+            ((s32 *)This->m_Unk6)[index] = len;
+            ((char **)This->m_Unk5)[index] = (char *)memory_allocate_mem(len + 4);
+            if (arg2 == 1) {
+                func_80040FC0((s8 *)((char **)This->m_Unk5)[index], (s8 *)*cursor);
+            } else {
+                strcpy(((char **)This->m_Unk5)[index], *cursor);
+            }
+            This->m_Unk4 = (This->m_Unk4 < len) ? len : This->m_Unk4;
+            cursor += 1;
+            index += 1;
+        } while (index < This->m_Unk3);
+    }
+    This->m_Unk2 = arg2;
+    func_80051C74(This);
+    This->vtable->Unk15(This);
+}
 
 void func_80051C74(class_4225C_t *This) {
     This->m_Unk12 = 0;
@@ -96,7 +140,36 @@ void func_80051F14(class_4225C_t *This) {
     This->m_Unk9 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/4225C", func_80051F24);
+extern s8 D_8008AB14[];
+extern s8 D_8008AB1C[];
+extern s8 D_8008AB24[];
+extern s8 D_800116E4[];
+extern s32 D_80087028[3];
+extern s32 D_8008AAF8[2];
+
+s8 *build_data_path(s8 *dest, s8 *arg1, s8 *arg2, s8 *arg3);
+
+void func_80051F24(class_4225C_t *This, s32 arg1) {
+    s8 buf[32];
+    tim_image_t *tex;
+    tim_image_t *tex2;
+    class_3249C_t *panel;
+
+    if ((arg1 == 0) || (This->m_Unk19 != 0)) {
+        return;
+    }
+    tex = tim_image_create((char *)build_data_path(buf, D_8008AB14, D_8008AB1C, D_8008AB24));
+    tex->vtable->Unk14(tex);
+    This->m_Unk19 = (s32)class_3249C_create((s32)tex, (s32)D_80087028, 0);
+    tex->vtable->Destruct(tex);
+    panel = (class_3249C_t *)This->m_Unk19;
+    panel->vtable->Unk18(panel, (void *)arg1, (void *)D_8008AAF8);
+    tex2 = tim_image_create((char *)build_data_path(buf, D_800116E4, D_8008AB1C, D_8008AB24));
+    tex2->vtable->Unk14(tex2);
+    ((void (*)(void *, s32, tim_image_t *, s32, s32, s32))This->vtable->Unk34)(
+        This, arg1, tex2, This->m_Unk7, This->m_Unk8, This->m_Unk9);
+    tex2->vtable->Destruct(tex2);
+}
 
 void func_800520A0(class_4225C_t *This) {
     if (This->m_Unk19) {

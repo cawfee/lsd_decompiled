@@ -142,7 +142,7 @@ typedef struct main_menu {
     /* 0xB4 */ s32 m_Unk44;
     /* 0xB8 */ s32 m_Unk45;
     /* 0xBC */ char *m_RegionCode;    // Points to J01, probably a struct
-    /* 0xC0 */ s32 m_RegionCodeParam; // Set to 0x700, argument passed into GetRegionCode
+    /* 0xC0 */ s32 m_RegionCodeParam; // Set to 0x700, argument passed into dream_sys_dream_sys_get_save_data
     /* 0xC4 */ s32 m_Unk48;
 } main_menu_t;
 

@@ -260,37 +260,37 @@ get_stage_chunk_from_mood = 0x8004950c;
 get_mood_from_stage_chunk = 0x800495b8;
 
 
-dream_sys__timer_tick = 0x80058d94;
-dream_sys__wall_link = 0x80058fac;
-dream_sys__get_set_dream_time_limit = 0x80059328;
-dream_sys__init_new_game = 0x8005a258;
-dream_sys__get_set_screen_shake = 0x8005a2d0;
-dream_sys__advance_day = 0x8005a304;
-dream_sys__start_day = 0x8005a368;
-dream_sys__end_day = 0x8005a41c;
-dream_sys__get_cinematic = 0x8005a4e8;
-dream_sys__init_spawn_loc = 0x8005a508;
-dream_sys__dynamic_link = 0x8005a580;
-dream_sys__static_wall_link = 0x8005a5d8;
-dream_sys__load_next_flashback = 0x8005a63c;
+dream_sys_timer_tick = 0x80058d94;
+dream_sys_wall_link = 0x80058fac;
+dream_sys_get_set_dream_time_limit = 0x80059328;
+dream_sys_init_new_game = 0x8005a258;
+dream_sys_get_set_screen_shake = 0x8005a2d0;
+dream_sys_advance_day = 0x8005a304;
+dream_sys_start_day = 0x8005a368;
+dream_sys_end_day = 0x8005a41c;
+dream_sys_get_cinematic = 0x8005a4e8;
+dream_sys_init_spawn_loc = 0x8005a508;
+dream_sys_dynamic_link = 0x8005a580;
+dream_sys_static_wall_link = 0x8005a5d8;
+dream_sys_load_next_flashback = 0x8005a63c;
 execute_link = 0x8005a928;
-dream_sys__process_chunk_change = 0x8005afdc;
-dream_sys__instance_effects_on_journal = 0x8005b03c;
-dream_sys__get_previous_day_mood = 0x8005b1f4;
-dream_sys__init_mood_contibutors = 0x8005b2f4;
-dream_sys__log_chunk_mood = 0x8005b3a4;
-dream_sys__log_instance_mood = 0x8005b3f0;
-dream_sys__update_dream_chart = 0x8005b420;
-dream_sys__get_dream_color = 0x8005b4e0;
+dream_sys_process_chunk_change = 0x8005afdc;
+dream_sys_instance_effects_on_journal = 0x8005b03c;
+dream_sys_get_previous_day_mood = 0x8005b1f4;
+dream_sys_init_mood_contributors = 0x8005b2f4;
+dream_sys_log_chunk_mood = 0x8005b3a4;
+dream_sys_log_instance_mood = 0x8005b3f0;
+dream_sys_update_dream_chart = 0x8005b420;
+dream_sys_get_dream_color = 0x8005b4e0;
 calc_dream_color = 0x8005B518;
-dream_sys__clear_mood_graph = 0x8005b5a4;
-dream_sys__log_mood = 0x8005b5b8;
-dream_sys__get_mood_average = 0x8005b5f0;
+dream_sys_clear_mood_graph = 0x8005b5a4;
+dream_sys_log_mood = 0x8005b5b8;
+dream_sys_get_mood_average = 0x8005b5f0;
 calc_mood_axis = 0x8005b66c;
-dream_sys__calc_unlock_score = 0x8005b6e0;
-dream_sys__add_flashback = 0x8005b74c;
-dream_sys__flashback_saving = 0x8005b81c;
-dream_sys__reset_flashback_list = 0x8005B8FC;
+dream_sys_calc_unlock_score = 0x8005b6e0;
+dream_sys_add_flashback = 0x8005b74c;
+dream_sys_flashback_saving = 0x8005b81c;
+dream_sys_reset_flashback_list = 0x8005B8FC;
 
 init_nav_challenges_array = 0x8005ba50;
 calc_navigation_score = 0x8005ba7c;
@@ -302,6 +302,74 @@ test_4_staircase_nodes = 0x8005bfdc;
 get_static_spawn = 0x8005c150;
 generate_initial_spawn = 0x8005c28c;
 is_day_special = 0x8005c438;
+
+// dream_sys methods and spawn/link helpers
+dream_sys_detach_actor = 0x80058A94;
+dream_sys_on_floor_event = 0x80058B08;
+dream_sys_on_chunk_event = 0x80058E8C;
+dream_sys_on_journal_event = 0x80058F18;
+dream_sys_nop = 0x800590E0;
+dream_sys_get_set_flashback = 0x800590E8;
+dream_sys_set_paused = 0x80059148;
+dream_sys_lock_input = 0x80059310;
+dream_sys_get_elapsed_seconds = 0x80059360;
+dream_sys_set_actor = 0x8005937C;
+dream_sys_set_transform = 0x80059384;
+dream_sys_set_texture = 0x8005938C;
+dream_sys_update_link_timer = 0x80059394;
+dream_sys_run_callbacks = 0x800593D8;
+dream_sys_resolve_target_position = 0x8005942C;
+lerp_position = 0x8005950C;
+dream_sys_clear_callbacks = 0x800595A8;
+dream_sys_set_callbacks = 0x80059610;
+dream_sys_set_view_callback = 0x8005966C;
+dream_sys_set_move_callback = 0x800596E8;
+dream_sys_update_view = 0x800597C0;
+dream_sys_update_look = 0x80059814;
+dream_sys_update_turn = 0x800598E8;
+dream_sys_decay_turn = 0x80059A1C;
+dream_sys_update_movement = 0x80059A58;
+dream_sys_move_step = 0x80059AEC;
+dream_sys_move_forward = 0x80059B50;
+dream_sys_set_move_forward = 0x80059BD4;
+dream_sys_process_move = 0x80059BE0;
+dream_sys_apply_floor_surface = 0x80059D1C;
+dream_sys_release_floor_effect = 0x80059E3C;
+dream_sys_trigger_link_action = 0x80059E98;
+dream_sys_update_turn_delta = 0x8005A050;
+dream_sys_reset_view = 0x8005A0B0;
+dream_sys_set_view_mode = 0x8005A134;
+dream_sys_get_set_move_direction = 0x8005A168;
+dream_sys_set_move_direction = 0x8005A184;
+dream_sys_restore_move_direction = 0x8005A1A4;
+dream_sys_set_link_params = 0x8005A1B0;
+dream_sys_set_link_interval = 0x8005A1EC;
+dream_sys_configure_entity_link = 0x8005A1F4;
+dream_sys_clear_new_game = 0x8005A33C;
+dream_sys_is_new_game = 0x8005A344;
+dream_sys_get_save_data = 0x8005A350;
+dream_sys_tunnel_link = 0x8005A700;
+dream_sys_random_spawn_link = 0x8005A7A0;
+dream_sys_teleport_link = 0x8005A82C;
+dream_sys_staircase_link = 0x8005A9CC;
+dream_sys_auto_move_0 = 0x8005AB2C;
+dream_sys_auto_move_1 = 0x8005AC24;
+dream_sys_auto_move_2 = 0x8005AD68;
+dream_sys_auto_move_3 = 0x8005AE40;
+dream_sys_translate_toward = 0x8005AF64;
+dream_sys_get_current_map = 0x8005AFD0;
+dream_sys_save_link_state = 0x8005B904;
+dream_sys_restore_link_state = 0x8005B990;
+dream_sys_get_set_flag = 0x8005BA20;
+get_stage_time_limit = 0x8005BB14;
+get_tunnel_link = 0x8005BD3C;
+is_facing_angle = 0x8005BE28;
+get_dynamic_link_spawn = 0x8005BE90;
+get_teleport_link_data = 0x8005BF48;
+set_teleport_links_enabled = 0x8005BF68;
+get_teleport_time_bonus = 0x8005BFC4;
+get_staircase_link = 0x8005C02C;
+get_staircase_spawn_index = 0x8005C118;
 
 set_teleports_enabled = 0x8005c6d8;
 
@@ -321,6 +389,26 @@ STG11_CHUNK_MOODS = 0x80086548; // type:s16 size:24
 STG12_CHUNK_MOODS = 0x80086560; // type:s16 size:40
 STG13_CHUNK_MOODS = 0x80086588; // type:s16 size:8
 STAGE_CHUNK_MOODS = 0x80086590; // type:s32 size:56
+
+// dream_sys player/link motion tables
+g_DreamStartTransform = 0x80087E08;
+g_DreamColorTable = 0x80087E14;
+g_LinkDistanceByDirection = 0x80087E20;
+g_LinkDistanceSign = 0x80087E34;
+g_LinkActionTable = 0x80087E3C;
+g_LookVerticalDelta = 0x80087E50;
+g_LookVerticalLimit = 0x80087E5C;
+g_TurnDelta = 0x80087E68;
+g_TurnLimit = 0x80087E74;
+g_TurnTransforms = 0x80087E80;
+g_TurnTransformYaw = 0x80087E84;
+g_ViewResetOffset = 0x80087EA4;
+g_FloorSurfaceAnim = 0x80087EB0;
+g_FloorSurfaceParam = 0x80087EC8;
+g_LinkTargetPos = 0x80087EE8;
+g_AutoMoveTable = 0x80087EEC;
+g_TurnStepCw = 0x80087EFC;
+g_TurnStepCcw = 0x80087F08;
 
 // Array of shorts defining dream length is seconds
 STAGE_TIME_LIMITS = 0x80087f14; // type:s16 size:28
@@ -354,15 +442,46 @@ STG12_PERMALINK_TRIGGERS = 0x80088708;
 STAGE_PERMALINK_TRIGGERS = 0x80088710; // type:s32 size:56
 LEN_STAGE_PERMALINK_TRIGGERS = 0x80088748; // type:s8 size:14
 
+// dream_sys static-link tables
+g_LinkTransforms = 0x80088758;
+g_LinkTransformAngles = 0x8008875C;
+g_TunnelLinkSpawns = 0x80088820;
+g_TunnelLinkSpawnTransforms = 0x80088858;
+g_TunnelLinkTriggers = 0x80088980;
+g_TunnelLinkTriggerTransforms = 0x800889B8;
+g_TunnelLinkCounts = 0x800889F0;
+g_TeleportLinkSpawns = 0x80088A80;
+g_TeleportLinkTriggers = 0x80088B24;
+g_TeleportLinkCounts = 0x80088B5C;
+g_StaircaseLinkSpawns = 0x80088BA4;
+g_StaircaseLinkSpawnTransforms = 0x80088BDC;
+g_StaircaseLinkTriggers = 0x80088C4C;
+g_StaircaseLinkTriggerTransforms = 0x80088C84;
+g_StaircaseLinkCounts = 0x80088CBC;
+
 // Array of shorts defining special days (day value is 1-indexed)
 SPECIAL_DAYS = 0x80088ccc; // type:s16 size:84
 
 //Meaning unknown, gets compared against the current dream color.
 SPECIAL_COLORS = 0x80088d20; // type:s8 size:8
 
+// dream_sys state/markers
+g_AutoMoveTarget0 = 0x8008ABC0;
+g_AutoMoveTarget1 = 0x8008ABC8;
+g_AutoMoveTarget2 = 0x8008ABD0;
+g_AutoMoveTarget3 = 0x8008ABD8;
+g_SaveDataMagic = 0x8008ABE0;
+g_TeleportLinksEnabled = 0x8008ABE4;
+g_DefaultLinkTransform = 0x8008ABF0;
+g_SpecialDayMarker = 0x8008ABF4;
+g_LinkSourceStage = 0x8008ACBC;
+g_LinkSourceIndex = 0x8008ACC0;
+g_LinkTargetStage = 0x8008ACC4;
+g_LinkTargetIndex = 0x8008ACC8;
+
 small__rand = 0x8008ac68;
 gpNavChallengesComplete = 0x8008acb4;
-gpDinamicLinkPenalty = 0x8008acb8;
+gpDynamicLinkPenalty = 0x8008acb8;
 
 // Memory
 memory_create_manager = 0x80017a20;

@@ -148,7 +148,7 @@ void func_80058404(graph_screen_t *This, s32 arg) {
     if (&pad[0] == &pad[7]) {
     }
     func_8003DFBC()->Unk55(This, arg);
-    rec = ((dream_sys_t *)This->m_Unk40)->vtable->GetRegionCode(This->m_Unk40, NULL);
+    rec = ((dream_sys_t *)This->m_Unk40)->vtable->dream_sys_get_save_data(This->m_Unk40, NULL);
     This->m_Unk141 = func_800585B4(This, (u8 *)rec);
     flag = 0;
     if (rec->field4 != 0) {

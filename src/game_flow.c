@@ -84,7 +84,7 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
 
     This->m_DreamSys = dream_sys_create(tmd_create(&tmd_args), 0, 0);
     This->m_SkipDreamChart = 0;
-    This->m_DreamSys->vtable->dream_sys__set_unk_flag(This->m_DreamSys, Config->unused_flag);
+    This->m_DreamSys->vtable->dream_sys_get_set_flag(This->m_DreamSys, Config->unused_flag);
     This->vtable->game_flow_get_day_rand(This);
 }
 
@@ -254,7 +254,7 @@ void game_flow_play_special_day(game_flow_t *This) {
     dream_sys_t *dream_sys;
 
     dream_sys = This->m_DreamSys;
-    dream_sys->vtable->dream_sys__get_cinematic(cinematic, dream_sys);
+    dream_sys->vtable->dream_sys_get_cinematic(cinematic, dream_sys);
 
     movie_name = get_special_day_movie(duration, cinematic[0] | (cinematic[1] << 16));
 

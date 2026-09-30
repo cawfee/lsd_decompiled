@@ -71,14 +71,14 @@ typedef struct class_3ACC8_vtable {
     /* 0x0F8 800867e0 */ void (*Unk61)(void *, s32, void *, s32);
     /* 0x0FC 800867e4 */ void (*Unk62)(void *);
     /* 0x100 800867e8 */ void (*Unk63)(void *, s32 **, s32);
-    /* 0x104 800867ec */ void (*Unk64)(void *);
+    /* 0x104 800867ec */ void (*Unk64)(void *, void *);
     /* 0x108 800867f0 */ void (*Unk65)(void *, void *);
     /* 0x10C 800867f4 */ s32 (*Unk66)(void *, void *, s32);
     /* 0x110 800867f8 */ s32 (*Unk67)(void *, void *, s32);
     /* 0x114 800867fc */ void (*Unk68)(void *);
     /* 0x118 80086800 */ void *(*Unk69)(void *, s32);
     /* 0x11C 80086804 */ void (*Unk70)(void *);
-    /* 0x120 80086808 */ void (*Unk71)(void *);
+    /* 0x120 80086808 */ s32 (*Unk71)(void *, s32);
     /* 0x124 8008680c */ s32 (*Unk72)(void *, s32);
     /* 0x128 80086810 */ void (*Unk73)(void *);
     /* 0x12C 80086814 */ void (*Unk74)(void *, void *, s32);

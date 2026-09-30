@@ -650,6 +650,55 @@ loop:
     return count;
 }
 
+/*
+ * Near match (semantics exact, 81/80 insns). The target keeps the byte offset
+ * in $s4 (`ori s4,zero,0xEC`, `addiu s4,s4,0x1C` in the loop-back delay) and
+ * recomputes the slot address at the loop head (`addu s0,s1,s4`). With the
+ * natural offset increment at the loop bottom gcc 2.6.3 strength-reduces the
+ * slot pointer into `addiu s0,s0,0x1C` (77 insns). Moving the increment into the
+ * loop body keeps $s4 but makes gcc peel a copy of the address computation into
+ * the preheader (81 insns vs target 80), so the first instruction difference is
+ * the missing/extra head `addu`. Also needs the widened vtable Unk64. Best C:
+ *
+ * void func_8004BD14(class_3ACC8_t *This, s32 unused, s32 arg2) {
+ *     s32 offset;
+ *     s32 i;
+ *     s32 state;
+ *     u16 count;
+ *
+ *     if (arg2 == 2) {
+ *         i = 0;
+ *         offset = 0xEC;
+ *         do {
+ *             fast_slot_t *slot = (fast_slot_t *)((u8 *)This + offset);
+ *             if (slot->m_Obj->m_Unk2E != 0) {
+ *                 slot->m_Obj->m_Unk2E = 0;
+ *                 This->vtable->Unk33(This, 7, slot, i);
+ *             }
+ *             state = This->m_Unk107;
+ *             offset += 0x1C;
+ *             if (state == 1 && slot->m_Flag != 0) {
+ *                 if (slot->m_Obj->m_Unk2C != 0) {
+ *                     This->vtable->Unk64(This, slot);
+ *                     slot->m_Obj->m_Unk2C = 2;
+ *                     slot->m_Flag = 0;
+ *                     count = *(u16 *)&This->m_Unk108 - 1;
+ *                     *(u16 *)&This->m_Unk108 = count;
+ *                     if (count == 0) {
+ *                         *(u16 *)&This->m_Unk108 = 0;
+ *                         This->m_Unk107 = 0;
+ *                         This->m_Unk109 = state;
+ *                     }
+ *                 } else if (slot->m_Obj->m_Unk2A == 0) {
+ *                     slot->m_Flag = 0;
+ *                 }
+ *             }
+ *             i += 1;
+ *         } while (i < 7);
+ *     }
+ * }
+ */
+
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BD14);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004BE54);
@@ -732,8 +781,38 @@ exit:
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C470);
+typedef struct {
+    /* 0x00 */ s32 field0;
+    /* 0x04 */ s32 field4;
+    /* 0x08 */ s32 field8;
+} func_8004C470_probe_t;
 
+void *func_8004C470(class_3ACC8_t *This, func_8004C470_probe_t *arg1) {
+    void *result;
+    u8 *inner;
+    s32 *coords;
+    s32 i = 0;
+    s32 range = 0xA000;
+    s32 offset = 0;
+    s32 c6;
+    s32 c8;
+
+    for (; i < 7; i += 1, offset -= 0x800) {
+        result = This->vtable->Unk69(This, i);
+        inner = *(u8 **)((u8 *)result + 0xC);
+        coords = *(s32 **)((inner + 0x14));
+        if ((c6 = coords[6], arg1->field0 >= c6) && arg1->field0 < c6 + range &&
+            arg1->field8 >= coords[8] && arg1->field8 < (c8 = coords[8]) + range) {
+            if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+                return result;
+            }
+            if (offset >= arg1->field4 && offset - 0x800 < arg1->field4) {
+                return result;
+            }
+        }
+    }
+    return NULL;
+}
 s32 func_8004C588(class_3ACC8_t *This, s32 Unk) {
     s32 ret = 0;
     s32 i = 0;
@@ -797,6 +876,49 @@ void func_8004C620(class_3ACC8_t *This) {
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C6A8);
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004C93C);
+
+/*
+ * Near match (semantics exact, 91/97 insns, same opcode stream). The target
+ * keeps This in $s1 and the line record in $s0 (reused as $s0=entry after the
+ * wrap), with the entry base `count*12 + 0x8C` folded into one addu; gcc 2.6.3
+ * here assigns This to $s4 and defers +0x8C into the first access
+ * (`addu s1,s4,v0` / `addiu s0,s1,0x8C`), and leaves the line record in $a1.
+ * Needs widened vtable Unk71 (s32 (*)(void*, s32), called with 2 args and the
+ * result stored). Best C (8-arg wrap-to-12-byte-record formatter):
+ *
+ * s32 func_8004CAF0(class_3ACC8_t *arg0, line_t *arg1, s32 arg2, s32 arg3,
+ *                   s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
+ *     entry_t *entry;
+ *     s32 count = arg2;
+ *     s32 wrapped, start, total, next;
+ *
+ *     if (arg5 + arg7 >= 0x15) {
+ *         wrapped = arg5 + arg7 - 0x14;
+ *         arg1->m_UnkA = arg7 - wrapped;
+ *         count += 1;
+ *         entry = (entry_t *)((u8 *)arg0 + count * 0xC + 0x8C);
+ *         if (arg4 < 0xA) { start = arg3 + 2; entry->m_Unk0 = Unk71(arg0, start); total = arg4 + 0xA; }
+ *         else            { start = arg3 + 3; entry->m_Unk0 = Unk71(arg0, start); total = arg4 - 0xA; }
+ *         entry->m_Unk4 = total;
+ *         entry->m_UnkA = wrapped;
+ *         next = entry->m_Unk4 + arg6;
+ *         entry->m_Unk6 = 0;
+ *         if (next >= 0x15) {
+ *             count += 1;
+ *             entry->m_Unk8 = (arg6 + 0x14) - next;
+ *             entry = (entry_t *)((u8 *)arg0 + count * 0xC + 0x8C);
+ *             entry->m_Unk0 = Unk71(arg0, start + 1);
+ *             entry->m_Unk4 = 0; entry->m_Unk6 = 0;
+ *             entry->m_Unk8 = next - 0x14; entry->m_UnkA = wrapped;
+ *         } else {
+ *             entry->m_Unk8 = arg6;
+ *         }
+ *     } else {
+ *         arg1->m_UnkA = arg7;
+ *     }
+ *     return count;
+ * }
+ */
 
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CAF0);
 

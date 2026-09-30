@@ -113,9 +113,44 @@ s32 func_8001CE30(class_D294_t *This) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/D294", func_8001CEB4);
-
 s32 func_8001EC84(void *arg0);
+
+void func_8001CEB4(class_D294_t *This, s32 arg1, s32 arg2) {
+    s32 vals[3];
+    void *obj;
+    s16 *dest;
+    s16 *p;
+    s32 i;
+
+    vals[0] = func_8001EC84((void *)arg2);
+    vals[1] = func_8001EC84((void *)((u8 *)arg2 + 4));
+    vals[2] = func_8001EC84((void *)((u8 *)arg2 + 8));
+    vals[0] /= 360;
+    vals[1] /= 360;
+    vals[2] /= 360;
+    obj = This->m_Unk4;
+    dest = *(s16 **)((u8 *)obj + 0x44);
+    p = dest + 8;
+    if (arg1 != 0) {
+        dest[8] = (s16)vals[0];
+        dest[9] = (s16)vals[1];
+        dest[10] = (s16)vals[2];
+    } else {
+        s32 *q;
+
+        i = 0;
+        q = vals;
+        for (; i < 3; i++) {
+            s16 *cur;
+
+            cur = p;
+            p = p + 1;
+            *cur = (*cur + *q) % 0x1000;
+            q = q + 1;
+        }
+    }
+    *(s32 *)This->m_Unk4 = 0;
+}
 
 void func_8001D008(class_D294_t *This, s32 mode, void *src) {
     s32 a;

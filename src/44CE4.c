@@ -95,7 +95,44 @@ void func_80054714(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/44CE4", func_80054758);
+extern s8 D_800873DC[];
+extern s8 D_800873D8[];
+extern u8 *D_800873C8[];
+extern u8 D_80087234[];
+extern u8 D_8008726C[];
+extern s32 D_8008AB50;
+extern s32 D_8008AC84;
+extern s32 D_8008AC8C;
+extern s32 D_8008AC90;
+
+s8 *func_80054758(void) {
+    s32 temp_v1;
+    s8 temp_a0;
+    s32 idx;
+    s8 *entry;
+    u8 *p;
+
+    temp_v1 = D_8008AC74 + D_8008AC6C;
+    temp_a0 = D_800873DC[temp_v1 & 0xF];
+    D_8008AC80 = temp_a0;
+    idx = temp_v1 % D_800873D8[temp_a0];
+    D_8008AC84 = idx;
+    entry = (s8 *)(D_800873C8[temp_a0] + idx * 4);
+    if (temp_a0 == 0) {
+        p = D_8008726C;
+        D_8008AC90 = (s32)(D_800872C4 + entry[3] * 3);
+        if (entry[2] != 0x12) {
+            p = D_80087234;
+        }
+        D_8008AC8C = (s32)p;
+        if (idx < 4) {
+            D_8008AB50 = 1;
+        } else if (idx < 6) {
+            D_8008AB50 = 2;
+        }
+    }
+    return entry;
+}
 
 INCLUDE_ASM("asm/nonmatchings/44CE4", func_80054850);
 
@@ -116,6 +153,35 @@ void func_80054B50(void) {
         D_8008AB50 = 0;
     }
 }
+
+/*
+ * Near match (semantics exact, 59/60 insns, same opcode stream). Only residual:
+ * gcc 2.6.3 CSEs the two `D_8008AC80 == 2` constants into one pseudolive across
+ * the calls, keeping 2 in $s2 and saving/restoring it; the target rematerializes
+ * `ori a0,zero,2` / `ori v0,zero,2` at each test and so has no $s2 save. Tried
+ * if/else, else-if, switch, do{break;}while, `!= 2u`, 2/0x2 spellings, inverted
+ * comparisons: gcc always hoists 2 into $s2 (59 or 61 insns). Best C:
+ *
+ * void func_80054B84(s32 arg0) {
+ *     s32 byte, pad, temp_v0;
+ *     if (D_8008AC80 >= 0) {
+ *         func_80056F5C(D_8008AC80, (void *)D_8008AC7C[1], D_8008AC7C[2], D_8008AC7C[3]);
+ *         byte = D_80087324[rand() & 3];
+ *         pad = 0;
+ *         if (D_8008AC80 == 2) { pad = 0x10 - byte; }
+ *         D_8008AC88 = byte + pad;
+ *         temp_v0 = (s32)func_80054F30((s32 *)func_80054DA4(D_8008E0C8, byte, arg0), pad, arg0);
+ *         if (D_8008AC80 == 0) {
+ *             func_80054FD8(temp_v0, arg0);
+ *         } else if (D_8008AC80 != 2) {
+ *             return;
+ *         } else {
+ *             func_8005511C(temp_v0, arg0);
+ *         }
+ *         D_8008AC88 += 1;
+ *     }
+ * }
+ */
 
 INCLUDE_ASM("asm/nonmatchings/44CE4", func_80054B84);
 
