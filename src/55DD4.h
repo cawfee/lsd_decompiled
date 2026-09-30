@@ -4,6 +4,15 @@
 #include "common.h"
 #include "base_class.h"
 
+/* class_55DD4 is the engine's generic "actor" base class below entity:
+ *   base_class  - parent/child lists + Notify bus
+ *   class_D294  - transform/matrix + 3D resource ownership
+ *   class_477E4 - model/attachment handling (Attach keeps m_Unk18/m_Unk19)
+ *   class_55DD4 - adds the large reusable actor method table: motion/animation
+ *                 (slots 0x40..), movement, collision and notify plumbing.
+ * entity derives from it and overrides a few slots plus appends its own
+ * (dream effects / interaction / per-type behaviour).  See entity.h.
+ * Slots still named UnkNN are not yet understood. */
 typedef struct class_55DD4_vtable {
     /* 0x000 8008a6c4 */ u32 type_id;
     /* 0x004 8008a6c8 */ base_class_t *(*Destroy)(base_class_t *);

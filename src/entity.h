@@ -1,12 +1,28 @@
 #ifndef LSD_ENTITY_H
 #define LSD_ENTITY_H
 
-#include "305B0.h"
+#include "effect.h"
 #include "common.h"
 #include "base_class.h"
 
 typedef struct dream_sys dream_sys_t;
 
+/* Notify codes raised by entity behaviours (base_class_notify). */
+typedef enum {
+    ENTITY_NOTIFY_DETACH = 1,      /* base_class cleanup: detach from sender */
+    ENTITY_NOTIFY_TRIGGERED = 9,   /* interaction fired (entity_set_triggered) */
+    ENTITY_NOTIFY_LINK = 10,       /* request a dynamic link (dream_session case 10) */
+    ENTITY_NOTIFY_LINK_VIDEO = 11, /* link that also plays an event video */
+    ENTITY_NOTIFY_LINK_END = 12,   /* request day end / link (dream_session case 12) */
+} entity_notify_t;
+
+
+/* entity_vtable is a superset of class_55DD4_vtable:
+ *   slots 0x004..0x140   inherited base_class -> D294 -> 477E4 -> 55DD4 methods
+ *   slot  0x008/0x00C    overridden by entity_construct/entity_cleanup
+ *   slots 0x144..0x180   entity-specific (distance, dream effects, link/trigger
+ *                        and per-frame behaviour control).  See g_ENTITY_TABLE.
+ * Slots still named UnkNN are inherited and not yet understood. */
 typedef struct entity_vtable {
     /* 0x000 80089ad4 */ u32 type_id;
     /* 0x004 80089ad8 */ base_class_t *(*Destroy)(base_class_t *);
@@ -89,22 +105,22 @@ typedef struct entity_vtable {
     /* 0x138 80089c0c */ void (*Unk77)(void *, s32, s32);
     /* 0x13C 80089c10 */ void (*Unk78)(void *);
     /* 0x140 80089c14 */ void (*Unk79)(void *);
-    /* 0x144 80089c18 */ s32 (*entity_get_distance)(void *, void *);
-    /* 0x148 80089c1c */ s32 (*Unk81)(void *);
-    /* 0x14C 80089c20 */ s8 *(*entity_get_mood_effect)(void *);
-    /* 0x150 80089c24 */ s32 (*entity_get_unlock_effect)(void *);
-    /* 0x154 80089c28 */ s32 (*entity_get_link_stage)(void *);
-    /* 0x158 80089c2c */ s32 (*entity_get_event_video)(void *);
-    /* 0x15C 80089c30 */ void (*Unk86)(void *);
-    /* 0x160 80089c34 */ void (*Unk87)(void *);
-    /* 0x164 80089c38 */ void (*Unk88)(void *, s32);
-    /* 0x168 80089c3c */ void (*Unk89)(void *);
-    /* 0x16C 80089c40 */ void (*Unk90)(void *);
-    /* 0x170 80089c44 */ s32 (*Unk91)(void *);
-    /* 0x174 80089c48 */ void (*Unk92)(void *);
-    /* 0x178 80089c4c */ void (*Unk93)(void *);
-    /* 0x17C 80089c50 */ s32 (*Unk94)(void *);
-    /* 0x180 80089c54 */ void (*Unk95)(void *);
+    /* 0x144 80089c18 */ s32 (*entity_get_distance)(entity_t *, void *);
+    /* 0x148 80089c1c */ s32 (*entity_get_trigger_ratio)(entity_t *);
+    /* 0x14C 80089c20 */ s8 *(*entity_get_mood_effect)(entity_t *);
+    /* 0x150 80089c24 */ s32 (*entity_get_unlock_effect)(entity_t *);
+    /* 0x154 80089c28 */ s32 (*entity_get_link_stage)(entity_t *);
+    /* 0x158 80089c2c */ s32 (*entity_get_event_video)(entity_t *);
+    /* 0x15C 80089c30 */ void (*entity_enable_link)(entity_t *);
+    /* 0x160 80089c34 */ void (*entity_disable_link)(entity_t *);
+    /* 0x164 80089c38 */ void (*entity_set_triggered)(entity_t *, s32);
+    /* 0x168 80089c3c */ void (*entity_start_behaviour)(entity_t *);
+    /* 0x16C 80089c40 */ void (*entity_stop_behaviour)(entity_t *);
+    /* 0x170 80089c44 */ s32 (*entity_check_interaction)(entity_t *);
+    /* 0x174 80089c48 */ s32 (*entity_check_interaction_range)(entity_t *);
+    /* 0x178 80089c4c */ s32 (*entity_check_interaction_angle)(entity_t *);
+    /* 0x17C 80089c50 */ s32 (*entity_check_link_trigger)(entity_t *);
+    /* 0x180 80089c54 */ s32 (*entity_check_link_proximity)(const entity_t *);
 } entity_vtable_t;
 
 typedef struct entity {
@@ -113,7 +129,7 @@ typedef struct entity {
     /* 0x08 */ s32 m_Unk1;
     /* 0x0C */ s32 m_Unk2;
     /* 0x10 */ s32 m_Unk3;
-    /* 0x14 */ s32 m_Unk4;
+    /* 0x14 */ s32 m_Transform;
     /* 0x18 */ s32 m_Unk5;
     /* 0x1C */ s32 m_Unk6;
     /* 0x20 */ s32 m_Unk7;
@@ -125,12 +141,12 @@ typedef struct entity {
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ s32 m_Unk15;
-    /* 0x44 */ s32 m_Unk16;
+    /* 0x44 */ s32 m_State;
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
     /* 0x54 */ s32 m_Unk20;
-    /* 0x58 */ s32 m_Unk21;
+    /* 0x58 */ s32 m_Helper;
     /* 0x5C */ s32 m_Unk22;
     /* 0x60 */ s32 m_Unk23;
     /* 0x64 */ s32 m_Unk24;
@@ -145,7 +161,7 @@ typedef struct entity {
     /* 0x88 */ s32 m_Unk33;
     /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
-    /* 0x94 */ dream_sys_t *m_Unk36;
+    /* 0x94 */ dream_sys_t *m_DreamSys;
     /* 0x98 */ s32 m_EntityID;
     /* 0x9C */ s32 m_EntityContext;
     /* 0xA0 */ s32 m_Unk39;
@@ -168,11 +184,11 @@ typedef struct entity {
     /* 0xE4 */ s32 m_Unk56;
     /* 0xE8 */ s32 m_Unk57;
     /* 0xEC */ s32 m_Unk58;
-    /* 0xF0 */ s32 m_Unk59;
-    /* 0xF4 */ s32 m_Unk60;
-    /* 0xF8 */ s32 m_Unk61;
-    /* 0xFC */ s32 m_Unk62;
-    /* 0x100 */ class_305B0_t *m_Class_305B0;
+    /* 0xF0 */ s32 m_LinkEnabled;
+    /* 0xF4 */ s32 m_Triggered;
+    /* 0xF8 */ s32 m_BehaviourActive;
+    /* 0xFC */ s32 m_Tick;
+    /* 0x100 */ effect_t *m_Effect;
     /* 0x104 */ s32 m_Unk64;
 } entity_t;
 

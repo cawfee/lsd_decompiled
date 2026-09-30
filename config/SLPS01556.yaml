@@ -240,7 +240,7 @@ segments:
       - [0x30470, c, psyq/gs/GsSetLightMode]
       - [0x304FC, c, psyq/gs/TransposeMatrix]
       - [0x3054C, c, psyq/gs/SetFogNear]
-      - [0x305B0, c]
+      - [0x305B0, c, effect]
       - [0x30CD0, c]
       - [0x310CC, c, text_line]
       - [0x3197c, c, psyq/libc/memset]
@@ -365,6 +365,8 @@ segments:
       - [0x775C4, data]
       - [0x783dc, data] # DreamSys
       - [0x79528, data]
+      - [0x7A2D4, .data, entity]
+      - [0x7AEC4, .data, 55DD4]
       - [0x7b008, .sdata, main]
       - [0x7B00C, sdata]
       # - [0x7B018, .data, memory]
@@ -392,7 +394,8 @@ segments:
       - [0x7b230, .sdata, memory_card]
       - [0x7b234, sdata]
       - [0x7b3c0, sdata] # DreamSys
-      - [0x7b3f8, sdata]
+      - [0x7b3f8, .sdata, link]
+      - [0x7b40c, sdata]
       - [0x7b420, .sbss, main]
       - [0x7b424, sbss]
       - [0x7B468, sbss] #psyq_rand

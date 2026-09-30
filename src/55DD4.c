@@ -470,3 +470,143 @@ void func_800667B0(class_55DD4_t *This) {
 class_55DD4_vtable_t *class_55DD4_get_vtable() {
     return &g_CLASS_55DD4_VTABLE;
 }
+
+/* Referenced by g_CLASS_55DD4_VTABLE. */
+extern void func_8001CEB4();
+extern void func_8001D008();
+extern void func_8001D204();
+extern void func_8001D280();
+extern void func_8001D33C();
+extern void func_8001D374();
+extern void func_8001D3A0();
+extern void func_8001D3CC();
+extern void func_8001D424();
+extern void func_8001D450();
+extern void func_8001D480();
+extern void func_8001D4AC();
+extern void func_8001D4DC();
+extern void func_8001D600();
+extern void func_8001D624();
+extern void func_8001D6A4();
+extern void func_8001D714();
+extern void func_8001D950();
+extern void func_8001DA28();
+extern void func_8001DDF4();
+extern void func_8001E4A4();
+extern void func_800570B4();
+extern void func_80057130();
+extern void func_800571A8();
+extern void func_800571F8();
+extern void func_80057320();
+extern void func_80057384();
+extern void func_800573A8();
+extern void func_80057444();
+extern void func_8005748C();
+extern void func_800574C4();
+extern void func_800574FC();
+extern void func_800575B0();
+extern void func_800575E0();
+extern void func_80057610();
+extern void func_80057B90();
+extern void func_80057C14();
+extern void func_80057C6C();
+extern void func_80057C74();
+extern void func_80057C7C();
+extern void func_800660BC();
+extern void func_8006613C();
+extern void func_80066148();
+extern void func_80066150();
+extern void func_800661C4();
+extern void func_800661CC();
+extern void func_800661D4();
+extern void func_80066214();
+extern void func_800662A8();
+extern void func_800662B4();
+extern void func_800662BC();
+extern void func_80066340();
+extern void func_80066748();
+extern void func_800667B0();
+
+class_55DD4_vtable_t g_CLASS_55DD4_VTABLE = {
+    0x00000234,
+    (base_class_t *(*)(base_class_t *))base_class_destructor,
+    (void *(*)(void *, s32, s32))class_55DD4_construct,
+    (void(*)(void *))class_55DD4_cleanup,
+    (void(*)(base_class_t *, base_class_t *))func_800570B4,
+    (void(*)(base_class_t *, base_class_t *))func_80057130,
+    (void(*)(base_class_t *))func_800571A8,
+    (void(*)(base_class_t *, void **, void **))base_class_iter_children,
+    (void(*)(base_class_t *, base_class_t *))base_class_add_parent,
+    (void(*)(base_class_t *, base_class_t *))base_class_remove_parent,
+    (void(*)(base_class_t *))base_class_clear_parents,
+    (void(*)(base_class_t *, void **, void **))base_class_iter_parents,
+    (void(*)(base_class_t *, s32))base_class_notify,
+    (void(*)(base_class_t *))base_class_nop,
+    (void(*)(base_class_t *, base_class_t *, s32))func_80065790,
+    0x00000000,
+    (void(*)(void *))func_80065830,
+    (void(*)(void *))func_8001CEB4,
+    (void(*)(void *))func_8001D008,
+    (void(*)(void *, s32, s32, s32, s32))func_80065918,
+    (void(*)(void *))func_800659D0,
+    (void(*)(void *))func_8001D204,
+    (void(*)(void *))func_8001D280,
+    (void(*)(void *))func_8001D33C,
+    (void(*)(void *))func_80065A5C,
+    (void(*)(void *))func_8001D374,
+    (void(*)(void *))func_8001D3A0,
+    (void(*)(void *))func_8001D3CC,
+    (void(*)(void *))func_80065AE0,
+    (void(*)(void *))func_8001D424,
+    (void(*)(void *))func_8001D450,
+    (void(*)(void *))func_8001D480,
+    (void(*)(void *))func_8001D4AC,
+    (void(*)(void *))func_8001D4DC,
+    (void(*)(void *))func_800571F8,
+    (void(*)(void *))func_8001D600,
+    (void(*)(void *))func_8001D624,
+    (void(*)(void *))func_8001D6A4,
+    (void(*)(void *, s32, s32))func_80065B80,
+    (void(*)(void *))func_80057320,
+    (void(*)(void *))func_8001D714,
+    (void(*)(void *))func_8001D950,
+    (void(*)(void *))func_8001DA28,
+    (void(*)(void *))func_8001DDF4,
+    0x00000000,
+    (void(*)(void *))func_8001E4A4,
+    (void(*)(void *))func_80057384,
+    (void(*)(void *))func_800573A8,
+    (void(*)(void *))func_80057444,
+    (void(*)(void *, s32, s32))func_8005748C,
+    (void(*)(void *))func_800574C4,
+    (void(*)(void *))func_800574FC,
+    (void(*)(void *))func_800575B0,
+    (void(*)(void *))func_800575E0,
+    (void(*)(void *))func_80057610,
+    (void(*)(void *, s32, s32))func_80057B90,
+    (void(*)(void *, s32, s32))func_80057C14,
+    (void(*)(void *, s32))func_80057C6C,
+    (void(*)(void *))func_80057C74,
+    (void(*)(void *))func_80057C7C,
+    (void(*)(void *, s32))func_80065BF4,
+    (s32(*)(void *, s32))func_80065BFC,
+    (void(*)(void *))func_80065C2C,
+    (void(*)(void *))func_80065D64,
+    (s32(*)(void *))func_80065DBC,
+    (void(*)(void *))func_80065DEC,
+    (void(*)(void *, s32))func_80065FD8,
+    (void(*)(void *, s32))func_800660BC,
+    (void(*)(void *))func_8006613C,
+    (void(*)(void *))func_80066148,
+    (void(*)(void *))func_80066150,
+    (void(*)(void *))func_800661C4,
+    (void(*)(void *))func_800661CC,
+    (void(*)(void *))func_800661D4,
+    (void(*)(void *, s32))func_80066214,
+    (void(*)(void *))func_800662A8,
+    (void(*)(void *))func_800662B4,
+    (void(*)(void *, s32, s32))func_800662BC,
+    (void *(*)(void *, void *, s32))func_80066340,
+    (void(*)(void *, s32))func_80066748,
+    (void(*)(void *))func_800667B0,
+};

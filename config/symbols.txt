@@ -1250,11 +1250,11 @@ class_55DD4_get_vtable = 0x80066818;
 class_55DD4_construct = 0x80065650;
 class_55DD4_cleanup = 0x8006573C;
 
-// Class 305B0
-g_CLASS_305B0_VTABLE = 0x8006E99C;
-class_305B0_create = 0x8003FDB0;
-class_305B0_get_vtable = 0x800404C0;
-class_305B0_construct = 0x8003FE2C;
+// Effect object
+g_EFFECT_VTABLE = 0x8006E99C;
+effect_create = 0x8003FDB0;
+effect_get_vtable = 0x800404C0;
+effect_construct = 0x8003FE2C;
 entity_get_mood_effect = 0x8005d944;
 entity_get_unlock_effect = 0x8005d95c;
 entity_get_link_stage = 0x8005d994;

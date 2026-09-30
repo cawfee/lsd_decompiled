@@ -3,11 +3,11 @@
 #include "entity.h"
 #include "3520C.h"
 
-extern dream_sys_t *g_LinkDreamSys;
-extern void *g_LinkSceneData;
-extern void *g_LinkScene;
-extern s32 g_CurrentLocation;
-extern s32 g_EntityHelper;
+s32 g_CurrentLocation = -1;
+void *g_LinkScene = NULL;
+dream_sys_t *g_LinkDreamSys = NULL;
+s32 g_EntityHelper = 0;
+void *g_LinkSceneData = NULL;
 
 void transform_local_to_world(void *arg0, void *arg1, void *arg2, s32 arg3);
 

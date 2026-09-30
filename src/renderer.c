@@ -1,6 +1,6 @@
 #include "renderer.h"
 #include "base_class.h"
-#include "305B0.h"
+#include "effect.h"
 #include "D294.h"
 
 #include <psx/libgte.h>
@@ -28,14 +28,14 @@ renderer_t *renderer_create(void) {
 }
 
 void func_8003E628(renderer_t *This) {
-    class_305B0_t *temp_v0;
+    effect_t *temp_v0;
 
     base_class_get_vtable()->Construct(This);
     This->vtable = renderer_get_vtable();
     This->m_Unk2 = 0;
     This->m_Unk3 = 0;
     This->m_Unk42 = (s32)func_8001CA94();
-    temp_v0 = class_305B0_create((s32)&D_8008A90C, 0, 0);
+    temp_v0 = effect_create((s32)&D_8008A90C, 0, 0);
     This->m_Unk43 = (s32)temp_v0;
     temp_v0->vtable->Unk18(temp_v0, (entity_t *)This->m_Unk42, (s32)&D_8008A904);
     This->vtable->Unk15(This);
