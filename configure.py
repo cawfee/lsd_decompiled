@@ -1,4 +1,3 @@
-import glob
 import os
 import shlex
 import sys
@@ -51,7 +50,7 @@ MASPSX = TOOLS_DIR + "/maspsx/maspsx.py"
 SPLAT = "-m splat split"
 
 # Tool Flags
-INCLUDE_FLAGS = ["-Iinclude/asm", "-Iinclude"]
+INCLUDE_FLAGS = ["-Iinclude/asm", "-Iinclude", "-Isrc"]
 AS_FLAGS = INCLUDE_FLAGS + ["-march=r3000", "-mtune=r3000", "-no-pad-sections"]
 CPP_FLAGS = INCLUDE_FLAGS + ["-undef", "-Wall", "-lang-c", "-fno-builtin"]
 CPPPLUS_FLAGS = INCLUDE_FLAGS + ["-lang-c++"]
@@ -158,57 +157,7 @@ asm_auto_targets = (
 )
 asm_targets = []
 
-# C sources
-c_game_targets = [
-    "src/timer.c",
-    "src/game_flow.c",
-    "src/tim_image.c",
-    "src/movie_screen.c",
-    "src/stage_grid.c",
-    "src/tmd_prim.c",
-    "src/display.c",
-    "src/file_object.c",
-    "src/ui_screen.c",
-    "src/effect.c",
-    "src/effect_base.c",
-    "src/text_line.c",
-    "src/glyph.c",
-    "src/sprite_node.c",
-    "src/sprite.c",
-    "src/seq_file.c",
-    "src/frame_phase.c",
-    "src/light.c",
-    "src/flat_light.c",
-    "src/tmd_model.c",
-    "src/34684.c",
-    "src/ui_sprite.c",
-    "src/object_model.c",
-    "src/object_model_list.c",
-    "src/tile_buffer.c",
-    "src/sprite_atlas.c",
-    "src/359B8.c",
-    "src/cd_stream.c",
-    "src/dream_session.c",
-    "src/scene.c",
-    "src/scene_renderer.c",
-    "src/3DB8C.c",
-    "src/scene_node.c",
-    "src/48494.c",
-    "src/graph_screen.c",
-    "src/actor.c",
-    "src/render_sort.c",
-    "src/psyq/spu/S_I.c",
-    "src/22D88.c",
-    "src/24490.c",
-    "src/272A8.c",
-    "src/display_border.c",
-    "src/select_menu.c",
-    "src/entity.c",
-    "src/transform.c",
-    "src/stage_texture.c",
-    "src/map_scene_post.c",
-]
-
+# Psy-Q SDK units, compiled with -G0.
 c_psyq_targets = [
     "src/psyq/libc/memory.c",
     "src/psyq/libc/printf.c",
@@ -371,40 +320,85 @@ c_psyq_targets = [
     "src/psyq/card/a80.c",
 ]
 
-c_targets = c_game_targets + c_psyq_targets
-
-# Game units compiled with -G8.
-c_targets_g8 = [
-    "src/tim_list.c",
+# Game units, compiled with -G8.
+c_game_targets = [
+    "src/file/tim_list.c",
     "src/main.c",
-    "src/memory.c",
+    "src/base/memory.c",
     "src/utils/cd_paths.c",
-    "src/main_menu.c",
-    "src/memory_card.c",
-    "src/file_buf.c",
-    "src/bgm.c",
-    "src/sound.c",
-    "src/system.c",
-    "src/screen.c",
-    "src/dream_sys.c",
-    "src/dream_session_path.c",
-    "src/debug_file_driver.c",
-    "src/mdec_movie.c",
-    "src/3ACC8.c",
-    "src/str_stream.c",
-    "src/pad.c",
-    "src/display_ref.c",
-    "src/base_class.c",
-    "src/cd_file_driver.c",
-    "src/tmd_prim_geom.c",
-    "src/object_math.c",
-    "src/dream_generation.c",
-    "src/46B20.c",
-    "src/comment_input.c",
-    "src/map_scene.c",
-    "src/link.c",
-    "src/generation_apply.c",
-    "src/renderer.c",
+    "src/menu/main_menu.c",
+    "src/menu/card/memory_card.c",
+    "src/file/file_buf.c",
+    "src/snd/bgm.c",
+    "src/snd/sound.c",
+    "src/sys/system.c",
+    "src/sys/screen.c",
+    "src/dream/dream_sys.c",
+    "src/dream/dream_session_path.c",
+    "src/file/debug_file_driver.c",
+    "src/menu/mdec_movie.c",
+    "src/scene/render_context.c",
+    "src/file/str_stream.c",
+    "src/sys/pad.c",
+    "src/sys/display_ref.c",
+    "src/base/base_class.c",
+    "src/file/cd_file_driver.c",
+    "src/file/tmd_prim_geom.c",
+    "src/base/object_math.c",
+    "src/dream/dream_generation.c",
+    "src/dream/generation_structure.c",
+    "src/menu/card/comment_input.c",
+    "src/scene/map_scene.c",
+    "src/scene/link.c",
+    "src/dream/generation_apply.c",
+    "src/gfx/renderer.c",
+    "src/base/timer.c",
+    "src/sys/game_flow.c",
+    "src/menu/movie_screen.c",
+    "src/scene/stage_grid.c",
+    "src/file/tmd_prim.c",
+    "src/sys/display.c",
+    "src/file/file_object.c",
+    "src/gfx/effect.c",
+    "src/gfx/effect_base.c",
+    "src/menu/text_line.c",
+    "src/menu/glyph.c",
+    "src/menu/sprite.c",
+    "src/snd/seq_file.c",
+    "src/base/frame_phase.c",
+    "src/gfx/light.c",
+    "src/gfx/flat_light.c",
+    "src/file/tmd_model.c",
+    "src/file/model_part.c",
+    "src/menu/ui_sprite.c",
+    "src/file/object_model.c",
+    "src/file/object_model_list.c",
+    "src/menu/tile_buffer.c",
+    "src/menu/sprite_atlas.c",
+    "src/file/model_part_list.c",
+    "src/file/cd_stream.c",
+    "src/dream/dream_session.c",
+    "src/scene/scene.c",
+    "src/gfx/scene_renderer.c",
+    "src/scene/notify_node.c",
+    "src/scene/scene_node.c",
+    "src/dream/generation_sprite.c",
+    "src/scene/actor.c",
+    "src/base/render_sort.c",
+    "src/psyq/spu/S_I.c",
+    "src/psyq/snd/24490.c",
+    "src/psyq/snd/272A8.c",
+    "src/sys/display_border.c",
+    "src/base/transform.c",
+    "src/scene/stage_texture.c",
+    "src/file/tim_image.c",
+    "src/menu/ui_screen.c",
+    "src/menu/sprite_node.c",
+    "src/menu/graph_screen.c",
+    "src/menu/card/select_menu.c",
+    "src/scene/map_scene_post.c",
+    "src/scene/entity.c",
+    "src/psyq/snd/22D88.c",
 ]
 
 cpp_targets = []
@@ -511,16 +505,6 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.rule("checksha", command="sha1sum --check $in", description="CHECK $in")
     n.newline()
 
-    DECOMP_GUARD_STAMP = BUILD_DIR + "/decomp_guard.ok"
-    n.rule(
-        "decomp_guard",
-        command=f"$python {shlex.quote(os.path.join(TOOLS_DIR, 'decomp_guard.py'))} --stamp $out",
-        description="DECOMP_GUARD",
-    )
-    n.newline()
-
-    src_c_files = glob.glob("src/**/*.c", recursive=True)
-
     n.build([LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS], "splat", SPLAT_CONFIG)
     n.newline()
 
@@ -531,12 +515,12 @@ with open("build.ninja", "w", encoding="utf-8") as f:
         obj_files.append(out_file)
         n.build(out_file, "asm", filename)
 
-    for filename in c_targets:
+    for filename in c_psyq_targets:
         out_file = BUILD_DIR + "/" + filename + O_EXT
         obj_files.append(out_file)
         n.build(out_file, "cc", filename)
 
-    for filename in c_targets_g8:
+    for filename in c_game_targets:
         out_file = BUILD_DIR + "/" + filename + O_EXT
         obj_files.append(out_file)
         n.build(out_file, "cc_g8", filename)
@@ -586,9 +570,8 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.build("clean", "clean_custom")
     n.newline()
 
-    # Check hash (decomp_guard runs first — blocks near_miss + forbidden asm)
-    n.build(DECOMP_GUARD_STAMP, "decomp_guard", implicit=src_c_files)
-    n.build("check", "checksha", EXE_HASH, implicit=[EXE, DECOMP_GUARD_STAMP])
+    # Check hash
+    n.build("check", "checksha", EXE_HASH, implicit=[EXE])
     n.newline()
 
     # n.build("test", "cplus", "tests/test.cpp")

@@ -2,10 +2,10 @@
 
 #include <psx/kernel.h>
 
-#include "pad.h"
-#include "game_flow.h"
-#include "display.h"
-#include "memory.h"
+#include "sys/pad.h"
+#include "sys/game_flow.h"
+#include "sys/display.h"
+#include "base/memory.h"
 
 // data
 static game_config_t g_GAME_CONFIG = {

@@ -2,8 +2,8 @@
 
 #include <psx/rand.h>
 
-#include "../stage_grid.h"
-#include "paths.h"
+#include "scene/stage_grid.h"
+#include "utils/paths.h"
 
 static char *g_CDI_STR = "CDI\\";
 /* Forced sound-type / music-track selection set by set_audio_path_override;
