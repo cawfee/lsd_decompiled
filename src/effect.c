@@ -32,7 +32,7 @@ void effect_construct(effect_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
     This->vtable->Unk15(This, Unk2);
 }
 
-void func_8003FED8(effect_t *This, s32 Unk2) {
+void effect_reset(effect_t *This, s32 Unk2) {
     This->m_Variant = Unk2;
     This->m_State = 0;
     This->m_ColorStep = 10;
@@ -43,7 +43,7 @@ void func_8003FED8(effect_t *This, s32 Unk2) {
     This->m_Unk37 = 0;
 }
 
-void func_8003FF44(effect_t *This, int Unk2, int Unk3) {
+void effect_tick(effect_t *This, int Unk2, int Unk3) {
     if (Unk3 == 2) {
         s32 value = This->m_Life;
 
@@ -69,27 +69,26 @@ void func_8003FF44(effect_t *This, int Unk2, int Unk3) {
     }
 }
 
-void func_8004001C(effect_t *This, s32 Value) {
+void effect_set_color_step(effect_t *This, s32 Value) {
     This->m_ColorStep = Value;
 }
 
-INCLUDE_ASM("asm/nonmatchings/effect", func_80040024);
 // Best attempt: all 35 instructions present and equal; only a scheduling
 // tie-break differs. Target sets arg1 (ori a1,1) right after the Unk54 call and
 // loads the D_8006EA90 lui/addiu after lw v0,0(s0); GCC 2.6.3 emits
 // sll/addu, lui/addiu a2, lw v0,0(s0), li a1,1 instead. Reconfirmed with
-// inline color, temp local, and `one` local (which lands in s1, 36 insns).
-// void func_80040024(effect_t *This) {
+// inline color, temp local, `one` local, vt local: none reorder the schedule.
+//
+// void effect_start(effect_t *This) {
 //     s32 temp;
-//     s32 *color;
 //     if (This->m_State == 0) {
 //         temp = This->vtable->Unk54(This);
-//         color = (s32 *)((u8 *)D_8006EA90 + (temp * 3));
-//         This->vtable->Unk45(This, 1, color);
+//         This->vtable->Unk45(This, 1, (s32 *)((u8 *)D_8006EA90 + (temp * 3)));
 //         This->m_State = 1;
 //         This->m_ColorStep = -This->m_ColorStep;
 //     }
 // }
+INCLUDE_ASM("asm/nonmatchings/effect", effect_start);
 
 /*
  * Best attempt (not matching: target is 41 insns, compiled 40. The only real
@@ -99,7 +98,7 @@ INCLUDE_ASM("asm/nonmatchings/effect", func_80040024);
  * forms. Everything else matches: `This->m_State == 0` guard, Unk54 call,
  * m_Unk37 branch, m_Life-=1, and Unk45(This,1,&D_8006EAA8[temp*3]).)
  *
- * void func_800400B0(effect_t *This, s32 Unk1, s32 Unk2) {
+ * void effect_start_attached(effect_t *This, s32 Unk1, s32 Unk2) {
  *     s32 temp;
  *
  *     temp = Unk2;
@@ -114,9 +113,10 @@ INCLUDE_ASM("asm/nonmatchings/effect", func_80040024);
  *     }
  * }
  */
-INCLUDE_ASM("asm/nonmatchings/effect", func_800400B0);
+INCLUDE_ASM("asm/nonmatchings/effect", effect_start_attached);
 
-s32 func_80040154(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
+
+s32 effect_activate(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
     effect_vtable_t *vtable;
     s32 state;
     s32 life;
@@ -154,7 +154,7 @@ s32 func_80040154(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
     return variant;
 }
 
-void func_800402F0(effect_t *This, s32 arg1) {
+void effect_deactivate(effect_t *This, s32 arg1) {
     effect_vtable_t *vt;
     s32 state;
     s32 which;
@@ -186,7 +186,7 @@ void func_800402F0(effect_t *This, s32 arg1) {
     }
 }
 
-s32 func_800403F8(effect_t *This) {
+s32 effect_get_color_impl(effect_t *This) {
     if (This->m_ColorChannels == 15) {
         return D_8006EAA8;
     }
@@ -194,7 +194,7 @@ s32 func_800403F8(effect_t *This) {
     return (s32 *)((s8 *)D_8006EA90 + 3 * This->m_ColorChannels);
 }
 
-void func_8004042C(effect_t *This, u16 *a, s32 *b) {
+void effect_save_render_state(effect_t *This, u16 *a, s32 *b) {
     if (This->m_Unk2 != 0) {
         This->m_Unk33 = (u16)This->m_Unk23_1;
         This->m_Unk34 = (u16)This->m_Unk23_2;
@@ -205,13 +205,13 @@ void func_8004042C(effect_t *This, u16 *a, s32 *b) {
     }
 }
 
-void func_80040490(effect_t *This) {
+void effect_restore_render_state(effect_t *This) {
     __builtin_memcpy(&This->m_Unk19, &This->m_Unk35, 8);
     This->m_Unk23_1 = This->m_Unk33;
     This->m_Unk23_2 = This->m_Unk34;
 }
 
-void func_800404B4(effect_t *This, s32 Unk2, s32 Unk3) {
+void effect_set_linked(effect_t *This, s32 Unk2, s32 Unk3) {
     This->m_Unk37 = Unk2;
     This->m_Unk38 = Unk3;
 }

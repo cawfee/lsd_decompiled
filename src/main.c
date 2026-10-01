@@ -43,5 +43,3 @@ void main(int argc, const char **argv) {
 void __main(void) {
 }
 // NOLINTEND
-
-INCLUDE_ASM("asm/nonmatchings/main", start);

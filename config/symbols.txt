@@ -1274,6 +1274,17 @@ actor_cleanup = 0x8006573C;
 
 // Effect object
 g_EFFECT_VTABLE = 0x8006E99C;
+effect_reset = 0x8003FED8;
+effect_tick = 0x8003FF44;
+effect_set_color_step = 0x8004001C;
+effect_start = 0x80040024;
+effect_start_attached = 0x800400B0;
+effect_activate = 0x80040154;
+effect_deactivate = 0x800402F0;
+effect_get_color_impl = 0x800403F8;
+effect_save_render_state = 0x8004042C;
+effect_restore_render_state = 0x80040490;
+effect_set_linked = 0x800404B4;
 effect_create = 0x8003FDB0;
 effect_get_vtable = 0x800404C0;
 effect_construct = 0x8003FE2C;
@@ -1285,6 +1296,12 @@ entity_cleanup = 0x8005D1EC;
 entity_check_proximity = 0x8005D714;
 entity_get_distance = 0x8005D7FC;
 g_ENTITY_TABLE = 0x80089EA4;
+
+// Entity pose / offset keyframe tables referenced by generated stubs.
+g_RotatePitchNinety = 0x80089D0C;
+g_OffsetEightSevenths = 0x80089E08;
+g_OffsetOne = 0x80089E14;
+g_OffsetOneTwoOne = 0x80089E50;
 
 // Entity character behaviour functions (names from the Japanese
 // 130-character impression-value table; entity_id = No.-1).

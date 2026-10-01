@@ -146,6 +146,7 @@ asm_header_targets = [
 hasm_targets = [
     "src/psyq/write.s",
     "src/psyq/SetMem.s",
+    "src/start.s",
 ]
 
 asm_auto_targets = (

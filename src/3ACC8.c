@@ -315,9 +315,41 @@ void func_8004B030(class_3ACC8_t *This, s8 *arg1, s32 arg2) {
     This->m_Unk36_2 = adj3;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004B100);
+void func_8004B100(class_3ACC8_t *This, aea4_arg_t *arg1, s32 arg2) {
+    u8 *rec;
+    u8 *sl;
+    u8 *grid;
+    u8 *q;
+    s32 i;
+    s32 j;
+    s32 k;
 
-void func_8004B2D4(class_3ACC8_t *This) {
+    rec = (u8 *)This + 0x8C;
+    for (i = 0; i < This->m_Unk33; i++) {
+        sl = (u8 *)This + (*(s32 *)rec * 0x1C + 0xEC);
+        if (*(s16 *)(*(u8 **)(sl + 4) + 0x2C) != 0) {
+            grid = *(u8 **)(sl + 0x10) + *(s16 *)(rec + 4) * 4 + *(s16 *)(rec + 6) * 0x50;
+            for (j = 0; j < *(s16 *)(rec + 0xA); j++) {
+                for (k = 0; k < *(s16 *)(rec + 8); k++) {
+                    *(u16 *)((u8 *)This + 0x1C0) = *(u16 *)((u8 *)This + 0xBC);
+                    *(u8 *)((u8 *)This + 0x1C2) = (u8)(*(u8 *)(rec + 4) + k);
+                    *(u8 *)((u8 *)This + 0x1C3) = (u8)(*(u8 *)(rec + 6) + j);
+                    func_8004B2D4(*(void **)grid, arg1, arg2);
+                    q = *(u8 **)(*(u8 **)grid + 0x38);
+                    while (q != 0) {
+                        func_8004B2D4(q, arg1, arg2);
+                        q = *(u8 **)(q + 0x38);
+                    }
+                    grid += 4;
+                }
+                grid += (0x14 - *(s16 *)(rec + 8)) * 4;
+            }
+        }
+        rec += 0xC;
+    }
+}
+
+void func_8004B2D4(class_3ACC8_t *This, aea4_arg_t *arg1, s32 arg2) {
     if (This && (This->m_Unk12_2 & 0x80) != 0) {
         This->vtable->OnNotify(This);
     }
@@ -989,6 +1021,7 @@ typedef struct {
 } cc74_buf_t;
 
 s32 func_8004CD38(s32 arg0, void *arg1);
+s32 func_8004CDA4(class_3ACC8_t *This, s32 unused, s32 index, s32 arg3);
 
 void func_8004CC74(class_3ACC8_t *This) {
     cc74_buf_t buf;
@@ -1014,24 +1047,30 @@ void func_8004CC74(class_3ACC8_t *This) {
 INCLUDE_ASM("asm/nonmatchings/3ACC8", func_8004CD38);
 
 /*
- * Near match (semantics correct, wrong register allocation): the target begins
- * with `addu a2,a0,zero` and uses $a2 for the object pointer while $a0 is a
- * temp; gcc 2.6.3 here coalesces the pointer into $a0 and uses $v1 for the
- * `lh`. Tried local s16 / s32 / u8 pointer forms, m2c u8 temporaries, struct fields,
- * guarded/early-return/else-if and reversed comparisons: all compile to the
- * same 26-insn sequence without the $a2 copy (~20 variants).
+ * Near match (26/27 insns): holding the two bytes in u8 temporaries and casting
+ * `(s8)` at each use reproduces the target's `lbu/sll/sra` sign-extend idiom
+ * exactly. The only residual is GCC 2.6.3 register allocation: the target begins
+ * with `addu a2,a0,zero`, keeps the box in $a2 and uses $a0 as the `lh` scratch;
+ * the bundled cc1 (and 2.5.7/2.6.0/2.7.2) coalesces the pointer into $a0 and
+ * uses $v0/$v1 instead. Swept: s32/void/struct-pointer forms, arg1 as char or
+ * u8 pointer, flat vs nested vs early-return, extra argument, comparison
+ * polarity, and all bundled cc1 versions/flags; the $a2 copy never appears.
  *
- * s32 func_8004CD38(s32 arg0, void *arg1) {
- *     s8 *q = (s8 *)arg1;
- *     s32 var_v0 = 1;
- *     if (arg0 != 0) {
- *         if (q[0] >= *(s16 *)arg0 && *(s32 *)(arg0 + 4) >= q[0]) {
- *             if (q[1] >= *(s16 *)(arg0 + 2)) {
- *                 var_v0 = *(s32 *)(arg0 + 8) < q[1];
+ * s32 func_8004CD38(void *arg0, u8 *arg1) {
+ *     u8 temp_v1;
+ *     u8 temp_v1_2;
+ *     s32 inside = 1;
+ *     if (arg0 != NULL) {
+ *         temp_v1 = *(u8 *)arg1;
+ *         if ((s8)temp_v1 >= *(s16 *)arg0 &&
+ *             *(s32 *)((u8 *)arg0 + 4) >= (s8)temp_v1) {
+ *             temp_v1_2 = *((u8 *)arg1 + 1);
+ *             if ((s8)temp_v1_2 >= *(s16 *)((u8 *)arg0 + 2)) {
+ *                 inside = *(s32 *)((u8 *)arg0 + 8) < (s8)temp_v1_2;
  *             }
  *         }
  *     }
- *     return var_v0;
+ *     return inside;
  * }
  */
 

@@ -505,42 +505,43 @@ void func_8001E49C(void) {
 }
 
 /*
- * Best attempt (not matching: 51/54 instructions, control flow and every load/
- * store/call identical, but GCC 2.6.3 allocates the two live-across-loop values
- * to s0 (arg0) and s1 (arg1) and rematerialises the type constant into v1 with
- * `li v1,4` in the beqz delay. The target keeps arg1 in s0, the constant 4 in
- * s1 and arg0 in s2, emitting `ori s1,zero,4` in the prologue. First difference
- * is insn 2 (`sw s2,32(sp)` vs `sw s0,24(sp)`). Adding an explicit s32 type=4
- * local makes GCC keep both 4 and 0x34 in callee-saved regs (s3/s2, frame 0x30,
- * 57 insns), so it is worse. Needs the original variable/ordering that gives
- * arg0 s2 and forces only the 4 constant into s1.
- *
- * void func_8001E4A4(s32 arg0, base_class_t *arg1) {
- *     s32 sp14;
- *     s32 **sp10;
- *     s32 *temp_a1;
- *
- *     sp10 = NULL;
- *     do {
- *     loop_1:
- *         base_class_iter_parents(arg1, (void **)&sp10, (void **)&sp14);
- *         if ((sp10 == NULL) || ((**sp10 & 0xF) != 4)) {
- *             if (sp14 == 0) {
- *                 sp10 = NULL;
- *             } else {
- *                 goto loop_1;
- *             }
- *         }
- *         if (sp10 != NULL) {
- *             temp_a1 = *sp10;
- *             if (*(u8 *)temp_a1 == 0x34) {
- *                 ((void (*)(s32 **, s32)) * (void **)((u8 *)temp_a1 + 0x10))(sp10, arg0);
- *             }
- *         }
- *     } while (sp14 != 0);
- * }
+ * Walk the parent chain of arg1 looking for a node whose low type nibble is 4
+ * (a u8 "type" local keeps the constant in a callee-saved register exactly as
+ * the original did); when found and its kind byte is 0x34, invoke its handler
+ * with arg0. The node pointer is re-copied at the loop head so the allocator
+ * keeps arg1 in $s0, the type in $s1 and arg0 in $s2.
  */
-INCLUDE_ASM("asm/nonmatchings/transform", func_8001E4A4);
+void func_8001E4A4(s32 arg0, base_class_t *arg1) {
+    s32 sp14;
+    s32 **sp10;
+    base_class_t *node;
+    s32 *temp_a1;
+    u8 type;
+
+    type = 4;
+    sp10 = NULL;
+    do {
+        node = arg1;
+        while (1) {
+            node = arg1;
+            base_class_iter_parents(node, (void **)&sp10, (void **)&sp14);
+            if (sp10 != NULL && (**sp10 & 0xF) == type) {
+                break;
+            }
+            if (sp14 == 0) {
+                sp10 = NULL;
+                break;
+            }
+        }
+        if (sp10 != NULL) {
+            temp_a1 = *sp10;
+            if (*(u8 *)temp_a1 == 0x34) {
+                ((void (*)(s32 **, s32)) * (void **)((u8 *)temp_a1 + 0x10))(sp10, arg0);
+            }
+        }
+    } while (sp14 != 0);
+}
+
 
 transform_vtable_t *func_8001E57C(void) {
     return &D_8006B5CC;

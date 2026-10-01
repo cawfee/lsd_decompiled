@@ -332,9 +332,59 @@ s32 *func_8005511C(s32 *arg0, s32 arg1) {
 */
 INCLUDE_ASM("asm/nonmatchings/dream_generation", func_8005511C);
 
+/*
+ * Best attempt (not matching: target 110 insns, compiled 108). Structure,
+ * signed /23 magic 0xB21642C9, unsigned /7, rand()-based table pick and the
+ * negate-if-odd pattern all match. Sole blocker: GCC 2.6.3 CSEs the absolute
+ * address of D_8008E0A4/D_8008E0AC across the intervening rand() call and
+ * keeps it in a callee-saved register (adds sw s0/sw s1 and a lui/addiu),
+ * whereas the target recomputes `lui`/`lw` + `lui`/`sw` each time. Reproduced
+ * standalone: `A[0]=1; if(g()&1) A[0]=-A[0];` keeps &A in s0 across g()
+ * regardless of volatile. This is a compiler revision difference, not source.
+ *
+ * void func_80055258(s32 unused, s32 arg1) {
+ *     if (arg1 == 0) {
+ *         arg1 = D_80087328[rand() & 3];
+ *     }
+ *     D_8008E0A8[0] = arg1;
+ *     D_8008E0A4[0] = (rand() % 23) << 11;
+ *     if (rand() & 1) {
+ *         D_8008E0A4[0] = -D_8008E0A4[0];
+ *     }
+ *     D_8008E0AC[0] = (rand() % 23) << 11;
+ *     if (rand() & 1) {
+ *         D_8008E0AC[0] = -D_8008E0AC[0];
+ *     }
+ *     D_8008E0B0[0] = ((u32)rand() % 7) * 12 + (s32)D_80087174;
+ *     D_8008E0B8[0] = rand() % 5;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/dream_generation", func_80055258);
 
-INCLUDE_ASM("asm/nonmatchings/dream_generation", func_80055410);
+extern s32 D_8008732C[];
+extern s32 D_8008E0A4[];
+extern s32 D_8008E0A8[];
+extern s32 D_8008E0AC[];
+extern s32 D_8008E0B0[];
+extern u8 D_80087174[];
+extern s32 D_8008E0B8[];
+
+void func_80055410(void) {
+    s32 d;
+
+    rand();
+    D_8008E0A8[0] = D_8008732C[0];
+    D_8008E0A4[0] = (rand() % 20) << 11;
+    D_8008E0A4[2] = 0xA000;
+    d = g_CurrentDay % 3;
+    if (d == 1) {
+        D_8008E0AC[0] = 0xFFFF6000;
+    } else if (d == 2) {
+        D_8008E0AC[0] = 0x800;
+    }
+    D_8008E0B0[0] = ((u32)rand() % 7) * 12 + (s32)D_80087174;
+    D_8008E0B8[0] = rand() % 5;
+}
 
 extern s32 *g_GenerationEntityContext;
 extern s32 D_800874B0[];

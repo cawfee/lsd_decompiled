@@ -214,6 +214,65 @@ void func_80056858(class_46B20_t *This, s32 arg1) {
     } while (i < 2);
 }
 
+/*
+ * Best attempt (not matching: 112-117/121 instructions; control flow, calls,
+ * the 0x5FB4 divisor and the two-iteration loop are all present). The residual
+ * is pure GCC 2.6.3 register allocation/scheduling:
+ *   target: This->s2, slot->s0, offset->s1, value->s4, mode->s5, and the
+ *           D_8008782C base is reloaded with lui/addiu inside each iteration;
+ *   gcc:    This->s1, slot->s0, offset->s2, value->s5, mode->s6, and the
+ *           D_8008782C base is hoisted into s4 (or mode into s6), and
+ *           D_8008780C[mode] is re-materialised at the division.
+ * Reconfirmed across nested/combined conditions, do/for loops, i*3 strength
+ * reduction, u32/s32 offset, struct/memcpy vector forms, explicit mode/value
+ * copies, redundant loop assignments, 480+ statement/declaration permutations,
+ * and an m2c-faithful body; none rotates This below slot/offset. The stub is
+ * kept as ground truth.
+ *
+ * void func_800569A8(class_46B20_t *This) {
+ *     scene_node_t **slot;
+ *     s32 local[3];
+ *     s32 i;
+ *     s32 offset;
+ *     s32 mode;
+ *     s32 *value;
+ *     s32 count;
+ *
+ *     mode = This->m_Unk27;
+ *     if (This->m_Unk26 != 0) {
+ *         value = &D_8008780C[mode];
+ *         if (*value != 0) {
+ *             if ((u32)This->m_Unk8 >= 0x1F5) {
+ *                 slot = (scene_node_t **)&This->m_Unk30;
+ *                 i = 0;
+ *                 This->vtable->Unk16(This, 0, (s32)&D_80087838);
+ *                 offset = 0;
+ *                 do {
+ *                     local[0] = D_8008782C[0];
+ *                     local[1] = D_8008782C[1];
+ *                     local[2] = D_8008782C[2] + offset + *value;
+ *                     ((void (*)(void *, void *))slot[0]->vtable->Unk46)(slot[0], local);
+ *                     ((void (*)(void *, s32, s32))slot[0]->vtable->Unk16)(slot[0], 0, (s32)&D_80087838);
+ *                     i += 1;
+ *                     offset += 3;
+ *                     slot += 1;
+ *                 } while (i < 2);
+ *                 count = 0x5FB4 / D_8008780C[mode];
+ *                 if (count >= 0) {
+ *                     if ((u32)This->m_Unk8 % (u32)count != 0) {
+ *                         goto end;
+ *                     }
+ *                 } else if ((u32)This->m_Unk8 % (u32)-count != 0) {
+ *                     goto end;
+ *                 }
+ *                 func_80056858(This, 1);
+ *             }
+ *         }
+ *     }
+ * end:
+ *     *(s32 *)This->m_Unk4 = 0;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/46B20", func_800569A8);
 
 void func_80056B8C(class_46B20_t *This) {

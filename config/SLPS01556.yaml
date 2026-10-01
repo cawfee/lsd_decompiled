@@ -75,6 +75,7 @@ segments:
       - [0x1F88, .rodata, dream_sys] # jtbl_80011788 (set_move_from_pad) + jtbl_80011848
       - [0x206C, rodata] # greyman
       - [0x20DC, c, main]
+      - [0x219C, hasm, start]
       - [0x2258, c, psyq/malloc]
       - [0x2864, c, render_sort]
       - [0x2F68, hasm, psyq/SetMem]
