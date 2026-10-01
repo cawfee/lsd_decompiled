@@ -1,18 +1,6 @@
 #include "base/frame_phase.h"
 #include "base/base_class.h"
 
-void frame_phase_construct(void *);
-void frame_phase_cleanup(base_class_t *);
-void frame_phase_remove_parent(base_class_t *, base_class_t *);
-void frame_phase_notify(base_class_t *, s32);
-void frame_phase_reset(void *, s32);
-void frame_phase_advance(void *);
-s32 frame_phase_get_phase(frame_phase_t *);
-void frame_phase_set_waiting(void *);
-void frame_phase_clear_waiting(void *);
-s32 frame_phase_is_waiting(frame_phase_t *);
-void frame_phase_set_finished(void *);
-
 frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     0x5,
     base_class_destructor,
@@ -32,10 +20,10 @@ frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     NULL,
     frame_phase_reset,
     frame_phase_advance,
-    (void (*)(void *))frame_phase_get_phase,
+    frame_phase_get_phase,
     frame_phase_set_waiting,
     frame_phase_clear_waiting,
-    (void (*)(void *))frame_phase_is_waiting,
+    frame_phase_is_waiting,
     frame_phase_set_finished,
 };
 
@@ -60,12 +48,12 @@ void frame_phase_cleanup(frame_phase_t *This) {
     base_class_get_vtable()->Cleanup(This);
 }
 
-void frame_phase_remove_parent(frame_phase_t *This, void *Unk) {
+void frame_phase_remove_parent(frame_phase_t *This, base_class_t *Unk) {
     void **node;
 
-    node = (void **)This->m_NotifyCursor;
+    node = (void **) This->m_NotifyCursor;
     if (node != NULL && Unk == node[1]) {
-        This->m_NotifyCursor = (s32)node[0];
+        This->m_NotifyCursor = (s32) node[0];
     }
     base_class_get_vtable()->RemoveParent(This, Unk);
 }
@@ -74,10 +62,10 @@ void frame_phase_notify(frame_phase_t *This, s32 Unk) {
     base_class_t *cur;
 
     This->m_NotifyCursor = This->m_Parents;
-    linked_list_next(&cur, (linked_list_node_t **)&This->m_NotifyCursor);
+    linked_list_next(&cur, (linked_list_node_t **) &This->m_NotifyCursor);
     while (cur != NULL) {
         cur->vtable->OnNotify(cur, This, Unk);
-        linked_list_next(&cur, (linked_list_node_t **)&This->m_NotifyCursor);
+        linked_list_next(&cur, (linked_list_node_t **) &This->m_NotifyCursor);
     }
     This->m_NotifyCursor = 0;
 }

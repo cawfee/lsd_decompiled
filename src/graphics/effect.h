@@ -1,8 +1,8 @@
 #ifndef LSD_EFFECT_H
 #define LSD_EFFECT_H
 
-#include "common.h"
 #include "base/base_class.h"
+#include "common.h"
 
 /* Effect: a short-lived colour-cycling primitive attached to an entity.
  * Created by entity_create_effect() when an entity triggers (hit spark / link
@@ -83,7 +83,6 @@ typedef enum {
     EFFECT_COLOR_STEP_NORMAL = 10,
     EFFECT_COLOR_STEP_FAST = 30,
 } effect_color_step_t;
-
 
 typedef struct effect {
     /* 0x00 */ effect_vtable_t *vtable;

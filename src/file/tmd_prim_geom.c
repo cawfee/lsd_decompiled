@@ -140,8 +140,8 @@ void func_8001F66C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 i;
     svec_t buf[8];
 
-    for (i = 0; i < *(s32 *)arg0; i++) {
-        svec_t *p = (svec_t *)((u8 *)arg0 + 4 + i * 0x30);
+    for (i = 0; i < *(s32 *) arg0; i++) {
+        svec_t *p = (svec_t *) ((u8 *) arg0 + 4 + i * 0x30);
 
         if (arg1 != 0) {
             __builtin_memcpy(buf, p, 48);
@@ -155,17 +155,25 @@ void func_8001F66C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             p[4] = buf[7];
             if (arg2 == 0) {
                 s32 j;
-                for (j = 0; j < 4; j++) p[j].vx = p[j].vx + arg3;
+                for (j = 0; j < 4; j++) {
+                    p[j].vx = p[j].vx + arg3;
+                }
             } else {
                 s32 j;
-                for (j = 0; j < 4; j++) p[4 + j].vx = p[4 + j].vx + arg3;
+                for (j = 0; j < 4; j++) {
+                    p[4 + j].vx = p[4 + j].vx + arg3;
+                }
             }
         } else if (arg2 == 0) {
             s32 j;
-            for (j = 0; j < 4; j++) p[j].vz = p[j].vz + arg3;
+            for (j = 0; j < 4; j++) {
+                p[j].vz = p[j].vz + arg3;
+            }
         } else {
             s32 j;
-            for (j = 0; j < 4; j++) p[4 + j].vz = p[4 + j].vz + arg3;
+            for (j = 0; j < 4; j++) {
+                p[4 + j].vz = p[4 + j].vz + arg3;
+            }
         }
     }
 }
@@ -175,7 +183,7 @@ INCLUDE_ASM("asm/nonmatchings/file/tmd_prim_geom", func_8001F8B8);
 INCLUDE_ASM("asm/nonmatchings/file/tmd_prim_geom", func_80020050);
 
 void func_800204D0(s32 arg0, s32 *arg1) {
-    u16 *p = *(u16 **)(*(u32 *)(arg0 + 0x10) + 0x10);
+    u16 *p = *(u16 **) (*(u32 *) (arg0 + 0x10) + 0x10);
     s32 v;
 
     p[3] += arg1[0] / 16;
@@ -184,7 +192,7 @@ void func_800204D0(s32 arg0, s32 *arg1) {
 }
 
 s32 func_80020510(s32 arg0, s16 *arg1) {
-    u16 *p = *(u16 **)(*(u32 *)(arg0 + 0x10) + 0x10);
+    u16 *p = *(u16 **) (*(u32 *) (arg0 + 0x10) + 0x10);
     s32 r;
 
     p[3] = arg1[0] / 16;

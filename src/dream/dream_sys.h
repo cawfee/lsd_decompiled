@@ -180,8 +180,12 @@ typedef struct dream_sys_vtable {
     /* 0x1FC 80087dd8 */ void (*dream_sys_update_dream_chart)(void *, dream_sys_mood_graph_point_t *);
     /* 0x200 80087ddc */ s32 (*dream_sys_get_dream_color)(void *);
     /* 0x204 80087de0 */ void (*dream_sys_clear_mood_graph)(void *, dream_sys_mood_graph_contrib_t *);
-    /* 0x208 80087de4 */ void (*dream_sys_log_mood)(void *, dream_sys_mood_graph_contrib_t *, dream_sys_mood_graph_point_t *);
-    /* 0x20C 80087de8 */ void (*dream_sys_get_mood_average)(void *, dream_sys_mood_graph_contrib_t *, dream_sys_mood_graph_point_t *);
+    /* 0x208 80087de4 */ void (*dream_sys_log_mood)(void *,
+                                                    dream_sys_mood_graph_contrib_t *,
+                                                    dream_sys_mood_graph_point_t *);
+    /* 0x20C 80087de8 */ void (*dream_sys_get_mood_average)(void *,
+                                                            dream_sys_mood_graph_contrib_t *,
+                                                            dream_sys_mood_graph_point_t *);
     /* 0x210 80087dec */ void (*dream_sys_calc_unlock_score)(void *);
     /* 0x214 80087df0 */ void (*dream_sys_add_flashback)(void *);
     /* 0x218 80087df4 */ void (*dream_sys_flashback_saving)(void *, s32, s32);
@@ -233,7 +237,7 @@ typedef struct dream_sys {
     /* 0x018 */ s32 m_Unk5;
     /* 0x01C */ s32 m_Unk6;
     /* 0x020 */ s32 m_Unk7;
-    /* 0x024 */ u32 m_DreamTimer; /* ticks; /15 = elapsed seconds */
+    /* 0x024 */ u32 m_DreamTimer;  /* ticks; /15 = elapsed seconds */
     /* 0x028 */ s32 m_FloorObject; /* object whose +0x36 holds the floor surface */
     /* 0x02C */ s32 m_Unk10;
     /* 0x030 */ s32 m_Unk11;
@@ -246,16 +250,16 @@ typedef struct dream_sys {
     /* 0x04C */ s32 m_AttachedActor; /* scene actor attached by the link system */
     /* 0x050 */ s32 m_Unk19;
     /* 0x054 */ s32 m_Unk20;
-    /* 0x058 */ s32 m_Actor; /* sound/entity actor used by the sound_entity_* helpers */
+    /* 0x058 */ s32 m_Actor;         /* sound/entity actor used by the sound_entity_* helpers */
     /* 0x05C */ s32 m_ViewTransform; /* transform modified by look/turn */
-    /* 0x060 */ s32 m_Model; /* model object passed to dream_sys_create */
+    /* 0x060 */ s32 m_Model;         /* model object passed to dream_sys_create */
     /* 0x064 */ s32 m_Texture;
     /* 0x068 */ s32 m_IsFlashbackSession;
     /* 0x06C */ s32 m_Paused;
     /* 0x070 */ s32 m_InputLocked;
     /* 0x074 */ s32 m_ActionPressed; /* one-tick flag raised by set_move_from_pad */
-    /* 0x078 */ s32 m_ResetFlag78; /* only ever cleared */
-    /* 0x07C */ s32 m_ResetFlag7C; /* only ever cleared */
+    /* 0x078 */ s32 m_ResetFlag78;   /* only ever cleared */
+    /* 0x07C */ s32 m_ResetFlag7C;   /* only ever cleared */
     /* 0x080 */ s32 m_ViewUpdateCallback;
     /* 0x084 */ s32 m_ViewMode;
     /* 0x088 */ s32 m_LookUpDownState;

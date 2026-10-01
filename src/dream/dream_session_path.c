@@ -17,25 +17,25 @@ s32 dream_session_path_advance(s32 arg0) {
     s32 step;
     s32 result;
 
-    path_table = (s32)get_path_table(&count);
+    path_table = (s32) get_path_table(&count);
     prev = g_DreamPathStep;
     step = prev + 1;
     g_DreamPathStep = step;
     switch (step) {
-    case 1:
-        if (arg0 != 0) {
-            g_DreamPathStep = prev + 2;
-        } else {
-            count = count / 2;
-            g_DreamPathHalfCount = count;
-        }
-        break;
-    case 2:
-        count -= g_DreamPathHalfCount;
-        break;
-    default:
-        count = 0;
-        break;
+        case 1:
+            if (arg0 != 0) {
+                g_DreamPathStep = prev + 2;
+            } else {
+                count = count / 2;
+                g_DreamPathHalfCount = count;
+            }
+            break;
+        case 2:
+            count -= g_DreamPathHalfCount;
+            break;
+        default:
+            count = 0;
+            break;
     }
     do {
         result = file_driver_lookup_path(path_table, count);

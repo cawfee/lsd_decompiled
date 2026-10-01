@@ -1,8 +1,8 @@
 #ifndef LSD_TMD_PRIM_H
 #define LSD_TMD_PRIM_H
 
-#include "common.h"
 #include "base/base_class.h"
+#include "common.h"
 
 typedef struct tmd_prim_vtable {
     /* 0x000 8006bea0 */ u32 type_id;

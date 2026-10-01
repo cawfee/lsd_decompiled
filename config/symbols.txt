@@ -1134,6 +1134,7 @@ base_class_notify = 0x800182cc;
 base_class_nop = 0x80018350;
 base_class_on_notify = 0x80018358;
 linked_list_next = 0x800183a0;
+g_MemoryLocked = 0x8008A820;
 
 // Scene node (transform/scene_node) helpers
 scene_node_get_vtable = 0x80057C84;

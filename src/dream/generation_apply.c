@@ -18,9 +18,7 @@ void generation_apply_context(s32 Unk1, void *obj, s32 Unk2, s32 Unk3) {
     i = 0;
     src = D_8008AB98;
     do {
-        func_80020510(
-            (*(s32 (**)(void *, s32))((u8 *)*(void **)obj + 0x80))(obj, *src),
-            D_8008AB94);
+        func_80020510((*(s32(**)(void *, s32))((u8 *) *(void **) obj + 0x80))(obj, *src), D_8008AB94);
         src++;
         i++;
     } while (i < 2);

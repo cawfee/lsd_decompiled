@@ -1,16 +1,15 @@
 #include "dream/dream_session.h"
-#include "dream/dream_session_path.h"
 #include "base/base_class.h"
+#include "memory/memory.h"
 #include "base/timer.h"
-#include "scene/scene.h"
-#include "scene/map_scene.h"
-#include "file/tmd_model.h"
-#include "snd/bgm.h"
+#include "dream/dream_session_path.h"
 #include "dream/dream_sys.h"
-#include "base/memory.h"
 #include "file/tim_image.h"
+#include "file/tmd_model.h"
+#include "scene/map_scene.h"
+#include "scene/scene.h"
+#include "sound/bgm.h"
 #include "utils/cd_paths.h"
-
 
 dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
     0x1F230,
@@ -36,12 +35,12 @@ dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
     dream_session_update_actor,
     dream_session_tick,
     scene_noop,
-    (void (*)(void *, void **, void *))scene_update,
-    (void (*)(void *, s32))scene_finish,
-    (void (*)(void *))timer_begin_frame,
-    (void (*)(void *))timer_end_frame,
-    (void (*)(void *, s32))scene_set_duration,
-    (void (*)(void *, s32))scene_play_note,
+    (void (*)(void *, void **, void *)) scene_update,
+    (void (*)(void *, s32)) scene_finish,
+    (void (*)(void *)) timer_begin_frame,
+    (void (*)(void *)) timer_end_frame,
+    (void (*)(void *, s32)) scene_set_duration,
+    (void (*)(void *, s32)) scene_play_note,
     NULL,
     NULL,
     dream_session_noop,
@@ -110,9 +109,9 @@ void dream_session_cleanup(dream_session_t *This) {
     gfx->cls_3acc8 = gfx->cls_3acc8->vtable->Destroy(gfx->cls_3acc8);
     gfx->cls_32c00 = gfx->cls_32c00->vtable->Destroy(gfx->cls_32c00);
     gfx->cls_3da54 = gfx->cls_3da54->vtable->Destroy(gfx->cls_3da54);
-    bgm = (bgm_t *)This->m_Bgm;
+    bgm = (bgm_t *) This->m_Bgm;
     bgm->vtable->Destroy(bgm);
-    model = (tmd_model_t *)This->m_Model;
+    model = (tmd_model_t *) This->m_Model;
     model->vtable->Destroy(model);
     This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
     link_destroy_models();
@@ -130,7 +129,7 @@ void dream_session_on_tick(dream_session_t *This, void **Unk2, s32 Unk3) {
     if ((value & 0xFFFF) == 0x1F34) {
         This->vtable->dream_session_noop2(This, Unk2, Unk3);
     } else if ((value & 0xFFFFF) == 0x2F230) {
-        This->vtable->dream_session_on_link_code(This, (s32)Unk2, Unk3);
+        This->vtable->dream_session_on_link_code(This, (s32) Unk2, Unk3);
     }
 }
 
@@ -248,9 +247,9 @@ state1:
     This->vtable->scene_finish(This, 3);
     return;
 state3:
-    mapScene = (map_scene_t *)This->m_MapScene;
-    ((void (*)(map_scene_t *))mapScene->vtable->Unk17)(mapScene);
-    mapScene = (map_scene_t *)This->m_MapScene;
+    mapScene = (map_scene_t *) This->m_MapScene;
+    ((void (*)(map_scene_t *)) mapScene->vtable->Unk17)(mapScene);
+    mapScene = (map_scene_t *) This->m_MapScene;
     mapScene->vtable->Destroy(mapScene);
     open_map(This, This->m_DreamSys->vtable->dream_sys_get_current_map(This->m_DreamSys));
 }
@@ -258,11 +257,11 @@ state3:
 void open_map(dream_session_t *This, s32 Unk) {
     void **obj;
 
-    This->m_MapScene = (s32)map_scene_create(This->m_StageArg, This->m_Bgm, (s32)This->m_TextureHelper,
-                                         This->m_Model, Unk);
+    This->m_MapScene =
+        (s32) map_scene_create(This->m_StageArg, This->m_Bgm, (s32) This->m_TextureHelper, This->m_Model, Unk);
     This->vtable->Attach(This, This->m_MapScene);
-    obj = (void **)This->m_MapScene;
-    (*(void (**)(void **, void *, void *))(*(u32 *)obj + 0x44))(obj, This->m_GraphicsCtx, This->m_DreamSys);
+    obj = (void **) This->m_MapScene;
+    (*(void (**)(void **, void *, void *))(*(u32 *) obj + 0x44))(obj, This->m_GraphicsCtx, This->m_DreamSys);
     This->m_State = 2;
 }
 

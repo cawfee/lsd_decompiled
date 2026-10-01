@@ -1,9 +1,9 @@
 #include "common.h"
 
 #include "base/base_class.h"
-#include "base/memory.h"
+#include "memory/memory.h"
 
-s32 D_8008A820 = 0;
+static s32 g_MEMORY_LOCKED = 0;
 
 base_class_vtable_t g_BASE_CLASS_VTABLE = {
     0,
@@ -60,19 +60,19 @@ void base_class_detach_all(base_class_t *This) {
 
     curp = &cur;
     list = This->m_Children;
-    linked_list_next(curp, (linked_list_node_t **)&list);
+    linked_list_next(curp, &list);
     while (cur != NULL) {
-        This->vtable->Detach(This, (base_class_t *)cur);
-        linked_list_next(curp, (linked_list_node_t **)&list);
+        This->vtable->Detach(This, cur);
+        linked_list_next(curp, &list);
     }
 }
 
-void base_class_iter_children(base_class_t *This, void **out_value, void **cursor) {
-    if (!*out_value) {
-        *cursor = This->m_Children;
+void base_class_iter_children(base_class_t *This, void **OutValue, void **Cursor) {
+    if (!*OutValue) {
+        *Cursor = This->m_Children;
     }
 
-    linked_list_next(out_value, (linked_list_node_t **)cursor);
+    linked_list_next(OutValue, Cursor);
 }
 
 void base_class_add_parent(base_class_t *This, base_class_t *Parent) {
@@ -88,86 +88,87 @@ void base_class_clear_parents(base_class_t *This) {
     This->m_Parents = NULL;
 }
 
-void base_class_iter_parents(base_class_t *This, void **out_value, void **cursor) {
-    if (!*out_value) {
-        *cursor = This->m_Parents;
+void base_class_iter_parents(base_class_t *This, void **OutValue, void **Cursor) {
+    if (!*OutValue) {
+        *Cursor = This->m_Parents;
     }
 
-    linked_list_next(out_value, (linked_list_node_t **)cursor);
+    linked_list_next(OutValue, Cursor);
 }
 
-s32 linked_list_prepend(linked_list_node_t **list, void *value) {
-    void *mem;
+s32 linked_list_prepend(linked_list_node_t **List, void *Value) {
+    linked_list_node_t *mem;
 
-    mem = memory_allocate_mem(8);
+    mem = memory_allocate_mem(sizeof(linked_list_node_t));
 
     if (mem) {
-        *((u32 *) mem + 0) = *(u32 *) list;
-        *((u32 *) mem + 1) = (u32)value;
-        *list = mem;
+        mem->m_Next = *List;
+        mem->m_Value = Value;
+        *List = mem;
         return 1;
     }
 
     return 0;
 }
 
-void linked_list_remove(linked_list_node_t **list, void *target) {
-    void *node;
-    void *prev;
+void linked_list_remove(linked_list_node_t **List, void *Target) {
+    linked_list_node_t *node;
+    linked_list_node_t *prev;
 
-    node = *list;
+    node = *List;
     prev = NULL;
     if (node != NULL) {
         do {
-            if (*((void **)node + 1) == target) {
+            if (node->m_Value == Target) {
                 if (prev != NULL) {
-                    *(void **)prev = *(void **)node;
+                    prev->m_Next = node->m_Next;
                 } else {
-                    *list = *(void **)node;
+                    *List = node->m_Next;
                 }
                 memory_free_mem(node);
                 return;
             }
             prev = node;
-            node = *(void **)node;
+            node = node->m_Next;
         } while (node != NULL);
     }
 }
 
-void linked_list_clear(linked_list_node_t **list_head) {
-    /* Arg is &m_Parents. Original typed this as base_class_t* and read
-     * This->vtable as the head node (offset 0). */
-    base_class_vtable_t *next;
-    base_class_vtable_t *cur;
+void linked_list_clear(linked_list_node_t **ListHead) {
+    linked_list_node_t *next;
+    linked_list_node_t *cur;
 
-    next = ((base_class_t *)list_head)->vtable;
-    cur = ((base_class_t *)list_head)->vtable;
+    next = *ListHead;
+    cur = *ListHead;
     if (cur) {
         do {
-            next = (base_class_vtable_t *)next->type_id;
+            next = next->m_Next;
             memory_free_mem(cur);
             cur = next;
         } while (next);
     }
 }
 
-void base_class_notify(base_class_t *This, s32 code) {
+void base_class_notify(base_class_t *This, s32 Code) {
     void *cur;
     void *list;
 
-    list = (void *)This->m_Parents;
-    linked_list_next(&cur, (linked_list_node_t **)&list);
+    list = This->m_Parents;
+    linked_list_next(&cur, &list);
     while (cur != NULL) {
-        ((base_class_t *)cur)->vtable->OnNotify((base_class_t *)cur, This, code);
-        linked_list_next(&cur, (linked_list_node_t **)&list);
+        base_class_t *obj;
+
+        obj = cur;
+        obj->vtable->OnNotify(obj, This, Code);
+        linked_list_next(&cur, &list);
     }
 }
 
 void base_class_nop(base_class_t *This) {
 }
 
-void base_class_on_notify(base_class_t *This, base_class_t *Sender, s32 code) {
-    if (code == 1) {
+void base_class_on_notify(base_class_t *This, base_class_t *Sender, s32 Code) {
+    if (Code == 1) {
         This->vtable->Detach(This, Sender);
     }
 }
@@ -176,31 +177,35 @@ base_class_vtable_t *base_class_get_vtable(void) {
     return &g_BASE_CLASS_VTABLE;
 }
 
-void linked_list_next(void *out_value, linked_list_node_t **cursor) {
-    if (*cursor) {
-        *(u32 *) out_value = *((u32 *) *cursor + 1);
-        *cursor = *(void **) *cursor;
+void linked_list_next(void **OutValue, void **Cursor) {
+    linked_list_node_t *node;
+
+    node = *Cursor;
+    if (node) {
+        *OutValue = node->m_Value;
+        node = *Cursor;
+        *Cursor = node->m_Next;
     } else {
-        *(u32 *) out_value = 0;
+        *OutValue = NULL;
     }
 }
 
-s32 destroy_list(base_class_t **arr, s32 n) {
-    base_class_t *obj;
+s32 destroy_list(base_class_t **Array, s32 Count) {
+    base_class_t *object;
 
-    if (n-- > 0) {
+    if (Count-- > 0) {
         do {
-            obj = *arr;
-            *arr = obj->vtable->Destroy(obj);
-            arr++;
-        } while (n-- > 0);
+            object = *Array;
+            *Array = object->vtable->Destroy(object);
+            Array++;
+        } while (Count-- > 0);
     }
 }
 
-void memory_set_lock(s32 value) {
-    D_8008A820 = value;
+void memory_set_lock(s32 Value) {
+    g_MEMORY_LOCKED = Value;
 }
 
 s32 memory_is_locked(void) {
-    return D_8008A820;
+    return g_MEMORY_LOCKED;
 }

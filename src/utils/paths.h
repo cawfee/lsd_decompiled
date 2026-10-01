@@ -11,8 +11,7 @@ static char *g_SOUND_TYPES[7] = { "SND\\AMBIENT", "SND\\CARTOON", "SND\\ELECTRO"
 
 /* Start index of each stage's path block within g_STRING_TABLE. Index 0 is
    STG00\TEXA.TIX, and each stage contributes a fixed run of TEX/BGA/LBD names. */
-static s16 g_StagePathStart[14] = { 16,  30,  45,  90,  355, 394, 433,
-                                    448, 462, 474, 485, 497, 518, 547 };
+static s16 g_StagePathStart[14] = { 16, 30, 45, 90, 355, 394, 433, 448, 462, 474, 485, 497, 518, 547 };
 
 static char g_STRING_TABLE[LSD_PATH_COUNT][LSD_PATH_LEN] = {
     "SND\\AMBIENT.VH",     "SND\\AMBIENT.VB",     "SND\\CARTOON.VH",     "SND\\CARTOON.VB",     "SND\\ELECTRO.VH",

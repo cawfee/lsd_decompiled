@@ -1,9 +1,8 @@
 #include "file/file_buf.h"
 
-#include "file/debug_file_driver.h"
 #include "base/base_class.h"
-#include "base/memory.h"
-
+#include "memory/memory.h"
+#include "file/debug_file_driver.h"
 
 s32 file_buf_destroy(file_buf_t *);
 void file_buf_construct(void *);
@@ -30,7 +29,7 @@ void *func_80044CC4(void);
 
 file_buf_vtable_t g_FILE_BUF_VTABLE = {
     3,
-    (void (*)(void *))file_buf_destroy,
+    (void (*)(void *)) file_buf_destroy,
     file_buf_construct,
     file_buf_cleanup,
     base_class_attach,
@@ -63,21 +62,9 @@ file_buf_vtable_t g_FILE_BUF_VTABLE = {
 };
 
 void *g_FILE_DRIVER_CLASS_VTABLES[] = {
-    class_1C92C_get_vtable,
-    tim_image_get_vtable,
-    func_800451A8,
-    func_80044F20,
-    func_80043E74,
-    func_80043830,
-    func_80043B78,
-    sound_get_vtable,
-    seq_file_get_vtable,
-    func_80048CE0,
-    func_800441A4,
-    func_80045428,
-    func_800449FC,
-    func_80044CC4,
-    NULL,
+    class_1C92C_get_vtable, tim_image_get_vtable, func_800451A8,    func_80044F20,       func_80043E74,
+    func_80043830,          func_80043B78,        sound_get_vtable, seq_file_get_vtable, func_80048CE0,
+    func_800441A4,          func_80045428,        func_800449FC,    func_80044CC4,       NULL,
 };
 
 static s32 g_FileDriverClass = 0x13;
@@ -184,20 +171,20 @@ void file_driver_set_class(s32 arg0) {
     void *cur;
     void *(*fn)(void);
 
-    cursor = (void *(**)(void))g_FILE_DRIVER_CLASS_VTABLES;
+    cursor = (void *(**) (void) ) g_FILE_DRIVER_CLASS_VTABLES;
     g_FileDriverClass = arg0;
     if (arg0 == 0x13) {
-        vt = (void *)cd_file_driver_get_vtable();
+        vt = (void *) cd_file_driver_get_vtable();
     } else {
-        vt = (void *)debug_file_driver_get_vtable();
+        vt = (void *) debug_file_driver_get_vtable();
     }
-    cur = (void *)file_buf_get_vtable();
+    cur = (void *) file_buf_get_vtable();
     goto loop_test;
     do {
         fn = *cursor;
         cursor++;
         cur = fn();
-loop_test:
+    loop_test:
         file_driver_copy_vtable_slots(cur, vt);
         fn = *cursor;
     } while (fn != NULL);
@@ -264,9 +251,9 @@ s32 file_driver_get_read_state(void) {
 void frame_setup(s32 Unk1, s32 Unk2, s32 Unk3) {
     s32 (*fn)(s32, s32, s32);
 
-    fn = (s32 (*)(s32, s32, s32))debug_file_driver_frame_setup;
+    fn = (s32(*)(s32, s32, s32)) debug_file_driver_frame_setup;
     if (g_FileDriverClass == 0x13) {
-        fn = (s32 (*)(s32, s32, s32))cd_file_driver_frame_setup;
+        fn = (s32(*)(s32, s32, s32)) cd_file_driver_frame_setup;
     }
     do {
     } while (fn(Unk1, Unk2, Unk3) == 0);

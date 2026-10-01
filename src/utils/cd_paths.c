@@ -16,10 +16,9 @@ extern const char *g_SE_PATHS[];
 /* Play length in seconds for each movie in g_STRING_TABLE order; indexed by
    the duration hint returned by the movie path getters. */
 static s16 g_MovieDurations[] = {
-    1060,  1088,  953,   1179,  979,   1231,  1046,  474,   524,   439,   349,   379,   352,
-    352,   475,   867,   527,   445,   399,   579,   264,   541,   566,   325,   436,   524,
-    522,   523,   649,   451,   465,   473,   411,   490,   467,   523,   187,   384,   90,
-    90,    90,    90,    90,    90,    90,    90,    90,    90,    -10,   90,
+    1060, 1088, 953, 1179, 979, 1231, 1046, 474, 524, 439, 349, 379, 352, 352, 475, 867, 527,
+    445,  399,  579, 264,  541, 566,  325,  436, 524, 522, 523, 649, 451, 465, 473, 411, 490,
+    467,  523,  187, 384,  90,  90,   90,   90,  90,  90,  90,  90,  90,  90,  -10, 90,
 };
 
 char *get_data_folder(void) {
@@ -63,7 +62,7 @@ const char *get_random_sound_type(s32 *Length) {
     s32 override;
     s32 off;
 
-    idx = (u32)get_seeded_random(0, (s32)Length) % 7u;
+    idx = (u32) get_seeded_random(0, (s32) Length) % 7u;
     paths = get_sound_types_paths();
     override = g_SoundTypeOverride;
     if (override != 0) {
@@ -71,7 +70,7 @@ const char *get_random_sound_type(s32 *Length) {
     } else {
         off = idx * 4;
     }
-    return *(const char **)((u8 *)paths + off);
+    return *(const char **) ((u8 *) paths + off);
 }
 
 // Only 1 SE exists in the list
@@ -113,7 +112,7 @@ const char *get_stage_music_path(s32 arg0, s32 unused) {
     s32 override;
     s32 off;
 
-    idx = (u32)get_seeded_random(0, unused) % 5u;
+    idx = (u32) get_seeded_random(0, unused) % 5u;
     if (arg0 == 9) {
         if (idx == 2) {
             idx = 3;
@@ -127,9 +126,9 @@ const char *get_stage_music_path(s32 arg0, s32 unused) {
     if (override != 0) {
         off = (override - 1) * 7;
     } else {
-        off = (s32)idx * 7;
+        off = (s32) idx * 7;
     }
-    return (const char *)((u8 *)path + off * 4);
+    return (const char *) ((u8 *) path + off * 4);
 }
 
 const char *get_stage_model_paths(s32 Arg) {
@@ -165,7 +164,7 @@ const char *get_random_opening_movie_path(s32 *out, s32 unused) {
     u32 idx;
     const char *path;
 
-    idx = (u32)get_seeded_random(0, unused) % 7u;
+    idx = (u32) get_seeded_random(0, unused) % 7u;
     path = get_opening_movie_path(&dur);
     if (out != NULL) {
         *out = idx + dur;
@@ -235,19 +234,19 @@ const char *get_special_day_movie(s32 *out, s32 packed) {
     const char *path;
     s32 val;
 
-    if (*(s16 *)&packed >= 0) {
-        path = get_special_movie_path(&dur, *(s16 *)&packed);
+    if (*(s16 *) &packed >= 0) {
+        path = get_special_movie_path(&dur, *(s16 *) &packed);
         if (out != NULL) {
-            if (((u16 *)&packed)[1] < 2U) {
-                val = ((s16 *)&packed)[1] + dur;
+            if (((u16 *) &packed)[1] < 2U) {
+                val = ((s16 *) &packed)[1] + dur;
             } else {
                 val = -1;
             }
             *out = val;
         }
-        return path + (((s16 *)&packed)[1] * 0x1C);
+        return path + (((s16 *) &packed)[1] * 0x1C);
     }
-    return get_event_movie_path(out, ((s16 *)&packed)[1]);
+    return get_event_movie_path(out, ((s16 *) &packed)[1]);
 }
 
 s32 get_movie_duration_maybe(s32 Index) {
@@ -274,4 +273,3 @@ const char *get_special_reel_movie_path(s32 *out, s32 index, s32 count) {
     *out -= 10;
     return path;
 }
-

@@ -1,12 +1,11 @@
 #include "base/timer.h"
 #include "base/base_class.h"
 #include "base/frame_phase.h"
-#include "gfx/light.h"
-#include "gfx/renderer.h"
+#include "graphics/light.h"
+#include "graphics/renderer.h"
 
 extern class_light_t *func_80042694(void);
 extern renderer_t *renderer_create(void);
-
 
 void timer_create(timer_t *This);
 void func_8003E030(timer_t *, void **, void *);
@@ -16,8 +15,6 @@ void func_8003E280(timer_t *);
 void func_8003E418(timer_t *, s32, s32);
 void timer_increment(timer_t *, void **, s32);
 void func_8003E4B8(timer_t *, s32);
-
-
 
 timer_vtable_t g_TIMER_VTABLE = {
     0x30,
@@ -86,31 +83,31 @@ void func_8003E10C(timer_t *This, s32 *Unk2, s32 Unk3) {
     if (value == 0) {
         value = (s32) frame_phase_create();
     }
-    This->m_Unk3 = (void *)value;
+    This->m_Unk3 = (void *) value;
 
     value = Unk2[3];
     if (value == 0) {
         value = (s32) func_80042694();
     }
-    This->m_Unk4 = (void *)value;
+    This->m_Unk4 = (void *) value;
 
     value = Unk2[4];
     if (value == 0) {
         value = (s32) renderer_create();
     }
-    This->m_Unk5 = (void *)value;
+    This->m_Unk5 = (void *) value;
 
     This->m_Unk2 = (s32) Unk2;
     m_Unk5 = This->m_Unk5;
     vtable->Attach(This, Unk2[0]);
     vtable->Attach(This, Unk2[1]);
-    vtable->Attach(This, (s32)This->m_Unk3);
+    vtable->Attach(This, (s32) This->m_Unk3);
     vtable->Unk18(This, 0, 0, 0);
     This->m_Unk8 = Unk3;
     if (Unk3 == 0) {
         (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x10))(m_Unk5, Unk2[0]);
-        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x10))(m_Unk5, (s32)This->m_Unk3);
-        (*(void (**)(void *, s32))(*(s32 *) This->m_Unk4 + 0x10))(This->m_Unk4, (s32)This->m_Unk3);
+        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x10))(m_Unk5, (s32) This->m_Unk3);
+        (*(void (**)(void *, s32))(*(s32 *) This->m_Unk4 + 0x10))(This->m_Unk4, (s32) This->m_Unk3);
         vtable->Unk23(This, 2);
         vtable->Unk17(This);
     }
@@ -128,23 +125,23 @@ void func_8003E280(timer_t *This) {
     m_Unk8 = This->m_Unk8;
     m_Unk5 = This->m_Unk5;
     if (m_Unk8 == 0) {
-        (*(void (**)(void *, s32))(*(s32 *) This->m_Unk4 + 0x14))(This->m_Unk4, (s32)This->m_Unk3);
-        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x14))(m_Unk5, (s32)This->m_Unk3);
+        (*(void (**)(void *, s32))(*(s32 *) This->m_Unk4 + 0x14))(This->m_Unk4, (s32) This->m_Unk3);
+        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x14))(m_Unk5, (s32) This->m_Unk3);
         (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x14))(m_Unk5, *(s32 *) This->m_Unk2);
     }
-    vtable->Detach(This, (s32)This->m_Unk3);
+    vtable->Detach(This, (s32) This->m_Unk3);
     vtable->Detach(This, *(s32 *) (This->m_Unk2 + 4));
     vtable->Detach(This, *(s32 *) This->m_Unk2);
-    if (*(s32 *) (This->m_Unk2 + 0x10) != (s32)m_Unk5) {
-        This->m_Unk5 = (void *)(*(s32 (**)(void *))(*(s32 *) m_Unk5 + 4))(m_Unk5);
+    if (*(s32 *) (This->m_Unk2 + 0x10) != (s32) m_Unk5) {
+        This->m_Unk5 = (void *) (*(s32(**)(void *))(*(s32 *) m_Unk5 + 4))(m_Unk5);
     }
     m_Unk4 = This->m_Unk4;
-    if (*(s32 *) (This->m_Unk2 + 0xC) != (s32)m_Unk4) {
-        This->m_Unk4 = (void *)(*(s32 (**)(void *))(*(s32 *) m_Unk4 + 4))(m_Unk4);
+    if (*(s32 *) (This->m_Unk2 + 0xC) != (s32) m_Unk4) {
+        This->m_Unk4 = (void *) (*(s32(**)(void *))(*(s32 *) m_Unk4 + 4))(m_Unk4);
     }
     m_Unk3 = This->m_Unk3;
-    if (*(s32 *) (This->m_Unk2 + 8) != (s32)m_Unk3) {
-        This->m_Unk3 = (void *)(*(s32 (**)(void *))(*(s32 *) m_Unk3 + 4))(m_Unk3);
+    if (*(s32 *) (This->m_Unk2 + 8) != (s32) m_Unk3) {
+        This->m_Unk3 = (void *) (*(s32(**)(void *))(*(s32 *) m_Unk3 + 4))(m_Unk3);
     }
 }
 

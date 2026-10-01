@@ -1,5 +1,5 @@
-#include "gfx/effect.h"
-#include "gfx/effect_base.h"
+#include "graphics/effect.h"
+#include "graphics/effect_base.h"
 
 extern effect_vtable_t g_EFFECT_VTABLE;
 
@@ -23,11 +23,11 @@ void effect_construct(effect_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
 
     parent = func_800408BC();
     if (Unk2 != 0) {
-        color = (u8 *)&D_8006EA90 + (Unk2 * 3);
+        color = (u8 *) &D_8006EA90 + (Unk2 * 3);
     } else {
         color = &D_8006EAA8;
     }
-    parent->Construct(This, Unk1, (u32)color, Unk3);
+    parent->Construct(This, Unk1, (u32) color, Unk3);
     This->vtable = effect_get_vtable();
     This->vtable->Unk15(This, Unk2);
 }
@@ -88,7 +88,7 @@ void effect_set_color_step(effect_t *This, s32 Value) {
 //         This->m_ColorStep = -This->m_ColorStep;
 //     }
 // }
-INCLUDE_ASM("asm/nonmatchings/gfx/effect", effect_start);
+INCLUDE_ASM("asm/nonmatchings/graphics/effect", effect_start);
 
 /*
  * Best attempt (not matching: target is 41 insns, compiled 40. The only real
@@ -113,8 +113,7 @@ INCLUDE_ASM("asm/nonmatchings/gfx/effect", effect_start);
  *     }
  * }
  */
-INCLUDE_ASM("asm/nonmatchings/gfx/effect", effect_start_attached);
-
+INCLUDE_ASM("asm/nonmatchings/graphics/effect", effect_start_attached);
 
 s32 effect_activate(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
     effect_vtable_t *vtable;
@@ -147,10 +146,10 @@ s32 effect_activate(effect_t *This, base_class_t *arg1, s32 arg2, s32 arg3) {
         This->m_Life = life - life / This->m_Unk38;
     }
     This->m_Unk32 = This->m_ColorMask / This->m_Life;
-    vtable->Attach((base_class_t *)This, arg1);
-    vtable->Unk24((void *)This, 1);
-    vtable->Unk25((void *)This, state);
-    vtable->Unk23((void *)This, 1);
+    vtable->Attach((base_class_t *) This, arg1);
+    vtable->Unk24((void *) This, 1);
+    vtable->Unk25((void *) This, state);
+    vtable->Unk23((void *) This, 1);
     return variant;
 }
 
@@ -191,13 +190,13 @@ s32 effect_get_color_impl(effect_t *This) {
         return D_8006EAA8;
     }
 
-    return (s32 *)((s8 *)D_8006EA90 + 3 * This->m_ColorChannels);
+    return (s32 *) ((s8 *) D_8006EA90 + 3 * This->m_ColorChannels);
 }
 
 void effect_save_render_state(effect_t *This, u16 *a, s32 *b) {
     if (This->m_Unk2 != 0) {
-        This->m_Unk33 = (u16)This->m_Unk23_1;
-        This->m_Unk34 = (u16)This->m_Unk23_2;
+        This->m_Unk33 = (u16) This->m_Unk23_1;
+        This->m_Unk34 = (u16) This->m_Unk23_2;
         __builtin_memcpy(&This->m_Unk35, &This->m_Unk19, 8);
         This->m_Unk23_1 = a[0];
         This->m_Unk23_2 = a[2];

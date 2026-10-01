@@ -1,9 +1,9 @@
 #ifndef LSD_ENTITY_H
 #define LSD_ENTITY_H
 
-#include "gfx/effect.h"
-#include "common.h"
 #include "base/base_class.h"
+#include "common.h"
+#include "graphics/effect.h"
 
 typedef struct dream_sys dream_sys_t;
 
@@ -15,7 +15,6 @@ typedef enum {
     ENTITY_NOTIFY_LINK_VIDEO = 11, /* link that also plays an event video */
     ENTITY_NOTIFY_LINK_END = 12,   /* request day end / link (dream_session case 12) */
 } entity_notify_t;
-
 
 /* entity_vtable is a superset of actor_vtable:
  *   slots 0x004..0x140   inherited base_class -> transform -> scene_node -> actor methods
@@ -213,20 +212,20 @@ typedef struct {
  * The behaviour function (g_ENTITY_TABLE[].behaviour_fn) is invoked as
  * callback(owner, &context) and writes effect ids into the three slots. */
 typedef struct {
-    /* 0x00 */ s32 handle;   /* effect/sound handle, -1 when free */
-    /* 0x04 */ s32 id;       /* effect id chosen by the behaviour */
-    /* 0x08 */ s32 param;    /* effect parameter chosen by the behaviour */
-    /* 0x0C */ s32 period;   /* reset to 0x7F by sound_entity_update */
-    /* 0x10 */ s32 counter;  /* reset to 0x40 by sound_entity_update */
+    /* 0x00 */ s32 handle;  /* effect/sound handle, -1 when free */
+    /* 0x04 */ s32 id;      /* effect id chosen by the behaviour */
+    /* 0x08 */ s32 param;   /* effect parameter chosen by the behaviour */
+    /* 0x0C */ s32 period;  /* reset to 0x7F by sound_entity_update */
+    /* 0x10 */ s32 counter; /* reset to 0x40 by sound_entity_update */
 } entity_effect_slot_t;
 
 typedef struct {
-    /* 0x00 */ s32 state;    /* 0 disables updates; set to entity id + 1 */
-    /* 0x04 */ s32 tick;     /* frame counter, incremented each update */
-    /* 0x08 */ void *owner;  /* object passed as the callback's first arg */
+    /* 0x00 */ s32 state;   /* 0 disables updates; set to entity id + 1 */
+    /* 0x04 */ s32 tick;    /* frame counter, incremented each update */
+    /* 0x08 */ void *owner; /* object passed as the callback's first arg */
     /* 0x0C */ void (*callback)(void *, s32 *);
-    /* 0x10 */ s32 motion;   /* current motion/pose id */
-    /* 0x14 */ s32 divisor;  /* period used by sound_entity_update */
+    /* 0x10 */ s32 motion;  /* current motion/pose id */
+    /* 0x14 */ s32 divisor; /* period used by sound_entity_update */
     /* 0x18 */ entity_effect_slot_t slots[3];
 } entity_context_t;
 

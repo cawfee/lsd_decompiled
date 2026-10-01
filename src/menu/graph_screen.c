@@ -1,6 +1,6 @@
 #include "menu/graph_screen.h"
-#include "menu/ui_screen.h"
 #include "dream/dream_sys.h"
+#include "menu/ui_screen.h"
 
 extern graph_screen_vtable_t D_80087AAC;
 
@@ -87,13 +87,13 @@ void func_80058308(graph_screen_t *This) {
     void *obj;
 
     i = 0;
-    cursor = (u8 *)This;
+    cursor = (u8 *) This;
     memory_free_mem(This->m_EventCellIndices);
     do {
-        obj = *(void **)(cursor + 0xA8);
+        obj = *(void **) (cursor + 0xA8);
         cursor += 4;
         i++;
-        (*(void (**)(void *))(*(u32 *)obj + 4))(obj);
+        (*(void (**)(void *))(*(u32 *) obj + 4))(obj);
     } while (i < 100);
     func_8003DFBC()->Unk54(This);
 }
@@ -148,8 +148,8 @@ void graph_screen_update_event(graph_screen_t *This, s32 arg) {
     if (&pad[0] == &pad[7]) {
     }
     func_8003DFBC()->Unk55(This, arg);
-    rec = ((dream_sys_t *)This->m_DreamSys)->vtable->dream_sys_get_save_data(This->m_DreamSys, NULL);
-    This->m_VideoReelReady = graph_screen_setup_video_event(This, (u8 *)rec);
+    rec = ((dream_sys_t *) This->m_DreamSys)->vtable->dream_sys_get_save_data(This->m_DreamSys, NULL);
+    This->m_VideoReelReady = graph_screen_setup_video_event(This, (u8 *) rec);
     flag = 0;
     if (rec->field4 != 0) {
         limit = 100;
@@ -162,18 +162,18 @@ void graph_screen_update_event(graph_screen_t *This, s32 arg) {
     i = 0;
     idx = rec->count - 1;
     if (limit > 0) {
-        cursor = (u8 *)This;
+        cursor = (u8 *) This;
         do {
             if (idx < 0) {
                 idx = 0x16C;
             }
-            cur.x = *(s8 *)((u8 *)rec + (idx << 1) + 0x18) * 10 - 5;
-            cur.y = -*(s8 *)((u8 *)rec + (idx << 1) + 0x19) * 10 - 5;
+            cur.x = *(s8 *) ((u8 *) rec + (idx << 1) + 0x18) * 10 - 5;
+            cur.y = -*(s8 *) ((u8 *) rec + (idx << 1) + 0x19) * 10 - 5;
             if (i == 0) {
                 saved = cur;
                 flag = 1;
             } else {
-                slot = *(graph_screen_event_slot_t **)(cursor + 0xA8);
+                slot = *(graph_screen_event_slot_t **) (cursor + 0xA8);
                 slot->vtable->Unk48(slot, arg, &cur.x, 0);
             }
             cursor += 4;
@@ -182,7 +182,7 @@ void graph_screen_update_event(graph_screen_t *This, s32 arg) {
         } while (i < limit);
     }
     if (flag != 0) {
-        slot = (graph_screen_event_slot_t *)This->m_DreamCells[0];
+        slot = (graph_screen_event_slot_t *) This->m_DreamCells[0];
         slot->vtable->Unk48(slot, arg, &saved.x, 0);
     }
 }
@@ -196,10 +196,10 @@ s32 graph_screen_setup_video_event(graph_screen_t *This, u8 *obj) {
 
     if (&dummy[0] == &dummy[7]) {
     }
-    if (((s8 *)obj)[0x467] == 0) {
+    if (((s8 *) obj)[0x467] == 0) {
         limit = 100;
-        if (*(s32 *)(obj + 4) == 0) {
-            limit = *(s32 *)(obj + 8);
+        if (*(s32 *) (obj + 4) == 0) {
+            limit = *(s32 *) (obj + 8);
             if (limit >= 101) {
                 limit = 100;
             }
@@ -211,7 +211,7 @@ s32 graph_screen_setup_video_event(graph_screen_t *This, u8 *obj) {
             s32 idx;
 
             i = 0;
-            base = *(s32 *)(obj + 8);
+            base = *(s32 *) (obj + 8);
             idx = base - 1;
             hits = 0;
             if (limit > 0) {
@@ -219,8 +219,8 @@ s32 graph_screen_setup_video_event(graph_screen_t *This, u8 *obj) {
                     if (idx < 0) {
                         idx = 0x16C;
                     }
-                    if (*(s16 *)((u8 *)g_VideoEventCells + (slot << 1)) == *(s16 *)(obj + (idx << 1) + 0x18)) {
-                        ((u8 *)This->m_EventCellIndices)[slot] = i;
+                    if (*(s16 *) ((u8 *) g_VideoEventCells + (slot << 1)) == *(s16 *) (obj + (idx << 1) + 0x18)) {
+                        ((u8 *) This->m_EventCellIndices)[slot] = i;
                         hits += 1;
                     }
                     idx -= 1;
@@ -231,7 +231,7 @@ s32 graph_screen_setup_video_event(graph_screen_t *This, u8 *obj) {
                 return 0;
             }
         }
-        ((s8 *)obj)[0x467] = 1;
+        ((s8 *) obj)[0x467] = 1;
         This->m_EventCellIndex = 0;
         return 1;
     }
@@ -247,13 +247,13 @@ void graph_screen_flash_video_event(graph_screen_t *This) {
     s32 idx;
 
     if (This->m_VideoReelReady != 0) {
-        unk6 = (u32)This->m_Tick;
+        unk6 = (u32) This->m_Tick;
         if (unk6 >= 0x1FU) {
-            unk142 = (u32)This->m_EventCellIndex;
+            unk142 = (u32) This->m_EventCellIndex;
             if ((unk142 < 4U) && (unk6 == ((unk6 / 24) * 0x18))) {
-                idx = *((s8 *)This->m_EventCellIndices + unk142);
-                obj = *(void **)((u8 *)This + 0xA8 + (idx * 4));
-                (*(void (**)(void *, s32, s32 *))(*(s32 *)obj + 0xB8))(obj, 1, D_8008ABBC);
+                idx = *((s8 *) This->m_EventCellIndices + unk142);
+                obj = *(void **) ((u8 *) This + 0xA8 + (idx * 4));
+                (*(void (**)(void *, s32, s32 *))(*(s32 *) obj + 0xB8))(obj, 1, D_8008ABBC);
                 This->m_EventCellIndex++;
             }
         }

@@ -61,10 +61,10 @@ struct display {
     /* 0x10 */ s32 m_VSyncCount;   // non-zero while display_do_vsync_internal is running
     /* 0x14 */ vec2d_t m_ScreenSize;
     /* 0x1C */ s32 m_VarMode;
-    /* 0x20 */ s32 m_NextVBlank;   // vblanks to wait in VSync, and the timer target
-    /* 0x24 */ s32 m_TimerCount;   // incremented by display_update_timer
+    /* 0x20 */ s32 m_NextVBlank; // vblanks to wait in VSync, and the timer target
+    /* 0x24 */ s32 m_TimerCount; // incremented by display_update_timer
     /* 0x28 */ s32 m_Unk8;
-    /* 0x2C */ s32 m_SyncMode;     // draw-sync mode used by load/store_image
+    /* 0x2C */ s32 m_SyncMode; // draw-sync mode used by load/store_image
     /* 0x30 */ void (*m_VsyncCallback)(void);
 };
 

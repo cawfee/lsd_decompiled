@@ -2,8 +2,8 @@
 
 #include <psx/libgpu.h>
 
+#include "memory/memory.h"
 #include "file/file_buf.h"
-#include "base/memory.h"
 
 void func_80044F90(void *, s32);
 void func_8004500C(base_class_t *);
@@ -15,7 +15,7 @@ void nullsub13(void *);
 
 sprite_atlas_vtable_t D_8006F514 = {
     0x303,
-    (base_class_t *(*)(base_class_t *))file_buf_destroy,
+    (base_class_t * (*) (base_class_t *) ) file_buf_destroy,
     func_80044F90,
     func_8004500C,
     base_class_attach,
@@ -76,18 +76,17 @@ void func_80044F90(sprite_atlas_t *This, s32 Unk) {
 
 void func_8004500C(sprite_atlas_t *This) {
     memory_free_mem(This->m_Unk12);
-  memory_free_mem(This->m_Unk10);
-  (*(void ( **)(sprite_atlas_t *))((s32) get_file_driver() + 12))(This);
+    memory_free_mem(This->m_Unk10);
+    (*(void (**)(sprite_atlas_t *))((s32) get_file_driver() + 12))(This);
 }
 
 void func_80045060(sprite_atlas_t *This) {
     s8 pad[0x20];
-    
-    if ( !This->m_Unk9_2 )
-  {
-    This->vtable->Unk29(This);
-    This->m_Unk11_2 = 1;
-  }
+
+    if (!This->m_Unk9_2) {
+        This->vtable->Unk29(This);
+        This->m_Unk11_2 = 1;
+    }
 }
 
 typedef struct {
@@ -116,12 +115,12 @@ void func_800450B4(sprite_atlas_t *This) {
     u = 0;
     tpage = GetTPage(2, 0, 0x280, 0) & 0xFFFF;
     mem = memory_allocate_mem(0x960);
-    This->m_Unk10 = (s32)mem;
+    This->m_Unk10 = (s32) mem;
     if (mem == NULL) {
         return;
     }
     i = 0;
-    cell = (atlas_cell_t *)mem;
+    cell = (atlas_cell_t *) mem;
     limit = 0x12C;
     do {
         cell->u = u;

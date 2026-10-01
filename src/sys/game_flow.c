@@ -3,17 +3,16 @@
 #include <psx/libetc.h>
 
 #include "base/base_class.h"
-#include "sys/system.h"
-#include "menu/ui_screen.h"
-#include "menu/graph_screen.h"
-#include "menu/movie_screen.h"
+#include "memory/memory.h"
 #include "dream/dream_session.h"
 #include "dream/dream_session_path.h"
-#include "sys/game_flow.h"
+#include "menu/graph_screen.h"
 #include "menu/main_menu.h"
-#include "base/memory.h"
+#include "menu/movie_screen.h"
+#include "menu/ui_screen.h"
+#include "sys/game_flow.h"
+#include "sys/system.h"
 #include "utils/cd_paths.h"
-
 
 game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     0x1F60,
@@ -250,8 +249,7 @@ void game_flow_play_special_day(game_flow_t *This) {
         if (This->m_Config->m_EnableMovie) {
             player = movie_screen_create(0, 0, 0, 0);
             player->vtable->Unk74(player, 0);
-            player->vtable->Play(player, This->m_GraphicsCtx, movie_path,
-                                  get_movie_duration_maybe(duration[0]), 1);
+            player->vtable->Play(player, This->m_GraphicsCtx, movie_path, get_movie_duration_maybe(duration[0]), 1);
         } else {
             return;
         }

@@ -1,8 +1,8 @@
 #ifndef LSD_STAGE_GRID_H
 #define LSD_STAGE_GRID_H
 
-#include <common.h>
 #include "dream/dream_sys.h"
+#include <common.h>
 
 #define STAGE_GRID_DIMENSION_COUNT 14
 

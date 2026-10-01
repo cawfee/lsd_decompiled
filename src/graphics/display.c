@@ -1,10 +1,10 @@
-#include "sys/display.h"
+#include "graphics/display.h"
 
 #include <psx/libetc.h>
 #include <psx/libgs.h>
 
 #include "base/base_class.h"
-#include "base/memory.h"
+#include "memory/memory.h"
 
 display_vtable_t g_DISPLAY_VTABLE = {
     1,
@@ -162,7 +162,6 @@ void display_update_timer(display_t *This) {
     display_t *disp;
     s32 limit;
     s32 count;
-
 
     disp = get_display();
     limit = disp->m_NextVBlank;

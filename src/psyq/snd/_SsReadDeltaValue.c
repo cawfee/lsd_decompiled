@@ -60,9 +60,9 @@ void SpuVmDamperOff(void);
 //     return result;
 // }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80034138);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80034138);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_8003424C);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_8003424C);
 
 // Best attempt: all 70 target instructions are present in the same order with the
 // same memory accesses, call sites, magic /127 sequence and return paths; only
@@ -93,17 +93,17 @@ INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_8003424C);
 //     return result;
 // }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_800344FC);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_800344FC);
 
 void func_80034614(s16 arg0, s16 arg1, s8 arg2) {
     u8 *chan = ss_score[arg0] + arg1 * 0xAC;
     u8 *p = chan + chan[0x12];
 
     p[0x2C] = arg2;
-    *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+    *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80034690);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80034690);
 
 #if 0
 /* Best match: 79/79 insns with identical structure; only GCC 2.6.3 register
@@ -135,7 +135,7 @@ void func_800349B0(s16 arg0, s16 arg1, s8 arg2) {
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_800349B0);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_800349B0);
 
 // Prototypes used by the commented attempts below (from libsnd.h):
 //   void SsUtGetProgAtr(s16, u8, u8 *);
@@ -167,7 +167,7 @@ INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_800349B0);
 //     *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 // }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80034AEC);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80034AEC);
 
 // Best attempt: structure/loop/frame (0x70) match; target keeps arg2 in $s4
 // (saved first) and p in $s0; GCC assigns arg2 to $s0 and p to $s3. Same
@@ -194,19 +194,19 @@ INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80034AEC);
 //     *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 // }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80034C28);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80034C28);
 
 void func_80034D90(s16 arg0, s16 arg1) {
     u8 *chan = ss_score[arg0] + arg1 * 0xAC;
 
     SsUtReverbOff();
     SpuVmDamperOff();
-    *(u8 *)(chan + chan[0x12] + 0x2C) = chan[0x12];
+    *(u8 *) (chan + chan[0x12] + 0x2C) = chan[0x12];
     chan[0x13] = 0;
     chan[0x14] = 0;
-    *(s16 *)(chan + chan[0x12] * 2 + 0x4E) = 0x7F;
-    *(u8 *)(chan + chan[0x12] + 0x17) = 0x40;
-    *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+    *(s16 *) (chan + chan[0x12] * 2 + 0x4E) = 0x7F;
+    *(u8 *) (chan + chan[0x12] + 0x17) = 0x40;
+    *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 }
 
 extern void (*D_80090368[][16])(s16, s16, u8);
@@ -228,43 +228,43 @@ void func_80034E5C(s16 arg0, s16 arg1, s8 arg2) {
             handler(arg0, arg1, arg2);
         }
     }
-    *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+    *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 }
 
 void func_80034F90(s16 arg0, s16 arg1, u8 arg2) {
     u8 *chan = ss_score[arg0] + arg1 * 0xAC;
 
     switch (arg2) {
-    case 0x14:
-        chan[0x16] = arg2;
-        chan[0x27] = 1;
-        *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
-        *(s32 *)(chan + 0xC) = *(s32 *)(chan + 4);
-        break;
-    case 0x1E:
-        chan[0x16] = arg2;
-        if (chan[0x28] == 0) {
-            chan[0x10] = 0;
-            *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
-        } else if (chan[0x28] < 0x7F) {
-            chan[0x28] = --chan[0x28];
-            *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
-            if (chan[0x28] != 0) {
-                *(s32 *)(chan + 4) = *(s32 *)(chan + 0xC);
-            } else {
+        case 0x14:
+            chan[0x16] = arg2;
+            chan[0x27] = 1;
+            *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+            *(s32 *) (chan + 0xC) = *(s32 *) (chan + 4);
+            break;
+        case 0x1E:
+            chan[0x16] = arg2;
+            if (chan[0x28] == 0) {
                 chan[0x10] = 0;
+                *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+            } else if (chan[0x28] < 0x7F) {
+                chan[0x28] = --chan[0x28];
+                *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+                if (chan[0x28] != 0) {
+                    *(s32 *) (chan + 4) = *(s32 *) (chan + 0xC);
+                } else {
+                    chan[0x10] = 0;
+                }
+            } else {
+                _SsReadDeltaValue(arg0, arg1);
+                *(s32 *) (chan + 0x88) = 0;
+                *(s32 *) (chan + 4) = *(s32 *) (chan + 0xC);
             }
-        } else {
-            _SsReadDeltaValue(arg0, arg1);
-            *(s32 *)(chan + 0x88) = 0;
-            *(s32 *)(chan + 4) = *(s32 *)(chan + 0xC);
-        }
-        break;
-    default:
-        chan[0x16] = arg2;
-        chan[0x2A] = chan[0x2A] + 1;
-        *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
-        break;
+            break;
+        default:
+            chan[0x16] = arg2;
+            chan[0x2A] = chan[0x2A] + 1;
+            *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+            break;
     }
 }
 
@@ -273,7 +273,7 @@ void func_800350D8(s16 arg0, s16 arg1, s8 arg2) {
 
     chan[0x13] = arg2;
     chan[0x29] = chan[0x29] + 1;
-    *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+    *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 }
 
 void func_80035154(s16 arg0, s16 arg1, s8 arg2) {
@@ -281,14 +281,14 @@ void func_80035154(s16 arg0, s16 arg1, s8 arg2) {
 
     chan[0x14] = arg2;
     chan[0x29] = chan[0x29] + 1;
-    *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
+    *(s32 *) (chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_800351D0);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_800351D0);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_800357B0);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_800357B0);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80035A7C);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80035A7C);
 // Best attempt: 44/44 insns present; every memory access and call operand matches.
 // First difference is scheduling: target issues `sll v0,s2,2` (ss_score[arg0]
 // index) right after sign-extending arg0 and places `sll a0,s1,8` (call arg 0)
@@ -306,9 +306,9 @@ INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80035A7C);
 //     *(s32 *)(chan + 0x88) = _SsReadDeltaValue(arg0, arg1);
 // }
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", func_80035B2C);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", func_80035B2C);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/_SsReadDeltaValue", _SsReadDeltaValue);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/_SsReadDeltaValue", _SsReadDeltaValue);
 // Best attempt: 48/47 insns; one extra `move v0,a1`. Target keeps the channel
 // pointer in $a1 and `scaled` in $v0; GCC 2.6.3 allocates the channel pointer to
 // $a2, forcing `scaled` into $a1 and a final `move v0,a1` before the return.

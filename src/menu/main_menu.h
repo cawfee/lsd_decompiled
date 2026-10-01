@@ -5,11 +5,11 @@
 
 #include "base/base_class.h"
 
-#include "menu/text_line.h"
 #include "dream/dream_sys.h"
-#include "menu/card/memory_card.h"
-#include "snd/sound.h"
 #include "file/tim_image.h"
+#include "menu/card/memory_card.h"
+#include "menu/text_line.h"
+#include "sound/sound.h"
 
 typedef struct main_menu_vtable {
     /* 0x000 80086b60 */ u32 type_id;

@@ -5,9 +5,9 @@
 
 #include "base/base_class.h"
 
-#include "sys/pad.h"
-#include "sys/display.h"
+#include "graphics/display.h"
 #include "sys/game_flow.h"
+#include "sys/pad.h"
 
 typedef struct system_vtable {
     /* 0x000 8006E4F0 */ u32 type_id;

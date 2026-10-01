@@ -5,13 +5,13 @@
 
 #include "base/base_class.h"
 
-#include "sys/pad.h"
 #include "base/frame_phase.h"
-#include "scene/render_context.h"
-#include "gfx/scene_renderer.h"
 #include "dream/dream_sys.h"
-#include "sys/display.h"
 #include "file/tim_image.h"
+#include "graphics/scene_renderer.h"
+#include "scene/render_context.h"
+#include "graphics/display.h"
+#include "sys/pad.h"
 
 // TODO move?
 typedef struct {
@@ -89,7 +89,10 @@ struct dream_session {
 dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode);
 dream_session_vtable_t *dream_session_get_vtable(void);
 
-void dream_session_construct(dream_session_t *This, game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode);
+void dream_session_construct(dream_session_t *This,
+                             game_graphics_ctx_t *GraphicsCtx,
+                             dream_sys_t *DreamSys,
+                             s32 FrameSyncMode);
 void dream_session_cleanup(dream_session_t *This);
 void dream_session_on_tick(dream_session_t *This, void **Unk2, s32 Unk3);
 void dream_session_reset(dream_session_t *This);

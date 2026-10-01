@@ -1,4 +1,4 @@
-#include "sys/display.h"
+#include "graphics/display.h"
 
 display_t *g_Display = NULL;
 

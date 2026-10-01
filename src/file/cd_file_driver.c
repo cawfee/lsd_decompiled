@@ -1,8 +1,8 @@
 #include "common.h"
 
+#include "memory/memory.h"
 #include "file/file_buf.h"
-#include "base/memory.h"
-#include "sys/display.h"
+#include "graphics/display.h"
 
 typedef struct cd_file_request {
     /* 0x00 */ s32 m_Cancel;
@@ -90,7 +90,7 @@ void *cd_file_driver_create(void) {
     void *mem = memory_allocate_mem(0x2C);
 
     if (mem != NULL) {
-        ((file_buf_vtable_t *)cd_file_driver_get_vtable())->Construct(mem);
+        ((file_buf_vtable_t *) cd_file_driver_get_vtable())->Construct(mem);
         return mem;
     }
     return NULL;
@@ -126,22 +126,22 @@ void cd_file_driver_open(file_buf_t *This, s32 arg1, s32 arg2, s32 arg3) {
         if (g_CdReadBusy == 0 && This->m_Unk2 == 0) {
             cd_file_driver_begin_read(1, 1);
             if (g_CdFrameActive != 0) {
-                g_CdReadPos = (s32)cd_file_driver_find_disc_record(arg1);
+                g_CdReadPos = (s32) cd_file_driver_find_disc_record(arg1);
                 if (g_CdReadPos == 0) {
                     return;
                 }
-                *(unk_disc_loc_t *)((u8 *)This + 0x18) = ((unk_disc_record_t *)g_CdReadPos)->m_Pos;
-                This->m_Unk6 = ((unk_disc_record_t *)g_CdReadPos)->m_Size;
+                *(unk_disc_loc_t *) ((u8 *) This + 0x18) = ((unk_disc_record_t *) g_CdReadPos)->m_Pos;
+                This->m_Unk6 = ((unk_disc_record_t *) g_CdReadPos)->m_Size;
                 g_CdReadPhase = 1;
                 This->m_Unk2 = 1;
             } else {
-                cd_file_driver_build_path(path, (s8 *)arg1);
+                cd_file_driver_build_path(path, (s8 *) arg1);
                 while (CdSearchFile(&file, path) == 0) {
                 }
-                *(unk_disc_loc_t *)((u8 *)This + 0x18) = file.m_Pos;
+                *(unk_disc_loc_t *) ((u8 *) This + 0x18) = file.m_Pos;
                 This->m_Unk6 = file.m_Size;
                 do {
-                    CdControl(2, (u8 *)This + 0x18, 0);
+                    CdControl(2, (u8 *) This + 0x18, 0);
                     do {
                         status = CdSync(0, 0);
                     } while (status == 0);
@@ -190,10 +190,10 @@ s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
             if (arg1 & 0x7FF) {
                 var_s0 += 1;
             }
-            CdIntToPos(CdPosToInt((u8 *)&arg0->m_Unk5) + var_s0, D_8006D574);
+            CdIntToPos(CdPosToInt((u8 *) &arg0->m_Unk5) + var_s0, D_8006D574);
             if (arg2 == 0) {
                 if (g_CdFrameActive != 0) {
-                    g_CdReadPos = (s32)D_8006D574 - 0x14;
+                    g_CdReadPos = (s32) D_8006D574 - 0x14;
                     g_CdReadPhase = 1;
                 } else {
                     do {
@@ -424,7 +424,7 @@ void cd_file_driver_unk28(file_buf_t *arg0) {
     cd_file_driver_lock();
     if (g_CdRequestList != NULL && arg0->m_Unk7_2 != 0) {
         arg0->m_Flags = 0;
-        if (g_CdRequestList->m_FileBuf == (s32)arg0 && g_CdRequestList->m_Cancel != 0 && g_CdReadIdle == 0) {
+        if (g_CdRequestList->m_FileBuf == (s32) arg0 && g_CdRequestList->m_Cancel != 0 && g_CdReadIdle == 0) {
             CdFlush();
             cd_file_driver_end_read();
             g_CdReadPos = g_CdReadTarget;
@@ -434,7 +434,7 @@ void cd_file_driver_unk28(file_buf_t *arg0) {
         if (node != NULL) {
             do {
                 next = node->m_Next;
-                if (node->m_FileBuf == (s32)arg0) {
+                if (node->m_FileBuf == (s32) arg0) {
                     cd_file_driver_free_request(node);
                     arg0->m_Unk7_2 = arg0->m_Unk7_2 - 1;
                 }
@@ -598,7 +598,7 @@ s32 cd_file_driver_tick(void) {
         cd_file_driver_read_state2();
     }
     if (g_CdCallbackActive != 0) {
-        ((void (*)(void))((void **)cd_file_driver_get_vtable())[26])();
+        ((void (*)(void))((void **) cd_file_driver_get_vtable())[26])();
     }
     if (g_CdFrameMode != 0) {
         VSyncCallback(cd_file_driver_tick);
@@ -643,7 +643,7 @@ void cd_file_driver_queue_request(file_buf_t *arg0, s32 arg1, s32 arg2, s32 arg3
 
     node->m_Unk2 = arg2;
     node->m_Unk5 = arg3;
-    node->m_FileBuf = (s32)arg0;
+    node->m_FileBuf = (s32) arg0;
     node->m_Unk4 = arg1;
     node->m_Unk6 = arg4;
     arg0->m_Flags = 0;
@@ -701,7 +701,7 @@ s32 cd_file_driver_find_disc_record(s32 arg0) {
 
     cd_file_driver_lock();
     while (1) {
-        if (strstr((char *)p, (char *)arg0) != 0) {
+        if (strstr((char *) p, (char *) arg0) != 0) {
             cd_file_driver_unlock();
             return p;
         }
@@ -719,7 +719,7 @@ s32 cd_file_driver_find_disc_record_index(s32 arg0) {
 
     cd_file_driver_lock();
     while (1) {
-        if (strstr((char *)p, (char *)arg0) != 0) {
+        if (strstr((char *) p, (char *) arg0) != 0) {
             break;
         }
         i++;
@@ -916,7 +916,7 @@ void cd_file_driver_construct2(file_buf_t *This) {
 }
 
 void cd_file_driver_cleanup2(file_buf_t *This) {
-    file_buf_get_vtable()->Cleanup((base_class_t *)This);
+    file_buf_get_vtable()->Cleanup((base_class_t *) This);
 }
 
 void cd_file_driver_nullsub16(void) {
@@ -959,7 +959,7 @@ INCLUDE_ASM("asm/nonmatchings/file/cd_file_driver", cd_file_driver_lookup_file);
 
 s8 *cd_file_driver_build_path(s8 *arg0, s8 *arg1) {
     *arg0 = 0x5C;
-    strcpy(arg0 + 1, (char *)get_current_data_folder());
+    strcpy(arg0 + 1, (char *) get_current_data_folder());
     strcat(arg0, arg1);
     strcat(arg0, g_CdPathSuffix);
     return arg0;
@@ -973,7 +973,7 @@ void cd_file_driver_reset_cache(file_buf_t *This) {
 
 s32 cd_file_driver_get_aligned_size(file_buf_t *This) {
     if (This->m_Unk2 != 0) {
-        return (((u32)This->m_Unk6 >> 11) + 1) << 11;
+        return (((u32) This->m_Unk6 >> 11) + 1) << 11;
     }
     return 0;
 }
@@ -998,9 +998,9 @@ s32 cd_file_driver_read_sectors(file_buf_t *arg0, void *arg1, u32 arg2) {
     if (arg0->m_Unk2 != 0) {
     retry:
         sectors = arg2 >> 11;
-        CdControl(2, (u8 *)&arg0->m_Unk5, 0);
+        CdControl(2, (u8 *) &arg0->m_Unk5, 0);
     syncloop:
-        status = CdSync(0, (u8 *)result);
+        status = CdSync(0, (u8 *) result);
         if (status == 0) {
             goto syncloop;
         }
@@ -1017,8 +1017,7 @@ s32 cd_file_driver_read_sectors(file_buf_t *arg0, void *arg1, u32 arg2) {
         if (status == -1) {
             goto retry;
         }
-    done:
-        ;
+    done:;
     } else {
         arg0->vtable->Close(arg0);
     }

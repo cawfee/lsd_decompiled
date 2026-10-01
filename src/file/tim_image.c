@@ -1,8 +1,8 @@
-#include <psx/libgs.h>
 #include "file/tim_image.h"
+#include "memory/memory.h"
 #include "file/file_buf.h"
-#include "sys/display.h"
-#include "base/memory.h"
+#include "graphics/display.h"
+#include <psx/libgs.h>
 extern tim_image_vtable_t g_TIM_IMAGE_VTABLE;
 extern display_t *get_display(void);
 tim_image_t *tim_image_create(const char *Unk1) {
@@ -45,26 +45,37 @@ void func_8003B4A8(tim_image_t *This) {
         rect.y = This->m_TimInfo.py;
         rect.w = This->m_TimInfo.pw;
         rect.h = This->m_TimInfo.ph;
-        display->vtable->display_load_image(display, (s16 *)&rect, (s32)This->m_TimInfo.pixel);
+        display->vtable->display_load_image(display, (s16 *) &rect, (s32) This->m_TimInfo.pixel);
         if ((This->m_TimInfo.pmode >> 3) & 1) {
             rect.x = This->m_TimInfo.cx;
             rect.y = This->m_TimInfo.cy;
             rect.w = This->m_TimInfo.cw;
             rect.h = This->m_TimInfo.ch;
-            display->vtable->display_load_image(display, (s16 *)&rect, (s32)This->m_TimInfo.clut);
+            display->vtable->display_load_image(display, (s16 *) &rect, (s32) This->m_TimInfo.clut);
         }
     }
 }
 
-void func_8003B5AC(void) {}
-void func_8003B5B4(void) {}
-void func_8003B5BC(void) {}
-void func_8003B5C4(void) {}
-void func_8003B5CC(void) {}
-void func_8003B5D4(void) {}
-void func_8003B5DC(void) {}
-void tim_image_set_loaded(tim_image_t *This) { This->m_MaybeLoaded = 1; }
+void func_8003B5AC(void) {
+}
+void func_8003B5B4(void) {
+}
+void func_8003B5BC(void) {
+}
+void func_8003B5C4(void) {
+}
+void func_8003B5CC(void) {
+}
+void func_8003B5D4(void) {
+}
+void func_8003B5DC(void) {
+}
+void tim_image_set_loaded(tim_image_t *This) {
+    This->m_MaybeLoaded = 1;
+}
 void tim_get_info(tim_image_t *This, void *TIMData) {
     GsGetTimInfo((unsigned long *) (This->m_Image + 4), TIMData);
 }
-tim_image_vtable_t *tim_image_get_vtable(void) { return &g_TIM_IMAGE_VTABLE; }
+tim_image_vtable_t *tim_image_get_vtable(void) {
+    return &g_TIM_IMAGE_VTABLE;
+}

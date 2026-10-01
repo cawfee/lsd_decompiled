@@ -68,6 +68,10 @@ CPLUS_FLAGS = C_FLAGS + []
 MASPSX_FLAGS = ["--dont-force-G0", "--expand-div", "--aspsx-version=2.21", "-G8"]
 LD_FLAGS = ["--no-check-sections", "-nostdlib", "-s"]
 
+CLANG_FORMAT = "clang-format"
+CLANG_TIDY = "clang-tidy"
+TIDY_FLAGS = INCLUDE_FLAGS + ["-std=c99"]
+
 if NON_MATCHING:
     CPP_FLAGS.append("-DNON_MATCHING=1")
 
@@ -249,38 +253,38 @@ c_psyq_targets = [
     "src/psyq/libc/strstr.c",
     "src/psyq/cd/lib.c",
     "src/psyq/spu/SpuVmSetProgVol.c",
-    "src/psyq/snd/SsUtPitchBend.c",
+    "src/psyq/sound/SsUtPitchBend.c",
     "src/psyq/spu/SpuVmVSetUp.c",
-    "src/psyq/snd/SsSetTableSize.c",
-    "src/psyq/snd/SsVabOpenHead.c",
-    "src/psyq/snd/SsUtGetVabHdr.c",
-    "src/psyq/snd/SsUtGetVagAtr.c",
-    "src/psyq/snd/SsSetMVol.c",
-    "src/psyq/snd/SsUtGetProgAtr.c",
-    "src/psyq/snd/SsVabTransBody.c",
-    "src/psyq/snd/SsSetMute.c",
-    "src/psyq/snd/SsVabTransCompleted.c",
-    "src/psyq/snd/SsSeqCalledTbyT.c",
-    "src/psyq/snd/Snd_pause.c",
-    "src/psyq/snd/Snd_tempo.c",
-    "src/psyq/snd/Snd_replay.c",
-    "src/psyq/snd/SsVabClose.c",
-    "src/psyq/snd/_SsUtResolveADSR.c",
-    "src/psyq/snd/SsUtReverbOn.c",
-    "src/psyq/snd/SsUtSetVagAtr.c",
-    "src/psyq/snd/_SsSndNextSep.c",
-    "src/psyq/snd/_SsReadDeltaValue.c",
-    "src/psyq/snd/Snd_stop.c",
+    "src/psyq/sound/SsSetTableSize.c",
+    "src/psyq/sound/SsVabOpenHead.c",
+    "src/psyq/sound/SsUtGetVabHdr.c",
+    "src/psyq/sound/SsUtGetVagAtr.c",
+    "src/psyq/sound/SsSetMVol.c",
+    "src/psyq/sound/SsUtGetProgAtr.c",
+    "src/psyq/sound/SsVabTransBody.c",
+    "src/psyq/sound/SsSetMute.c",
+    "src/psyq/sound/SsVabTransCompleted.c",
+    "src/psyq/sound/SsSeqCalledTbyT.c",
+    "src/psyq/sound/Snd_pause.c",
+    "src/psyq/sound/Snd_tempo.c",
+    "src/psyq/sound/Snd_replay.c",
+    "src/psyq/sound/SsVabClose.c",
+    "src/psyq/sound/_SsUtResolveADSR.c",
+    "src/psyq/sound/SsUtReverbOn.c",
+    "src/psyq/sound/SsUtSetVagAtr.c",
+    "src/psyq/sound/_SsSndNextSep.c",
+    "src/psyq/sound/_SsReadDeltaValue.c",
+    "src/psyq/sound/Snd_stop.c",
     "src/psyq/spu/SpuSetMute.c",
     "src/psyq/spu/SpuVmDamperOn.c",
     "src/psyq/spu/SpuVmDamperOff.c",
-    "src/psyq/snd/SsSeqSetVol.c",
-    "src/psyq/snd/Snd_SetReplayMode.c",
-    "src/psyq/snd/Snd_setvol_data.c",
-    "src/psyq/snd/SsSeqOpen.c",
-    "src/psyq/snd/Snd_SetPlayMode.c",
-    "src/psyq/snd/seq_close.c",
-    "src/psyq/snd/Snd_SetPauseMode.c",
+    "src/psyq/sound/SsSeqSetVol.c",
+    "src/psyq/sound/Snd_SetReplayMode.c",
+    "src/psyq/sound/Snd_setvol_data.c",
+    "src/psyq/sound/SsSeqOpen.c",
+    "src/psyq/sound/Snd_SetPlayMode.c",
+    "src/psyq/sound/seq_close.c",
+    "src/psyq/sound/Snd_SetPauseMode.c",
     "src/psyq/gs/GsInit3D.c",
     "src/psyq/cd/CdInit.c",
     "src/psyq/gs/GsGetTimInfo.c",
@@ -326,13 +330,13 @@ c_psyq_targets = [
 c_game_targets = [
     "src/file/tim_list.c",
     "src/main.c",
-    "src/base/memory.c",
+    "src/memory/memory.c",
     "src/utils/cd_paths.c",
     "src/menu/main_menu.c",
     "src/menu/card/memory_card.c",
     "src/file/file_buf.c",
-    "src/snd/bgm.c",
-    "src/snd/sound.c",
+    "src/sound/bgm.c",
+    "src/sound/sound.c",
     "src/sys/system.c",
     "src/sys/screen.c",
     "src/dream/dream_sys.c",
@@ -354,23 +358,23 @@ c_game_targets = [
     "src/scene/map_scene.c",
     "src/scene/link.c",
     "src/dream/generation_apply.c",
-    "src/gfx/renderer.c",
+    "src/graphics/renderer.c",
     "src/base/timer.c",
     "src/sys/game_flow.c",
     "src/menu/movie_screen.c",
     "src/scene/stage_grid.c",
     "src/file/tmd_prim.c",
-    "src/sys/display.c",
+    "src/graphics/display.c",
     "src/file/file_object.c",
-    "src/gfx/effect.c",
-    "src/gfx/effect_base.c",
+    "src/graphics/effect.c",
+    "src/graphics/effect_base.c",
     "src/menu/text_line.c",
     "src/menu/glyph.c",
     "src/menu/sprite.c",
-    "src/snd/seq_file.c",
+    "src/sound/seq_file.c",
     "src/base/frame_phase.c",
-    "src/gfx/light.c",
-    "src/gfx/flat_light.c",
+    "src/graphics/light.c",
+    "src/graphics/flat_light.c",
     "src/file/tmd_model.c",
     "src/file/model_part.c",
     "src/menu/ui_sprite.c",
@@ -382,15 +386,15 @@ c_game_targets = [
     "src/file/cd_stream.c",
     "src/dream/dream_session.c",
     "src/scene/scene.c",
-    "src/gfx/scene_renderer.c",
+    "src/graphics/scene_renderer.c",
     "src/scene/notify_node.c",
     "src/scene/scene_node.c",
     "src/dream/generation_sprite.c",
     "src/scene/actor.c",
     "src/base/render_sort.c",
     "src/psyq/spu/S_I.c",
-    "src/psyq/snd/24490.c",
-    "src/psyq/snd/272A8.c",
+    "src/psyq/sound/24490.c",
+    "src/psyq/sound/272A8.c",
     "src/sys/display_border.c",
     "src/base/transform.c",
     "src/scene/stage_texture.c",
@@ -401,10 +405,26 @@ c_game_targets = [
     "src/menu/card/select_menu.c",
     "src/scene/map_scene_post.c",
     "src/scene/entity.c",
-    "src/psyq/snd/22D88.c",
+    "src/psyq/sound/22D88.c",
 ]
 
 cpp_targets = []
+
+
+def _find_c_sources(*roots):
+    """All .c/.h files under the given roots, used by clang-format."""
+    found = []
+    for root in roots:
+        for dirpath, _dirnames, filenames in os.walk(root):
+            for name in filenames:
+                if name.endswith((".c", ".h")):
+                    found.append(os.path.join(dirpath, name))
+    return sorted(found)
+
+
+format_targets = _find_c_sources("src", "include")
+tidy_targets = sorted(set(c_psyq_targets + c_game_targets + cpp_targets))
+
 clean_files = [
     UNDEF_SYMS,
     UNDEF_FUNCS,
@@ -440,6 +460,11 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.variable("cppplusflags", " ".join(CPPPLUS_FLAGS))
     n.variable("cplusflags", " ".join(CPLUS_FLAGS))
     n.variable("maspsxflags", " ".join(MASPSX_FLAGS))
+    n.variable("clang_format", CLANG_FORMAT)
+    n.variable("clang_tidy", CLANG_TIDY)
+    n.variable("formatfiles", " ".join(shlex.quote(f) for f in format_targets))
+    n.variable("tidyfiles", " ".join(shlex.quote(f) for f in tidy_targets))
+    n.variable("tidyflags", " ".join(TIDY_FLAGS))
 
     # Keep ninja_log out of working dir
     n.variable("builddir", BUILD_DIR)
@@ -508,6 +533,17 @@ with open("build.ninja", "w", encoding="utf-8") as f:
     n.rule("checksha", command="sha1sum --check $in", description="CHECK $in")
     n.newline()
 
+    n.rule("format", command="$clang_format -i $formatfiles", description="FORMAT")
+    n.newline()
+    n.rule(
+        "format_check",
+        command="$clang_format --dry-run --Werror $formatfiles",
+        description="FORMAT-CHECK",
+    )
+    n.newline()
+    n.rule("tidy", command="$clang_tidy $tidyfiles -- $tidyflags", description="TIDY")
+    n.newline()
+
     n.build([LD_SCRIPT, UNDEF_SYMS, UNDEF_FUNCS], "splat", SPLAT_CONFIG)
     n.newline()
 
@@ -571,6 +607,15 @@ with open("build.ninja", "w", encoding="utf-8") as f:
 
     # Clean helper
     n.build("clean", "clean_custom")
+    n.newline()
+
+    n.build("format", "format")
+    n.newline()
+
+    n.build("format-check", "format_check")
+    n.newline()
+
+    n.build("tidy", "tidy")
     n.newline()
 
     # Check hash

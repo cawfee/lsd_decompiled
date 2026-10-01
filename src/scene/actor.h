@@ -1,8 +1,8 @@
 #ifndef LSD_ACTOR_H
 #define LSD_ACTOR_H
 
-#include "common.h"
 #include "base/base_class.h"
+#include "common.h"
 
 /* actor is the engine's generic "actor" base class below entity:
  *   base_class  - parent/child lists + Notify bus

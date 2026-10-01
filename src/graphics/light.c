@@ -1,9 +1,9 @@
-#include "gfx/light.h"
+#include "graphics/light.h"
 
 #include <psx/libgs.h>
 
 #include "base/transform.h"
-#include "gfx/flat_light.h"
+#include "graphics/flat_light.h"
 
 extern class_light_vtable_t **D_8006EFAC;
 class_flat_light_t *func_8004291C(s32 Unk1);
@@ -49,19 +49,19 @@ void func_8001E4A4(void *);
 
 class_light_vtable_t D_8006EFAC = {
     0x14,
-    (void (*)(void *))base_class_destructor,
+    (void (*)(void *)) base_class_destructor,
     func_800426E4,
     func_80042790,
     func_8001CC48,
     func_8001CCB4,
     func_8001CD20,
-    (void (*)(void *))base_class_iter_children,
-    (void (*)(void *))base_class_add_parent,
-    (void (*)(void *))base_class_remove_parent,
-    (void (*)(void *))base_class_clear_parents,
-    (void (*)(void *))base_class_iter_parents,
-    (void (*)(void *))base_class_notify,
-    (void (*)(void *))base_class_nop,
+    (void (*)(void *)) base_class_iter_children,
+    (void (*)(void *)) base_class_add_parent,
+    (void (*)(void *)) base_class_remove_parent,
+    (void (*)(void *)) base_class_clear_parents,
+    (void (*)(void *)) base_class_iter_parents,
+    (void (*)(void *)) base_class_notify,
+    (void (*)(void *)) base_class_nop,
     func_8001CD60,
     NULL,
     func_80042814,
@@ -94,7 +94,7 @@ class_light_vtable_t D_8006EFAC = {
     func_8001DDF4,
     func_8001E49C,
     func_8001E4A4,
-    (void (*)(void *))func_80042828,
+    (void (*)(void *)) func_80042828,
     func_8004283C,
 };
 
@@ -120,7 +120,7 @@ void func_800426E4(class_light_t *This) {
     slot = &This->m_Unk16;
     do {
         obj = func_8004291C(i);
-        *slot = (s32)obj;
+        *slot = (s32) obj;
         This->vtable->Unk3(This, obj);
         i += 1;
         slot += 1;
@@ -136,7 +136,7 @@ void func_80042790(class_light_t *This) {
     do {
         obj = This->vtable->Unk45(This, i);
         i += 1;
-        (*(void (**)(void *))(*(s32 *)obj + 4))(obj);
+        (*(void (**)(void *))(*(s32 *) obj + 4))(obj);
     } while (i < 3);
 
     func_8001E57C()->Cleanup(This);
@@ -157,14 +157,13 @@ void func_8004283C(class_light_t *This, s8 *RGB, s32 Swap) {
     s8 tmp[3];
 
     if (Swap != 0) {
-        __builtin_memcpy(tmp, (s8 *)(s32)This->m_Ambient, 3);
+        __builtin_memcpy(tmp, (s8 *) (s32) This->m_Ambient, 3);
         __builtin_memcpy(This->m_Ambient, RGB, 3);
         __builtin_memcpy(RGB, tmp, 3);
     } else {
         __builtin_memcpy(This->m_Ambient, RGB, 3);
     }
-    GsSetAmbient((u8)This->m_Ambient[0] << 4, (u8)This->m_Ambient[1] << 4,
-                 (u8)This->m_Ambient[2] << 4);
+    GsSetAmbient((u8) This->m_Ambient[0] << 4, (u8) This->m_Ambient[1] << 4, (u8) This->m_Ambient[2] << 4);
 }
 
 class_light_vtable_t *func_800428E4() {

@@ -5,7 +5,7 @@
 
 #include "base/base_class.h"
 
-#include "snd/sound.h"
+#include "sound/sound.h"
 
 typedef struct bgm_vtable {
     /* 0x000 8006e48c */ u32 type_id;

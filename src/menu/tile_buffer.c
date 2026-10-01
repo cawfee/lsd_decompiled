@@ -10,7 +10,7 @@ void nullsub13(void *);
 
 tile_buffer_vtable_t D_8006F498 = {
     0x203,
-    (base_class_t *(*)(base_class_t *))file_buf_destroy,
+    (base_class_t * (*) (base_class_t *) ) file_buf_destroy,
     func_80044D40,
     func_80044DC8,
     base_class_attach,
@@ -57,8 +57,8 @@ void func_80044D40(tile_buffer_t *arg0, s32 arg1, s32 arg2) {
     s32 pad[8];
     void **v5;
 
-    v5 = (void **)get_file_driver();
-    ((void (*)(tile_buffer_t *))v5[2])(arg0);
+    v5 = (void **) get_file_driver();
+    ((void (*)(tile_buffer_t *)) v5[2])(arg0);
     arg0->vtable = func_80044F20();
     arg0->m_Unk14 = arg2;
     arg0->m_Unk15_2 = 0;
@@ -72,15 +72,14 @@ void func_80044D40(tile_buffer_t *arg0, s32 arg1, s32 arg2) {
 
 void func_80044DC8(tile_buffer_t *This) {
     memory_free_mem(This->m_Unk13);
-  (*(void ( **)(tile_buffer_t *))((s32) get_file_driver() + 12))(This);
+    (*(void (**)(tile_buffer_t *))((s32) get_file_driver() + 12))(This);
 }
 
 void func_80044E10(tile_buffer_t *This) {
-    if ( !This->m_Unk9_2 )
-  {
-    This->vtable->Unk29(This);
-    This->m_Unk15_2 = 1;
-  }
+    if (!This->m_Unk9_2) {
+        This->vtable->Unk29(This);
+        This->m_Unk15_2 = 1;
+    }
 }
 
 void func_80044E64(tile_buffer_t *This) {
@@ -90,16 +89,16 @@ void func_80044E64(tile_buffer_t *This) {
     s32 i;
     s32 fifteen;
 
-    This->m_Unk12 = *(s32 *)(This->m_Unk14 + 0x2C);
+    This->m_Unk12 = *(s32 *) (This->m_Unk14 + 0x2C);
 
     if (This->m_Unk15_1) {
         This->m_Unk10_2 = 0x14;
         fifteen = 0xF;
-        count = *(volatile u16 *)&This->m_Unk10_2 * fifteen;
+        count = *(volatile u16 *) &This->m_Unk10_2 * fifteen;
         This->m_Unk10_0 = 0x10;
         This->m_Unk10_1 = 0x10;
         This->m_Unk11_0 = 0xF;
-        if ((This->m_Unk13 = (s32)memory_allocate_mem(count << 1)) != 0) {
+        if ((This->m_Unk13 = (s32) memory_allocate_mem(count << 1)) != 0) {
             mem = This->m_Unk13;
             i = 0;
             if (count != 0) {

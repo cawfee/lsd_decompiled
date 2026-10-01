@@ -13,8 +13,8 @@ void func_8004416C(void *);
 
 model_part_list_vtable_t D_8006F590 = {
     0x14F03,
-    (base_class_t *(*)(base_class_t *))file_buf_destroy,
-    (s32 (*)(void *, s32 *))func_80045228,
+    (base_class_t * (*) (base_class_t *) ) file_buf_destroy,
+    (s32(*)(void *, s32 *)) func_80045228,
     func_800452AC,
     base_class_attach,
     base_class_detach,
@@ -42,7 +42,7 @@ model_part_list_vtable_t D_8006F590 = {
     NULL,
     NULL,
     NULL,
-    (void (*)(void *))func_800453DC,
+    (void (*)(void *)) func_800453DC,
     func_80043FE4,
     func_8004416C,
 };
@@ -80,8 +80,8 @@ model_part_list_t *func_80045228(model_part_list_t *This, s32 *pDword) {
 }
 
 void func_800452AC(model_part_list_t *This) {
-    destroy_list((s32 *)(This->m_Unk3 + 8), *(s32 *)(This->m_Unk3 + 4));
-  func_800441A4()->Cleanup(This);
+    destroy_list((s32 *) (This->m_Unk3 + 8), *(s32 *) (This->m_Unk3 + 4));
+    func_800441A4()->Cleanup(This);
 }
 
 s32 func_800452FC(model_part_list_t *This) {
@@ -94,17 +94,17 @@ s32 func_800452FC(model_part_list_t *This) {
 
     file_buf_set_triple(data, 0, 0, 1);
     i = 0;
-    count = *(s32 *)(This->m_Unk3 + 4);
-    entries = (s32 *)(This->m_Unk3 + 8);
+    count = *(s32 *) (This->m_Unk3 + 4);
+    entries = (s32 *) (This->m_Unk3 + 8);
     while (i < count) {
-        data[0] = This->m_Unk3 + *(s32 *)(This->m_Unk3 + 8 + i * 4);
-        result = (s32)func_80043E84((s32)data);
+        data[0] = This->m_Unk3 + *(s32 *) (This->m_Unk3 + 8 + i * 4);
+        result = (s32) func_80043E84((s32) data);
         *entries = result;
         if (result == 0) {
             if (i != 0) {
                 do {
                     entries--;
-                    obj = (model_part_t *)*entries;
+                    obj = (model_part_t *) *entries;
                     obj->vtable->Destroy(obj);
                 } while (--i != 0);
             }
@@ -117,11 +117,8 @@ s32 func_800452FC(model_part_list_t *This) {
 }
 
 u8 func_800453DC(model_part_list_t *This, s32 Unk2, s32 Unk3) {
-    return ((u8 ( *)(model_part_list_t *, s32, s32, s32))This->vtable->Unk30)(
-           This,
-           Unk2,
-           Unk3,
-           4 * *(s32 *)(This->m_Unk3 + 4) + This->m_Unk3 + 16);
+    return ((u8(*)(model_part_list_t *, s32, s32, s32)) This->vtable->Unk30)(
+        This, Unk2, Unk3, 4 * *(s32 *) (This->m_Unk3 + 4) + This->m_Unk3 + 16);
 }
 
 model_part_list_vtable_t *func_80045428(void) {

@@ -68,7 +68,7 @@ sprite_vtable_t D_8006EE1C = {
     func_8001D204,
     func_8001D280,
     func_8001D33C,
-    (void (*)(void *))func_8004220C,
+    (void (*)(void *)) func_8004220C,
     func_8004223C,
     func_80042268,
     func_8001D3CC,
@@ -122,25 +122,25 @@ void func_8004208C(sprite_unk24_t *a1, s32 a2, u8 *a3, u8 *a4) {
     u32 v8;
     u16 v10;
 
-    v6 = *(u32*)a4;
+    v6 = *(u32 *) a4;
     a1->m_Unk25_lo = 0;
     a1->m_Unk25_hi = 0;
     v8 = v6 & 3;
     a1->m_Unk24 = v8 << 24;
 
-    a1->m_Unk26_lo = *(u16*)(a3 + 4);
-    a1->m_Unk26_hi = *(u16*)(a3 + 8);
+    a1->m_Unk26_lo = *(u16 *) (a3 + 4);
+    a1->m_Unk26_hi = *(u16 *) (a3 + 8);
 
     a1->m_Unk30_lo = a1->m_Unk26_lo >> 1;
     a1->m_Unk30_hi = a1->m_Unk26_hi >> 1;
 
-    a1->m_Unk27_tpage = GetTPage(v8, a2, *(s16*)(a4 + 4), *(s16*)(a4 + 6));
+    a1->m_Unk27_tpage = GetTPage(v8, a2, *(s16 *) (a4 + 4), *(s16 *) (a4 + 6));
 
     a1->m_Unk27_b2 = a3[0];
     a1->m_Unk27_b3 = a3[2];
 
-    a1->m_Unk28_lo = *(u16*)(a4 + 16);
-    v10 = *(u16*)(a4 + 18);
+    a1->m_Unk28_lo = *(u16 *) (a4 + 16);
+    v10 = *(u16 *) (a4 + 18);
 
     a1->m_Unk29[2] = 0x80;
     a1->m_Unk29[1] = 0x80;
@@ -154,11 +154,11 @@ void func_8004208C(sprite_unk24_t *a1, s32 a2, u8 *a3, u8 *a4) {
 }
 
 void func_80042170(sprite_t *This, s32 a2, u8 *a3) {
-    s32 v4 = *(s16 *)(a3 + 8);
-    s32 v5 = *(s16 *)(a3 + 10);
-    
+    s32 v4 = *(s16 *) (a3 + 8);
+    s32 v5 = *(s16 *) (a3 + 10);
+
     v4 = ((v4 / v5) << 12) + (((v4 % v5) << 12) / v5);
-    
+
     if (a2 != 0) {
         This->m_Unk24.m_Unk32 = v4;
     } else {

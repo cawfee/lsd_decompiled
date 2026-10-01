@@ -3,7 +3,6 @@
 
 #include <psx/libgs.h>
 
-
 void class_FA50_construct(void *, s32);
 void func_8001F314(void *);
 void func_8001F33C(void *);
@@ -30,7 +29,7 @@ tmd_prim_vtable_t g_CLASS_FA50_VTABLE = {
     0,
     func_8001F314,
     func_8001F33C,
-    (void (*)(void *))func_8001F360,
+    (void (*)(void *)) func_8001F360,
     func_8001F37C,
 };
 

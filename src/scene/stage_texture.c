@@ -21,8 +21,8 @@ INCLUDE_ASM("asm/nonmatchings/scene/stage_texture", func_80043068);
 
 void func_800431A8(class_stage_texture_t *This) {
     destroy_list(This->m_Unk11, This->m_Unk10);
-  memory_free_mem(This->m_Unk11);
-  (*(void ( **)(class_stage_texture_t *))((s32) get_file_driver() + 12))(This);
+    memory_free_mem(This->m_Unk11);
+    (*(void (**)(class_stage_texture_t *))((s32) get_file_driver() + 12))(This);
 }
 
 INCLUDE_ASM("asm/nonmatchings/scene/stage_texture", func_80043200);
@@ -78,7 +78,7 @@ void func_8004355C(class_stage_texture_t *This, s32 arg1) {
     file_driver_lock();
     i = 0;
     do {
-        ((void (*)(void *, s32, s32))This->vtable->Unk31)(This, i, arg1);
+        ((void (*)(void *, s32, s32)) This->vtable->Unk31)(This, i, arg1);
         i += 1;
     } while (i < 4);
     file_driver_unlock();

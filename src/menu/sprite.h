@@ -12,11 +12,11 @@ typedef struct sprite_unk24 {
     /* 0x08 */ u16 m_Unk26_lo;
     /* 0x0A */ u16 m_Unk26_hi;
     /* 0x0C */ u16 m_Unk27_tpage;
-    /* 0x0E */ u8  m_Unk27_b2;
-    /* 0x0F */ u8  m_Unk27_b3;
+    /* 0x0E */ u8 m_Unk27_b2;
+    /* 0x0F */ u8 m_Unk27_b3;
     /* 0x10 */ u16 m_Unk28_lo;
     /* 0x12 */ u16 m_Unk28_hi;
-    /* 0x14 */ u8  m_Unk29[4];
+    /* 0x14 */ u8 m_Unk29[4];
     /* 0x18 */ u16 m_Unk30_lo;
     /* 0x1A */ u16 m_Unk30_hi;
     /* 0x1C */ s16 m_Unk31_lo;

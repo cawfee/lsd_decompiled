@@ -80,26 +80,26 @@ void func_80056520(generation_structure_t *This, s32 Unk1, s32 Unk2) {
     void *obj;
     s32 (*method)(void *, s32);
 
-    D_8008ACB0 = *(s32 *)((u8 *)D_8008ACAC + 0x18);
-    func_80056794((generation_structure_t *)&local, (s32 *)Unk2, &This->m_Unk21);
-    func_800567D4(This, Unk1, (s32)&local, This->m_Unk24, This->m_Unk25);
+    D_8008ACB0 = *(s32 *) ((u8 *) D_8008ACAC + 0x18);
+    func_80056794((generation_structure_t *) &local, (s32 *) Unk2, &This->m_Unk21);
+    func_800567D4(This, Unk1, (s32) &local, This->m_Unk24, This->m_Unk25);
     mode = This->m_Unk20;
     if (mode < 2) {
         obj = D_8008ACA4;
-        method = *(s32 (**)(void *, s32))((u8 *)*(void **)obj + 0x80);
+        method = *(s32(**)(void *, s32))((u8 *) *(void **) obj + 0x80);
         func_8001E770(This, method(obj, D_8008AB98[mode]));
         mode = This->m_Unk20;
     }
     switch (mode) {
-    case 0:
-        func_80056858(This, 0);
-        return;
-    case 2:
-        func_80056BBC(This, 0);
-        return;
-    case 3:
-        ((void (*)(generation_structure_t *, s32))func_80056E1C)(This, 0);
-        return;
+        case 0:
+            func_80056858(This, 0);
+            return;
+        case 2:
+            func_80056BBC(This, 0);
+            return;
+        case 3:
+            ((void (*)(generation_structure_t *, s32)) func_80056E1C)(This, 0);
+            return;
     }
 }
 
@@ -107,20 +107,20 @@ void func_80056640(generation_structure_t *This, s32 Unk1) {
     func_80056640_vec_t local;
     s32 mode;
 
-    func_80056794((generation_structure_t *)&local, (s32 *)Unk1, &This->m_Unk21);
-    local.y += *(s32 *)((u8 *)D_8008ACAC + 0x18) - D_8008ACB0;
+    func_80056794((generation_structure_t *) &local, (s32 *) Unk1, &This->m_Unk21);
+    local.y += *(s32 *) ((u8 *) D_8008ACAC + 0x18) - D_8008ACB0;
     This->vtable->Unk45(This, &local);
     mode = This->m_Unk20;
     switch (mode) {
-    case 0:
-        func_800569A8(This, Unk1);
-        return;
-    case 2:
-        ((void (*)(generation_structure_t *, s32))func_80056DF0)(This, Unk1);
-        return;
-    case 3:
-        ((void (*)(generation_structure_t *, s32))func_80056E44)(This, Unk1);
-        return;
+        case 0:
+            func_800569A8(This, Unk1);
+            return;
+        case 2:
+            ((void (*)(generation_structure_t *, s32)) func_80056DF0)(This, Unk1);
+            return;
+        case 3:
+            ((void (*)(generation_structure_t *, s32)) func_80056E44)(This, Unk1);
+            return;
     }
 }
 
@@ -189,14 +189,14 @@ void func_80056858(generation_structure_t *This, s32 arg1) {
     if (mode == 0) {
         return;
     }
-    local = *(func_80056858_vec_t *)D_800877EC;
-    slot = (scene_node_t **)&This->m_Unk30;
+    local = *(func_80056858_vec_t *) D_800877EC;
+    slot = (scene_node_t **) &This->m_Unk30;
     i = 0;
     table = D_800877F8;
     scale = table + mode;
     do {
         if (mode < 3) {
-            half = (s16 *)This->m_Unk25;
+            half = (s16 *) This->m_Unk25;
             local.x += half[0] * scale[0];
         } else {
             local.y += scale[0];
@@ -207,7 +207,7 @@ void func_80056858(generation_structure_t *This, s32 arg1) {
         } else {
             *slot = func_80056FE4();
             func_8001E770(*slot, This->m_Unk7);
-            func_800567D4((generation_structure_t *)*slot, (s32)This, (s32)&local, This->m_Unk24, This->m_Unk25);
+            func_800567D4((generation_structure_t *) *slot, (s32) This, (s32) &local, This->m_Unk24, This->m_Unk25);
         }
         i += 1;
         slot += 1;
@@ -307,13 +307,13 @@ void func_80056BBC(generation_structure_t *This, s32 unused) {
     if (parity == 0) {
         extra = D_80087868;
     }
-    func_80056D18(This, 0, 0, (s32)extra);
+    func_80056D18(This, 0, 0, (s32) extra);
     mode = This->m_Unk27;
     arg = 1;
     if (mode < 2) {
         goto low;
     }
-    obj = (scene_node_t *)This->m_Unk33;
+    obj = (scene_node_t *) This->m_Unk33;
     {
         s32 *p = D_80087880;
         *p = D_80087844[mode];
@@ -324,24 +324,24 @@ void func_80056BBC(generation_structure_t *This, s32 unused) {
     if (arg == 0) {
         arg = This->m_Unk28;
     }
-    vt->Unk45(obj, (void *)arg);
+    vt->Unk45(obj, (void *) arg);
     goto end;
 low:
-    obj = (scene_node_t *)This->m_Unk33;
-    ((void (*)(void *, s32))obj->vtable->Unk24)(obj, arg);
-    ((void (*)(void *, s32))obj->vtable->Unk25)(obj, 0);
+    obj = (scene_node_t *) This->m_Unk33;
+    ((void (*)(void *, s32)) obj->vtable->Unk24)(obj, arg);
+    ((void (*)(void *, s32)) obj->vtable->Unk25)(obj, 0);
     table = D_80087874;
     vt = obj->vtable;
     if (parity != 0) {
         table = D_8008785C;
     }
-    ((void (*)(void *, s32, s32 *))vt->Unk17)(obj, 1, table);
+    ((void (*)(void *, s32, s32 *)) vt->Unk17)(obj, 1, table);
 end:
-    ((scene_node_t *)This->m_Unk34)->vtable->Unk23((scene_node_t *)This->m_Unk34, 0);
+    ((scene_node_t *) This->m_Unk34)->vtable->Unk23((scene_node_t *) This->m_Unk34, 0);
 }
 
-#include "dream/generation_structure.h"
 #include "dream/generation_sprite.h"
+#include "dream/generation_structure.h"
 
 extern s32 D_8008ACA8;
 
@@ -349,7 +349,7 @@ void func_80056D18(generation_structure_t *This, s32 unused, s32 arg2, s32 arg3)
     generation_sprite_t **slot;
     s32 i;
 
-    slot = (generation_sprite_t **)&This->m_Unk32;
+    slot = (generation_sprite_t **) &This->m_Unk32;
     i = 0;
     do {
         *slot = func_80057C94(arg2, 0, D_8008ACA8);
@@ -387,11 +387,11 @@ void func_80056E44(generation_structure_t *This) {
     s32 i;
     s32 which;
 
-    slot = (generation_structure_t **)&This->m_Unk33;
+    slot = (generation_structure_t **) &This->m_Unk33;
     i = 0;
     do {
         i++;
-        which = (s32)&D_8008788C[((u32)rand() % 6) * 3];
+        which = (s32) &D_8008788C[((u32) rand() % 6) * 3];
         slot[0]->vtable->Unk17(slot[0], 1, which);
         slot[0]->m_Unk32 = (rand() % 360) << 12;
         slot++;

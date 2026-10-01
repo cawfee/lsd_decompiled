@@ -1,8 +1,8 @@
 #include <psx/libsnd.h>
 
-#include "snd/sound.h"
-#include "base/memory.h"
+#include "memory/memory.h"
 #include "scene/entity.h"
+#include "sound/sound.h"
 #include <psx/libspu.h>
 
 extern sound_vtable_t g_SOUND_VTABLE;
@@ -48,7 +48,7 @@ void sound_construct(sound_t *This, char *path) {
     char buf[0x20];
     char *mem;
 
-    (*(void (**)(sound_t *))((s32)get_file_driver() + 8))(This);
+    (*(void (**)(sound_t *))((s32) get_file_driver() + 8))(This);
     This->vtable = sound_get_vtable();
     This->unk19 = 0;
     This->unk20 = 0;
@@ -70,9 +70,9 @@ void sound_construct(sound_t *This, char *path) {
     }
     g_SoundInstanceCount += 1;
     if (path != 0) {
-        mem = (char *)memory_allocate_mem(strlen(path) + 1);
+        mem = (char *) memory_allocate_mem(strlen(path) + 1);
         if (mem != 0) {
-            This->unk23 = (s32)mem;
+            This->unk23 = (s32) mem;
             strcpy(mem, path);
             build_data_path(buf, mem, NULL, g_VabHeaderExt);
             This->unk10_2 = 1;
@@ -97,10 +97,10 @@ void sound_close(sound_t *This) {
         func_800329D8();
         func_80032A7C();
     }
-    memory_free_mem((void *)This->unk19);
-    memory_free_mem((void *)This->unk20);
-    memory_free_mem((void *)This->unk23);
-    (*(void (**)(sound_t *))((s32)get_file_driver() + 0xC))(This);
+    memory_free_mem((void *) This->unk19);
+    memory_free_mem((void *) This->unk20);
+    memory_free_mem((void *) This->unk23);
+    (*(void (**)(sound_t *))((s32) get_file_driver() + 0xC))(This);
 }
 
 void sound_update_vab_load(sound_t *This) {
@@ -123,22 +123,22 @@ void sound_update_vab_load(sound_t *This) {
 
 case1:
     if (This->m_FlagsUnk & 0x200) {
-        This->unk21_1 = SsVabOpenHead((unsigned char *)This->unk4, -1);
-        build_data_path(buffer, (char *)This->unk23, NULL, g_VabBodyExt);
+        This->unk21_1 = SsVabOpenHead((unsigned char *) This->unk4, -1);
+        build_data_path(buffer, (char *) This->unk23, NULL, g_VabBodyExt);
         saved = This->unk4;
         This->unk10_2 = 6;
         This->unk4 = 0;
         g_VabHeaderPtr = saved;
         This->vtable->Unk6(This, buffer);
         if (This->unk23 != 0) {
-            memory_free_mem((void *)This->unk23);
+            memory_free_mem((void *) This->unk23);
             This->unk23 = 0;
         }
     }
     goto done;
 case6:
     if (This->m_FlagsUnk & 0x200) {
-        vab_id = SsVabTransBody((unsigned char *)This->unk4, This->unk21_1);
+        vab_id = SsVabTransBody((unsigned char *) This->unk4, This->unk21_1);
         This->unk21_1 = vab_id;
         if (vab_id != -1) {
             This->unk22_2 = 1;
@@ -213,8 +213,8 @@ s32 sound_finish_vab_load(sound_t *This, s32 Unk) {
  *                                 inner = 0;
  *                                 innerOffset = offset;
  *                                 do {
- *                                     if (SsUtGetVagAtr(This->unk21_1, innerOffset >> 16, (s16)inner, (s32)cursor) == -1) {
- *                                         return;
+ *                                     if (SsUtGetVagAtr(This->unk21_1, innerOffset >> 16, (s16)inner, (s32)cursor) ==
+ * -1) { return;
  *                                     }
  *                                     inner++;
  *                                     cursor += 0x20;
@@ -235,7 +235,7 @@ s32 sound_finish_vab_load(sound_t *This, s32 Unk) {
  *     }
  * }
  */
-INCLUDE_ASM("asm/nonmatchings/snd/sound", sound_build_program_table);
+INCLUDE_ASM("asm/nonmatchings/sound/sound", sound_build_program_table);
 
 s16 sound_play_note(sound_t *This, s32 arg1, s16 arg2, s16 arg3) {
     s32 vab;
@@ -244,16 +244,10 @@ s16 sound_play_note(sound_t *This, s32 arg1, s16 arg2, s16 arg3) {
 
     if (arg1 >= 0) {
         vab = arg1 >> 4;
-        entry = *(u8 **)(This->unk20 + vab * 4);
+        entry = *(u8 **) (This->unk20 + vab * 4);
         entry += (arg1 - (vab << 4)) * 32;
-        voice = func_80030E90(
-            This->unk21_1,
-            (s16)vab,
-            (s16)(arg1 - (vab << 4)),
-            (s16)(entry[4] + (u16)This->unk24),
-            entry[5],
-            arg2,
-            arg2);
+        voice = func_80030E90(This->unk21_1, (s16) vab, (s16) (arg1 - (vab << 4)), (s16) (entry[4] + (u16) This->unk24),
+                              entry[5], arg2, arg2);
         if (voice >= 0) {
             SsUtGetDetVVol(voice, arg2, arg3, 2);
             return voice;
@@ -350,7 +344,7 @@ void sound_entity_stop(void **This, s32 *Unk2) {
         val = *ptr;
         i += 1;
         if (val >= 0) {
-            *ptr = (*(s32 (**)(void **, s32))(*(u32 *)This + 0x84))(This, val);
+            *ptr = (*(s32(**)(void **, s32))(*(u32 *) This + 0x84))(This, val);
         }
         ptr += 5;
     } while (i < 3);
@@ -376,7 +370,7 @@ void sound_entity_update(sound_t *This, entity_context_t *Unk2) {
 
         Unk2->motion = 0;
         if (Unk2->callback != NULL) {
-            Unk2->callback(Unk2->owner, (s32 *)Unk2);
+            Unk2->callback(Unk2->owner, (s32 *) Unk2);
         }
 
         if (Unk2->motion >= 0) {
@@ -389,9 +383,7 @@ void sound_entity_update(sound_t *This, entity_context_t *Unk2) {
                     }
                     This->vtable->sound_set_volume_offset(This, slot->param);
                     slot->handle = This->vtable->sound_play_note(
-                        This,
-                        slot->id << 4,
-                        slot->period - (slot->period / Unk2->divisor) * Unk2->motion,
+                        This, slot->id << 4, slot->period - (slot->period / Unk2->divisor) * Unk2->motion,
                         slot->counter - (slot->counter / Unk2->divisor) * Unk2->motion);
                 } else if (slot->id == -2) {
                     if (slot->handle >= 0) {

@@ -1,15 +1,14 @@
-#include "snd/bgm.h"
+#include "sound/bgm.h"
 
 #include <psx/libsnd.h>
 
-#include "snd/seq_file.h"
 #include "base/base_class.h"
-#include "snd/sound.h"
+#include "sound/seq_file.h"
+#include "sound/sound.h"
 
 const char g_SeqOpenErrorFmt[0x2C] = "Seq Open error in WBgmHandleMonitorEvent";
 
 s32 g_BgmActive = 0;
-
 
 void bgm_construct(bgm_t *, s32, s32, s32);
 void bgm_cleanup(bgm_t *);
@@ -27,8 +26,8 @@ void bgm_set_sound(bgm_t *, s32);
 bgm_vtable_t g_BGM_VTABLE = {
     0x50,
     base_class_destructor,
-    (void (*)(void *, s32, s32, s32))bgm_construct,
-    (void (*)(void *))bgm_cleanup,
+    (void (*)(void *, s32, s32, s32)) bgm_construct,
+    (void (*)(void *)) bgm_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -39,17 +38,17 @@ bgm_vtable_t g_BGM_VTABLE = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    (void (*)(void *))bgm_on_notify,
+    (void (*)(void *)) bgm_on_notify,
     NULL,
-    (void (*)(void *, void **, s32))bgm_handle_event,
-    (void (*)(void *))seq_play,
-    (void (*)(void *))seq_stop,
-    (void (*)(void *))seq_pause,
-    (void (*)(void *))seq_resume,
-    (void (*)(void *))seq_set_vol,
-    (void (*)(void *))bgm_set_crescendo,
-    (void (*)(void *, s32))bgm_set_sequence,
-    (void (*)(void *, s32))bgm_set_sound,
+    (void (*)(void *, void **, s32)) bgm_handle_event,
+    (void (*)(void *)) seq_play,
+    (void (*)(void *)) seq_stop,
+    (void (*)(void *)) seq_pause,
+    (void (*)(void *)) seq_resume,
+    (void (*)(void *)) seq_set_vol,
+    (void (*)(void *)) bgm_set_crescendo,
+    (void (*)(void *, s32)) bgm_set_sequence,
+    (void (*)(void *, s32)) bgm_set_sound,
 };
 
 void *get_display(void);
@@ -73,7 +72,7 @@ void bgm_construct(bgm_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
     This->m_Sound = 0;
     This->m_SeqFile = 0;
     This->m_SeqAccess = 0;
-    *(u16 *)((u8 *)This + 0x1A) = 0;
+    *(u16 *) ((u8 *) This + 0x1A) = 0;
     This->m_Paused = 0;
     This->m_Playing = 0;
     This->m_AutoPlay = Unk4;
@@ -94,7 +93,7 @@ void bgm_cleanup(bgm_t *This) {
     }
 
     if (This->m_SeqFile) {
-        (*(void (**)(s32))(*(u32 *)This->m_SeqFile + 4))(This->m_SeqFile);
+        (*(void (**)(s32))(*(u32 *) This->m_SeqFile + 4))(This->m_SeqFile);
     }
 
     This->vtable->Detach(This, get_display());
@@ -130,19 +129,19 @@ s32 seq_open(bgm_t *This) {
     if (unk3 == 0) {
         return 0;
     }
-    if (*(u16 *)((u8 *)engine + 0x58) == 0) {
+    if (*(u16 *) ((u8 *) engine + 0x58) == 0) {
         return 0;
     }
-    if (*(s32 *)(unk3 + 0x2C) == 0) {
+    if (*(s32 *) (unk3 + 0x2C) == 0) {
         return 0;
     }
-    seq = SsSeqOpen(*(u32 *)(unk3 + 0x10), *(s16 *)((u8 *)engine + 0x54));
+    seq = SsSeqOpen(*(u32 *) (unk3 + 0x10), *(s16 *) ((u8 *) engine + 0x54));
     This->m_SeqAccess = seq;
     if (seq == -1) {
         printf(g_SeqOpenErrorFmt);
     }
     SsSeqSetVol(This->m_SeqAccess, 0x34, 0x34);
-    *(u16 *)((u8 *)This + 0x1A) = 2;
+    *(u16 *) ((u8 *) This + 0x1A) = 2;
     return 1;
 }
 
@@ -232,19 +231,7 @@ void bgm_set_sound(bgm_t *This, s32 Unk) {
 }
 
 bgm_vtable_t *bgm_get_vtable(void) {
-#ifndef CCG8
     return &g_BGM_VTABLE;
-#else
-    // G8 hack
-    bgm_vtable_t *result;
-
-    __asm__("lui     %0, %%hi(%1)\n\t"
-            "addiu   %0, %0, %%lo(%1)"
-            : "=r"(result)
-            : "i"(&g_BGM_VTABLE));
-
-    return result;
-#endif
 }
 
 s32 bgm_is_active(void) {

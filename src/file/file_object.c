@@ -19,7 +19,7 @@ void class_1C92C_construct(file_object_t *This, s32 Unk) {
     void *base;
 
     base = get_file_driver();
-    (*(void (**)(void *))((s32)base + 8))(This);
+    (*(void (**)(void *))((s32) base + 8))(This);
 
     This->vtable = class_1C92C_get_vtable();
     This->m_Unk10 = 0;
@@ -34,7 +34,7 @@ void class_1C92C_cleanup(void *This) {
     void *base;
 
     base = get_file_driver();
-    (*(void (**)(void *))((s32)base + 0xC))(This);
+    (*(void (**)(void *))((s32) base + 0xC))(This);
 }
 
 void class_1C92C_unk24(file_object_t *This) {

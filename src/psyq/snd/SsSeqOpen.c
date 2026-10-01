@@ -1,8 +1,8 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsSeqOpen", _SsInitSoundSeq);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsSeqOpen", _SsInitSoundSeq);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsSeqOpen", SsSeqOpen);
+INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsSeqOpen", SsSeqOpen);
 
 /*
  * Near match (semantics likely exact, 50/51 insns). Blocker: the target emits

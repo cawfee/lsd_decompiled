@@ -1,7 +1,7 @@
-#include "gfx/renderer.h"
+#include "graphics/renderer.h"
 #include "base/base_class.h"
-#include "gfx/effect.h"
 #include "base/transform.h"
+#include "graphics/effect.h"
 
 #include <psx/libgte.h>
 
@@ -34,10 +34,10 @@ void func_8003E628(renderer_t *This) {
     This->vtable = renderer_get_vtable();
     This->m_Unk2 = 0;
     This->m_Unk3 = 0;
-    This->m_Unk42 = (s32)func_8001CA94();
-    temp_v0 = effect_create((s32)&D_8008A90C, 0, 0);
-    This->m_Unk43 = (s32)temp_v0;
-    temp_v0->vtable->Unk18(temp_v0, (entity_t *)This->m_Unk42, (s32)&D_8008A904);
+    This->m_Unk42 = (s32) func_8001CA94();
+    temp_v0 = effect_create((s32) &D_8008A90C, 0, 0);
+    This->m_Unk43 = (s32) temp_v0;
+    temp_v0->vtable->Unk18(temp_v0, (entity_t *) This->m_Unk42, (s32) &D_8008A904);
     This->vtable->Unk15(This);
 }
 
@@ -46,9 +46,9 @@ void func_8003E6CC(renderer_t *This) {
 
     This->vtable->Unk35(This);
     This->vtable->Unk28(This);
-    temp_a0 = (void *)This->m_Unk42;
-    (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
-    ((void (*)(void *, s32))This->vtable->Unk41)(This, 0);
+    temp_a0 = (void *) This->m_Unk42;
+    (*(void (**)(void *))(*(s32 *) temp_a0 + 4))(temp_a0);
+    ((void (*)(void *, s32)) This->vtable->Unk41)(This, 0);
     base_class_get_vtable()->Cleanup(This);
 }
 
@@ -56,21 +56,21 @@ void func_8003E770(renderer_t *This, void **arg1) {
     s32 temp_v1;
 
     base_class_get_vtable()->Attach(This, arg1);
-    temp_v1 = *(s32 *)*arg1 & 0xF;
+    temp_v1 = *(s32 *) *arg1 & 0xF;
     if (temp_v1 == 4) {
-        This->m_Unk3 = (s32)arg1;
-        This->m_Unk11 = ((s32 *)arg1)[5];
+        This->m_Unk3 = (s32) arg1;
+        This->m_Unk11 = ((s32 *) arg1)[5];
         return;
     }
     if (temp_v1 == 1) {
-        This->m_Unk2 = (s32)arg1;
+        This->m_Unk2 = (s32) arg1;
     }
 }
 
 void func_8003E7F4(renderer_t *This, void **Unk) {
     s32 kind;
 
-    kind = *(u32 *)*Unk & 0xF;
+    kind = *(u32 *) *Unk & 0xF;
     if (kind == 4) {
         This->m_Unk11 = 0;
         This->m_Unk3 = 0;
@@ -82,20 +82,20 @@ void func_8003E7F4(renderer_t *This, void **Unk) {
 
 void func_8003E874(renderer_t *This) {
     This->m_Unk11 = 0;
-  This->m_Unk3 = 0;
-  This->m_Unk2 = 0;
-  base_class_get_vtable()->DetachAll(This);
+    This->m_Unk3 = 0;
+    This->m_Unk2 = 0;
+    base_class_get_vtable()->DetachAll(This);
 }
 
 void func_8003E8B8(renderer_t *This, void **Unk1, s32 Unk2) {
     s32 kind;
 
-    ((void (*)(void *, void **, s32))base_class_get_vtable()->OnNotify)(This, Unk1, Unk2);
-    kind = *(u32 *)*Unk1 & 0xF;
+    ((void (*)(void *, void **, s32)) base_class_get_vtable()->OnNotify)(This, Unk1, Unk2);
+    kind = *(u32 *) *Unk1 & 0xF;
     if (kind == 5) {
-        ((void (*)(void *, void **, s32))This->vtable->Unk36)(This, Unk1, Unk2);
+        ((void (*)(void *, void **, s32)) This->vtable->Unk36)(This, Unk1, Unk2);
     } else if (kind == 1) {
-        ((void (*)(void *, void **, s32))This->vtable->Unk37)(This, Unk1, Unk2);
+        ((void (*)(void *, void **, s32)) This->vtable->Unk37)(This, Unk1, Unk2);
     }
 }
 
@@ -137,7 +137,7 @@ void func_8003E968(renderer_t *This) {
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/gfx/renderer", func_8003E968);
+INCLUDE_ASM("asm/nonmatchings/graphics/renderer", func_8003E968);
 
 void func_8003EA0C(renderer_t *This, s32 *Unk) {
     __builtin_memcpy(This->m_Unk12, Unk, 8);
@@ -191,14 +191,14 @@ void func_8003EACC(renderer_t *This, s32 unused, s32 arg2, s32 arg3, s32 *arg4) 
 
     vt = This->vtable;
     if (This->m_Unk3 == 0) {
-        ((void (*)(renderer_t *))vt->Attach)(This);
-        ((void (*)(renderer_t *, s32))vt->Unk29)(This, arg2);
-        ((void (*)(renderer_t *, s32))vt->Unk30)(This, arg3);
+        ((void (*)(renderer_t *)) vt->Attach)(This);
+        ((void (*)(renderer_t *, s32)) vt->Unk29)(This, arg2);
+        ((void (*)(renderer_t *, s32)) vt->Unk30)(This, arg3);
         view_arg = arg4;
         if (view_arg == NULL) {
             view_arg = &D_8008A8F4;
         }
-        ((void (*)(renderer_t *, s32 *))vt->Unk31)(This, view_arg);
+        ((void (*)(renderer_t *, s32 *)) vt->Unk31)(This, view_arg);
         GsSetRefView2(&This->m_Unk4);
     }
 }
@@ -256,18 +256,18 @@ void func_8003ECD0(renderer_t *This) {
         bytes = (four << This->m_Unk14) + area;
         buf = memory_allocate_mem(bytes << 1);
         if (buf != 0) {
-            This->m_Unk29 = (s32)buf;
-            This->m_Unk31 = (s32)buf + 0x14;
+            This->m_Unk29 = (s32) buf;
+            This->m_Unk31 = (s32) buf + 0x14;
             This->m_Unk33 = This->m_Unk31 + (four << This->m_Unk14);
             This->m_Unk30 = This->m_Unk29 + bytes;
             This->m_Unk32 = This->m_Unk31 + bytes;
             This->m_Unk34 = This->m_Unk33 + bytes;
-            *(s32 *)This->m_Unk29 = This->m_Unk14;
-            *(s32 *)(This->m_Unk29 + 4) = This->m_Unk31;
-            *(s32 *)This->m_Unk30 = This->m_Unk14;
-            *(s32 *)(This->m_Unk30 + 4) = This->m_Unk32;
-            GsClearOt(0, 0, (void *)This->m_Unk29);
-            GsClearOt(0, 0, (void *)This->m_Unk30);
+            *(s32 *) This->m_Unk29 = This->m_Unk14;
+            *(s32 *) (This->m_Unk29 + 4) = This->m_Unk31;
+            *(s32 *) This->m_Unk30 = This->m_Unk14;
+            *(s32 *) (This->m_Unk30 + 4) = This->m_Unk32;
+            GsClearOt(0, 0, (void *) This->m_Unk29);
+            GsClearOt(0, 0, (void *) This->m_Unk30);
             This->m_Unk27 = 1;
             This->m_Unk28 = 0;
         }
@@ -275,19 +275,18 @@ void func_8003ECD0(renderer_t *This) {
 }
 
 void func_8003EDF4(renderer_t *This) {
-    if ( This->m_Unk27 )
-  {
-    DrawSync(0);
-    memory_free_mem(This->m_Unk29);
-    This->m_Unk27 = 0;
-  }
+    if (This->m_Unk27) {
+        DrawSync(0);
+        memory_free_mem(This->m_Unk29);
+        This->m_Unk27 = 0;
+    }
 }
 
 void func_8003EE40(renderer_t *This, s32 Unk1, s32 Unk2) {
     ++This->m_Unk35;
-  if ( (unsigned int)(Unk2 - 2) < 2 ) {
-    This->vtable->Unk38(This);
-  }
+    if ((unsigned int) (Unk2 - 2) < 2) {
+        This->vtable->Unk38(This);
+    }
 }
 
 void func_8003EE88(renderer_t *This, s32 Unk, s32 Unk2) {
@@ -312,27 +311,27 @@ void func_8003EEC0(renderer_t *This) {
     if (This->m_Unk27 == 0) {
         return;
     }
-    if (*(s32 *)((u8 *)This->m_Unk3 + 0xC) != 0) {
+    if (*(s32 *) ((u8 *) This->m_Unk3 + 0xC) != 0) {
         This->vtable->Unk39(This, This->m_Unk3);
     }
-    func_8003F28C((s32)This->m_Unk15);
+    func_8003F28C((s32) This->m_Unk15);
     func_8003FB0C(This->m_Unk18);
     GsSetLightMode(This->m_Unk20);
     if (This->m_Unk20 == 1 || This->m_Unk20 == 3) {
-        rgb = (u8 *)This->m_Unk21;
+        rgb = (u8 *) This->m_Unk21;
         SetFarColor(rgb[3], rgb[4], rgb[5]);
-        SetFogNear(This->m_Unk23, (s32)This->m_Unk15);
+        SetFogNear(This->m_Unk23, (s32) This->m_Unk15);
     }
     GsSetRefView2(&This->m_Unk4);
-    *(s32 *)This->m_Unk11 = 0;
+    *(s32 *) This->m_Unk11 = 0;
     span = This->m_Unk19 - This->m_Unk18;
     step = 1 << This->m_Unk14;
     This->m_Unk37 = (span / step) + 1;
-    func_8003FBE4(((s32 *)&This->m_Unk33)[This->m_Unk28]);
-    GsClearOt(0, 0, (void *)(&This->m_Unk29)[This->m_Unk28]);
+    func_8003FBE4(((s32 *) &This->m_Unk33)[This->m_Unk28]);
+    GsClearOt(0, 0, (void *) (&This->m_Unk29)[This->m_Unk28]);
     This->vtable->Unk39(This, This->m_Unk42);
     if (This->m_Unk3 != 0) {
-        This->vtable->Unk39(This, (s32)func_8003F25C((s32 *)This->m_Unk3));
+        This->vtable->Unk39(This, (s32) func_8003F25C((s32 *) This->m_Unk3));
     }
 }
 
@@ -347,34 +346,34 @@ void func_8003F04C(renderer_t *This) {
     if (This->m_Unk27 == 0) {
         return;
     }
-    obj = (void **)This->m_Unk2;
-    This->m_Unk28 = ((s32 (*)(void **))(*(u32 *)((u8 *)*obj + 0x54)))(obj);
+    obj = (void **) This->m_Unk2;
+    This->m_Unk28 = ((s32(*)(void **))(*(u32 *) ((u8 *) *obj + 0x54)))(obj);
     if (This->m_Unk45 == 0) {
         goto flip;
     }
     ResetGraph(1);
-    obj = (void **)This->m_Unk2;
-    ((void (*)(void **))(*(u32 *)((u8 *)*obj + 0x50)))(obj);
+    obj = (void **) This->m_Unk2;
+    ((void (*)(void **))(*(u32 *) ((u8 *) *obj + 0x50)))(obj);
     if (This->m_Unk44 == 0) {
         goto draw;
     }
     if (This->m_Unk28 != 0) {
         goto draw;
     }
-    obj = (void **)This->m_Unk2;
-    ((void (*)(void **))(*(u32 *)((u8 *)*obj + 0x50)))(obj);
+    obj = (void **) This->m_Unk2;
+    ((void (*)(void **))(*(u32 *) ((u8 *) *obj + 0x50)))(obj);
 draw:
-    rgb = (u8 *)This->m_Unk21;
-    GsSortClear(rgb[0], rgb[1], rgb[2], (void *)(&This->m_Unk29)[This->m_Unk28]);
-    GsDrawOt((void *)(&This->m_Unk29)[This->m_Unk28]);
+    rgb = (u8 *) This->m_Unk21;
+    GsSortClear(rgb[0], rgb[1], rgb[2], (void *) (&This->m_Unk29)[This->m_Unk28]);
+    GsDrawOt((void *) (&This->m_Unk29)[This->m_Unk28]);
     if (This->m_Unk44 == 0) {
         goto flip;
     }
     if (This->m_Unk28 != 0) {
         goto store;
     }
-    obj = (void **)This->m_Unk2;
-    ((void (*)(void **))(*(u32 *)((u8 *)*obj + 0x50)))(obj);
+    obj = (void **) This->m_Unk2;
+    ((void (*)(void **))(*(u32 *) ((u8 *) *obj + 0x50)))(obj);
 flip:
     This->m_Unk28 = This->m_Unk28 == 0;
     return;
@@ -386,14 +385,13 @@ s32 func_8003F1A8(renderer_t *This, void *obj) {
     void *old;
 
     if (This->m_Unk3 == 0) {
-        old = (void *)This->m_Unk43;
+        old = (void *) This->m_Unk43;
         if (old != 0) {
-            (*(void (**)(void *))(*(u32 *)old + 4))(old);
+            (*(void (**)(void *))(*(u32 *) old + 4))(old);
         }
-        This->m_Unk43 = (s32)obj;
+        This->m_Unk43 = (s32) obj;
         if (obj != 0) {
-            return ((s32 (*)(void *, s32, void *))(*(u32 *)(*(u32 *)obj + 0x4C)))(
-                obj, This->m_Unk42, &D_8008A904);
+            return ((s32(*)(void *, s32, void *))(*(u32 *) (*(u32 *) obj + 0x4C)))(obj, This->m_Unk42, &D_8008A904);
         }
     }
 #ifdef NON_MATCHING

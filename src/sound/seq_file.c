@@ -1,4 +1,4 @@
-#include "snd/seq_file.h"
+#include "sound/seq_file.h"
 
 #include "base/base_class.h"
 #include "file/file_buf.h"
@@ -13,7 +13,7 @@ void seq_file_set_flag(void *);
 
 seq_file_vtable_t g_SEQ_FILE_VTABLE = {
     0xB03,
-    (base_class_t *(*)(base_class_t *))file_buf_destroy,
+    (base_class_t * (*) (base_class_t *) ) file_buf_destroy,
     seq_file_construct,
     seq_file_cleanup,
     base_class_attach,

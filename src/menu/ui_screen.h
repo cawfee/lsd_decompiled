@@ -5,11 +5,11 @@
 
 #include "base/base_class.h"
 
-#include "menu/ui_sprite.h"
-#include "menu/tile_buffer.h"
-#include "menu/sprite_atlas.h"
-#include "snd/sound.h"
 #include "file/tim_image.h"
+#include "menu/sprite_atlas.h"
+#include "menu/tile_buffer.h"
+#include "menu/ui_sprite.h"
+#include "sound/sound.h"
 
 typedef struct ui_screen_vtable {
     /* 0x000 8006e730 */ u32 type_id;

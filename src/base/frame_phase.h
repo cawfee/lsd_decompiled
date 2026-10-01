@@ -5,10 +5,12 @@
 
 #include "base/base_class.h"
 
+typedef struct frame_phase frame_phase_t;
+
 typedef struct frame_phase_vtable {
     /* 0x000 8006ef50 */ u32 type_id;
     /* 0x004 8006ef54 */ base_class_t *(*Destroy)(base_class_t *);
-    /* 0x008 8006ef58 */ void (*Construct)(void *);
+    /* 0x008 8006ef58 */ void (*Construct)(frame_phase_t *);
     /* 0x00C 8006ef5c */ void (*Cleanup)(base_class_t *);
     /* 0x010 8006ef60 */ void (*Attach)(base_class_t *, base_class_t *);
     /* 0x014 8006ef64 */ void (*Detach)(base_class_t *, base_class_t *);
@@ -22,13 +24,13 @@ typedef struct frame_phase_vtable {
     /* 0x034 8006ef84 */ void (*Nop)(base_class_t *);
     /* 0x038 8006ef88 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006ef8c */ void (*Unk14)(void *);
-    /* 0x040 8006ef90 */ void (*frame_phase_reset)(void *, s32);
-    /* 0x044 8006ef94 */ void (*frame_phase_advance)(void *);
-    /* 0x048 8006ef98 */ void (*frame_phase_get_phase)(void *);
-    /* 0x04C 8006ef9c */ void (*frame_phase_set_waiting)(void *);
-    /* 0x050 8006efa0 */ void (*frame_phase_clear_waiting)(void *);
-    /* 0x054 8006efa4 */ void (*frame_phase_is_waiting)(void *);
-    /* 0x058 8006efa8 */ void (*frame_phase_set_finished)(void *);
+    /* 0x040 8006ef90 */ void (*frame_phase_reset)(frame_phase_t *, s32);
+    /* 0x044 8006ef94 */ void (*frame_phase_advance)(frame_phase_t *);
+    /* 0x048 8006ef98 */ void (*frame_phase_get_phase)(frame_phase_t *);
+    /* 0x04C 8006ef9c */ void (*frame_phase_set_waiting)(frame_phase_t *);
+    /* 0x050 8006efa0 */ void (*frame_phase_clear_waiting)(frame_phase_t *);
+    /* 0x054 8006efa4 */ void (*frame_phase_is_waiting)(frame_phase_t *);
+    /* 0x058 8006efa8 */ void (*frame_phase_set_finished)(frame_phase_t *);
 } frame_phase_vtable_t;
 
 typedef struct frame_phase {
@@ -43,8 +45,17 @@ typedef struct frame_phase {
 } frame_phase_t;
 
 frame_phase_t *frame_phase_create(void);
+void frame_phase_construct(frame_phase_t *);
+void frame_phase_cleanup(base_class_t *);
 void frame_phase_remove_parent(frame_phase_t *This, void *Unk);
 void frame_phase_notify(frame_phase_t *This, s32 Unk);
+void frame_phase_reset(frame_phase_t *, s32);
+void frame_phase_advance(frame_phase_t *);
+s32 frame_phase_get_phase(frame_phase_t *);
+void frame_phase_set_waiting(frame_phase_t *);
+void frame_phase_clear_waiting(frame_phase_t *);
+s32 frame_phase_is_waiting(frame_phase_t *);
+void frame_phase_set_finished(frame_phase_t *);
 frame_phase_vtable_t *frame_phase_get_vtable(void);
 
 #endif

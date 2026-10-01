@@ -1,8 +1,8 @@
 #include "menu/ui_screen.h"
 
-#include "gfx/effect_base.h"
-#include "menu/text_line.h"
 #include "base/timer.h"
+#include "graphics/effect_base.h"
+#include "menu/text_line.h"
 
 // Unknown class
 // Owns main_menu?
@@ -113,19 +113,19 @@ void func_8003C238(ui_screen_t *This) {
     func_8003C238_link_t *link;
     void *sym;
 
-    actor = (func_8003C238_actor_t *)This->m_Unk5;
+    actor = (func_8003C238_actor_t *) This->m_Unk5;
     avt = actor->vtable;
     This->vtable->Unk55(This, This->m_Unk4);
     This->m_Unk29->vtable->Unk18(This->m_Unk29, This->m_Unk4, 0);
     if (This->m_Unk33 != 0) {
-        This->vtable->Unk56(This, (char *)&This->m_Unk35);
-        This->m_Unk29->vtable->Unk45(This->m_Unk29, 1, (u8 *)&This->m_Unk35);
+        This->vtable->Unk56(This, (char *) &This->m_Unk35);
+        This->m_Unk29->vtable->Unk45(This->m_Unk29, 1, (u8 *) &This->m_Unk35);
     }
     if (This->m_Unk28 == 0) {
-        link = *(func_8003C238_link_t **)This->m_Unk2;
+        link = *(func_8003C238_link_t **) This->m_Unk2;
         link->vtable->Unk29(link, &This->m_Unk35, &D_8006E854);
     }
-    link = *(func_8003C238_link_t **)This->m_Unk2;
+    link = *(func_8003C238_link_t **) This->m_Unk2;
     link->vtable->Unk29(link, &This->m_Unk35, 0);
     avt->Unk17(actor, This->m_Unk9);
     avt->Unk18(actor, This->m_Unk10);
@@ -219,8 +219,8 @@ void func_8003C63C(ui_screen_t *This, s32 Unk2) {
 
     switch (Unk2) {
         case 5:
-            vtable->Unk56(This, (char *)(This->m_Unk18 + 16));
-            vtable->Unk59(This, *(s32 *)(This->m_Unk18 + 8), 0);
+            vtable->Unk56(This, (char *) (This->m_Unk18 + 16));
+            vtable->Unk59(This, *(s32 *) (This->m_Unk18 + 8), 0);
             This->m_TicksPassed = 0;
             This->m_HasIdleTimeout = 1;
             break;
@@ -418,9 +418,9 @@ void func_8003CB30(ui_screen_t *This, s32 Unk) {
 }
 
 void func_8003CB68(ui_screen_t *This, s8 *Unk2, s8 *Unk3, s8 *Unk4) {
-    __builtin_memcpy((s8 *)&This->m_Unk35 + 0, Unk2, 3);
-    __builtin_memcpy((s8 *)&This->m_Unk35 + 3, Unk3, 3);
-    __builtin_memcpy((s8 *)&This->m_Unk35 + 6, Unk4, 3);
+    __builtin_memcpy((s8 *) &This->m_Unk35 + 0, Unk2, 3);
+    __builtin_memcpy((s8 *) &This->m_Unk35 + 3, Unk3, 3);
+    __builtin_memcpy((s8 *) &This->m_Unk35 + 6, Unk4, 3);
 }
 
 void func_8003CBB8(ui_screen_t *This, s32 Unk) {
@@ -448,13 +448,13 @@ s32 func_8003CC2C(ui_screen_t *This) {
     u8 *c;
 
     v = This->m_TicksPassed * This->m_Unk32;
-    c = (u8 *)&This->m_Unk35;
+    c = (u8 *) &This->m_Unk35;
     buf[0] = v + c[0];
     buf[1] = v + c[1];
     buf[2] = v + c[2];
-    This->vtable->Unk56(This, (char *)buf);
+    This->vtable->Unk56(This, (char *) buf);
     This->m_Unk29->vtable->Unk45(This->m_Unk29, 1, buf);
-    return ((u8)v >= 0x81u);
+    return ((u8) v >= 0x81u);
 }
 
 s32 func_8003CCDC(ui_screen_t *This) {
@@ -502,7 +502,7 @@ void func_8003CDE0(ui_screen_t *This, s8 *Unk2, s32 Unk3) {
         new_texture_handle->vtable->Unk14(new_texture_handle);
         This->m_Unk28->vtable->Unk7(This->m_Unk28);
     } else {
-        This->m_Unk28 = (tim_image_t *)Unk3;
+        This->m_Unk28 = (tim_image_t *) Unk3;
     }
 
     This->m_Unk27 = Unk2;
@@ -532,7 +532,7 @@ void func_8003CE98(ui_screen_t *This, func_8003CE98_arg_t *arg) {
     void *entry;
     s32 len;
 
-    This->m_Unk18 = (s32)arg;
+    This->m_Unk18 = (s32) arg;
     if (arg == NULL) {
         return;
     }
@@ -548,7 +548,7 @@ func_8003CE98_count:
     }
     bytes = n * 4;
     out = memory_allocate_mem(bytes);
-    This->m_Unk20 = (s32)out;
+    This->m_Unk20 = (s32) out;
     This->m_Unk22 = memory_allocate_mem(bytes);
     This->m_Unk23 = memory_allocate_mem(bytes);
     This->m_Unk24 = memory_allocate_mem(bytes);
@@ -566,7 +566,7 @@ func_8003CE98_count:
         do {
             entry = arg->table[i];
             len = strlen(*cursor);
-            *out = text_line_create((s32)tex, len, (s32)*cursor);
+            *out = text_line_create((s32) tex, len, (s32) *cursor);
             out += 1;
             if (entry != NULL) {
                 This->m_Unk21 = i;
@@ -576,7 +576,7 @@ func_8003CE98_count:
             i += 1;
         } while (*cursor != NULL);
     }
-    This->m_Unk25 = (s32)effect_base_create((u32)D_8008A8E8, (u32)D_8008A8F0, 0);
+    This->m_Unk25 = (s32) effect_base_create((u32) D_8008A8E8, (u32) D_8008A8F0, 0);
     arg->tex = tex;
 }
 
@@ -697,19 +697,19 @@ void func_8003D2CC(ui_screen_t *This, s32 Unk2) {
     text_line_t **list;
     char pad[4];
 
-    (void)pad;
+    (void) pad;
 
     if (This->m_Unk18 != 0) {
-        list = (text_line_t **)This->m_Unk20;
+        list = (text_line_t **) This->m_Unk20;
         saved = This->m_Unk21;
         i = 0;
         if (This->m_Unk19 > 0) {
             do {
                 text_line_t *line = *list;
 
-                line->vtable->Unk45(line, (char *)Unk2);
+                line->vtable->Unk45(line, (char *) Unk2);
 
-                if (((func_8003CE98_arg_t *)This->m_Unk18)->table[i] != NULL) {
+                if (((func_8003CE98_arg_t *) This->m_Unk18)->table[i] != NULL) {
                     This->m_Unk21 = i;
                     This->vtable->Unk64(This, Unk2);
                 }
@@ -737,7 +737,7 @@ void func_8003D3B0(ui_screen_t *This) {
             if (v1 == This->m_Unk21) {
                 break;
             }
-            if (!(*(s32 **)((char *)This->m_Unk18 + 0x18))[v1++]) {
+            if (!(*(s32 **) ((char *) This->m_Unk18 + 0x18))[v1++]) {
                 v1 -= 1;
                 break;
             }
@@ -759,7 +759,7 @@ void func_8003D444(ui_screen_t *This) {
             if (v1 == This->m_Unk21) {
                 break;
             }
-            if (!(*(s32 **)((char *)This->m_Unk18 + 0x18))[v1--]) {
+            if (!(*(s32 **) ((char *) This->m_Unk18 + 0x18))[v1--]) {
                 v1 += 1;
                 break;
             }
@@ -773,14 +773,12 @@ void func_8003D4DC(ui_screen_t *This, s32 arg1, s32 arg2) {
     void *new_obj;
 
     if (This->m_Unk18) {
-        cur_obj = ((void **)This->m_Unk20)[This->m_Unk21];
-        new_obj = ((void **)This->m_Unk20)[arg1];
+        cur_obj = ((void **) This->m_Unk20)[This->m_Unk21];
+        new_obj = ((void **) This->m_Unk20)[arg1];
         if (This->m_Unk21 >= 0) {
-            (*(void (**)(void *, char *))(*(u32 *)cur_obj + 0xB8))(
-                cur_obj, (char *)This->m_Unk18 + 0x10);
+            (*(void (**)(void *, char *))(*(u32 *) cur_obj + 0xB8))(cur_obj, (char *) This->m_Unk18 + 0x10);
         }
-        (*(void (**)(void *, char *))(*(u32 *)new_obj + 0xB8))(
-            new_obj, (char *)This->m_Unk18 + 0x13);
+        (*(void (**)(void *, char *))(*(u32 *) new_obj + 0xB8))(new_obj, (char *) This->m_Unk18 + 0x13);
         This->m_Unk21 = arg1;
         if (arg2) {
             This->vtable->Unk27(This, 0);
@@ -814,14 +812,14 @@ void func_8003D5CC(ui_screen_t *This, ui_screen_name_list_t *list, s32 ctx) {
         count++;
     }
     dest = memory_allocate_mem(count * 4);
-    This->m_Unk24[idx] = (s32)dest;
+    This->m_Unk24[idx] = (s32) dest;
     This->m_Unk23[idx] = list->index;
     This->m_Unk22[idx] = count;
     cursor = list->names;
     if (*cursor != 0) {
         do {
             len = strlen(*cursor);
-            *dest = text_line_create(ctx, len, (s32)*cursor);
+            *dest = text_line_create(ctx, len, (s32) *cursor);
             cursor += 1;
             dest += 1;
         } while (*cursor != 0);
@@ -830,9 +828,8 @@ void func_8003D5CC(ui_screen_t *This, ui_screen_name_list_t *list, s32 ctx) {
 
 void func_8003D6D4(ui_screen_t *This) {
     destroy_list(This->m_Unk24[This->m_Unk21], This->m_Unk22[This->m_Unk21]);
-    memory_free_mem((void *)This->m_Unk24[This->m_Unk21]);
+    memory_free_mem((void *) This->m_Unk24[This->m_Unk21]);
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/menu/ui_screen", func_8003D73C);
 
@@ -906,7 +903,7 @@ void func_8003D980(ui_screen_t *This, char *arg1) {
     s32 i;
     text_line_t *obj;
 
-    list = (text_line_t **)This->m_Unk24[This->m_Unk21];
+    list = (text_line_t **) This->m_Unk24[This->m_Unk21];
     count = This->m_Unk22[This->m_Unk21];
     for (i = 0; i < count; i++) {
         obj = *list++;
@@ -922,16 +919,13 @@ void func_8003DA10(ui_screen_t *This) {
     if (This->m_HasIdleTimeout == 1) {
         idx = This->m_Unk21;
         This->vtable->Unk63(This, This->m_Unk4, 1);
-        obj = ((void **)This->m_Unk24[idx])[This->m_Unk23[idx]];
-        table = *(s32 **)((char *)This->m_Unk18 + 0x24);
-        (*(void (**)(void *, char *))(*(u32 *)obj + 0xB8))(
-            obj, (char *)table[idx] + 8);
+        obj = ((void **) This->m_Unk24[idx])[This->m_Unk23[idx]];
+        table = *(s32 **) ((char *) This->m_Unk18 + 0x24);
+        (*(void (**)(void *, char *))(*(u32 *) obj + 0xB8))(obj, (char *) table[idx] + 8);
         This->m_HasIdleTimeout = 2;
         This->vtable->Unk23(This, 0xE);
     }
 }
-
-
 
 INCLUDE_ASM("asm/nonmatchings/menu/ui_screen", func_8003DAD4);
 
@@ -990,7 +984,6 @@ void func_8003DAD4(ui_screen_t *This) {
 }
 */
 
-
 void func_8003DCAC(ui_screen_t *This) {
     s32 idx;
     s32 sel;
@@ -1005,11 +998,11 @@ void func_8003DCAC(ui_screen_t *This) {
     idx = This->m_Unk21;
     sel = This->m_Unk23[idx];
     This->vtable->Unk63(This, This->m_Unk4, 0);
-    row = (text_line_t **)This->m_Unk24[idx];
+    row = (text_line_t **) This->m_Unk24[idx];
     obj = row[sel];
-    obj->vtable->Unk45(obj, (char *)This->m_Unk18 + 0x10);
-    words = *(s32 **)((char *)This->m_Unk18 + 0x24);
-    next = ((s32 *)words[idx])[1];
+    obj->vtable->Unk45(obj, (char *) This->m_Unk18 + 0x10);
+    words = *(s32 **) ((char *) This->m_Unk18 + 0x24);
+    next = ((s32 *) words[idx])[1];
     This->m_Unk23[idx] = next;
     obj = row[next];
     obj->vtable->Unk23(obj, 1);
@@ -1053,12 +1046,12 @@ void func_8003DE9C(ui_screen_t *This, s32 arg1, s32 arg2) {
 
     idx = This->m_Unk21;
     sel = This->m_Unk23[idx];
-    row = (text_line_t **)This->m_Unk24[idx];
+    row = (text_line_t **) This->m_Unk24[idx];
     cur = row[sel];
     other = row[arg1];
-    cur->vtable->Unk45(cur, (char *)This->m_Unk18 + 0x10);
-    words = *(s32 **)((char *)This->m_Unk18 + 0x24);
-    other->vtable->Unk45(other, (char *)words[idx] + 8);
+    cur->vtable->Unk45(cur, (char *) This->m_Unk18 + 0x10);
+    words = *(s32 **) ((char *) This->m_Unk18 + 0x24);
+    other->vtable->Unk45(other, (char *) words[idx] + 8);
     This->m_Unk23[idx] = arg1;
     if (arg2 != 0) {
         This->vtable->Unk27(This, 0);

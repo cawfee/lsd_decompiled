@@ -81,7 +81,7 @@ s32 str_stream_open(str_stream_t *This, char *name, s32 retries) {
         if (This->m_RingSize != 0) {
             if (g_StreamActive == NULL) {
                 path[0] = 0x5C;
-                strcpy(&path[1], (char *)get_current_data_folder());
+                strcpy(&path[1], (char *) get_current_data_folder());
                 strcat(path, name);
                 strcat(path, g_StreamFileSuffix);
                 file = &This->m_Unk2;
@@ -93,7 +93,7 @@ s32 str_stream_open(str_stream_t *This, char *name, s32 retries) {
                         }
                     }
                 }
-                This->m_Unk15 = (s32)((u32)This->m_Unk3 / This->m_Unk13);
+                This->m_Unk15 = (s32) ((u32) This->m_Unk3 / This->m_Unk13);
                 g_StreamState = str_stream_set_spu_volume(This);
                 g_StreamActive = This;
                 This->vtable->Unk18(This, file);
@@ -141,7 +141,7 @@ void str_stream_start(str_stream_t *This, void *arg1) {
     if (This->m_State != 2) {
         if (g_StreamActive == This) {
             if (This->m_Unk20 != 0) {
-                CdSyncCallback((void *)str_stream_sync_callback);
+                CdSyncCallback((void *) str_stream_sync_callback);
                 CdControlF(0x15, arg1);
             } else {
                 do {
@@ -155,7 +155,7 @@ void str_stream_start(str_stream_t *This, void *arg1) {
 void str_stream_sync_callback(str_stream_t *This) {
     if ((g_StreamActive != NULL) && ((u8) This == 2)) {
         CdSyncCallback(0);
-        
+
         if (g_StreamActive->m_Unk20) {
             ((void (*)(s32)) g_StreamActive->m_Unk20)(g_StreamActive->m_Unk16);
         }
@@ -179,7 +179,7 @@ void str_stream_play(str_stream_t *This, s32 arg1, s32 arg2) {
             StSetStream(0, arg1, -1, NULL, NULL);
             This->vtable->Unk24(This);
             do {
-                while (CdControl(2, (unsigned char *)This + 0xC, 0) == 0) {
+                while (CdControl(2, (unsigned char *) This + 0xC, 0) == 0) {
                 }
             } while (CdRead2(mode) == 0);
             This->vtable->Unk25(This);
@@ -259,37 +259,37 @@ s32 str_stream_get_next(str_stream_t *This, u32 *ring, s32 *out, s32 count) {
     if (This->m_Unk15 <= 0) {
         goto accept;
     }
-    if ((u32)value >= (u32)This->m_Unk15) {
+    if ((u32) value >= (u32) This->m_Unk15) {
         goto reject;
     }
-    if ((u32)value >= (u32)This->m_Unk21) {
+    if ((u32) value >= (u32) This->m_Unk21) {
         goto store;
     }
 reject:
-    if ((u32)value < (u32)This->m_Unk21) {
+    if ((u32) value < (u32) This->m_Unk21) {
         *out = 0;
     }
-    ((void (*)(str_stream_t *, s32, s32))str_stream_invoke_callback)(This, ring[0], *out);
+    ((void (*)(str_stream_t *, s32, s32)) str_stream_invoke_callback)(This, ring[0], *out);
     str_stream_finish(This);
     return -1;
 store:
     This->m_Unk21 = value;
 accept:
-    ((void (*)(str_stream_t *, s32, s32))str_stream_invoke_callback)(This, ring[0], *out);
+    ((void (*)(str_stream_t *, s32, s32)) str_stream_invoke_callback)(This, ring[0], *out);
     return 1;
 }
 
 void str_stream_invoke_callback(str_stream_t *This, s32 Unk) {
     if (This->m_Unk17) {
-        ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
-        ((void (*)(void *, s32))This->vtable->Unk27)(This, Unk);
+        ((void (*)(s32)) This->m_Unk17)(This->m_Unk16);
+        ((void (*)(void *, s32)) This->vtable->Unk27)(This, Unk);
     }
 }
 
 void str_stream_finish(str_stream_t *This) {
     if (This->m_Unk18) {
-        ((void (*)(s32))This->m_Unk17)(This->m_Unk16);
-    This->vtable->Unk17(This);
+        ((void (*)(s32)) This->m_Unk17)(This->m_Unk16);
+        This->vtable->Unk17(This);
     }
 }
 

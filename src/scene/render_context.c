@@ -1,6 +1,6 @@
 #include "scene/render_context.h"
 #include "base/transform.h"
-#include "gfx/light.h"
+#include "graphics/light.h"
 
 extern render_context_vtable_t D_800866E8;
 
@@ -97,13 +97,13 @@ void func_8004A7C0(render_context_t *This) {
     s32 index;
     s32 offset;
 
-    This->vtable->Detach((base_class_t *)This, (base_class_t *)get_display());
+    This->vtable->Detach((base_class_t *) This, (base_class_t *) get_display());
     index = 0;
     offset = 0xEC;
     do {
-        slot = (render_context_slot_t *)((u8 *)This + offset);
+        slot = (render_context_slot_t *) ((u8 *) This + offset);
         This->vtable->Unk33(This, 6, slot, index);
-        obj = (base_class_t *)slot->m_Obj;
+        obj = (base_class_t *) slot->m_Obj;
         if (obj != NULL) {
             obj->vtable->Destroy(obj);
         }
@@ -113,19 +113,20 @@ void func_8004A7C0(render_context_t *This) {
             if (child != NULL) {
                 child->vtable->Destroy(child);
             }
-            slot->m_Link = (render_context_slot_link_t *)((base_class_t *)slot->m_Link)->vtable->Destroy((base_class_t *)slot->m_Link);
+            slot->m_Link = (render_context_slot_link_t *) ((base_class_t *) slot->m_Link)
+                               ->vtable->Destroy((base_class_t *) slot->m_Link);
         }
-        obj = *(base_class_t **)slot->m_UnkC;
+        obj = *(base_class_t **) slot->m_UnkC;
         if (obj != NULL) {
             obj->vtable->Destroy(obj);
         }
         start = slot->m_Items;
-        end = (render_context_slot_item_t **)((u8 *)start + 0x668);
+        end = (render_context_slot_item_t **) ((u8 *) start + 0x668);
         cursor = start;
         while (cursor < end) {
             entry = *cursor;
             if (entry != NULL) {
-                ((base_class_t *)entry)->vtable->Destroy((base_class_t *)entry);
+                ((base_class_t *) entry)->vtable->Destroy((base_class_t *) entry);
             }
             cursor++;
         }
@@ -158,19 +159,18 @@ void func_8004AA10(render_context_t *This) {
 void func_8004AA6C(render_context_t *This, s32 arg1, void *arg2) {
     void *obj;
 
-    ((void (*)(void *, s32))func_8001E57C()->Unk33)(This, arg1);
+    ((void (*)(void *, s32)) func_8001E57C()->Unk33)(This, arg1);
     switch (arg1) {
-    case 6:
-        obj = *(void **)((u8 *)arg2 + 0x14);
-        if (obj != NULL) {
-            *(void **)((u8 *)arg2 + 0x14) =
-                (*(void *(**)(void *))(*(s32 *)obj + 4))(obj);
-        }
-        /* fallthrough */
-    case 7:
-        This->m_Unk110 = (s32)arg2;
-        ((void (*)(void *, s32))This->vtable->Notify)(This, arg1);
-        break;
+        case 6:
+            obj = *(void **) ((u8 *) arg2 + 0x14);
+            if (obj != NULL) {
+                *(void **) ((u8 *) arg2 + 0x14) = (*(void *(**) (void *) )(*(s32 *) obj + 4))(obj);
+            }
+            /* fallthrough */
+        case 7:
+            This->m_Unk110 = (s32) arg2;
+            ((void (*)(void *, s32)) This->vtable->Notify)(This, arg1);
+            break;
     }
 }
 
@@ -197,14 +197,14 @@ void func_8004ABD0(render_context_t *This) {
     index = 0;
     offset = 0xEC;
     do {
-        slot = (render_context_slot_t *)((u8 *)This + offset);
+        slot = (render_context_slot_t *) ((u8 *) This + offset);
         slot->m_Obj->vtable->Unk29(slot->m_Obj);
         slot->m_Flag = 0;
         This->vtable->Unk65(This, slot);
         link = slot->m_Link;
         child = link->m_Child;
         if (child != 0) {
-            link->m_Child = (render_context_slot_child_t *)child->vtable->Destroy(child);
+            link->m_Child = (render_context_slot_child_t *) child->vtable->Destroy(child);
         }
         offset += 0x1C;
         This->vtable->Unk33(This, 6, slot, index);
@@ -212,7 +212,7 @@ void func_8004ABD0(render_context_t *This) {
         index += 1;
     } while (index < 7);
     This->m_Unk109 = 0;
-    *(s16 *)&This->m_Unk108 = 0;
+    *(s16 *) &This->m_Unk108 = 0;
     This->vtable->Unk79(This);
 }
 
@@ -233,9 +233,9 @@ void func_8004ACF8(render_context_t *This, s32 count, void *arg2, void *arg3) {
     for (i = 0; i < count; i++) {
         obj = This->vtable->Unk45(This, i);
         obj->vtable->Unk16(obj, 1, arg3);
-        arg3 = (u8 *)arg3 + 3;
+        arg3 = (u8 *) arg3 + 3;
         obj->vtable->Unk17(obj, 1, arg2);
-        arg2 = (u8 *)arg2 + 6;
+        arg2 = (u8 *) arg2 + 6;
     }
 }
 
@@ -252,25 +252,26 @@ void func_8004ADD8(render_context_t *This, s32 **arg1, s32 arg2) {
     char dummy_stack_padding[24];
     s32 *p;
 
-    if (&dummy_stack_padding[0] == &dummy_stack_padding[23]) {}
+    if (&dummy_stack_padding[0] == &dummy_stack_padding[23]) {
+    }
 
     switch (arg2) {
-    case 2:
-    case 3:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-        p = This->m_Unk57;
-        if (p != NULL && *p != 0) {
-            do {
-                if (*p == **arg1) {
-                    This->vtable->Unk74(This, arg1, arg2);
-                }
-                p++;
-            } while (*p != 0);
-        }
-        break;
+        case 2:
+        case 3:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            p = This->m_Unk57;
+            if (p != NULL && *p != 0) {
+                do {
+                    if (*p == **arg1) {
+                        This->vtable->Unk74(This, arg1, arg2);
+                    }
+                    p++;
+                } while (*p != 0);
+            }
+            break;
     }
 }
 
@@ -305,29 +306,28 @@ void func_8004AEA4(render_context_t *This, aea4_arg_t *arg1, s32 arg2) {
         return;
     }
     keep = This->m_Unk33;
-    saved = *(blk30_t *)&This->m_Unk34;
-    gate = (s32 *)This->m_Unk25;
+    saved = *(blk30_t *) &This->m_Unk34;
+    gate = (s32 *) This->m_Unk25;
     if (gate[1] == 0) {
-        func_8004AFE0(This, (s32 *)&out, 3);
+        func_8004AFE0(This, (s32 *) &out, 3);
     } else {
-        func_8004B030(This, (s8 *)&out, 3);
+        func_8004B030(This, (s8 *) &out, 3);
     }
     func_8004B100(This, arg1, arg2);
     This->m_Unk33 = keep;
-    *(blk30_t *)&This->m_Unk34 = saved;
+    *(blk30_t *) &This->m_Unk34 = saved;
 }
 
 void func_8004AFE0(render_context_t *This, s32 *Unk1, s32 Unk2) {
     s8 v3;
 
-  This->m_Unk30_1 = *((s8 *)Unk1 + 2) - 1;
-  v3 = *((s8 *)Unk1 + 3);
-  This->m_Unk31 = Unk2;
-  This->m_Unk32 = Unk2;
-  This->m_Unk30_2 = v3 - 1;
-  func_8004C93C(This);
+    This->m_Unk30_1 = *((s8 *) Unk1 + 2) - 1;
+    v3 = *((s8 *) Unk1 + 3);
+    This->m_Unk31 = Unk2;
+    This->m_Unk32 = Unk2;
+    This->m_Unk30_2 = v3 - 1;
+    func_8004C93C(This);
 }
-
 
 void func_8004B030(render_context_t *This, s8 *arg1, s32 arg2) {
     s32 b2;
@@ -360,7 +360,7 @@ void func_8004B030(render_context_t *This, s8 *arg1, s32 arg2) {
         adj3--;
     }
     This->m_Unk33 = 1;
-    This->m_Unk34 = This->vtable->Unk72(This, *(s32 *)(arg1 + 0x28));
+    This->m_Unk34 = This->vtable->Unk72(This, *(s32 *) (arg1 + 0x28));
     This->m_Unk35_1 = b2;
     This->m_Unk35_2 = b3;
     This->m_Unk36_1 = adj2;
@@ -376,25 +376,25 @@ void func_8004B100(render_context_t *This, aea4_arg_t *arg1, s32 arg2) {
     s32 j;
     s32 k;
 
-    rec = (u8 *)This + 0x8C;
+    rec = (u8 *) This + 0x8C;
     for (i = 0; i < This->m_Unk33; i++) {
-        sl = (u8 *)This + (*(s32 *)rec * 0x1C + 0xEC);
-        if (*(s16 *)(*(u8 **)(sl + 4) + 0x2C) != 0) {
-            grid = *(u8 **)(sl + 0x10) + *(s16 *)(rec + 4) * 4 + *(s16 *)(rec + 6) * 0x50;
-            for (j = 0; j < *(s16 *)(rec + 0xA); j++) {
-                for (k = 0; k < *(s16 *)(rec + 8); k++) {
-                    *(u16 *)((u8 *)This + 0x1C0) = *(u16 *)((u8 *)This + 0xBC);
-                    *(u8 *)((u8 *)This + 0x1C2) = (u8)(*(u8 *)(rec + 4) + k);
-                    *(u8 *)((u8 *)This + 0x1C3) = (u8)(*(u8 *)(rec + 6) + j);
-                    func_8004B2D4(*(void **)grid, arg1, arg2);
-                    q = *(u8 **)(*(u8 **)grid + 0x38);
+        sl = (u8 *) This + (*(s32 *) rec * 0x1C + 0xEC);
+        if (*(s16 *) (*(u8 **) (sl + 4) + 0x2C) != 0) {
+            grid = *(u8 **) (sl + 0x10) + *(s16 *) (rec + 4) * 4 + *(s16 *) (rec + 6) * 0x50;
+            for (j = 0; j < *(s16 *) (rec + 0xA); j++) {
+                for (k = 0; k < *(s16 *) (rec + 8); k++) {
+                    *(u16 *) ((u8 *) This + 0x1C0) = *(u16 *) ((u8 *) This + 0xBC);
+                    *(u8 *) ((u8 *) This + 0x1C2) = (u8) (*(u8 *) (rec + 4) + k);
+                    *(u8 *) ((u8 *) This + 0x1C3) = (u8) (*(u8 *) (rec + 6) + j);
+                    func_8004B2D4(*(void **) grid, arg1, arg2);
+                    q = *(u8 **) (*(u8 **) grid + 0x38);
                     while (q != 0) {
                         func_8004B2D4(q, arg1, arg2);
-                        q = *(u8 **)(q + 0x38);
+                        q = *(u8 **) (q + 0x38);
                     }
                     grid += 4;
                 }
-                grid += (0x14 - *(s16 *)(rec + 8)) * 4;
+                grid += (0x14 - *(s16 *) (rec + 8)) * 4;
             }
         }
         rec += 0xC;
@@ -422,7 +422,7 @@ void func_8004B32C(render_context_t *This, s32 Value) {
 
 void func_8004B344(render_context_t *This, s32 Unk) {
     This->vtable->Unk15(This);
-  This->m_Unk25 = Unk;
+    This->m_Unk25 = Unk;
 }
 
 s32 func_8004B44C(void *, void *, s32, void *, void *);
@@ -436,12 +436,9 @@ s32 func_8004B38C(render_context_t *This, void *arg1, s32 arg2, void *arg3) {
     s8 sp18[0x10];
 
     This->m_Unk26 = arg2;
-    *(func_8004B38C_pkt_t *)&This->m_Unk46 = *(func_8004B38C_pkt_t *)arg3;
-    return ((s32 (*)(void *, s32, void *, void *))This->vtable->Unk61)(
-        This,
-        func_8004B44C(arg1, sp18, This->m_Unk25, &This->m_Unk20, arg3),
-        sp18,
-        D_80086904);
+    *(func_8004B38C_pkt_t *) &This->m_Unk46 = *(func_8004B38C_pkt_t *) arg3;
+    return ((s32(*)(void *, s32, void *, void *)) This->vtable->Unk61)(
+        This, func_8004B44C(arg1, sp18, This->m_Unk25, &This->m_Unk20, arg3), sp18, D_80086904);
 }
 
 void func_8004B418(render_context_t *This, s32 Unk2, s32 Unk3) {
@@ -555,16 +552,16 @@ s32 func_8004B5BC(render_context_t *This) {
     if (This->vtable->Unk66(This, &buf, 0) == 0) {
         return 0;
     }
-    inner = *(void **)((u8 *)buf.obj + 4);
-    index = *(s16 *)((u8 *)inner + 0x32);
+    inner = *(void **) ((u8 *) buf.obj + 4);
+    index = *(s16 *) ((u8 *) inner + 0x32);
     kind = D_800868FC[index];
-    if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+    if (*(s32 *) (This->m_Unk25 + 4) == 0) {
         This->vtable->Unk61(This, buf.value, &buf.at_c, D_80086974[kind]);
     }
     This->vtable->Unk73(This);
-    old = *(u16 *)&This->m_Unk46;
-    *(func_8004B5BC_buf_t *)&This->m_Unk46 = buf;
-    if ((s16)old != buf.first) {
+    old = *(u16 *) &This->m_Unk46;
+    *(func_8004B5BC_buf_t *) &This->m_Unk46 = buf;
+    if ((s16) old != buf.first) {
         This->vtable->Notify(This, 5);
     }
     return kind;
@@ -691,30 +688,30 @@ void func_8004BB3C(render_context_t *This, func_8004BB3C_ent_t *ents, s32 count)
     func_8004BB3C_inner_t *obj;
 
     for (i = 0; i < count; i += 1) {
-            one = 1;
-            slot = This->vtable->Unk69(This, ents->arg);
-            This->vtable->Unk33(This, 6, slot, i);
-            if (ents->id != 0) {
-                if (slot->obj->field_2c != 0) {
-                    This->vtable->Unk65(This, slot);
-                }
-                slot->obj->field_30 = ents->half;
-                slot->obj->vtable->Unk29(slot->obj, ents->id);
-                slot->flag = one;
-                This->m_Unk107 = one;
-            } else {
-                if (slot->obj->field_2c != 0) {
-                    This->vtable->Unk65(This, slot);
-                }
-                obj = slot->obj;
-                if (obj->field_2a != 0) {
-                    obj->vtable->Unk28(obj);
-                    slot->flag = 0;
-                }
+        one = 1;
+        slot = This->vtable->Unk69(This, ents->arg);
+        This->vtable->Unk33(This, 6, slot, i);
+        if (ents->id != 0) {
+            if (slot->obj->field_2c != 0) {
+                This->vtable->Unk65(This, slot);
             }
-            ents += 1;
+            slot->obj->field_30 = ents->half;
+            slot->obj->vtable->Unk29(slot->obj, ents->id);
+            slot->flag = one;
+            This->m_Unk107 = one;
+        } else {
+            if (slot->obj->field_2c != 0) {
+                This->vtable->Unk65(This, slot);
+            }
+            obj = slot->obj;
+            if (obj->field_2a != 0) {
+                obj->vtable->Unk28(obj);
+                slot->flag = 0;
+            }
         }
-    *(s16 *)&This->m_Unk108 = func_8004BCE0(This);
+        ents += 1;
+    }
+    *(s16 *) &This->m_Unk108 = func_8004BCE0(This);
 }
 
 s32 func_8004BCE0(render_context_t *This) {
@@ -725,7 +722,7 @@ loop:
     if (This->m_Unk58_1 != 0) {
         count++;
     }
-    This = (render_context_t *)((char *)This + 0x1C);
+    This = (render_context_t *) ((char *) This + 0x1C);
     i++;
     if (i < 7) {
         goto loop;
@@ -797,7 +794,7 @@ void func_8004C0AC(render_context_t *This, render_context_slot_t *slot) {
     if (obj->m_Unk30_1 >= 0) {
         obj->vtable->Unk30(obj);
         start = slot->m_Items;
-        end = (render_context_slot_item_t **)((u8 *)start + 0x668);
+        end = (render_context_slot_item_t **) ((u8 *) start + 0x668);
         cursor = start;
         while (cursor < end) {
             (*cursor)->m_Flags |= 0x80000000;
@@ -812,13 +809,12 @@ void *func_8004C158(render_context_t *This, s32 arg1, s32 *arg2) {
     s32 temp_v1;
     void *var_v0;
 
-    temp_v1 = *(s32 *)(This->m_Unk26 + 0x14) + 0x18;
+    temp_v1 = *(s32 *) (This->m_Unk26 + 0x14) + 0x18;
     if (arg2 != NULL) {
         *arg2 = temp_v1;
     }
-    if ((arg1 == 0) ||
-        (((s32(*)(void *, s32, s32))This->vtable->Unk67)(This, arg1, temp_v1) == 0)) {
-        var_v0 = (u8 *)This + 0xBC;
+    if ((arg1 == 0) || (((s32(*)(void *, s32, s32)) This->vtable->Unk67)(This, arg1, temp_v1) == 0)) {
+        var_v0 = (u8 *) This + 0xBC;
     } else {
         var_v0 = NULL;
     }
@@ -890,16 +886,16 @@ INCLUDE_ASM("asm/nonmatchings/scene/render_context", func_8004C1C0);
 s16 func_8004C368(render_context_t *This, s8 *out, s32 val) {
     s16 d;
 
-    d = *(s16 *)This->m_Unk25;
+    d = *(s16 *) This->m_Unk25;
     *out = val % d;
-    d = *(s16 *)This->m_Unk25;
+    d = *(s16 *) This->m_Unk25;
     out[1] = val / d;
     return d;
 }
 
 s32 func_8004C3F0(render_context_t *This, s8 *Unk) {
-    func_8004C368(This, Unk, *(s16 *)(*(s32 *)(This->m_Unk110 + 4) + 48));
-  return This->m_Unk110;
+    func_8004C368(This, Unk, *(s16 *) (*(s32 *) (This->m_Unk110 + 4) + 48));
+    return This->m_Unk110;
 }
 
 s32 func_8004C434(render_context_t *This, int Unk) {
@@ -909,10 +905,10 @@ s32 func_8004C434(render_context_t *This, int Unk) {
     s32 result;
 
     do {
-        ptr = (char *)This + offset;
-        
-        if (*(s16 *)(*(s32 *)(ptr + 4) + 0x32) == Unk) {
-            result = (s32)ptr;
+        ptr = (char *) This + offset;
+
+        if (*(s16 *) (*(s32 *) (ptr + 4) + 0x32) == Unk) {
+            result = (s32) ptr;
             goto exit;
         }
 
@@ -943,11 +939,11 @@ void *func_8004C470(render_context_t *This, func_8004C470_probe_t *arg1) {
 
     for (; i < 7; i += 1, offset -= 0x800) {
         result = This->vtable->Unk69(This, i);
-        inner = *(u8 **)((u8 *)result + 0xC);
-        coords = *(s32 **)((inner + 0x14));
-        if ((c6 = coords[6], arg1->field0 >= c6) && arg1->field0 < c6 + range &&
-            arg1->field8 >= coords[8] && arg1->field8 < (c8 = coords[8]) + range) {
-            if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+        inner = *(u8 **) ((u8 *) result + 0xC);
+        coords = *(s32 **) ((inner + 0x14));
+        if ((c6 = coords[6], arg1->field0 >= c6) && arg1->field0 < c6 + range && arg1->field8 >= coords[8] &&
+            arg1->field8 < (c8 = coords[8]) + range) {
+            if (*(s32 *) (This->m_Unk25 + 4) == 0) {
                 return result;
             }
             if (offset >= arg1->field4 && offset - 0x800 < arg1->field4) {
@@ -963,9 +959,9 @@ s32 func_8004C588(render_context_t *This, s32 Unk) {
     s32 offset = 0xEC;
 
     do {
-        u8 *ptr = *(u8 **)((u8 *)This + offset + 4);
+        u8 *ptr = *(u8 **) ((u8 *) This + offset + 4);
 
-        if (*(s16 *)(ptr + 0x32) == Unk) {
+        if (*(s16 *) (ptr + 0x32) == Unk) {
             ret = i;
             break;
         }
@@ -985,9 +981,9 @@ s32 func_8004C5D0(render_context_t *This, s32 Unk) {
     i = 0;
     offset = 0xEC;
     do {
-        ptr = *(char**)((u8*)This + offset + 4);
-        if (*(s16*)(ptr + 0x30) == Unk) {
-            if (*(s16*)(ptr + 0x2C) != 0) {
+        ptr = *(char **) ((u8 *) This + offset + 4);
+        if (*(s16 *) (ptr + 0x30) == Unk) {
+            if (*(s16 *) (ptr + 0x2C) != 0) {
                 return i;
             }
         }
@@ -1008,7 +1004,7 @@ void func_8004C620(render_context_t *This) {
     if (This->m_Unk109 != 0) {
         doubled = This->m_Unk29_1 * 2;
         func_8004CE24(This, 0);
-        if (*(s32 *)(This->m_Unk25 + 4) == 0) {
+        if (*(s32 *) (This->m_Unk25 + 4) == 0) {
             func_8004C6A8(This, doubled, This->m_Unk29_2);
         } else {
             func_8004CC74(This);
@@ -1045,7 +1041,7 @@ void func_8004C93C(render_context_t *This) {
         mode = 2;
     }
     y = This->m_Unk30_2;
-    rec = (u8 *)This + 0x8C;
+    rec = (u8 *) This + 0x8C;
     if (y < 0) {
         y += 0x14;
         if (flag != 0) {
@@ -1059,7 +1055,7 @@ void func_8004C93C(render_context_t *This) {
                 x -= 0xA;
                 mode = 1;
             }
-            rec = (u8 *)This + 0x8C;
+            rec = (u8 *) This + 0x8C;
         }
     }
     This->m_Unk34 = This->vtable->Unk71(This, mode);
@@ -1074,12 +1070,12 @@ void func_8004C93C(render_context_t *This) {
         wrapped = total - 0x14;
         This->m_Unk36_1 = z - wrapped;
         count = func_8004CAF0(This, rec, 0, mode, x, y, z, w) + 1;
-        rec = (u8 *)This + (count * 0xC + 0x8C);
-        *(s32 *)rec = This->vtable->Unk71(This, mode + 1);
-        *(s16 *)(rec + 4) = 0;
-        *(u16 *)(rec + 6) = This->m_Unk35_2;
-        *(s16 *)(rec + 8) = wrapped;
-        *(u16 *)(rec + 0xA) = This->m_Unk36_2;
+        rec = (u8 *) This + (count * 0xC + 0x8C);
+        *(s32 *) rec = This->vtable->Unk71(This, mode + 1);
+        *(s16 *) (rec + 4) = 0;
+        *(u16 *) (rec + 6) = This->m_Unk35_2;
+        *(s16 *) (rec + 8) = wrapped;
+        *(u16 *) (rec + 0xA) = This->m_Unk36_2;
     } else {
         This->m_Unk36_1 = z;
         count = func_8004CAF0(This, rec, 0, mode, x, y, z, w);
@@ -1153,7 +1149,7 @@ void func_8004CC74(render_context_t *This) {
     This->m_Unk33 = next;
     if (func_8004CD38(This->m_Unk118, &buf.pad[2]) != 0) {
         next = buf.value + 1;
-        if (next < ((s16 *)This->m_Unk25)[1]) {
+        if (next < ((s16 *) This->m_Unk25)[1]) {
             This->m_Unk33 = func_8004CDA4(This, unused, This->m_Unk33, next);
         }
     }
@@ -1198,9 +1194,9 @@ s32 func_8004CDA4(render_context_t *This, s32 unused, s32 index, s32 arg3) {
     s32 off;
 
     off = (index * 12) + 0x8C;
-    dest = (s32 *)((u8 *)This + off);
+    dest = (s32 *) ((u8 *) This + off);
     __builtin_memcpy(dest, D_80086990, 0xC);
-    *dest = ((s32(*)(render_context_t *, s32))This->vtable->Unk72)(This, arg3);
+    *dest = ((s32(*)(render_context_t *, s32)) This->vtable->Unk72)(This, arg3);
     return index + 1;
 }
 
@@ -1213,30 +1209,30 @@ void func_8004CE24(render_context_t *This, s32 arg1) {
     s32 j;
     s32 k;
 
-    rec = (u8 *)This + 0x8C;
+    rec = (u8 *) This + 0x8C;
     for (i = 0; i < This->m_Unk33; i++) {
-        sl = (u8 *)This + (*(s32 *)rec * 0x1C + 0xEC);
-        if (*(s16 *)(*(u8 **)(sl + 4) + 0x2C) != 0) {
-            grid = *(u8 **)(sl + 0x10) + *(s16 *)(rec + 4) * 4 + *(s16 *)(rec + 6) * 0x50;
-            for (j = 0; j < *(s16 *)(rec + 0xA); j++) {
-                for (k = 0; k < *(s16 *)(rec + 8); k++) {
+        sl = (u8 *) This + (*(s32 *) rec * 0x1C + 0xEC);
+        if (*(s16 *) (*(u8 **) (sl + 4) + 0x2C) != 0) {
+            grid = *(u8 **) (sl + 0x10) + *(s16 *) (rec + 4) * 4 + *(s16 *) (rec + 6) * 0x50;
+            for (j = 0; j < *(s16 *) (rec + 0xA); j++) {
+                for (k = 0; k < *(s16 *) (rec + 8); k++) {
                     if (arg1 != 0) {
-                        *(s32 *)(*(u8 **)grid + 0x10) &= 0x7FFFFFFF;
+                        *(s32 *) (*(u8 **) grid + 0x10) &= 0x7FFFFFFF;
                     } else {
-                        *(s32 *)(*(u8 **)grid + 0x10) |= 0x80000000;
+                        *(s32 *) (*(u8 **) grid + 0x10) |= 0x80000000;
                     }
-                    q = *(u8 **)(*(u8 **)grid + 0x38);
+                    q = *(u8 **) (*(u8 **) grid + 0x38);
                     while (q != 0) {
                         if (arg1 != 0) {
-                            *(s32 *)(q + 0x10) &= 0x7FFFFFFF;
+                            *(s32 *) (q + 0x10) &= 0x7FFFFFFF;
                         } else {
-                            *(s32 *)(q + 0x10) |= 0x80000000;
+                            *(s32 *) (q + 0x10) |= 0x80000000;
                         }
-                        q = *(u8 **)(q + 0x38);
+                        q = *(u8 **) (q + 0x38);
                     }
                     grid += 4;
                 }
-                grid += (0x14 - *(s16 *)(rec + 8)) * 4;
+                grid += (0x14 - *(s16 *) (rec + 8)) * 4;
             }
         }
         rec += 0xC;
@@ -1265,20 +1261,20 @@ void func_8004CFB8(render_context_t *This, s32 arg1, s32 arg2) {
     s32 prod;
 
     if (arg1 > 0) {
-        table = (scale_row_t *)D_8008699C;
+        table = (scale_row_t *) D_8008699C;
         if (arg2 != 0) {
-            This->m_Unk120 = (s32)D_800869A8;
+            This->m_Unk120 = (s32) D_800869A8;
             goto use;
         }
     } else {
-        table = (scale_row_t *)D_800869B4;
+        table = (scale_row_t *) D_800869B4;
         if (arg2 != 0) {
-            table = (scale_row_t *)D_800869C0;
+            table = (scale_row_t *) D_800869C0;
         }
     }
-    This->m_Unk120 = (s32)table;
+    This->m_Unk120 = (s32) table;
 use:
-    row = (scale_row_t *)This->m_Unk120;
+    row = (scale_row_t *) This->m_Unk120;
     scale = row->scale;
     if (arg1 < 0) {
         prod = scale * (~arg1 + 1);
@@ -1302,20 +1298,19 @@ void func_8004D028(render_context_t *This) {
 }
 
 void func_8004D088(render_context_t *This) {
-    if ( This->m_Unk119 )
-  {
-    func_8004D140(This, func_8004D108, 0);
-    This->m_Unk119 = 0;
-  }
+    if (This->m_Unk119) {
+        func_8004D140(This, func_8004D108, 0);
+        This->m_Unk119 = 0;
+    }
 }
 
 void func_8004D0D0(render_context_t *This, s32 *Unk) {
-    (*(void ( **)(s32 *, s32, s32))(*Unk + 72))(Unk, 0, This->m_Unk120);
+    (*(void (**)(s32 *, s32, s32))(*Unk + 72))(Unk, 0, This->m_Unk120);
 }
 
 // INCLUDE_ASM("asm/nonmatchings/scene/render_context", func_8004D108);
 void func_8004D108(render_context_t *This, s32 *Unk) {
-    (*(void ( **)(s32 *, s32, s32 *))(*Unk + 72))(Unk, 1, & D_800869CC);
+    (*(void (**)(s32 *, s32, s32 *))(*Unk + 72))(Unk, 1, &D_800869CC);
 }
 
 void func_8004D1D0(render_context_t *This, void (*arg1)(render_context_t *, s32), void *arg2);
@@ -1328,11 +1323,11 @@ void func_8004D140(render_context_t *This, void (*arg1)(s32, s32), void (*arg2)(
     i = 0;
     off = 0xEC;
     do {
-        ptr = (s32)This + off;
+        ptr = (s32) This + off;
         if (arg2 != NULL) {
-            arg2((s32)This, ptr);
+            arg2((s32) This, ptr);
         }
-        func_8004D1D0(This, arg1, (void *)ptr);
+        func_8004D1D0(This, arg1, (void *) ptr);
         i += 1;
         off += 0x1C;
     } while (i < 7);
@@ -1343,8 +1338,8 @@ void func_8004D1D0(render_context_t *This, void (*arg1)(render_context_t *, s32)
     s32 *cursor;
     s32 *end;
 
-    start = *(s32 **)((u8 *)arg2 + 0x10);
-    end = (s32 *)((u8 *)start + 0x668);
+    start = *(s32 **) ((u8 *) arg2 + 0x10);
+    end = (s32 *) ((u8 *) start + 0x668);
     cursor = start;
     while (cursor < end) {
         arg1(This, *cursor++);

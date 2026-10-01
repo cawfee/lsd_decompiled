@@ -24,7 +24,7 @@ scene_vtable_t D_80086668 = {
     func_8003E030,
     NULL,
     scene_reset,
-    (void (*)(void *, void *, s32))scene_run,
+    (void (*)(void *, void *, s32)) scene_run,
     scene_stop,
     NULL,
     NULL,

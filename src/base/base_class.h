@@ -1,23 +1,7 @@
 #ifndef LSD_BASE_CLASS_H
 #define LSD_BASE_CLASS_H
 
-/* Root game-object type: attachment lists + notify bus.
- *
- * m_Children — objects this has Attached
- * m_Parents  — objects that Attached this
- *
- * Attach(A, B) adds B to A's children and AddParent(B, A).
- * Notify(code) walks parents and calls OnNotify(parent, this, code).
- * Cleanup sends Notify(1); default OnNotify detaches on code == 1.
- *
- * type_id (vtable word 0) is a per-class RTTI tag; handlers read it via
- * *(u32 *)obj->vtable (often written as *(u32 *)*obj with a loose void** type).
- */
-
-typedef struct linked_list_node {
-    /* 0x0 */ struct linked_list_node *next;
-    /* 0x4 */ void *value;
-} linked_list_node_t;
+#include <common.h>
 
 typedef struct base_class base_class_t;
 typedef struct base_class_vtable base_class_vtable_t;
@@ -30,16 +14,21 @@ struct base_class_vtable {
     /* 0x010 8006b59c */ void (*Attach)(base_class_t *This, base_class_t *Child);
     /* 0x014 8006b5a0 */ void (*Detach)(base_class_t *This, base_class_t *Child);
     /* 0x018 8006b5a4 */ void (*DetachAll)(base_class_t *This);
-    /* 0x01C 8006b5a8 */ void (*IterChildren)(base_class_t *This, void **out_value, void **cursor);
+    /* 0x01C 8006b5a8 */ void (*IterChildren)(base_class_t *This, void **OutValue, void **Cursor);
     /* 0x020 8006b5ac */ void (*AddParent)(base_class_t *This, base_class_t *Parent);
     /* 0x024 8006b5b0 */ void (*RemoveParent)(base_class_t *This, base_class_t *Parent);
     /* 0x028 8006b5b4 */ void (*ClearParents)(base_class_t *This);
-    /* 0x02C 8006b5b8 */ void (*IterParents)(base_class_t *This, void **out_value, void **cursor);
-    /* 0x030 8006b5bc */ void (*Notify)(base_class_t *This, s32 code);
+    /* 0x02C 8006b5b8 */ void (*IterParents)(base_class_t *This, void **OutValue, void **Cursor);
+    /* 0x030 8006b5bc */ void (*Notify)(base_class_t *This, s32 Code);
     /* 0x034 8006b5c0 */ void (*Nop)(base_class_t *This);
-    /* 0x038 8006b5c4 */ void (*OnNotify)(base_class_t *This, base_class_t *Sender, s32 code);
+    /* 0x038 8006b5c4 */ void (*OnNotify)(base_class_t *This, base_class_t *Sender, s32 Code);
     /* 0x03C 8006b5c8 */ void (*Unk14)(base_class_t *This);
 };
+
+typedef struct linked_list_node {
+    /* 0x0 */ struct linked_list_node *m_Next;
+    /* 0x4 */ void *m_Value;
+} linked_list_node_t;
 
 struct base_class {
     /* 0x00 */ base_class_vtable_t *vtable;
@@ -55,19 +44,19 @@ void base_class_cleanup(base_class_t *This);
 void base_class_attach(base_class_t *This, base_class_t *Child);
 void base_class_detach(base_class_t *This, base_class_t *Child);
 void base_class_detach_all(base_class_t *This);
-void base_class_iter_children(base_class_t *This, void **out_value, void **cursor);
+void base_class_iter_children(base_class_t *This, void **OutValue, void **Cursor);
 void base_class_add_parent(base_class_t *This, base_class_t *Parent);
 void base_class_remove_parent(base_class_t *This, base_class_t *Parent);
 void base_class_clear_parents(base_class_t *This);
-void base_class_iter_parents(base_class_t *This, void **out_value, void **cursor);
-void base_class_notify(base_class_t *This, s32 code);
+void base_class_iter_parents(base_class_t *This, void **OutValue, void **Cursor);
+void base_class_notify(base_class_t *This, s32 Code);
 void base_class_nop(base_class_t *This);
-void base_class_on_notify(base_class_t *This, base_class_t *Sender, s32 code);
+void base_class_on_notify(base_class_t *This, base_class_t *Sender, s32 Code);
 
-s32 linked_list_prepend(linked_list_node_t **list, void *value);
-void linked_list_remove(linked_list_node_t **list, void *target);
-void linked_list_clear(linked_list_node_t **list);
-void linked_list_next(void *out_value, linked_list_node_t **cursor);
-s32 destroy_list(base_class_t **arr, s32 n);
+s32 linked_list_prepend(linked_list_node_t **List, void *Value);
+void linked_list_remove(linked_list_node_t **List, void *Target);
+void linked_list_clear(linked_list_node_t **ListHead);
+void linked_list_next(void **OutValue, void **Cursor);
+s32 destroy_list(base_class_t **Array, s32 Count);
 
 #endif

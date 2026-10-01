@@ -1,6 +1,6 @@
-#include "gfx/scene_renderer.h"
+#include "graphics/scene_renderer.h"
 #include "base/base_class.h"
-#include "gfx/renderer.h"
+#include "graphics/renderer.h"
 
 void func_8004D2A4(void *);
 void func_8003E6CC(void *);
@@ -117,10 +117,9 @@ void func_8004D2F8(void *) {
 }
 
 void func_8004D300(scene_renderer_t *This) {
-if ( This->m_Unk3 && This->m_Unk27 )
-  {
-    renderer_get_vtable()->Unk38(This);
-  }
+    if (This->m_Unk3 && This->m_Unk27) {
+        renderer_get_vtable()->Unk38(This);
+    }
 }
 
 void func_8004D35C(void *) {

@@ -12,7 +12,6 @@ extern void MulMatrix2(void *src, void *dst);
 
 void func_8001EE04(void *arg0, void *arg1, s32 arg2, void *arg3);
 
-
 // Maybe pad handling? unchecked
 
 extern transform_vtable_t D_8006B5CC;
@@ -109,7 +108,7 @@ s32 func_8001CE30(transform_t *This) {
     GsInitCoordinate2(NULL, This->m_Unk4);
     This->vtable->Unk16(This, 1, D_8006B684);
     This->vtable->Unk17(This, 1, D_8006B690);
-    *(s32 *)This->m_Unk4 = 1;
+    *(s32 *) This->m_Unk4 = 1;
     return 1;
 }
 
@@ -122,19 +121,19 @@ void func_8001CEB4(transform_t *This, s32 arg1, s32 arg2) {
     s16 *p;
     s32 i;
 
-    vals[0] = func_8001EC84((void *)arg2);
-    vals[1] = func_8001EC84((void *)((u8 *)arg2 + 4));
-    vals[2] = func_8001EC84((void *)((u8 *)arg2 + 8));
+    vals[0] = func_8001EC84((void *) arg2);
+    vals[1] = func_8001EC84((void *) ((u8 *) arg2 + 4));
+    vals[2] = func_8001EC84((void *) ((u8 *) arg2 + 8));
     vals[0] /= 360;
     vals[1] /= 360;
     vals[2] /= 360;
     obj = This->m_Unk4;
-    dest = *(s16 **)((u8 *)obj + 0x44);
+    dest = *(s16 **) ((u8 *) obj + 0x44);
     p = dest + 8;
     if (arg1 != 0) {
-        dest[8] = (s16)vals[0];
-        dest[9] = (s16)vals[1];
-        dest[10] = (s16)vals[2];
+        dest[8] = (s16) vals[0];
+        dest[9] = (s16) vals[1];
+        dest[10] = (s16) vals[2];
     } else {
         s32 *q;
 
@@ -149,7 +148,7 @@ void func_8001CEB4(transform_t *This, s32 arg1, s32 arg2) {
             q = q + 1;
         }
     }
-    *(s32 *)This->m_Unk4 = 0;
+    *(s32 *) This->m_Unk4 = 0;
 }
 
 void func_8001D008(transform_t *This, s32 mode, void *src) {
@@ -160,20 +159,20 @@ void func_8001D008(transform_t *This, s32 mode, void *src) {
     s32 *dest;
 
     a = func_8001EC84(src);
-    b = func_8001EC84((u8 *)src + 4);
-    c = func_8001EC84((u8 *)src + 8);
+    b = func_8001EC84((u8 *) src + 4);
+    c = func_8001EC84((u8 *) src + 8);
     obj = This->m_Unk4;
-    dest = *(s32 **)((u8 *)obj + 0x44);
+    dest = *(s32 **) ((u8 *) obj + 0x44);
     if (mode != 0) {
-        dest[0] = (s16)a;
-        dest[1] = (s16)b;
-        dest[2] = (s16)c;
+        dest[0] = (s16) a;
+        dest[1] = (s16) b;
+        dest[2] = (s16) c;
     } else {
-        dest[0] += (s16)a;
-        dest[1] += (s16)b;
-        dest[2] += (s16)c;
+        dest[0] += (s16) a;
+        dest[1] += (s16) b;
+        dest[2] += (s16) c;
     }
-    *(s32 *)This->m_Unk4 = 0;
+    *(s32 *) This->m_Unk4 = 0;
 }
 
 transform_t *func_8001D0EC(transform_t *This, void *arg1, s32 *arg2) {
@@ -181,20 +180,20 @@ transform_t *func_8001D0EC(transform_t *This, void *arg1, s32 *arg2) {
 
     if (This->m_Unk2 == 0) {
         buf = This->m_Unk4;
-        This->m_Unk2 = (s32)arg1;
-        *(s32 *)((u8 *)buf + 0x48) = *(s32 *)((u8 *)arg1 + 0x14);
-        (*(void (**)(void *, void *))(*(s32 *)arg1 + 0x10))(arg1, This);
+        This->m_Unk2 = (s32) arg1;
+        *(s32 *) ((u8 *) buf + 0x48) = *(s32 *) ((u8 *) arg1 + 0x14);
+        (*(void (**)(void *, void *))(*(s32 *) arg1 + 0x10))(arg1, This);
         buf = This->m_Unk4;
         if (arg2 != NULL) {
-            *(s32 *)((u8 *)buf + 0x18) = arg2[0];
-            *(s32 *)((u8 *)buf + 0x1C) = arg2[1];
-            *(s32 *)((u8 *)buf + 0x20) = arg2[2];
+            *(s32 *) ((u8 *) buf + 0x18) = arg2[0];
+            *(s32 *) ((u8 *) buf + 0x1C) = arg2[1];
+            *(s32 *) ((u8 *) buf + 0x20) = arg2[2];
         } else {
-            *(s32 *)((u8 *)buf + 0x18) = 0;
-            *(s32 *)((u8 *)buf + 0x1C) = 0;
-            *(s32 *)((u8 *)buf + 0x20) = 0;
+            *(s32 *) ((u8 *) buf + 0x18) = 0;
+            *(s32 *) ((u8 *) buf + 0x1C) = 0;
+            *(s32 *) ((u8 *) buf + 0x20) = 0;
         }
-        *(s32 *)This->m_Unk4 = 0;
+        *(s32 *) This->m_Unk4 = 0;
     }
     return This;
 }
@@ -204,8 +203,8 @@ transform_t *func_8001D1A4(transform_t *This) {
 
     obj = This->m_Unk2;
     if (obj) {
-        (*(void (**)(void *, transform_t *))(*(s32 *)obj + 0x14))(obj, This);
-        *(s32 *)((u8 *)This->m_Unk4 + 0x48) = 0;
+        (*(void (**)(void *, transform_t *))(*(s32 *) obj + 0x14))(obj, This);
+        *(s32 *) ((u8 *) This->m_Unk4 + 0x48) = 0;
         This->m_Unk2 = 0;
     }
     return This;
@@ -219,7 +218,7 @@ void func_8001D204(transform_t *This) {
     do {
         This->vtable->Unk21(This, &obj, &cont);
         if (obj != NULL) {
-            (*(void (**)(void *))(*(u32 *)obj + 0x50))(obj);
+            (*(void (**)(void *))(*(u32 *) obj + 0x50))(obj);
         }
     } while (cont != 0);
 }
@@ -231,9 +230,9 @@ void func_8001D280(transform_t *This, void **arg1, s32 *arg2) {
         if (*arg1 == NULL) {
             *arg2 = This->m_Unk0;
         }
-        linked_list_next(arg1, (linked_list_node_t **)arg2);
+        linked_list_next(arg1, (linked_list_node_t **) arg2);
         temp = *arg1;
-        if (temp != NULL && ((**(u32 **)temp) & 0xF) == 4 && *(void **)((u8 *)temp + 0xC) == This) {
+        if (temp != NULL && ((**(u32 **) temp) & 0xF) == 4 && *(void **) ((u8 *) temp + 0xC) == This) {
             break;
         }
         if (*arg2 == 0) {
@@ -286,7 +285,7 @@ void *func_8001D4DC(transform_t *This, void *mtx, s32 negate) {
     s16 ang[4];
     u16 *src;
 
-    src = *(u16 **)((u8 *)This->m_Unk4 + 0x44);
+    src = *(u16 **) ((u8 *) This->m_Unk4 + 0x44);
     if (negate != 0) {
         ang[0] = -src[8];
         ang[1] = -src[9];
@@ -324,11 +323,11 @@ void func_8001D624(transform_t *This, s32 *arg1, s32 arg2) {
     transform_vtable_t *vt;
 
     p = arg1 + 1;
-    func_8001EE04(p, p, *arg1 * 8, (u8 *)This->m_Unk4 + 0x24);
+    func_8001EE04(p, p, *arg1 * 8, (u8 *) This->m_Unk4 + 0x24);
     vt = This->vtable;
     This->m_Unk9 = 0;
     This->m_Unk10 = 0;
-    This->m_Unk11 = (s32)arg1;
+    This->m_Unk11 = (s32) arg1;
     vt->Notify(This, arg2);
     This->m_Unk11 = 0;
 }
@@ -345,16 +344,15 @@ void func_8001D6B4(transform_t *This, s32 Unk1, s32 Unk2) {
         case 3:
             This->vtable->Unk39(This, Unk1);
             break;
-        
+
         case 4:
             This->m_Unk9 = Unk1;
             break;
-        
+
         default:
             break;
     }
 }
-
 
 /*
  * Best attempt (not matching: target 143 insns, compiled 131).  Every
@@ -446,11 +444,11 @@ void func_8001D950(transform_t *This, void *arg1, void *arg2, void *arg3, s32 ar
     transform_t *child;
 
     This->vtable->Unk32(This, mtx, 1);
-    child = (transform_t *)This->m_Unk2;
+    child = (transform_t *) This->m_Unk2;
     while (child != NULL) {
         child->vtable->Unk32(child, child_mtx, 1);
         MulMatrix2(child_mtx, mtx);
-        child = (transform_t *)child->m_Unk2;
+        child = (transform_t *) child->m_Unk2;
     }
     func_8001EE04(arg2, arg3, arg4, mtx);
     if (arg1 != NULL) {
@@ -606,7 +604,7 @@ void func_8001E4A4(s32 arg0, base_class_t *arg1) {
         node = arg1;
         while (1) {
             node = arg1;
-            base_class_iter_parents(node, (void **)&sp10, (void **)&sp14);
+            base_class_iter_parents(node, (void **) &sp10, (void **) &sp14);
             if (sp10 != NULL && (**sp10 & 0xF) == type) {
                 break;
             }
@@ -617,13 +615,12 @@ void func_8001E4A4(s32 arg0, base_class_t *arg1) {
         }
         if (sp10 != NULL) {
             temp_a1 = *sp10;
-            if (*(u8 *)temp_a1 == 0x34) {
-                ((void (*)(s32 **, s32)) * (void **)((u8 *)temp_a1 + 0x10))(sp10, arg0);
+            if (*(u8 *) temp_a1 == 0x34) {
+                ((void (*)(s32 **, s32)) * (void **) ((u8 *) temp_a1 + 0x10))(sp10, arg0);
             }
         }
     } while (sp14 != 0);
 }
-
 
 transform_vtable_t *func_8001E57C(void) {
     return &D_8006B5CC;

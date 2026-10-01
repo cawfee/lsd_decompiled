@@ -1,6 +1,12 @@
 ---
-Language: Cpp
 BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120
+
+BreakBeforeBraces: Attach
 BraceWrapping:
   AfterControlStatement: Always
   AfterEnum: true
@@ -11,13 +17,19 @@ BraceWrapping:
   AfterExternBlock: true
   BeforeCatch: true
   BeforeElse: true
-  IndentBraces: false
   AfterNamespace: true
-BreakBeforeBraces: Attach
-UseTab: Never
-TabWidth: 4
-IndentWidth: 4
-ColumnLimit: 120
+  IndentBraces: false
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortLambdasOnASingleLine: All
+InsertBraces: true
+IndentCaseLabels: true
+
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: None
 AlignConsecutiveDeclarations: None
@@ -25,18 +37,13 @@ AlignConsecutiveMacros: None
 AlignEscapedNewlines: Right
 AlignOperands: Align
 AlignTrailingComments: true
+
 AllowAllArgumentsOnNextLine: true
 AllowAllConstructorInitializersOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-AllowShortLambdasOnASingleLine: All
-InsertBraces: true
-IndentCaseLabels: true
-SpaceAfterCStyleCast: true
 BinPackParameters: false
 Cpp11BracedListStyle: false
+
+# No space after casts: `(void)Size`, `(u32)value`, `(u8 *)ptr`.
+SpaceAfterCStyleCast: false
 ...

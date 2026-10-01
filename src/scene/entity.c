@@ -1,10 +1,10 @@
 #include <psx/rand.h>
 
-#include "scene/entity.h"
-#include "scene/actor.h"
-#include "dream/dream_sys.h"
-#include "base/memory.h"
+#include "memory/memory.h"
 #include "base/transform.h"
+#include "dream/dream_sys.h"
+#include "scene/actor.h"
+#include "scene/entity.h"
 
 entity_t *entity_construct(entity_t *This, s32 EntityID, s32 Unk3, s32 Unk4);
 s8 *entity_get_mood_effect(entity_t *This);
@@ -212,9 +212,9 @@ entity_vtable_t g_ENTITY_VTABLE = {
     base_class_destructor,
     entity_construct,
     entity_cleanup,
-    (void(*)(base_class_t *, base_class_t *))func_800570B4,
-    (void(*)(base_class_t *, base_class_t *))func_80057130,
-    (void(*)(base_class_t *))func_800571A8,
+    (void (*)(base_class_t *, base_class_t *)) func_800570B4,
+    (void (*)(base_class_t *, base_class_t *)) func_80057130,
+    (void (*)(base_class_t *)) func_800571A8,
     base_class_iter_children,
     base_class_add_parent,
     base_class_remove_parent,
@@ -222,73 +222,73 @@ entity_vtable_t g_ENTITY_VTABLE = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    (void(*)(base_class_t *, base_class_t *, s32))func_80065790,
+    (void (*)(base_class_t *, base_class_t *, s32)) func_80065790,
     0x00000000,
     entity_init,
-    (void(*)(void *, s32, s32 *))func_8001CEB4,
-    (void(*)(void *, s32, s32 *))func_8001D008,
+    (void (*)(void *, s32, s32 *)) func_8001CEB4,
+    (void (*)(void *, s32, s32 *)) func_8001D008,
     entity_start,
     entity_stop,
-    (void(*)(void *))func_8001D204,
-    (void(*)(void *))func_8001D280,
-    (void(*)(void *))func_8001D33C,
-    (void(*)(void *, s32))func_80065A5C,
-    (void(*)(void *))func_8001D374,
-    (void(*)(void *))func_8001D3A0,
-    (void(*)(void *))func_8001D3CC,
-    (void(*)(void *, s32))func_80065AE0,
-    (void(*)(void *))func_8001D424,
-    (void(*)(void *))func_8001D450,
-    (void(*)(void *))func_8001D480,
-    (void(*)(void *))func_8001D4AC,
-    (void(*)(void *))func_8001D4DC,
-    (void(*)(void *))func_800571F8,
-    (void(*)(void *))func_8001D600,
-    (void(*)(void *))func_8001D624,
-    (void(*)(void *))func_8001D6A4,
+    (void (*)(void *)) func_8001D204,
+    (void (*)(void *)) func_8001D280,
+    (void (*)(void *)) func_8001D33C,
+    (void (*)(void *, s32)) func_80065A5C,
+    (void (*)(void *)) func_8001D374,
+    (void (*)(void *)) func_8001D3A0,
+    (void (*)(void *)) func_8001D3CC,
+    (void (*)(void *, s32)) func_80065AE0,
+    (void (*)(void *)) func_8001D424,
+    (void (*)(void *)) func_8001D450,
+    (void (*)(void *)) func_8001D480,
+    (void (*)(void *)) func_8001D4AC,
+    (void (*)(void *)) func_8001D4DC,
+    (void (*)(void *)) func_800571F8,
+    (void (*)(void *)) func_8001D600,
+    (void (*)(void *)) func_8001D624,
+    (void (*)(void *)) func_8001D6A4,
     entity_update,
-    (void(*)(void *))func_80057320,
-    (void(*)(void *))func_8001D714,
-    (void(*)(void *))func_8001D950,
-    (void(*)(void *))func_8001DA28,
-    (void(*)(void *))func_8001DDF4,
+    (void (*)(void *)) func_80057320,
+    (void (*)(void *)) func_8001D714,
+    (void (*)(void *)) func_8001D950,
+    (void (*)(void *)) func_8001DA28,
+    (void (*)(void *)) func_8001DDF4,
     0x00000000,
-    (void(*)(void *))func_8001E4A4,
-    (void(*)(void *, s32))func_80057384,
-    (void(*)(void *, s32 *))func_800573A8,
-    (void(*)(void *))func_80057444,
-    (void(*)(void *, s32, s32))func_8005748C,
+    (void (*)(void *)) func_8001E4A4,
+    (void (*)(void *, s32)) func_80057384,
+    (void (*)(void *, s32 *)) func_800573A8,
+    (void (*)(void *)) func_80057444,
+    (void (*)(void *, s32, s32)) func_8005748C,
     func_800574C4,
-    (void(*)(void *, s32, s32))func_800574FC,
-    (void(*)(void *, s32, s32))func_800575B0,
-    (void(*)(void *))func_800575E0,
-    (void(*)(void *))func_80057610,
+    (void (*)(void *, s32, s32)) func_800574FC,
+    (void (*)(void *, s32, s32)) func_800575B0,
+    (void (*)(void *)) func_800575E0,
+    (void (*)(void *)) func_80057610,
     entity_notify_interaction,
     entity_notify_interaction_done,
-    (void(*)(void *))func_80057C6C,
-    (void(*)(void *))func_80057C74,
-    (void(*)(void *))func_80057C7C,
-    (void(*)(void *))func_80065BF4,
-    (void(*)(void *))func_80065BFC,
-    (void(*)(void *))func_80065C2C,
-    (void(*)(void *))func_80065D64,
-    (void(*)(void *))func_80065DBC,
-    (void(*)(void *))func_80065DEC,
-    (void(*)(void *))func_80065FD8,
-    (void(*)(void *, s32))func_800660BC,
-    (void(*)(void *))func_8006613C,
-    (void(*)(void *))func_80066148,
-    (void(*)(void *))func_80066150,
+    (void (*)(void *)) func_80057C6C,
+    (void (*)(void *)) func_80057C74,
+    (void (*)(void *)) func_80057C7C,
+    (void (*)(void *)) func_80065BF4,
+    (void (*)(void *)) func_80065BFC,
+    (void (*)(void *)) func_80065C2C,
+    (void (*)(void *)) func_80065D64,
+    (void (*)(void *)) func_80065DBC,
+    (void (*)(void *)) func_80065DEC,
+    (void (*)(void *)) func_80065FD8,
+    (void (*)(void *, s32)) func_800660BC,
+    (void (*)(void *)) func_8006613C,
+    (void (*)(void *)) func_80066148,
+    (void (*)(void *)) func_80066150,
     entity_tick,
-    (void(*)(void *))func_800661CC,
-    (void(*)(void *))func_800661D4,
-    (void(*)(void *, s32))func_80066214,
-    (void(*)(void *))func_800662A8,
-    (void(*)(void *))func_800662B4,
-    (s32(*)(void *, s32, s32))func_800662BC,
+    (void (*)(void *)) func_800661CC,
+    (void (*)(void *)) func_800661D4,
+    (void (*)(void *, s32)) func_80066214,
+    (void (*)(void *)) func_800662A8,
+    (void (*)(void *)) func_800662B4,
+    (s32(*)(void *, s32, s32)) func_800662BC,
     func_80066340,
-    (void(*)(void *))func_80066748,
-    (void(*)(void *))func_800667B0,
+    (void (*)(void *)) func_80066748,
+    (void (*)(void *)) func_800667B0,
     entity_get_distance,
     entity_get_trigger_ratio,
     entity_get_mood_effect,
@@ -353,7 +353,8 @@ frac_t g_OffsetOneTwoOne[3] = { { 1, 1 }, { 2, 1 }, { 1, 1 } };
 frac_t g_OffsetOneFourOneThenQuarter[6] = { { 1, 1 }, { 4, 1 }, { 1, 1 }, { 1, 4 }, { 1, 1 }, { 1, 2 } };
 frac_t g_OffsetThree[3] = { { 3, 1 }, { 3, 1 }, { 3, 1 } };
 frac_t g_OffsetThirtySecond[3] = { { 1, 32 }, { 1, 32 }, { 1, 32 } };
-u8 g_EntityOffsetScratch[22] = { 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 };
+u8 g_EntityOffsetScratch[22] = { 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01,
+                                 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 };
 s16 g_EntityOffsetScratchDenom __attribute__((section(".data"))) = 0x0001;
 
 entity_prop_t g_ENTITY_TABLE[130] = {
@@ -489,12 +490,9 @@ entity_prop_t g_ENTITY_TABLE[130] = {
     { { 2, -3 }, -20, 0, 120, 0, 2, -14, 1, 1, 0, 1, entity_paper_sumo_wait },
 };
 
-
-
 extern void *D_8008AC14[];
 extern void *D_8008AC0C[];
 extern void *D_8008AC1C[];
-
 
 void entity_check_event_video(entity_t *This, s32 Unk2);
 s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4);
@@ -682,7 +680,8 @@ s32 entity_check_proximity(entity_t *This, vec3d_t *Location, s32 Unk3, s32 Unk4
     call_arg_1 = 0;
     call_arg_2 = Unk3 << 11;
 
-    return This->m_DreamSys->vtable->dream_sys_resolve_target_position(This->m_DreamSys, call_arg_1, call_arg_2, &local_data, Unk4);
+    return This->m_DreamSys->vtable->dream_sys_resolve_target_position(This->m_DreamSys, call_arg_1, call_arg_2,
+                                                                       &local_data, Unk4);
 }
 
 s32 entity_get_distance(entity_t *This, void *a1) {
@@ -776,7 +775,7 @@ void entity_set_triggered(entity_t *This, s32 Value) {
 
 void entity_start_behaviour(entity_t *This) {
     sound_entity_init(This->m_Helper, &This->m_EntityContext, This->m_EntityID + 1, This,
-                        g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
+                      g_ENTITY_TABLE[This->m_EntityID].behaviour_fn);
 
     This->vtable->Unk74(This); // This->m_AnimPlaying = 1
     This->vtable->Unk67(This); // This->m_ModelLoaded = 1
@@ -809,8 +808,8 @@ s32 entity_check_interaction(entity_t *This) {
             goto end_logic;
         }
 
-        if (entity_check_proximity(This, This->m_Transform + 24, property->interaction_range, property->interaction_param) ==
-            0) {
+        if (entity_check_proximity(This, This->m_Transform + 24, property->interaction_range,
+                                   property->interaction_param) == 0) {
             goto func_returned_zero;
         }
 
@@ -1064,7 +1063,7 @@ void entity_astronaut(entity_t *This, s32 *arg1) {
         arg1[7] = -2;
         return;
     }
-    if ((u32)(tick - 0x105) < 0x133) {
+    if ((u32) (tick - 0x105) < 0x133) {
         This->vtable->Unk48(This, -0x32, 0);
         This->vtable->Unk16(This, 1, &g_RotateYawNeg120);
         return;
@@ -1092,13 +1091,14 @@ void entity_gargoyle(entity_t *This, s32 *arg1) {
 
 void entity_futon(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
-  s32 v4; // $v1
+    s32 v4; // $v1
 
-  v2 = This->vtable->entity_get_trigger_ratio(This);
-  v4 = Unk[1];
-  Unk[4] = v2;
-  if ( !v4 )
-    Unk[7] = 23;
+    v2 = This->vtable->entity_get_trigger_ratio(This);
+    v4 = Unk[1];
+    Unk[4] = v2;
+    if (!v4) {
+        Unk[7] = 23;
+    }
 }
 
 void entity_gargoyle_pit(entity_t *This, s32 *arg1) {
@@ -1141,7 +1141,7 @@ void entity_minotaur(entity_t *This, s32 *arg1) {
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     temp = This->m_Duration;
-    half = ((s32)(temp + (temp >> 31))) >> 1;
+    half = ((s32) (temp + (temp >> 31))) >> 1;
     if ((arg1[1] % half) == 0) {
         arg1[7] = 0xA;
     }
@@ -1151,15 +1151,14 @@ void entity_minotaur(entity_t *This, s32 *arg1) {
 void entity_giant_minotaur(entity_t *This, s32 *Unk) {
     s32 v2; // $v0
 
-  v2 = Unk[1];
-  Unk[4] = 0;
-  if ( !v2 )
-  {
-    Unk[7] = 11;
-    Unk[12] = 11;
-    Unk[17] = 11;
-  }
-  This->vtable->Unk48(This, -30, 0);
+    v2 = Unk[1];
+    Unk[4] = 0;
+    if (!v2) {
+        Unk[7] = 11;
+        Unk[12] = 11;
+        Unk[17] = 11;
+    }
+    This->vtable->Unk48(This, -30, 0);
 }
 
 void entity_maiko_giant(entity_t *This, s32 *arg1) {
@@ -1168,10 +1167,10 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
     u32 utemp;
     s32 half;
 
-    *(s16 *)&This->m_Unk17 = -0x14;
+    *(s16 *) &This->m_Unk17 = -0x14;
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     utemp = This->m_Duration;
-    half = ((s32)(utemp + (utemp >> 31))) >> 1;
+    half = ((s32) (utemp + (utemp >> 31))) >> 1;
     ptr = NULL;
     if ((arg1[1] % half) == 0) {
         arg1[7] = 0xA;
@@ -1189,7 +1188,7 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
         if (temp == 0xE10) {
             ptr = &g_RotateYawNegQuarter;
         }
-        if ((u32)(temp - 0xD5D) < 0x78U) {
+        if ((u32) (temp - 0xD5D) < 0x78U) {
             if (This->m_DreamSys->vtable->dream_sys_get_action_pressed(This->m_DreamSys) != 0) {
                 This->m_Tick = 0;
                 This->m_State = 0xD;
@@ -1200,7 +1199,7 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
             ptr = &g_RotateYawNegQuarter;
         }
     } else if (temp == 0xD) {
-        *(s16 *)&This->m_Unk17 = -0x78;
+        *(s16 *) &This->m_Unk17 = -0x78;
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
         This->vtable->Unk17(This, 1, &g_OffsetHalf);
         if (This->vtable->entity_get_distance(This, This->m_DreamSys) < 0x400) {
@@ -1219,7 +1218,7 @@ void entity_maiko_giant(entity_t *This, s32 *arg1) {
     if (ptr != NULL) {
         This->vtable->Unk16(This, 0, ptr);
     }
-    This->vtable->Unk51(This, *(s16 *)&This->m_Unk17, 0);
+    This->vtable->Unk51(This, *(s16 *) &This->m_Unk17, 0);
     if ((This->m_State != 0xC) && (This->m_FrameOffsetX != 0)) {
         This->vtable->Unk50(This, -0xC8, 0);
     }
@@ -1233,7 +1232,7 @@ void entity_old_woman(entity_t *This, s32 *arg1) {
             This->m_State = 0xB;
         }
     }
-    if (*(s32 *)(This->m_Transform + 0x1C) < 0x7D0) {
+    if (*(s32 *) (This->m_Transform + 0x1C) < 0x7D0) {
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
     }
     if (This->m_State == 0xB) {
@@ -1363,7 +1362,7 @@ void entity_ox_cart(entity_t *This, s32 *arg1) {
 
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     temp = This->m_Duration;
-    half = ((s32)(temp + (temp >> 31))) >> 1;
+    half = ((s32) (temp + (temp >> 31))) >> 1;
     rem = arg1[1] % half;
     if (rem == 0) {
         arg1[7] = 0xA;
@@ -1461,8 +1460,7 @@ void entity_horse(entity_t *This, s32 *arg1) {
         arg1[4] = This->vtable->entity_get_trigger_ratio(This);
         arg1[7] = 0x1A;
     }
-    This->vtable->Unk51(
-        This, (This->m_Tick == 0x6E) ? -0x2D00 : -0x180, 0);
+    This->vtable->Unk51(This, (This->m_Tick == 0x6E) ? -0x2D00 : -0x180, 0);
 }
 
 void entity_ufo(entity_t *This, s32 *arg1) {
@@ -1519,7 +1517,7 @@ void entity_boat_bird(entity_t *This, s32 *arg1) {
         if (temp == 0xB) {
             This->vtable->Unk48(This, -0x64, 0);
             temp = This->m_Tick;
-            if ((u32)(temp - 0x55) < 0x1EU) {
+            if ((u32) (temp - 0x55) < 0x1EU) {
                 This->vtable->Unk50(This, 0x50, 0);
             } else if (temp == 0x78) {
                 This->m_State = 0xD;
@@ -1572,9 +1570,9 @@ void entity_shark(entity_t *This, s32 *arg1) {
     s32 count;
 
     count = This->m_Tick;
-    if ((u32)(count - 0x190) < 0xA) {
+    if ((u32) (count - 0x190) < 0xA) {
         This->vtable->Unk16(This, 0, &g_RotateYawNine);
-    } else if (((u32)(count - 0x2BC) < 0xA) || ((u32)(count - 0x33E) < 4)) {
+    } else if (((u32) (count - 0x2BC) < 0xA) || ((u32) (count - 0x33E) < 4)) {
         This->vtable->Unk16(This, 0, &g_RotateYawNegNine);
     } else if (count >= 0x353) {
         This->vtable->entity_disable_link(This);
@@ -1720,9 +1718,9 @@ void entity_locomotive_factory(entity_t *This, s32 *arg1) {
         entity_locomotive_common(This, arg1, 0xBB8, 0x1F4, -0x100);
     } else if ((kind == 0xE) && ((This->m_Tick & 3) == 0)) {
         roll = rand();
-        slot = (s16 *)(g_EntityOffsetScratch + 22);
+        slot = (s16 *) (g_EntityOffsetScratch + 22);
         *slot = (roll % 32) + 1;
-        This->vtable->Unk17(This, 1, (s32 *)(slot - 5));
+        This->vtable->Unk17(This, 1, (s32 *) (slot - 5));
     }
 }
 
@@ -1769,14 +1767,13 @@ void entity_rabbit(entity_t *This, s32 *arg1) {
         arg1[7] = 3;
     }
     temp = This->m_Tick;
-    if ((u32)(temp - 0x12C) < 0x14U) {
+    if ((u32) (temp - 0x12C) < 0x14U) {
         This->vtable->Unk48(This, -0x3C, 0);
-    } else if ((u32)(temp - 0x141) < 0x13U) {
+    } else if ((u32) (temp - 0x141) < 0x13U) {
         This->vtable->Unk16(This, 0, &g_RotateYawNegNine);
     } else if (temp >= 0x141) {
         This->vtable->Unk49(This, (rand() & 1) ? 0x80 : -0x80, 1);
-        This->vtable->Unk16(
-            This, 0, (rand() & 3) ? &g_RotateYawNegNine : &g_RotateYawNine);
+        This->vtable->Unk16(This, 0, (rand() & 3) ? &g_RotateYawNegNine : &g_RotateYawNine);
     }
 }
 
@@ -1922,7 +1919,7 @@ void entity_locomotive_kyoto(entity_t *This, s32 *arg1) {
             if (This->m_Unk2 != 0) {
                 link = This->m_Transform + 0x38;
             }
-            vt->Unk45(*(dream_sys_t *volatile *)&This->m_DreamSys, link);
+            vt->Unk45(*(dream_sys_t *volatile *) &This->m_DreamSys, link);
             if (This->m_Tick == 0x64) {
                 This->vtable->Notify(This, ENTITY_NOTIFY_LINK);
             }
@@ -2026,7 +2023,7 @@ void entity_hopscotch_girl(entity_t *This, s32 *arg1) {
 }
 
 void entity_corpse(entity_t *This, s32 *arg1) {
-    if ( !This->m_Tick ) {
+    if (!This->m_Tick) {
         This->vtable->Unk50(This, -200, 0);
     }
 }
@@ -2080,7 +2077,7 @@ void entity_airplane(entity_t *This, s32 *arg1) {
     arg1[8] = -1;
     This->vtable->Unk48(This, -0x200, 0);
     tick = This->m_Tick;
-    if ((u32)(tick - 0x80) < 0xC2) {
+    if ((u32) (tick - 0x80) < 0xC2) {
         This->vtable->Unk50(This, -0x80, 0);
         return;
     }
@@ -2394,7 +2391,7 @@ void entity_dog(entity_t *This, s32 *arg1) {
         } else {
             nudge = -0xC0;
         }
-        *(s16 *)&This->m_Unk17 = nudge;
+        *(s16 *) &This->m_Unk17 = nudge;
     }
     if (This->m_State == 0) {
         if ((arg1[1] % 10) == 0) {
@@ -2417,7 +2414,7 @@ void entity_dog(entity_t *This, s32 *arg1) {
             }
         }
         func_8001EACC(This, This->m_DreamSys, 1, 0, 0);
-        This->vtable->Unk48(This, *(s16 *)&This->m_Unk17, 1);
+        This->vtable->Unk48(This, *(s16 *) &This->m_Unk17, 1);
         return;
     }
     if (This->m_State == 0xA) {
@@ -2429,7 +2426,7 @@ void entity_dog(entity_t *This, s32 *arg1) {
         arg1[7] = 0x12;
         arg1[12] = 3;
         This->vtable->entity_stop_behaviour(This);
-        This->m_State = ((u32)rand() % 2) == 0;
+        This->m_State = ((u32) rand() % 2) == 0;
     }
 }
 
@@ -2511,16 +2508,16 @@ void entity_clouds_wind(entity_t *This, s32 *arg1) {
     s32 unk62;
 
     if (This->m_Tick == 0) {
-        (*(void (**)(void *, void **))(*(s32 *)This->m_DreamSys->m_ViewTransform + 0x64))(
-            (void *)This->m_DreamSys->m_ViewTransform, (void **)&D_8008AC1C);
+        (*(void (**)(void *, void **))(*(s32 *) This->m_DreamSys->m_ViewTransform + 0x64))(
+            (void *) This->m_DreamSys->m_ViewTransform, (void **) &D_8008AC1C);
         This->m_State = rand() % 3;
-        if (*(s32 *)((char *)This->m_DreamSys->m_Transform + 0x20) < 0x262) {
+        if (*(s32 *) ((char *) This->m_DreamSys->m_Transform + 0x20) < 0x262) {
             This->m_State = 0;
         }
     }
     if (This->m_State != 0) {
         temp = This->m_Duration;
-        half = ((s32)(temp + (temp >> 31))) >> 1;
+        half = ((s32) (temp + (temp >> 31))) >> 1;
         if (half < This->m_Tick) {
             This->m_DreamSys->vtable->Unk48(This->m_DreamSys, 0x80, 0);
         }
@@ -2529,7 +2526,7 @@ void entity_clouds_wind(entity_t *This, s32 *arg1) {
         }
     } else {
         unk62 = This->m_Tick;
-        if ((u32)(unk62 - 0x14) < 0x64U) {
+        if ((u32) (unk62 - 0x14) < 0x64U) {
             This->m_DreamSys->vtable->Unk48(This->m_DreamSys, -((unk62 - 0x13) << 5), 1);
             if (This->m_Tick == 0x55) {
                 This->m_DreamSys->vtable->dream_sys_set_callbacks(This->m_DreamSys, 1, 1);
@@ -3116,8 +3113,7 @@ void entity_fetus_jump(entity_t *This, s32 *arg1) {
 void entity_gray_man(entity_t *This, s32 *arg1) {
     if (This->m_Triggered != 0) {
         if (entity_create_effect(This, NULL, NULL, EFFECT_COLOR_STEP_NORMAL, 0) != NULL) {
-            This->m_Effect->vtable->Unk52(
-                This->m_Effect, This->m_EffectColor, 7, 0);
+            This->m_Effect->vtable->Unk52(This->m_Effect, This->m_EffectColor, 7, 0);
             This->vtable->entity_disable_link(This);
             This->m_DreamSys->vtable->dream_sys_reset_flashback_list(This->m_DreamSys);
         }
@@ -3136,7 +3132,7 @@ void entity_winged_minotaur(entity_t *This, s32 *arg1) {
     }
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     utemp = This->m_Duration;
-    half = ((s32)(utemp + (utemp >> 31))) >> 1;
+    half = ((s32) (utemp + (utemp >> 31))) >> 1;
     if (This->m_Frame == half) {
         arg1[7] = 7;
         arg1[8] = -2;
@@ -3218,7 +3214,7 @@ tail:
 
 void entity_maiko_small(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &g_OffsetQuarter);
-    if ((u32)(This->m_Tick - 0xC9) < 0x63U) {
+    if ((u32) (This->m_Tick - 0xC9) < 0x63U) {
         This->vtable->Unk50(This, -0x20, 0);
     }
 }
@@ -3286,7 +3282,7 @@ void entity_locomotive_natural(entity_t *This, s32 *arg1) {
     }
     if ((This->m_State != 0) && (This->m_Tick >= 0x870)) {
         temp = This->m_Tick;
-        if ((u32)(temp - 0x870) < 0x191U) {
+        if ((u32) (temp - 0x870) < 0x191U) {
             if (temp == 0x870) {
                 This->vtable->Unk75(This);
                 arg1[7] = -2;
@@ -3294,7 +3290,7 @@ void entity_locomotive_natural(entity_t *This, s32 *arg1) {
                 arg1[17] = -2;
                 return;
             }
-            if ((u32)(temp - 0x9F6) < 0xAU) {
+            if ((u32) (temp - 0x9F6) < 0xAU) {
                 arg1[7] = 5;
                 arg1[8] = -2;
                 return;
@@ -3324,8 +3320,7 @@ void entity_locomotive_common(entity_t *This, s32 *arg1, s32 arg2, s32 arg3, s32
         arg1[17] = 4;
     }
     temp = This->m_Tick;
-    if (((temp >= arg2) && (temp <= (arg2 + 0x5B))) ||
-        ((temp >= (arg2 + 0x155)) && (temp <= (arg2 + 0x1B1))) ||
+    if (((temp >= arg2) && (temp <= (arg2 + 0x5B))) || ((temp >= (arg2 + 0x155)) && (temp <= (arg2 + 0x1B1))) ||
         ((temp >= (arg2 + 0x2BA)) && (temp <= (arg2 + 0x317)))) {
         This->vtable->Unk16(This, 0, &g_RotateYawOne);
     }
@@ -3391,7 +3386,7 @@ void entity_maiko_plain(entity_t *This, s32 *arg1) {
     This->vtable->Unk17(This, 1, &g_OffsetTwoFifths);
     arg1[4] = This->vtable->entity_get_trigger_ratio(This);
     temp = This->m_Duration;
-    half = ((s32)(temp + (temp >> 31))) >> 1;
+    half = ((s32) (temp + (temp >> 31))) >> 1;
     if ((arg1[1] % half) == 0) {
         arg1[7] = 0xA;
         arg1[8] = 1;
@@ -3411,8 +3406,8 @@ void entity_paper_sumo_wait(entity_t *This, s32 *arg1) {
 
     if (This->m_Tick == 0) {
         r = rand();
-        rem = (s32)(r + (r >> 31)) >> 1;
-        This->m_State = 0xA + (s32)(r - (rem << 1));
+        rem = (s32) (r + (r >> 31)) >> 1;
+        This->m_State = 0xA + (s32) (r - (rem << 1));
     }
     This->vtable->Unk75(This);
     if (This->m_Tick >= 0xC9) {

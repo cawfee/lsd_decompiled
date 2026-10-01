@@ -21,7 +21,7 @@ tmd_model_t *tmd_create(s32 Unk1) {
 }
 
 tmd_model_t *func_800438B0(tmd_model_t *This, s32 *Unk) {
-    (*(void (**)(void *))((s32)get_file_driver() + 8))(This);
+    (*(void (**)(void *))((s32) get_file_driver() + 8))(This);
     This->vtable = func_80043B78();
     if (Unk == NULL) {
         return This;
@@ -44,16 +44,16 @@ void func_80043954(tmd_model_t *This) {
     void ***var_s0;
     void **temp_a0;
 
-    var_s0 = (void ***)This->m_Unk10;
+    var_s0 = (void ***) This->m_Unk10;
     if (*var_s0 != NULL) {
         do {
             temp_a0 = *var_s0;
-            var_s0 = (void ***)((u8 *)var_s0 + 4);
-            (*(void (**)(void *))(*(s32 *)temp_a0 + 4))(temp_a0);
+            var_s0 = (void ***) ((u8 *) var_s0 + 4);
+            (*(void (**)(void *))(*(s32 *) temp_a0 + 4))(temp_a0);
         } while (*var_s0 != NULL);
     }
     memory_free_mem(This->m_Unk10);
-    (*(void (**)(void *))((s32)get_file_driver() + 0xC))(This);
+    (*(void (**)(void *))((s32) get_file_driver() + 0xC))(This);
 }
 
 /*

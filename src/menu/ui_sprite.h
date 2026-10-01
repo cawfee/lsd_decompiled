@@ -82,7 +82,7 @@ typedef struct ui_sprite {
     /* 0x50 */ s16 m_Unk19_0;
     /* 0x52 */ s16 m_Unk19_1;
     /* 0x54 */ s8 m_Unk20[4];
-    /* 0x58 */ u8* m_Unk21;
+    /* 0x58 */ u8 *m_Unk21;
     /* 0x5C */ s16 m_Unk22_0;
     /* 0x5E */ s16 m_Unk22_1;
     /* 0x60 */ s16 m_Unk23_0;

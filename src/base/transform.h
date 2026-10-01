@@ -79,8 +79,15 @@ typedef struct transform {
  * frac_t packs a fraction as two s16: value = num * 4096 / den
  * (see object_math.c func_8001EC84).  fixed_vec3_t is a plain s32 vector in
  * the same 4096-per-unit scale (0x1000 == 1.0). */
-typedef struct { s16 num; s16 den; } frac_t;
-typedef struct { s32 x; s32 y; s32 z; } fixed_vec3_t;
+typedef struct {
+    s16 num;
+    s16 den;
+} frac_t;
+typedef struct {
+    s32 x;
+    s32 y;
+    s32 z;
+} fixed_vec3_t;
 
 transform_vtable_t *func_8001E57C(void);
 

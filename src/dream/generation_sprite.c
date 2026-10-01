@@ -20,11 +20,11 @@ generation_sprite_t *func_80057C94(s32 Unk1, s32 Unk2, s32 Unk3) {
 }
 
 void func_80057D10(generation_sprite_t *This, s32 arg1, s32 arg2, s32 arg3) {
-    (*(void (**)(void *, s32, s32, void *, s32, s32))((s32)func_800422BC() + 8))(
-        This, arg3, 0, &D_80087A8C[arg1 * 0xC], arg2, 0);
+    (*(void (**)(void *, s32, s32, void *, s32, s32))((s32) func_800422BC() + 8))(This, arg3, 0,
+                                                                                  &D_80087A8C[arg1 * 0xC], arg2, 0);
     This->vtable = func_80057F58();
     This->m_Unk40 = 0;
-    ((void (*)(void *, s32))This->vtable->Unk15)(This, arg1);
+    ((void (*)(void *, s32)) This->vtable->Unk15)(This, arg1);
 }
 
 void func_80057DBC(generation_sprite_t *This, s32 Unk) {
@@ -49,8 +49,8 @@ void func_80057DF4(generation_sprite_t *This, s32 arg1, s16 *arg2) {
         This->m_Unk22 = (x * This->m_Unk22) >> 12;
         This->m_Unk23 = (y * This->m_Unk23) >> 12;
     } else {
-        *(s16 *)((u8 *)This + 0x80) = x;
-        *(s16 *)((u8 *)This + 0x82) = y;
+        *(s16 *) ((u8 *) This + 0x80) = x;
+        *(s16 *) ((u8 *) This + 0x82) = y;
     }
 }
 

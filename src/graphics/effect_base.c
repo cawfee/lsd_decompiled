@@ -1,4 +1,4 @@
-#include "gfx/effect_base.h"
+#include "graphics/effect_base.h"
 
 #include "base/transform.h"
 
@@ -43,7 +43,7 @@ void func_800405D0(effect_base_t *This, u16 *Data, s8 *Color, s32 Unk3) {
 
 void func_80040664(effect_base_t *This, s32 Unk1, s32 Unk2) {
     if (This->m_Unk2 == 0) {
-        ((void (*)(void *, s32, s32))func_8001E57C()->Unk18)(This, Unk1, 0);
+        ((void (*)(void *, s32, s32)) func_8001E57C()->Unk18)(This, Unk1, 0);
         This->vtable->set_offset(This, Unk2);
     }
 }
@@ -61,7 +61,7 @@ void func_80040740(effect_base_t *This, s32 Unk) {
 }
 
 void func_8004076C(effect_base_t *This, s32 Unk1, s32 Unk2) {
-    func_80040790(This, (s8 *)&This->m_Unk24, (s8 *)Unk2, Unk1);
+    func_80040790(This, (s8 *) &This->m_Unk24, (s8 *) Unk2, Unk1);
 }
 
 void func_80040790(effect_base_t *This, s8 *dst, s8 *src, s32 set) {
@@ -71,9 +71,9 @@ void func_80040790(effect_base_t *This, s8 *dst, s8 *src, s32 set) {
     if (set) {
         __builtin_memcpy(out, src, 3);
     } else {
-        ((u8 *)out)[0] += ((u8 *)src)[0];
-        ((u8 *)out)[1] += ((u8 *)src)[1];
-        ((u8 *)out)[2] += ((u8 *)src)[2];
+        ((u8 *) out)[0] += ((u8 *) src)[0];
+        ((u8 *) out)[1] += ((u8 *) src)[1];
+        ((u8 *) out)[2] += ((u8 *) src)[2];
     }
 }
 
@@ -92,8 +92,8 @@ void func_80040824(effect_base_t *This, s16 *Data) {
 
 void func_80040854(effect_base_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
     This->vtable->attach_to(This, Unk2, Unk3);
-  This->m_Unk17 = 0;
-  This->m_Unk18 = Unk4;
+    This->m_Unk17 = 0;
+    This->m_Unk18 = Unk4;
 }
 
 void func_800408A0(effect_base_t *This, s32 Unk) {

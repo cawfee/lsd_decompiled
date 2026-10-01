@@ -159,21 +159,21 @@ movie_screen_t *movie_screen_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
 }
 
 void movie_screen_construct(movie_screen_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 *arg4) {
-    func_8003DFBC()->Construct(This, (char **)Unk1, (char *)Unk2, Unk3);
+    func_8003DFBC()->Construct(This, (char **) Unk1, (char *) Unk2, Unk3);
     This->vtable = movie_screen_get_vtable();
     if (arg4 != NULL) {
         __builtin_memcpy(&This->m_Unk41, arg4, 12);
     } else {
         __builtin_memcpy(&This->m_Unk41, func_8003DFCC(), 12);
     }
-    This->m_Unk44 = mdec_movie_create((s32)func_8003DFCC(), 0, 0);
+    This->m_Unk44 = mdec_movie_create((s32) func_8003DFCC(), 0, 0);
     This->m_Unk45 = 0;
     This->vtable->Unk15(This);
 }
 
 void movie_screen_cleanup(movie_screen_t *This) {
-    (*(void ( **)(s32))(*(s32 *)This->m_Unk44 + 4))(This->m_Unk44);
-  func_8003DFBC()->Cleanup(This);
+    (*(void (**)(s32))(*(s32 *) This->m_Unk44 + 4))(This->m_Unk44);
+    func_8003DFBC()->Cleanup(This);
 }
 
 void func_8003BA38(movie_screen_t *This) {
@@ -197,13 +197,13 @@ s32 func_8003BAB4(movie_screen_t *This) {
     void *obj;
 
     func_8003DFBC()->Unk18(This);
-    obj = (void *)This->m_Unk44;
+    obj = (void *) This->m_Unk44;
     This->m_Unk40 = 0;
-    (*(void (**)(void *, s32))(*(u32 *)obj + 0x6C))(obj, This->m_Unk47);
-    result = (*(s32 (**)(void *, s32, s32, s32, s32))(*(u32 *)This->m_Unk44 + 0x40))(
-        (void *)This->m_Unk44, This->m_Unk45, This->m_Unk46, This->m_Unk48, This->m_Unk49);
+    (*(void (**)(void *, s32))(*(u32 *) obj + 0x6C))(obj, This->m_Unk47);
+    result = (*(s32(**)(void *, s32, s32, s32, s32))(*(u32 *) This->m_Unk44 + 0x40))(
+        (void *) This->m_Unk44, This->m_Unk45, This->m_Unk46, This->m_Unk48, This->m_Unk49);
     if (result != 0) {
-        result = ((s32 (*)(void *, s32))This->vtable->SetLength)(This, 0);
+        result = ((s32(*)(void *, s32)) This->vtable->SetLength)(This, 0);
     }
     return result;
 }
@@ -212,10 +212,10 @@ void func_8003BB5C(movie_screen_t *This, s32 arg1, s32 arg2) {
     void *obj;
     s32 temp;
 
-    ((void (*)(void *, s32, s32))func_8003DFBC()->Unk22)(This, arg1, arg2);
+    ((void (*)(void *, s32, s32)) func_8003DFBC()->Unk22)(This, arg1, arg2);
     if (This->m_Unk40 == 0) {
-        obj = (void *)This->m_Unk44;
-        temp = (*(s32 (**)(void *))(*(s32 *)obj + 0x48))(obj);
+        obj = (void *) This->m_Unk44;
+        temp = (*(s32(**)(void *))(*(s32 *) obj + 0x48))(obj);
         This->m_Unk40 = temp;
         if ((temp != 0) && (This->m_Unk53 == 0)) {
             This->vtable->Unk23(This, 7);
@@ -229,25 +229,25 @@ void func_8003BC14(movie_screen_t *This, s32 arg1) {
 
     func_8003DFBC()->Unk23(This, arg1);
     switch (arg1) {
-    case 5:
-        This->m_Unk53 = 0;
-        break;
-    case 7:
-        This->m_Unk53 = 1;
-        break;
-    case 8:
-        if (This->m_Unk52 == 0) {
-            obj = (void *)This->m_Unk44;
-            callback = *(void (**)(void *))(*(s32 *)obj + 0x4C);
-            goto call;
-        }
-        break;
-    case 0x12:
-        callback = This->vtable->Unk36;
-        obj = This;
-    call:
-        callback(obj);
-        break;
+        case 5:
+            This->m_Unk53 = 0;
+            break;
+        case 7:
+            This->m_Unk53 = 1;
+            break;
+        case 8:
+            if (This->m_Unk52 == 0) {
+                obj = (void *) This->m_Unk44;
+                callback = *(void (**)(void *))(*(s32 *) obj + 0x4C);
+                goto call;
+            }
+            break;
+        case 0x12:
+            callback = This->vtable->Unk36;
+            obj = This;
+        call:
+            callback(obj);
+            break;
     }
 }
 
@@ -284,7 +284,7 @@ void func_8003BDEC(void *) {
 
 void func_8003BDF4(movie_screen_t *This) {
     if (This->m_Unk52) {
-        (*(void (**)(s32))(*(s32 *)This->m_Unk44 + 0x4C))(This->m_Unk44);
+        (*(void (**)(s32))(*(s32 *) This->m_Unk44 + 0x4C))(This->m_Unk44);
     } else {
         This->vtable->Unk23(This, 7);
     }

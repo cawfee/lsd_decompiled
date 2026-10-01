@@ -1,12 +1,11 @@
 #include "sys/system.h"
 
-#include "sys/game_flow.h"
 #include "base/base_class.h"
+#include "sys/game_flow.h"
 #include <psx/libspu.h>
 
 static s32 g_CD_INIT = 0;
 extern s32 g_ScreenSize[];
-
 
 void system_construct(void *, s32);
 void func_8003B02C(void *, s32 *, s32);

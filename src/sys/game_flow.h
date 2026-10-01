@@ -5,10 +5,10 @@
 
 #include "base/base_class.h"
 
-#include "sys/pad.h"
 #include "dream/dream_session.h"
 #include "dream/dream_sys.h"
-#include "sys/display.h"
+#include "graphics/display.h"
+#include "sys/pad.h"
 
 typedef struct game_flow game_flow_t;
 typedef struct game_flow_vtable game_flow_vtable_t;

@@ -6,7 +6,7 @@
 #include "base/base_class.h"
 
 #include "dream/dream_session.h"
-#include "snd/sound.h"
+#include "sound/sound.h"
 
 typedef struct scene_vtable {
     /* 0x000 80086668 */ u32 type_id;

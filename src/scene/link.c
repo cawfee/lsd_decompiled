@@ -1,7 +1,7 @@
 #include "common.h"
 #include "dream/dream_sys.h"
-#include "scene/entity.h"
 #include "file/object_model_list.h"
+#include "scene/entity.h"
 
 s32 g_CurrentLocation = -1;
 void *g_LinkScene = NULL;
@@ -56,7 +56,7 @@ void link_init_stage_objects(void) {
         if (*counts > 0) {
             t = tables;
             do {
-                ((u8 *)*t)[j * 8] = 0;
+                ((u8 *) *t)[j * 8] = 0;
                 j += 1;
             } while (j < *counts);
         }
@@ -64,15 +64,15 @@ void link_init_stage_objects(void) {
         tables += 1;
         i += 1;
     } while (i < 0xE);
-    file_buf_set_triple(sp10, 0, (s32)g_GrayManModelPath, 1);
+    file_buf_set_triple(sp10, 0, (s32) g_GrayManModelPath, 1);
     i = 0;
     file = g_SymDogModelPath;
     off = 0;
     do {
-        *(base_class_t **)((u8 *)g_SpecialEntityModel + off) = (base_class_t *)func_8004468C((s32)sp10);
+        *(base_class_t **) ((u8 *) g_SpecialEntityModel + off) = (base_class_t *) func_8004468C((s32) sp10);
         off += 0x14;
         i += 1;
-        sp10[1] = (s32)file;
+        sp10[1] = (s32) file;
     } while (i == 0);
 }
 
@@ -89,7 +89,7 @@ void link_destroy_models(void) {
         if (obj != NULL) {
             *p = obj->vtable->Destroy(obj);
         }
-        p = (base_class_t **)((u8 *)p + 0x14);
+        p = (base_class_t **) ((u8 *) p + 0x14);
     } while (i == 0);
 }
 
@@ -105,18 +105,18 @@ void link_spawn_special_entity(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
     s32 i;
     entity_spawn_args_t args;
 
-    p = (u8 *)g_SpecialEntityModel;
+    p = (u8 *) g_SpecialEntityModel;
     i = 0;
     g_CurrentLocation = arg0;
-    g_LinkScene = (void *)arg1;
-    g_LinkDreamSys = (dream_sys_t *)arg2;
+    g_LinkScene = (void *) arg1;
+    g_LinkDreamSys = (dream_sys_t *) arg2;
     g_EntityHelper = arg3;
-    g_LinkSceneData = (void *)arg4;
+    g_LinkSceneData = (void *) arg4;
     do {
         s32 id = i + 0x62;
         i += 1;
-        args.m_Unk3 = *(s32 *)p;
-        *(entity_t **)(p + 4) = entity_create(id, &args, g_EntityHelper);
+        args.m_Unk3 = *(s32 *) p;
+        *(entity_t **) (p + 4) = entity_create(id, &args, g_EntityHelper);
         p += 0x14;
     } while (i == 0);
     set_teleports_enabled(arg0);
@@ -135,14 +135,14 @@ void set_teleports_enabled(s32 arg0) {
 
 void link_enable_teleport_type(s32 arg0) {
     switch (arg0) {
-    case 0x4E:
-    case 0xB:
-    case 0x38:
-        set_teleport_links_enabled(1);
-        break;
-    case 0x5D:
-        set_teleport_links_enabled(1);
-        break;
+        case 0x4E:
+        case 0xB:
+        case 0x38:
+            set_teleport_links_enabled(1);
+            break;
+        case 0x5D:
+            set_teleport_links_enabled(1);
+            break;
     }
 }
 
@@ -159,7 +159,7 @@ void link_destroy_teleport_entity(void) {
         if (obj != NULL) {
             *p = obj->vtable->Destroy(obj);
         }
-        p = (base_class_t **)((u8 *)p + 0x14);
+        p = (base_class_t **) ((u8 *) p + 0x14);
     } while (i == 0);
 }
 
@@ -169,13 +169,13 @@ s32 link_spawn_from_tile(s32 arg0, s16 *arg1, s32 arg2) {
     v0 = link_find_teleport(arg1);
     if (v0 != NULL) {
         if (link_check_teleport_condition(arg2, v0) != 0) {
-            return link_spawn_object_group(arg2, (s32)v0, arg0);
+            return link_spawn_object_group(arg2, (s32) v0, arg0);
         }
         if (g_CurrentLocation != 0) {
             s32 value = rand();
 
             if (value == (value / 12) * 0xC && (arg2 & 1) == 0) {
-                link_activate_object((u8 *)g_SpecialEntityModel);
+                link_activate_object((u8 *) g_SpecialEntityModel);
             }
         }
         return 0;
@@ -205,8 +205,7 @@ s32 link_adjust_teleport_target(s32 arg0, s32 arg1) {
     s32 var_s0 = arg0;
     s32 var_s1 = g_CurrentLocation;
 
-    if (var_s1 == 4 && arg1 == 0x10 &&
-        g_LinkDreamSys->vtable->dream_sys_get_dream_color(g_LinkDreamSys) == var_s1) {
+    if (var_s1 == 4 && arg1 == 0x10 && g_LinkDreamSys->vtable->dream_sys_get_dream_color(g_LinkDreamSys) == var_s1) {
         var_s0 += 0x1E;
     }
     return var_s0;
@@ -231,7 +230,7 @@ s32 link_spawn_object_group(s32 arg0, s8 *arg1, s32 arg2) {
     u8 *temp_s4;
 
     sp10[0] = arg2;
-    temp_v0 = func_80044A0C((s32)sp10);
+    temp_v0 = func_80044A0C((s32) sp10);
     if (temp_v0 != 0) {
         var_s0 = arg1 + 3;
         end = arg1 + 6;
@@ -242,7 +241,7 @@ s32 link_spawn_object_group(s32 arg0, s8 *arg1, s32 arg2) {
             if (c == -1) {
                 break;
             }
-            link_spawn_object(arg0, (s32)arg1, (s32)(temp_s4 + c * 8), temp_v0);
+            link_spawn_object(arg0, (s32) arg1, (s32) (temp_s4 + c * 8), temp_v0);
             var_s0 += 1;
         }
         return temp_v0;
@@ -257,17 +256,17 @@ s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_object_model_list_t *a
     s8 *temp_s2;
 
     if (link_check_object(arg0, arg2) != 0) {
-        var_s0 = (s8 *)(arg2 + 4);
+        var_s0 = (s8 *) (arg2 + 4);
         link_enable_teleport_type(arg2[3]);
-        temp_v0 = arg3->vtable->Unk33(arg3, (s8)arg2[2]);
-        temp_s2 = (s8 *)(arg2 + 8);
+        temp_v0 = arg3->vtable->Unk33(arg3, (s8) arg2[2]);
+        temp_s2 = (s8 *) (arg2 + 8);
         sp10.m_Unk3 = temp_v0;
         if (temp_v0 != 0 && var_s0 < temp_s2) {
             while (var_s0 < temp_s2) {
                 if (*var_s0 == -1) {
                     break;
                 }
-                if (link_create_object(arg2[3], &sp10, arg1, (u8)*var_s0) != 0) {
+                if (link_create_object(arg2[3], &sp10, arg1, (u8) *var_s0) != 0) {
                     return 1;
                 }
                 var_s0 += 1;
@@ -341,7 +340,7 @@ INCLUDE_ASM("asm/nonmatchings/scene/link", link_check_object);
 extern s16 SPECIAL_DAYS[];
 
 s32 link_is_special_color(s32 arg0) {
-    s32 temp_s0 = ((s8 *)SPECIAL_DAYS)[0x4A + arg0];
+    s32 temp_s0 = ((s8 *) SPECIAL_DAYS)[0x4A + arg0];
 
     return temp_s0 == g_LinkDreamSys->vtable->dream_sys_get_dream_color(g_LinkDreamSys);
 }
@@ -381,19 +380,15 @@ s32 link_create_object(s32 arg0, void *arg1, s32 arg2, s32 arg3) {
     s32 transform[4];
     object_variant_entry_t *variant;
 
-    ent = entity_create(arg0, (s32)arg1, g_EntityHelper);
+    ent = entity_create(arg0, (s32) arg1, g_EntityHelper);
     if (ent != NULL) {
-        spawn.m_Unk0 = ((u16 *)arg2)[0];
+        spawn.m_Unk0 = ((u16 *) arg2)[0];
         variant = &g_ObjectVariantTable[arg3];
         spawn.m_Unk1 = variant->m_Unk0;
-        spawn.m_Position = *(dream_sys_pkt6_t *)((u8 *)g_ObjectColorTable +
-                                                 variant->m_Unk3 * 6);
-        (*(void (**)(void *, void *, void *))(*(u32 *)g_LinkScene + 0xE8))(
-            g_LinkScene, &transform, &spawn);
-        ent->vtable->Unk16(ent, 1,
-                           (s32 *)&g_ObjectAnimTable[variant->m_Unk2 * 0xC]);
-        ent->vtable->Unk18(ent, (s32)g_LinkDreamSys, (s32)g_LinkSceneData,
-                           (s32)g_LinkScene, (s32)&transform);
+        spawn.m_Position = *(dream_sys_pkt6_t *) ((u8 *) g_ObjectColorTable + variant->m_Unk3 * 6);
+        (*(void (**)(void *, void *, void *))(*(u32 *) g_LinkScene + 0xE8))(g_LinkScene, &transform, &spawn);
+        ent->vtable->Unk16(ent, 1, (s32 *) &g_ObjectAnimTable[variant->m_Unk2 * 0xC]);
+        ent->vtable->Unk18(ent, (s32) g_LinkDreamSys, (s32) g_LinkSceneData, (s32) g_LinkScene, (s32) &transform);
         return 0;
     }
     return 1;
@@ -402,12 +397,11 @@ s32 link_create_object(s32 arg0, void *arg1, s32 arg2, s32 arg3) {
 void link_activate_object(u8 *arg0) {
     vec3d_t pos;
 
-    if (*(entity_t **)(arg0 + 4) != NULL) {
-        (*(entity_t **)(arg0 + 4))->vtable->Unk19(*(entity_t **)(arg0 + 4));
+    if (*(entity_t **) (arg0 + 4) != NULL) {
+        (*(entity_t **) (arg0 + 4))->vtable->Unk19(*(entity_t **) (arg0 + 4));
         transform_local_to_world(g_LinkDreamSys, &pos, arg0 + 8, 0);
-        (*(entity_t **)(arg0 + 4))->vtable->Unk18(*(entity_t **)(arg0 + 4),
-                                                  g_LinkDreamSys, g_LinkSceneData,
-                                                  g_LinkScene, &pos);
-        func_8001EACC(*(entity_t **)(arg0 + 4), g_LinkDreamSys, 1, 0, 0);
+        (*(entity_t **) (arg0 + 4))
+            ->vtable->Unk18(*(entity_t **) (arg0 + 4), g_LinkDreamSys, g_LinkSceneData, g_LinkScene, &pos);
+        func_8001EACC(*(entity_t **) (arg0 + 4), g_LinkDreamSys, 1, 0, 0);
     }
 }

@@ -25,8 +25,8 @@ void func_80044220(ui_sprite_t *This, s32 Unk2, s32 Unk3) {
 void func_80044294(ui_sprite_t *This, u8 *arg1, s32 arg2) {
     if (arg2 == 0) {
         This->m_Unk16 = 0x01000000;
-        This->m_Unk18_0 = arg1[0x2C] * *(u16*)(arg1 + 0x2E);
-        This->m_Unk18_1 = arg1[0x2D] * *(u16*)(arg1 + 0x30);
+        This->m_Unk18_0 = arg1[0x2C] * *(u16 *) (arg1 + 0x2E);
+        This->m_Unk18_1 = arg1[0x2D] * *(u16 *) (arg1 + 0x30);
     } else if (arg2 == 1) {
         This->m_Unk16 = 0x02000000;
         This->m_Unk18_0 = 320;
@@ -45,16 +45,16 @@ void func_80044294(ui_sprite_t *This, u8 *arg1, s32 arg2) {
     This->m_Unk23_1 = 0x1000;
     This->m_Unk24 = 0;
 
-    This->m_Unk22_0 = (s16)This->m_Unk18_0 / 2;
-    This->m_Unk22_1 = (s16)This->m_Unk18_1 / 2;
+    This->m_Unk22_0 = (s16) This->m_Unk18_0 / 2;
+    This->m_Unk22_1 = (s16) This->m_Unk18_1 / 2;
 }
 
 void func_80044380(ui_sprite_t *This, s32 arg1, u8 *arg2) {
-    s32 num = *(s16 *)(arg2 + 8);
-    s32 den = *(s16 *)(arg2 + 10);
+    s32 num = *(s16 *) (arg2 + 8);
+    s32 den = *(s16 *) (arg2 + 10);
 
     s32 val = ((num / den) << 12) + (((num % den) << 12) / den);
-    
+
     if (arg1 != 0) {
         This->m_Unk24 = val;
     } else {

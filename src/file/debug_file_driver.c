@@ -27,7 +27,7 @@ void debug_file_driver_unk28(void *);
 
 debug_file_driver_vtable_t g_DEBUG_FILE_DRIVER_VTABLE = {
     0x23,
-    (void (*)(void *))file_buf_destroy,
+    (void (*)(void *)) file_buf_destroy,
     debug_file_driver_construct,
     debug_file_driver_cleanup,
     base_class_attach,
@@ -47,7 +47,7 @@ debug_file_driver_vtable_t g_DEBUG_FILE_DRIVER_VTABLE = {
     debug_file_driver_close,
     debug_file_driver_seek,
     debug_file_driver_unk19,
-    (void (*)(void *))debug_file_driver_read,
+    (void (*)(void *)) debug_file_driver_read,
     debug_file_driver_unk21,
     file_buf_release,
     nullsub13,

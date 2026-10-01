@@ -24,7 +24,7 @@ void pad_construct(pad_t *This, s32 arg1, s32 arg2) {
     if (g_PadInitRefCount++ == 0) {
         PadInit(arg1);
     }
-    ((void (*)(void *, s32))This->vtable->Unk15)(This, arg2);
+    ((void (*)(void *, s32)) This->vtable->Unk15)(This, arg2);
 }
 
 void pad_cleanup(pad_t *This) {
@@ -40,20 +40,20 @@ void pad_cleanup(pad_t *This) {
 void pad_set_port(pad_t *This, s32 Unk) {
     This->m_Port = Unk != 0;
     This->m_Buttons = 0;
-  This->m_Released = 0;
-  This->m_Pressed = 0;
-  This->vtable->Unk19();
+    This->m_Released = 0;
+    This->m_Pressed = 0;
+    This->vtable->Unk19();
 }
 
 void pad_poll(pad_t *This) {
-    s32 v2; // $v0
-  s32 old_buttons; // $a0
+    s32 v2;          // $v0
+    s32 old_buttons; // $a0
 
-  v2 = PadRead(This->m_Port);
-  old_buttons = This->m_Buttons;
-  This->m_Buttons = v2;
-  This->m_Released = (v2 ^ old_buttons) & old_buttons;
-  This->m_Pressed = (v2 ^ old_buttons) & v2;
+    v2 = PadRead(This->m_Port);
+    old_buttons = This->m_Buttons;
+    This->m_Buttons = v2;
+    This->m_Released = (v2 ^ old_buttons) & old_buttons;
+    This->m_Pressed = (v2 ^ old_buttons) & v2;
 }
 
 void func_80025D10(pad_t *This) {
