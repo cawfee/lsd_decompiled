@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsSetMVol", SsSetMVol);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsSetMVol", SsSetMVol);

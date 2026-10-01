@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsUtGetProgAtr", SsUtGetProgAtr);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsUtGetProgAtr", SsUtGetProgAtr);

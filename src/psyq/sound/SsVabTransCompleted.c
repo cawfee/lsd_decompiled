@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsVabTransCompleted", SsVabTransCompleted);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsVabTransCompleted", SsVabTransCompleted);

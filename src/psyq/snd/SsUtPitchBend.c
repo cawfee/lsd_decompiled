@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsUtPitchBend", SsUtPitchBend);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsUtPitchBend", SsUtPitchBend);

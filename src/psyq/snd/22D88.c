@@ -1,8 +1,8 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/22D88", func_80032588);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/22D88", func_80032588);
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/22D88", func_80032708);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/22D88", func_80032708);
 
 void func_80032708(int);
 

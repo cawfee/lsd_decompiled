@@ -1,3 +1,3 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/psyq/sound/SsSeqCalledTbyT", SsSeqCalledTbyT);
+INCLUDE_ASM("asm/nonmatchings/psyq/snd/SsSeqCalledTbyT", SsSeqCalledTbyT);
