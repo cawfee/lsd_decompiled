@@ -358,14 +358,39 @@ void dream_generation_stop(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/dream/dream_generation", dream_generation_create_structures_random);
-
 extern s32 g_GenerationSampleOffsets[];
 extern s32 g_GenerationStructureSprite[];
 extern void *g_GenerationSpawnSpriteSet[];
 extern s32 g_GenerationSpawnParams[];
+extern s32 g_GenerationSpawnRandom[];
+extern u8 g_GenerationStructureSpriteData[];
+void dream_generation_seed_palette_daily(void);
 void dream_generation_seed_palette_random(s32, s32);
 s32 generation_structure_create(s32, void *, s32, s32);
+
+s32 *dream_generation_create_structures_random(s32 *arg0, s32 arg1, s32 arg2) {
+    void (*seed)(s32, s32);
+    s32 i;
+    s32 index;
+
+    g_GenerationSpawnRandom[0] = rand() % 7;
+    g_GenerationSpawnSpriteSet[0] =
+        (void *)(((u32)rand() % 5) * 12 + (s32)g_GenerationStructureSpriteData);
+    index = (u32)rand() % 5;
+    if (index != 0) {
+        index = g_GenerationSampleOffsets[index];
+    }
+    seed = dream_generation_seed_palette_daily;
+    if (g_CurrentDay != (g_CurrentDay / 7) * 7) {
+        seed = dream_generation_seed_palette_random;
+    }
+    for (i = 0; i < arg1; i++) {
+        seed(arg2, index);
+        *arg0 = generation_structure_create(0, g_GenerationSpawnParams, g_GenerationOwner, arg2);
+        arg0 += 1;
+    }
+    return arg0;
+}
 
 s32 *dream_generation_create_structures_type1(s32 *arg0, s32 arg1, s32 arg2) {
     s32 temp_s4;
@@ -524,6 +549,58 @@ s32 *dream_generation_spawn_entity(s32 *arg0, s32 *arg1, s32 arg2) {
     return NULL;
 }
 
+/*
+ * Best attempt (not matching: 106/111 insns; prologue/epilogue and body shape
+ * correct, residual gcc 2.6.3 register allocation. Target: arg0=$s3,
+ * arg1=$s6, arg2=$s4, effect_base=$s7 (hoisted), range base recomputed with
+ * $at. gcc: arg0=$s6, arg1=$s7, arg2=$s4, range base hoisted into $s8,
+ * diff kept in $s3; frame 0x48 vs 0x50. The entry pointer must be u8* so the
+ * two 4-byte copies use lwl/lwr/swl/swr; effect_base explicit hoist did not
+ * change the remaining allocation.)
+ *
+ * extern s32 *g_GenerationStageEntries[];
+ * extern s8 g_GenerationStageEntryCounts[];
+ * extern s32 g_GenerationEntryIndex;
+ * extern s32 g_GenerationEntityRange[];
+ * extern s32 g_GenerationEntityEffects[];
+ * typedef struct { s32 m_Unk0; s32 m_Unk1; s16 m_Unk2; } generation_entry_out_t;
+ *
+ * void *dream_generation_find_entry(s32 *arg0, s32 *arg1, s32 arg2) {
+ *     generation_entry_out_t out;
+ *     s32 count, remaining, i, diff, temp, dist;
+ *     u8 *entry, *effect, *effect_base;
+ *
+ *     if (arg2 == 0) return NULL;
+ *     i = 0;
+ *     count = *(u8 *)&g_GenerationStageEntryCounts[g_GenerationLocation];
+ *     remaining = count - g_GenerationEntryIndex;
+ *     entry = (u8 *)g_GenerationStageEntries[g_GenerationLocation] + g_GenerationEntryIndex * 8;
+ *     effect_base = (u8 *)g_GenerationEntityEffects + 0x3C;
+ *     if (remaining > 0) {
+ *         do {
+ *             g_GenerationEntryIndex += 1;
+ *             if (*(s8 *)(entry + 6) > 0) {
+ *                 __builtin_memcpy(&out.m_Unk0, entry, 4);
+ *                 effect = effect_base + *(u8 *)(entry + 4) * 6;
+ *                 __builtin_memcpy(&out.m_Unk1, effect, 4);
+ *                 out.m_Unk2 = *(s16 *)(effect + 4);
+ *                 (*(void (**)(s32, s32 *, generation_entry_out_t *))(*(u32 *)g_GenerationOwner + 0xE8))(g_GenerationOwner, arg0, &out);
+ *                 diff = arg0[0] - arg2[0];
+ *                 if (diff < 0) diff = ~diff + 1;
+ *                 temp = arg0[2] - arg2[2];
+ *                 if (temp < 0) dist = diff - temp; else dist = diff + temp;
+ *                 *arg1 = dist;
+ *                 i += 1;
+ *                 if (dist < g_GenerationEntityRange[*(s8 *)(entry + 6)]) return entry;
+ *             } else {
+ *                 i += 1;
+ *             }
+ *             entry = entry + 8;
+ *         } while (i < remaining);
+ *     }
+ *     return NULL;
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/dream/dream_generation", dream_generation_find_entry);
 
 extern s32 *g_GenerationEntityContext;

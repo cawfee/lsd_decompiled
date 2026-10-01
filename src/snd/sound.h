@@ -38,7 +38,7 @@ typedef struct sound_vtable {
     /* 0x074 8006daa8 */ void (*Unk13)(void *);
     /* 0x078 8006daac */ void (*sound_finish_vab_load)(void *, s32);
     /* 0x07C 8006dab0 */ void (*sound_build_program_table)(void *);
-    /* 0x080 8006dab4 */ void (*sound_play_note)(void *, s32, s32, s32);
+    /* 0x080 8006dab4 */ s32 (*sound_play_note)(void *, s32, s32, s32);
     /* 0x084 8006dab8 */ s32 (*sound_stop_note)(void *, s32);
     /* 0x088 8006dabc */ void (*sound_mute)(void *);
     /* 0x08C 8006dac0 */ void (*sound_unmute)(void *);

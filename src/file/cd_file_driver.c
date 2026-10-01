@@ -16,6 +16,25 @@ typedef struct cd_file_request {
     /* 0x20 */ struct cd_file_request *m_Next;
 } cd_file_request_t;
 
+typedef struct unk_disc_loc {
+    u8 minute;
+    u8 second;
+    u8 sector;
+    u8 track;
+} unk_disc_loc_t;
+
+typedef struct unk_disc_file {
+    unk_disc_loc_t m_Pos;
+    s32 m_Size;
+    char m_Name[16];
+} unk_disc_file_t;
+
+typedef struct unk_disc_record {
+    char m_Name[0x14];
+    unk_disc_loc_t m_Pos;
+    s32 m_Size;
+} unk_disc_record_t;
+
 extern void VSyncCallback();
 display_t *get_display(void);
 extern s32 get_current_data_folder();
@@ -31,6 +50,7 @@ extern s32 CdReadSync(s32, u8 *);
 extern s32 CdFlush();
 extern s32 CdPosToInt(u8 *);
 extern void CdIntToPos(s32, u8 *);
+extern s32 CdSearchFile(void *, char *);
 extern u8 D_8006D574[];
 extern s32 func_80029274(s32, s32, s32);
 
@@ -91,7 +111,50 @@ void cd_file_driver_cleanup(file_buf_t *This) {
 void cd_file_driver_unk15(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/file/cd_file_driver", cd_file_driver_open);
+void cd_file_driver_open(file_buf_t *This, s32 arg1, s32 arg2, s32 arg3) {
+    s8 path[0x40];
+    unk_disc_file_t file;
+    unk_disc_record_t *rec;
+    s32 status;
+
+    if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
+        cd_file_driver_lookup_file();
+        return;
+    }
+    cd_file_driver_lock();
+    if (This->m_Unk9 != 0) {
+        if (g_CdReadBusy == 0 && This->m_Unk2 == 0) {
+            cd_file_driver_begin_read(1, 1);
+            if (g_CdFrameActive != 0) {
+                g_CdReadPos = (s32)cd_file_driver_find_disc_record(arg1);
+                if (g_CdReadPos == 0) {
+                    return;
+                }
+                *(unk_disc_loc_t *)((u8 *)This + 0x18) = ((unk_disc_record_t *)g_CdReadPos)->m_Pos;
+                This->m_Unk6 = ((unk_disc_record_t *)g_CdReadPos)->m_Size;
+                g_CdReadPhase = 1;
+                This->m_Unk2 = 1;
+            } else {
+                cd_file_driver_build_path(path, (s8 *)arg1);
+                while (CdSearchFile(&file, path) == 0) {
+                }
+                *(unk_disc_loc_t *)((u8 *)This + 0x18) = file.m_Pos;
+                This->m_Unk6 = file.m_Size;
+                do {
+                    CdControl(2, (u8 *)This + 0x18, 0);
+                    do {
+                        status = CdSync(0, 0);
+                    } while (status == 0);
+                } while (status == 5);
+                This->m_Unk2 = 1;
+                cd_file_driver_end_read();
+            }
+        }
+    } else {
+        cd_file_driver_queue_request(This, cd_file_driver_find_disc_record_index(arg1), 2, arg2, arg3);
+    }
+    cd_file_driver_unlock();
+}
 
 void cd_file_driver_close(file_buf_t *arg0) {
     if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
@@ -195,8 +258,155 @@ s32 cd_file_driver_read(file_buf_t *arg0, s32 arg1, u32 arg2) {
     return 0;
 }
 
+/*
+ * Best attempt (not matching: 136/137 insns; control flow, calls, globals and
+ * field offsets all correct). Residual gcc 2.6.3 block layout/scheduling:
+ * target keeps the m_Buffer==0 allocate block as fall-through and jumps over
+ * it (`bnez v1,skip`); gcc emits `beqz v1,alloc` with the skip path as
+ * fall-through, and the alloc-success branch lands one instruction off.
+ * Tried if/else both polarities and moved the queue path last; same shapes.
+ *
+ * void cd_file_driver_unk21(file_buf_t *arg0, s32 arg1) {
+ *     unk_disc_record_t *record;
+ *     s32 size, status;
+ *     if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
+ *         file_buf_load();
+ *         arg0->m_Flags |= 0x200;
+ *         arg0->vtable->Unk24(arg0);
+ *         return;
+ *     }
+ *     cd_file_driver_lock();
+ *     if (arg0->m_Unk9 != 0) {
+ *         if (g_CdReadBusy == 0 && (arg0->m_Buffer == 0 || arg0->m_NoFree != 0)) {
+ *             cd_file_driver_begin_read(4, 1);
+ *             g_CdReadTarget = g_CdReadPos;
+ *             record = (unk_disc_record_t *)cd_file_driver_find_disc_record(arg1);
+ *             g_CdReadPos = (s32)record;
+ *             if (record == NULL) return;
+ *             g_CdReadDest = (u32)record->m_Size >> 11;
+ *             if (record->m_Size & 0x7FF) g_CdReadDest += 1;
+ *             size = g_CdReadDest << 11;
+ *             if (arg0->m_Buffer == 0) {
+ *                 s32 temp = memory_allocate_mem(size);
+ *                 if (temp == 0) { arg0->vtable->Close(arg0); return; }
+ *                 g_CdReadLba = temp;
+ *                 arg0->m_Buffer = temp;
+ *             } else {
+ *                 g_CdReadLba = arg0->m_Buffer;
+ *             }
+ *             if (g_CdFrameActive != 0) {
+ *                 arg0->m_Size = size;
+ *                 g_CdReadPhase = 2;
+ *             } else {
+ * sync_read:
+ *                 do {
+ *                     CdControl(2, (u8 *)(g_CdReadPos + 0x14), 0);
+ *                     do { status = CdSync(0, 0); } while (status == 0);
+ *                 } while (status == 5);
+ *                 func_80029274(g_CdReadDest, arg0->m_Buffer, 0x80);
+ *                 do { status = CdReadSync(0, 0); } while (status > 0);
+ *                 if (status == -1) goto sync_read;
+ *                 *g_CdRequestList = 1;
+ *                 arg0->m_Size = size;
+ *                 cd_file_driver_end_read();
+ *             }
+ *         }
+ *     } else {
+ *         cd_file_driver_queue_request(arg0, cd_file_driver_find_disc_record_index(arg1), 7, 0, 0);
+ *     }
+ *     cd_file_driver_unlock();
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/file/cd_file_driver", cd_file_driver_unk21);
 
+/*
+ * Best attempt (not matching: 151/151 insns; request dispatch, both jump
+ * tables, cancel-flag sequence, vtable calls and free_request tail all
+ * present). Residual gcc 2.6.3 optimizer/regalloc choices: target keeps
+ * `type` in $a0 (gcc picks $a1), which then makes target reload m_Flags
+ * before `|= 4` instead of fusing it into `|= 6`; and target shares the
+ * read()/seek() call tail (case 4 `j B08`, case 5 falls through) while gcc
+ * duplicates it. Tried switch(type) vs switch(type-2), case reorders,
+ * local flags temp: same 2.6.3 shapes.
+ *
+ * void cd_file_driver_unk25(void) {
+ *     cd_file_request_t *req;
+ *     file_buf_t *buf;
+ *     s32 type;
+ *
+ *     cd_file_driver_lock();
+ *     req = g_CdRequestList;
+ *     if (req == NULL) {
+ *         goto end;
+ *     }
+ *     buf = (file_buf_t *)req->m_FileBuf;
+ *     type = req->m_Unk2;
+ *     if (req->m_Cancel != 0) {
+ *         goto cancel;
+ *     }
+ *     buf->m_Unk9 = 1;
+ *     switch (type) {
+ *     case 2:
+ *         buf->vtable->Open(buf, cd_file_driver_get_disc_record(req->m_Unk4), req->m_Unk5, req->m_Unk6);
+ *         break;
+ *     case 3:
+ *         buf->vtable->Close(buf);
+ *         break;
+ *     case 4:
+ *         buf->vtable->Seek(buf, req->m_Unk5, req->m_Unk6);
+ *         break;
+ *     case 5:
+ *         buf->vtable->Read(buf, (void *)req->m_Unk5, req->m_Unk6);
+ *         break;
+ *     case 7:
+ *         buf->vtable->file_buf_load(buf, (void *)cd_file_driver_get_disc_record(req->m_Unk4));
+ *         break;
+ *     default:
+ *         break;
+ *     }
+ *     buf->m_Unk9 = 0;
+ *     goto end;
+ *
+ * cancel:
+ *     if (g_CdReadIdle == 0) {
+ *         goto end;
+ *     }
+ *     if (req->m_Unk1 != 0) {
+ *         buf->m_Flags |= 1;
+ *     }
+ *     buf->m_Unk7_2 = buf->m_Unk7_2 - 1;
+ *     buf->m_Flags |= 2;
+ *     if (buf->m_Unk7_2 == 0) {
+ *         buf->m_Flags |= 4;
+ *     }
+ *     switch (type) {
+ *     case 2:
+ *         buf->m_Flags |= 0x10;
+ *         break;
+ *     case 3:
+ *         buf->m_Flags |= 0x20;
+ *         break;
+ *     case 4:
+ *         buf->m_Flags |= 0x40;
+ *         break;
+ *     case 5:
+ *         buf->m_Flags |= 0x80;
+ *         break;
+ *     case 7:
+ *         buf->m_Flags |= 0x200;
+ *         break;
+ *     default:
+ *         break;
+ *     }
+ *     buf->vtable->Unk24(buf);
+ *     cd_file_driver_free_request(req);
+ *     if (g_CdRequestList == 0) {
+ *         buf->vtable->Unk27(buf);
+ *     }
+ * end:
+ *     cd_file_driver_unlock();
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/file/cd_file_driver", cd_file_driver_unk25);
 
 INCLUDE_ASM("asm/nonmatchings/file/cd_file_driver", cd_file_driver_unk26);

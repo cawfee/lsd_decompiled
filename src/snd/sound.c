@@ -2,6 +2,7 @@
 
 #include "snd/sound.h"
 #include "base/memory.h"
+#include "scene/entity.h"
 #include <psx/libspu.h>
 
 extern sound_vtable_t g_SOUND_VTABLE;
@@ -356,4 +357,51 @@ void sound_entity_stop(void **This, s32 *Unk2) {
     *Unk2 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/snd/sound", sound_entity_update);
+void sound_entity_update(sound_t *This, entity_context_t *Unk2) {
+    entity_effect_slot_t *slot;
+    entity_effect_slot_t *init;
+    s32 i;
+
+    if (Unk2->state > 0) {
+        i = 0;
+        init = Unk2->slots;
+        do {
+            i += 1;
+            init->id = -1;
+            init->param = 0;
+            init->period = 0x7F;
+            init->counter = 0x40;
+            init += 1;
+        } while (i < 3);
+
+        Unk2->motion = 0;
+        if (Unk2->callback != NULL) {
+            Unk2->callback(Unk2->owner, (s32 *)Unk2);
+        }
+
+        if (Unk2->motion >= 0) {
+            slot = Unk2->slots;
+            i = 0;
+            do {
+                if (slot->id >= 0) {
+                    if (slot->handle >= 0) {
+                        This->vtable->sound_stop_note(This, slot->handle);
+                    }
+                    This->vtable->sound_set_volume_offset(This, slot->param);
+                    slot->handle = This->vtable->sound_play_note(
+                        This,
+                        slot->id << 4,
+                        slot->period - (slot->period / Unk2->divisor) * Unk2->motion,
+                        slot->counter - (slot->counter / Unk2->divisor) * Unk2->motion);
+                } else if (slot->id == -2) {
+                    if (slot->handle >= 0) {
+                        This->vtable->sound_stop_note(This, slot->handle);
+                    }
+                }
+                i += 1;
+                slot += 1;
+            } while (i < 3);
+        }
+        Unk2->tick += 1;
+    }
+}

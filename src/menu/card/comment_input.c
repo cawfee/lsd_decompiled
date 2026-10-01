@@ -242,6 +242,63 @@ void func_80051370(class_comment_input_t *This) {
     }
 }
 
+// Best attempt: all 147 target instructions reproduce exactly with the switch
+// below. The only blocker is data placement: the compiler emits
+// jtbl_80011628 into this unit's .rodata, but the 0x1E28 rodata subsegment is
+// currently assembled from asm/data/1E28.rodata.s and is shared with
+// select_menu (D_800116E4 "FONTICON"). Attributing 0x1E28 to menu/card/
+// comment_input in config/SLPS01556.yaml is required to link this C body.
+//
+// void func_800513D0(class_comment_input_t *This, s32 arg1, s32 arg2) {
+//     switch (arg2) {
+//     case 25:
+//         if (This->m_Unk2 == 1) {
+//             func_80041020((u8 *)This->m_Unk8, (u8 *)This->m_Unk9);
+//         } else {
+//             strcpy((char *)This->m_Unk8, (char *)This->m_Unk9);
+//         }
+//         ((void (*)(void *, s32))This->vtable->Unk23)(This, 0x10);
+//         ((void (*)(void *, s32))This->vtable->Unk20)(This, 2);
+//         break;
+//     case 23:
+//         ((void (*)(void *, s32))This->vtable->Unk23)(This, 0x10);
+//         ((void (*)(void *, s32))This->vtable->Unk20)(This, 3);
+//         break;
+//     case 32:
+//         This->vtable->Unk39(This);
+//         break;
+//     case 31:
+//         This->vtable->Unk38(This);
+//         break;
+//     case 28:
+//         This->vtable->Unk37(This);
+//         break;
+//     case 21:
+//         if (This->m_Unk7 == 0) This->vtable->Unk33(This);
+//         break;
+//     case 5:
+//         if (This->m_Unk7 != 0) This->vtable->Unk33(This);
+//         break;
+//     case 20:
+//         if (This->m_Unk7 == 0) This->vtable->Unk34(This);
+//         break;
+//     case 4:
+//         if (This->m_Unk7 != 0) This->vtable->Unk34(This);
+//         break;
+//     case 18:
+//         if (This->m_Unk7 == 0) This->vtable->Unk35(This);
+//         break;
+//     case 2:
+//         if (This->m_Unk7 != 0) This->vtable->Unk35(This);
+//         break;
+//     case 19:
+//         if (This->m_Unk7 == 0) This->vtable->Unk36(This);
+//         break;
+//     case 3:
+//         if (This->m_Unk7 != 0) This->vtable->Unk36(This);
+//         break;
+//     }
+// }
 INCLUDE_ASM("asm/nonmatchings/menu/card/comment_input", func_800513D0);
 
 void func_8005161C(class_comment_input_t *This, s32 Unk) {

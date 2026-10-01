@@ -94,6 +94,74 @@ void func_800435D0(class_stage_texture_t *This, s32 arg1, s8 *arg2) {
     file_driver_unlock();
 }
 
+/*
+ * Best attempt (not matching: 122 insns, byte-identical except a register
+ * allocation tie-break in the outer-loop setup. Target keeps step `row+1` in
+ * v0 and shifts into t0 (`sllv t0,v0,s6`), reserving v0 for the 0x1000
+ * constant; gcc 2.6.3 coalesces step and the shift result into v0
+ * (`sllv v0,v0,s6`) and materializes 0x1000 in v1, which cascades into the
+ * inner-loop register assignment. Tried separate step/temp variables, u32
+ * types, inline shift counts, returned s32, reordered products/inv, and
+ * function-scope temps; all coalesce. struct rgb must be u8 for the lbu.)
+ *
+ * typedef struct { s16 x; u16 y; s16 w; u16 h; } stage_texture_rect_t;
+ * void StoreImage(stage_texture_rect_t *, u16 *);
+ * void LoadImage(stage_texture_rect_t *, u16 *);
+ * void DrawSync(s32);
+ *
+ * void func_80043648(class_stage_texture_slot_t *slot, s32 arg1) {
+ *     stage_texture_rect_t dst;
+ *     stage_texture_rect_t src;
+ *     u16 buf[0x100];
+ *     u16 pixels[0x108];
+ *     u8 r, g, b;
+ *     s32 shift, row, i, t0, inv, roff, goff, boff;
+ *
+ *     src.x = 0;
+ *     src.w = 0x100;
+ *     src.h = 1;
+ *     src.y = (arg1 << D_8008A92C) + 0x1E0;
+ *     StoreImage(&src, pixels);
+ *     DrawSync(0);
+ *     dst.h = 1;
+ *     row = 0;
+ *     dst.x = 0;
+ *     dst.y = 0;
+ *     dst.w = 0x100;
+ *     r = slot->rgb[0];
+ *     g = slot->rgb[1];
+ *     b = slot->rgb[2];
+ *     slot->unkA = slot->unk1;
+ *     shift = 0xC - slot->unk0;
+ *     if (slot->unk1 - 1 > 0) {
+ *         do {
+ *             t0 = (row + 1) << shift;
+ *             roff = r * t0;
+ *             goff = g * t0;
+ *             boff = b * t0;
+ *             inv = 0x1000 - t0;
+ *             i = 0;
+ *             if (src.w > 0) {
+ *                 do {
+ *                     if (pixels[i] == 0) {
+ *                         buf[i] = pixels[i];
+ *                     } else {
+ *                         buf[i] = (pixels[i] & 0x8000)
+ *                             | (((((pixels[i] & 0x1F) << 3) * inv) + roff) >> 0xF)
+ *                             | ((((((pixels[i] >> 2) & 0xF8) * inv) + goff) >> 0xF) << 5)
+ *                             | ((((((pixels[i] >> 7) & 0xF8) * inv) + boff) >> 0xF) << 0xA);
+ *                     }
+ *                     i++;
+ *                 } while (i < src.w);
+ *             }
+ *             dst.y = src.y + row + src.h;
+ *             DrawSync(0);
+ *             LoadImage(&dst, buf);
+ *             row++;
+ *         } while (row < slot->unk1 - 1);
+ *     }
+ * }
+ */
 INCLUDE_ASM("asm/nonmatchings/scene/stage_texture", func_80043648);
 
 class_stage_texture_vtable_t *func_80043830(void) {

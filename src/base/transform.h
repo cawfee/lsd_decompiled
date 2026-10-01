@@ -47,9 +47,9 @@ typedef struct transform_vtable {
     /* 0x098 8006b664 */ void (*Unk37)(void *, void **, s32);
     /* 0x09C 8006b668 */ void (*Unk38)(void *, void **, s32);
     /* 0x0A0 8006b66c */ void (*Unk39)(void *, s32);
-    /* 0x0A4 8006b670 */ void (*Unk40)(void *);
-    /* 0x0A8 8006b674 */ void (*Unk41)(void *);
-    /* 0x0AC 8006b678 */ void (*Unk42)(void *);
+    /* 0x0A4 8006b670 */ void (*Unk40)(void *, void *, void *, void *, s32);
+    /* 0x0A8 8006b674 */ s32 (*Unk41)(void *, void *, void *);
+    /* 0x0AC 8006b678 */ s32 (*Unk42)(void *, void *, void *, void *);
     /* 0x0B0 8006b67c */ void (*Unk43)(void *);
     /* 0x0B4 8006b680 */ void (*Unk44)(void *);
 } transform_vtable_t;
