@@ -117,7 +117,7 @@ typedef struct scene_renderer {
     /* 0xDC */ s32 m_Unk54;
 } scene_renderer_t;
 
-scene_renderer_t *func_8004D254();
+scene_renderer_t *scene_renderer_create();
 scene_renderer_vtable_t *func_8004D37C(void);
 
 #endif

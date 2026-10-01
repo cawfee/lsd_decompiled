@@ -9,22 +9,22 @@
 
 // data
 static game_config_t g_GAME_CONFIG = {
-    .file_driver_class = 0x13, // 0x23 selects the null driver and crashes
-    .frame_sync_mode = 0,
-    .enable_movie = 1,
-    .enable_logo = 1,
-    .enable_main_menu = 1,
-    .unused_flag = 1,
+    .m_FileDriverClass = LSD_FILE_DRIVER_CD, // 0x23 selects the null driver and crashes
+    .m_FrameSyncMode = 0,
+    .m_EnableMovie = 1,
+    .m_EnableLogo = 1,
+    .m_EnableMainMenu = 1,
+    .m_UnusedFlag = 1,
 };
 
 // sdata
-static void *g_MEMORY_MANAGER_MAIN = NULL;
+static memory_manager_t *g_MEMORY_MANAGER_MAIN = NULL;
 
 // sbss
 static game_flow_t *g_GAME_FLOW;
 
 void main(int argc, const char **argv) {
-    void *manager;
+    memory_manager_t *manager;
     display_t *display;
 
     SetMem(2);

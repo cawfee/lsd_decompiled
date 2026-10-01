@@ -57,7 +57,7 @@ void func_800581C4(graph_screen_t *This) {
 extern s32 D_8008ABAC[];
 extern s8 D_8008ABB4[];
 extern s8 D_8008ABB8[];
-extern void *func_800404D0(u32, u32, u32);
+extern void *effect_base_create(u32, u32, u32);
 
 void func_80058228(graph_screen_t *This) {
     s32 dec;
@@ -65,12 +65,12 @@ void func_80058228(graph_screen_t *This) {
     u8 coords[3];
     u8 *cursor;
 
-    This->m_DreamCells[0] = (s32) func_800404D0((u32) D_8008ABAC, (u32) D_8008ABB4, 0);
+    This->m_DreamCells[0] = (s32) effect_base_create((u32) D_8008ABAC, (u32) D_8008ABB4, 0);
     __builtin_memcpy(coords, D_8008ABB8, 3);
     i = 1;
     cursor = (u8 *) This + 4;
     do {
-        *(s32 *) (cursor + 0xA8) = (s32) func_800404D0((u32) D_8008ABAC, (u32) coords, 0);
+        *(s32 *) (cursor + 0xA8) = (s32) effect_base_create((u32) D_8008ABAC, (u32) coords, 0);
         dec = (i < 7) ? 20 : 1;
         coords[0] -= dec;
         coords[1] -= dec;

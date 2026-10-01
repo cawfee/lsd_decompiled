@@ -15,23 +15,10 @@
 #include "utils/cd_paths.h"
 
 
-void game_flow_on_construct(void *, void *);
-void nullsub25(void *);
-s32 game_flow_get_day_rand(void);
-void game_flow_init(void *, display_t *, pad_t *);
-void func_8003B108(void *);
-void game_flow_execute_phases(void *);
-void game_flow_display_logo_sequence(void *);
-void game_flow_play_intro_movie(void *);
-s32 game_flow_execute_main_menu(void *);
-void nullsub12(void *);
-s32 game_flow_execute_dream(void *);
-void game_flow_play_ending_movie(void *);
-
 game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     0x1F60,
     base_class_destructor,
-    game_flow_on_construct,
+    game_flow_construct,
     nullsub25,
     base_class_attach,
     base_class_detach,
@@ -45,23 +32,23 @@ game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     base_class_nop,
     base_class_on_notify,
     0,
-    (void (*)(void *))game_flow_get_day_rand,
+    game_flow_get_day_rand,
     game_flow_init,
-    func_8003B108,
+    game_flow_pre_execute,
     game_flow_execute_phases,
     game_flow_display_logo_sequence,
     game_flow_play_intro_movie,
     game_flow_execute_main_menu,
-    nullsub12,
+    game_flow_menu_unused,
     game_flow_execute_dream,
     game_flow_play_ending_movie,
 };
 
 game_flow_t *game_flow_create(game_config_t *Config) {
-    game_flow_t *allocated = (game_flow_t *) memory_allocate_mem(0x2C);
+    game_flow_t *allocated = memory_allocate_mem(0x2C);
 
     if (allocated) {
-        game_flow_get_vtable()->game_flow_on_construct(allocated, Config);
+        game_flow_get_vtable()->game_flow_construct(allocated, Config);
         return allocated;
     }
 
@@ -70,10 +57,10 @@ game_flow_t *game_flow_create(game_config_t *Config) {
 #endif
 }
 
-void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
+void game_flow_construct(game_flow_t *This, game_config_t *Config) {
     char *tmd_args[4];
 
-    system_get_vtable()->Construct(This, Config->file_driver_class);
+    system_get_vtable()->Construct(This, Config->m_FileDriverClass);
     This->vtable = game_flow_get_vtable();
     This->m_Config = Config;
 
@@ -84,11 +71,11 @@ void game_flow_on_construct(game_flow_t *This, game_config_t *Config) {
 
     This->m_DreamSys = dream_sys_create(tmd_create(&tmd_args), 0, 0);
     This->m_SkipDreamChart = 0;
-    This->m_DreamSys->vtable->dream_sys_get_set_flag(This->m_DreamSys, Config->unused_flag);
+    This->m_DreamSys->vtable->dream_sys_get_set_flag(This->m_DreamSys, Config->m_UnusedFlag);
     This->vtable->game_flow_get_day_rand(This);
 }
 
-s32 game_flow_get_day_rand() {
+s32 game_flow_get_day_rand(void *This) {
     return get_seeded_random(*(s32 *) GET_SCRATCH_ADDR(0) % 365, 0);
 }
 
@@ -104,7 +91,7 @@ void game_flow_display_logo_sequence(game_flow_t *This) {
     s32 index;
     s32 duration;
 
-    if (This->m_Config->enable_logo) {
+    if (This->m_Config->m_EnableLogo) {
         frame_setup(0, 0, 0);
         game_flow_display_logo(This, "ETC\\ASMKLOGO.TIM");
 
@@ -120,12 +107,12 @@ void game_flow_display_logo_sequence(game_flow_t *This) {
 }
 
 void game_flow_display_logo(game_flow_t *This, const char *Path) {
-    ui_screen_t *cls = ui_screen_create(0, 0, 0);
-    cls->vtable->SetCallback(cls, &game_flow_logo_callback, This);
-    cls->vtable->SetIdleTimeout(cls, 0);
-    cls->vtable->SetTexture(cls, Path, 0);
-    cls->vtable->Run(cls, This->m_GraphicsCtx, 0);
-    cls->vtable->Destroy(cls);
+    ui_screen_t *screen = ui_screen_create(0, 0, 0);
+    screen->vtable->SetCallback(screen, &game_flow_logo_callback, This);
+    screen->vtable->SetIdleTimeout(screen, 0);
+    screen->vtable->SetTexture(screen, Path, 0);
+    screen->vtable->Run(screen, This->m_GraphicsCtx, 0);
+    screen->vtable->Destroy(screen);
 }
 
 void game_flow_logo_callback() {
@@ -138,7 +125,7 @@ void game_flow_play_intro_movie(game_flow_t *This) {
     s32 index;
     s32 duration;
 
-    if (This->m_Config->enable_movie) {
+    if (This->m_Config->m_EnableMovie) {
         frame_setup(0, 0, 0);
 
         player = movie_screen_create(0, 0, 0, 0);
@@ -152,7 +139,7 @@ void game_flow_play_intro_movie(game_flow_t *This) {
 s32 game_flow_execute_main_menu(game_flow_t *This) {
     s32 value;
 
-    if (This->m_Config->enable_main_menu) {
+    if (This->m_Config->m_EnableMainMenu) {
         frame_setup(0, 0, 0);
 
         if (This->m_DreamSys->vtable->get_day_number(This->m_DreamSys, 0) != 1 && !This->m_SkipDreamChart &&
@@ -178,13 +165,12 @@ s32 game_flow_execute_main_menu(game_flow_t *This) {
     return 2;
 }
 
-// Creates a screen object, runs it (vtable +0x44) with Arg1, destroys it (vtable +0x04),
+// Creates a screen object, runs it (vtable +0x44) with runArg, destroys it (vtable +0x04),
 // and returns the value the screen's Run returned.
-s32 run_screen(s32 (*Create)(s32), s32 Arg0, s32 Arg1) {
-    s32 obj = Create(Arg0);
-    s32 run_result = (*(s32(**)(s32, s32, u32))(*(u32 *) obj + 68))(obj, Arg1, 0);
-    void (*destroy)(s32) = *(void (**)(s32))(*(u32 *) obj + 4);
-    destroy(obj);
+s32 run_screen(game_flow_screen_t *(*create)(s32), s32 createArg, s32 runArg) {
+    game_flow_screen_t *screen = create(createArg);
+    s32 run_result = screen->vtable->Run(screen, runArg, 0);
+    screen->vtable->Destroy(screen);
     return run_result;
 }
 
@@ -193,7 +179,7 @@ void play_special_reel(game_flow_t *This) {
     const char *path;
     u32 reel_info[3]; // [2] = total playback length in frames (written by get_special_reel_movie_path)
 
-    if (This->m_Config->enable_movie) {
+    if (This->m_Config->m_EnableMovie) {
         frame_setup(0, 0, 0);
         player = movie_screen_create(0, 0, 0, 0);
         path = get_special_reel_movie_path(&reel_info[2], 0, 10);
@@ -204,7 +190,7 @@ void play_special_reel(game_flow_t *This) {
     }
 }
 
-void nullsub12(void *) {
+void game_flow_menu_unused(void *) {
 }
 
 s32 game_flow_execute_dream(game_flow_t *This) {
@@ -215,7 +201,7 @@ s32 game_flow_execute_dream(game_flow_t *This) {
     s32 result;
 
     // Start the dream and cleanup
-    dream_ctx = dream_session_create(This->m_GraphicsCtx, This->m_DreamSys, This->m_Config->frame_sync_mode);
+    dream_ctx = dream_session_create(This->m_GraphicsCtx, This->m_DreamSys, This->m_Config->m_FrameSyncMode);
     dream_result = dream_ctx->vtable->dream_session_execute(dream_ctx);
     dream_ctx->vtable->Destroy(dream_ctx);
 
@@ -248,34 +234,34 @@ s32 game_flow_execute_dream(game_flow_t *This) {
 void game_flow_play_special_day(game_flow_t *This) {
     u16 cinematic[4];
     s32 duration[4];
-    const char *movie_name;
+    const char *movie_path;
     movie_screen_t *player;
-    ui_screen_t *cls;
+    ui_screen_t *screen;
     dream_sys_t *dream_sys;
 
     dream_sys = This->m_DreamSys;
     dream_sys->vtable->dream_sys_get_cinematic(cinematic, dream_sys);
 
-    movie_name = get_special_day_movie(duration, cinematic[0] | (cinematic[1] << 16));
+    movie_path = get_special_day_movie(duration, cinematic[0] | (cinematic[1] << 16));
 
     frame_setup(0, 0, 0);
 
     if (duration[0] != -1) {
-        if (This->m_Config->enable_movie) {
+        if (This->m_Config->m_EnableMovie) {
             player = movie_screen_create(0, 0, 0, 0);
             player->vtable->Unk74(player, 0);
-            player->vtable->Play(player, This->m_GraphicsCtx, (char *) movie_name,
+            player->vtable->Play(player, This->m_GraphicsCtx, movie_path,
                                   get_movie_duration_maybe(duration[0]), 1);
         } else {
             return;
         }
     } else {
-        cls = ui_screen_create(0, 0, 0);
-        player = (movie_screen_t *) cls;
+        screen = ui_screen_create(0, 0, 0);
+        player = (movie_screen_t *) screen;
 
-        cls->vtable->SetIdleTimeout(cls, 10);
-        cls->vtable->SetTexture(cls, (char *) movie_name, 0);
-        cls->vtable->Run(cls, This->m_GraphicsCtx, 0);
+        screen->vtable->SetIdleTimeout(screen, 10);
+        screen->vtable->SetTexture(screen, (char *) movie_path, 0);
+        screen->vtable->Run(screen, This->m_GraphicsCtx, 0);
     }
 
     player->vtable->Destroy(player);
@@ -287,7 +273,7 @@ void game_flow_play_ending_movie(game_flow_t *This) {
     s32 duration_index;
     s32 duration;
 
-    if (This->m_Config->enable_movie) {
+    if (This->m_Config->m_EnableMovie) {
         frame_setup(0, 0, 0);
         player = movie_screen_create(0, 0, 0, 0);
         player->vtable->Unk74(player, 0);

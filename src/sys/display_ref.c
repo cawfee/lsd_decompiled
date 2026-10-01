@@ -1,11 +1,11 @@
-#include "common.h"
+#include "sys/display.h"
 
-void *g_Display = NULL;
+display_t *g_Display = NULL;
 
-void *get_display(void) {
+display_t *get_display(void) {
     return g_Display;
 }
 
-void set_display(void *value) {
+void set_display(display_t *value) {
     g_Display = value;
 }

@@ -25,14 +25,14 @@ typedef struct effect_base_vtable {
     /* 0x040 8006eb00 */ void (*Unk15)(void *, u32, u32, u32);
     /* 0x044 8006eb04 */ void (*Unk16)(void *);
     /* 0x048 8006eb08 */ void (*Unk17)(void *);
-    /* 0x04C 8006eb0c */ void (*Unk18)(void *, s32, s32 *);
+    /* 0x04C 8006eb0c */ void (*attach_to)(void *, s32, s32 *);
     /* 0x050 8006eb10 */ void (*Unk19)(void *);
     /* 0x054 8006eb14 */ void (*Unk20)(void *);
     /* 0x058 8006eb18 */ void (*Unk21)(void *);
     /* 0x05C 8006eb1c */ void (*Unk22)(void *);
     /* 0x060 8006eb20 */ void (*Unk23)(void *);
-    /* 0x064 8006eb24 */ void (*Unk24)(void *, s32);
-    /* 0x068 8006eb28 */ void (*Unk25)(void *, s32);
+    /* 0x064 8006eb24 */ void (*set_enabled)(void *, s32);
+    /* 0x068 8006eb28 */ void (*set_mode)(void *, s32);
     /* 0x06C 8006eb2c */ void (*Unk26)(void *);
     /* 0x070 8006eb30 */ void (*Unk27)(void *);
     /* 0x074 8006eb34 */ void (*Unk28)(void *);
@@ -52,8 +52,8 @@ typedef struct effect_base_vtable {
     /* 0x0AC 8006eb6c */ void (*Unk42)(void *);
     /* 0x0B0 8006eb70 */ void (*Unk43)(void *);
     /* 0x0B4 8006eb74 */ void (*Unk44)(void *);
-    /* 0x0B8 8006eb78 */ void (*Unk45)(void *, s32, void *);
-    /* 0x0BC 8006eb7c */ void (*Unk46)(void *, s32);
+    /* 0x0B8 8006eb78 */ void (*set_color)(void *, s32, void *);
+    /* 0x0BC 8006eb7c */ void (*set_offset)(void *, s32);
     /* 0x0C0 8006eb80 */ void (*Unk47)(void *, s32 *);
     /* 0x0C4 8006eb84 */ void (*Unk48)(void *);
     /* 0x0C8 8006eb88 */ void (*Unk49)(void *);

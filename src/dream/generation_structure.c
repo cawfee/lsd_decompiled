@@ -3,7 +3,7 @@
 
 extern generation_structure_vtable_t D_800876FC;
 
-generation_structure_t *func_80056320(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
+generation_structure_t *generation_structure_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     generation_structure_t *allocated = (generation_structure_t *) memory_allocate_mem(0x98);
 
     if (allocated) {

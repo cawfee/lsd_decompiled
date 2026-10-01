@@ -42,7 +42,6 @@ void cd_file_driver_read_state1(void);
 void cd_file_driver_read_state2(void);
 void cd_file_driver_set_read_result(s32 arg0);
 s32 cd_file_driver_read_sectors();
-s32 func_80018458(void);
 
 extern s32 g_CdInitialized;
 extern s32 g_CdCallbackInstalled;
@@ -377,7 +376,7 @@ s32 cd_file_driver_tick(void) {
     if (g_CdLocked != 0) {
         return 0;
     }
-    if (func_80018458() != 0) {
+    if (memory_is_locked() != 0) {
         return 0;
     }
     if (g_CdFrameMode != 0) {

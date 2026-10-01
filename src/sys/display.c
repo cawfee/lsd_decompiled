@@ -4,28 +4,7 @@
 #include <psx/libgs.h>
 
 #include "base/base_class.h"
-#include <common.h>
-
-
-void display_construct(display_t *);
-void display_reset(display_t *);
-void display_init_gs(display_t *, vec2d_t *, s32);
-void display_do_vsync(display_t *);
-void display_reset_vsync_count(display_t *);
-void display_swap_disp_buffer(display_t *);
-s32 display_get_active_buffer(display_t *);
-void display_load_image(display_t *, s16 *, s32);
-void display_store_image(display_t *, s32, s16 *);
-s32 func_80020A1C(display_t *);
-void display_move_image(display_t *, s16 *, s16, s16);
-void display_do_vsync_internal(display_t *);
-void func_80020AF4(display_t *);
-void display_set_vblanks(display_t *, s32);
-s32 display_get_vblanks(display_t *);
-void display_clear_image(display_t *, unsigned char *, s32);
-void *display_get_screen_size(display_t *, void *);
-void display_set_sync_mode(display_t *, s32);
-void display_set_vsync_callback(display_t *, void (*)(void));
+#include "base/memory.h"
 
 display_vtable_t g_DISPLAY_VTABLE = {
     1,
@@ -52,10 +31,10 @@ display_vtable_t g_DISPLAY_VTABLE = {
     display_get_active_buffer,
     display_load_image,
     display_store_image,
-    func_80020A1C,
+    display_get_status,
     display_move_image,
     display_do_vsync_internal,
-    func_80020AF4,
+    display_update_timer,
     display_set_vblanks,
     display_get_vblanks,
     display_clear_image,
@@ -64,8 +43,8 @@ display_vtable_t g_DISPLAY_VTABLE = {
     display_set_vsync_callback,
 };
 
-display_t *display_create() {
-    display_t *allocated = (display_t *) memory_allocate_mem(0x34);
+display_t *display_create(void) {
+    display_t *allocated = memory_allocate_mem(0x34);
 
     if (allocated) {
         display_vtable_t *vtable = display_get_vtable();
@@ -85,7 +64,7 @@ void display_construct(display_t *This) {
 void display_reset(display_t *This) {
     This->m_VSyncCount = 0;
     This->vtable->display_set_vblanks(This, 3);
-    This->vtable->Unk31(This, 1);
+    This->vtable->display_set_sync_mode(This, 1);
     This->m_VsyncCallback = NULL;
 }
 
@@ -112,57 +91,57 @@ void display_reset_vsync_count(display_t *This) {
 }
 
 void display_swap_disp_buffer(display_t *This) {
-    UNUSED(This);
     GsSwapDispBuff();
 }
 
 s32 display_get_active_buffer(display_t *This) {
-    UNUSED(This);
     return GsGetActiveBuff();
 }
 
-void display_load_image(display_t *This, s16 *Unk2, s32 Unk3) {
-    s16 unk_struct[4];
+void display_load_image(display_t *This, s16 *Rect, s32 VramAddr) {
+    u16 rect[4];
 
-    if (!This->m_VSyncCount || This->m_Unk9) {
-        display_copy_rect(unk_struct, Unk2);
-        LoadImage(unk_struct, Unk3);
-        if (This->m_Unk9) {
+    if (!This->m_VSyncCount || This->m_SyncMode) {
+        display_copy_rect(rect, Rect);
+        LoadImage(rect, VramAddr);
+        if (This->m_SyncMode) {
             DrawSync(0);
         }
     }
 }
 
 // Copy something to something, not on the vtable
-void display_copy_rect(void *This, void *CopyFrom) {
-    *(u16 *) ((u8 *) This + 0) = *(u16 *) ((u8 *) CopyFrom + 0);
-    *(u16 *) ((u8 *) This + 2) = *(u16 *) ((u8 *) CopyFrom + 2);
-    *(u16 *) ((u8 *) This + 4) = *(u16 *) ((u8 *) CopyFrom + 4);
-    *(u16 *) ((u8 *) This + 6) = *(u16 *) ((u8 *) CopyFrom + 8);
+void display_copy_rect(u16 *Dest, void *Src) {
+    u16 *src;
+
+    src = Src;
+    Dest[0] = src[0];
+    Dest[1] = src[1];
+    Dest[2] = src[2];
+    Dest[3] = src[4];
 }
 
-void display_store_image(display_t *This, s32 Unk2, s16 *Unk3) {
-    s16 unk_struct[4];
+void display_store_image(display_t *This, s32 VramAddr, s16 *Rect) {
+    u16 rect[4];
 
-    if (!This->m_VSyncCount || This->m_Unk9) {
-        display_copy_rect(unk_struct, Unk3);
-        StoreImage(unk_struct, Unk2);
-        if (This->m_Unk9) {
+    if (!This->m_VSyncCount || This->m_SyncMode) {
+        display_copy_rect(rect, Rect);
+        StoreImage(rect, VramAddr);
+        if (This->m_SyncMode) {
             DrawSync(0);
         }
     }
 }
 
-s32 func_80020A1C(display_t *This) {
-    UNUSED(This);
+s32 display_get_status(display_t *This) {
     return 0;
 }
 
-void display_move_image(display_t *This, s16 *Unk1, s16 Unk2, s16 Unk3) {
-    s16 unk_struct[4];
+void display_move_image(display_t *This, s16 *Rect, s16 X, s16 Y) {
+    u16 rect[4];
 
-    display_copy_rect((s16 *) &unk_struct, (s16 *) Unk1);
-    MoveImage((s16 *) &unk_struct, (s16) Unk2, (s16) Unk3);
+    display_copy_rect(rect, Rect);
+    MoveImage(rect, X, Y);
 }
 
 void display_do_vsync_internal(display_t *This) {
@@ -178,27 +157,27 @@ void display_do_vsync_internal(display_t *This) {
     }
 }
 
-void func_80020AF4(display_t *This) {
-    UNUSED(This);
+// Advance the vblank timer and flag it once it has run for m_NextVBlank frames
+void display_update_timer(display_t *This) {
+    display_t *disp;
+    s32 limit;
+    s32 count;
 
-    void *struct_data;
-    int unk;
-    int unk2;
 
-    struct_data = get_display();
-    unk = *((u32 *) struct_data + 8);
-    unk2 = *((u32 *) struct_data + 9) + 1;
-    *((u32 *) struct_data + 9) = unk2;
-    if (unk2 >= unk && !*((u32 *) struct_data + 3)) {
-        *((u32 *) struct_data + 3) = 1;
-        *((u32 *) struct_data + 9) = 0;
+    disp = get_display();
+    limit = disp->m_NextVBlank;
+    count = disp->m_TimerCount + 1;
+    disp->m_TimerCount = count;
+    if (count >= limit && !disp->m_TimerExpired) {
+        disp->m_TimerExpired = 1;
+        disp->m_TimerCount = 0;
     }
 }
 
 // Set the amount of vblanks to be waited for
-void display_set_vblanks(display_t *This, s32 VideoMode) {
+void display_set_vblanks(display_t *This, s32 Count) {
     if (!This->m_VSyncCount) {
-        This->m_NextVBlank = VideoMode;
+        This->m_NextVBlank = Count;
     }
 }
 
@@ -207,31 +186,34 @@ s32 display_get_vblanks(display_t *This) {
     return This->m_NextVBlank;
 }
 
-void display_clear_image(display_t *This, unsigned char *UnkData, s32 Unk3) {
-    char unk_buffer1[16];
-    char unk_buffer2[4];
+void display_clear_image(display_t *This, unsigned char *Color, void *Rect) {
+    unsigned char screen_rect[16];
+    u16 clear_rect[4];
 
-    if (!Unk3) {
-        This->vtable->display_get_screen_size(This, (s32) unk_buffer1);
-        This->vtable->Unk29(This, UnkData, unk_buffer1);
+    if (!Rect) {
+        This->vtable->display_get_screen_size(This, screen_rect);
+        This->vtable->display_clear_image(This, Color, screen_rect);
     } else {
-        display_copy_rect(unk_buffer2, Unk3);
-        ClearImage((int) unk_buffer2, *UnkData, UnkData[1], UnkData[2]);
+        display_copy_rect(clear_rect, Rect);
+        ClearImage(clear_rect, *Color, Color[1], Color[2]);
     }
 }
 
-void *display_get_screen_size(display_t *This, void *Unk) {
-    if (Unk) {
-        *(u16 *) Unk = 0;
-        *((u16 *) Unk + 1) = 0;
-        *((u32 *) Unk + 1) = This->m_ScreenSize.x;
-        *((u32 *) Unk + 2) = 2 * This->m_ScreenSize.y;
+void *display_get_screen_size(display_t *This, void *OutRect) {
+    vram_rect_t *out;
+
+    if (OutRect) {
+        out = OutRect;
+        out->x = 0;
+        out->y = 0;
+        out->w = This->m_ScreenSize.x;
+        out->h = 2 * This->m_ScreenSize.y;
     }
     return &This->m_ScreenSize;
 }
 
-void display_set_sync_mode(display_t *This, s32 Unk) {
-    This->m_Unk9 = Unk;
+void display_set_sync_mode(display_t *This, s32 Mode) {
+    This->m_SyncMode = Mode;
 }
 
 void display_set_vsync_callback(display_t *This, void (*Callback)()) {

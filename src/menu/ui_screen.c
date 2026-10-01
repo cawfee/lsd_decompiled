@@ -510,7 +510,7 @@ void func_8003CDE0(ui_screen_t *This, s8 *Unk2, s32 Unk3) {
 
 extern s32 D_8008A8E8[];
 extern char D_8008A8F0[];
-extern void *func_800404D0(u32, u32, u32);
+extern void *effect_base_create(u32, u32, u32);
 extern int strlen(char *);
 
 typedef struct func_8003CE98_arg {
@@ -576,7 +576,7 @@ func_8003CE98_count:
             i += 1;
         } while (*cursor != NULL);
     }
-    This->m_Unk25 = (s32)func_800404D0((u32)D_8008A8E8, (u32)D_8008A8F0, 0);
+    This->m_Unk25 = (s32)effect_base_create((u32)D_8008A8E8, (u32)D_8008A8F0, 0);
     arg->tex = tex;
 }
 
@@ -875,7 +875,7 @@ void func_8003D73C(ui_screen_t *This, s32 Unk2, s32 Unk3) {
 
     sound = (effect_base_t *)This->m_Unk25;
     if (Unk3) {
-        sound->vtable->Unk18(sound, This->m_Unk4, pos);
+        sound->vtable->attach_to(sound, This->m_Unk4, pos);
         tmp[0] = 0x28;
         tmp[1] = count * 12;
         sound->vtable->Unk47(sound, tmp);

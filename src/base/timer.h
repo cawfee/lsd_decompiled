@@ -55,4 +55,7 @@ struct timer {
 
 timer_vtable_t *timer_get_vtable(void);
 
+void timer_begin_frame(timer_t *This);
+void timer_end_frame(timer_t *This);
+
 #endif

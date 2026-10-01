@@ -11,7 +11,7 @@ extern char D_8008AB44[];
 
 void func_80053EB4(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
 void link_destroy_teleport_entity(void);
-void func_80054D30(void);
+void dream_generation_stop(void);
 s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 
 void func_800536B0(map_scene_t *This) {
@@ -78,7 +78,7 @@ s32 func_8005393C(map_scene_t *This) {
     s32 v1;
 
     v1 = (*(s32 (**)(void *, s32, s32))(*(s32 *)This->m_SceneObject + 0x10C))(This->m_SceneObject, 0, 0);
-    return func_800558F0(v1, 0, 0);
+    return dream_generation_update(v1, 0, 0);
 }
 
 void func_80053984(map_scene_t *This, s32 Unk2, s32 Unk3) {

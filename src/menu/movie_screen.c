@@ -18,8 +18,8 @@ void func_8003E418(void *);
 void func_8003C48C(void *);
 void func_8003BB5C(void *);
 void func_8003BC14(void *);
-void func_8003E538(void *);
-void func_8003E578(void *);
+void timer_begin_frame(void *);
+void timer_end_frame(void *);
 void func_8003BCF4(void *);
 void func_8003C7B4(void *);
 void func_8003C7F4(void *);
@@ -92,8 +92,8 @@ movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
     func_8003C48C,
     func_8003BB5C,
     func_8003BC14,
-    func_8003E538,
-    func_8003E578,
+    timer_begin_frame,
+    timer_end_frame,
     func_8003BCF4,
     func_8003C7B4,
     func_8003C7F4,

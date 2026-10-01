@@ -16,8 +16,8 @@ void func_8003E280(timer_t *);
 void func_8003E418(timer_t *, s32, s32);
 void timer_increment(timer_t *, void **, s32);
 void func_8003E4B8(timer_t *, s32);
-void func_8003E538(timer_t *);
-void func_8003E578(timer_t *);
+
+
 
 timer_vtable_t g_TIMER_VTABLE = {
     0x30,
@@ -45,8 +45,8 @@ timer_vtable_t g_TIMER_VTABLE = {
     NULL,
     timer_increment,
     func_8003E4B8,
-    func_8003E538,
-    func_8003E578,
+    timer_begin_frame,
+    timer_end_frame,
 };
 
 void timer_create(timer_t *This) {
@@ -181,7 +181,7 @@ void func_8003E4B8(timer_t *This, s32 Unk2) {
     }
 }
 
-void func_8003E538(timer_t *This) {
+void timer_begin_frame(timer_t *This) {
     u32 *m_Unk2;
 
     m_Unk2 = (u32 *) This->m_Unk2;
@@ -189,7 +189,7 @@ void func_8003E538(timer_t *This) {
     (*(int (**)(u32))(*(u32 *) *m_Unk2 + 72))(*m_Unk2);
 }
 
-void func_8003E578(timer_t *This) {
+void timer_end_frame(timer_t *This) {
     (*(void (**)(u32))(**(u32 **) This->m_Unk2 + 76))(*(u32 *) This->m_Unk2);
     This->m_TicksPassed = 0;
 }

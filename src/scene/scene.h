@@ -61,6 +61,17 @@ typedef struct scene {
     /* 0x38 */ s32 m_Unk13;
 } scene_t;
 
-scene_vtable_t *func_8004A4B8(void);
+scene_t *scene_create(u32 soundName, u32 soundEngine);
+void scene_construct(scene_t *This, void *soundName, sound_vtable_t *soundEngine);
+void scene_cleanup(scene_t *This);
+void scene_reset(scene_t *This);
+void scene_stop(scene_t *This);
+void scene_noop(void *This);
+void scene_update(scene_t *This, void **Event, void *Data);
+void scene_finish(scene_t *This, s32 Mode);
+void scene_set_duration(scene_t *This, s32 Days);
+void scene_play_note(scene_t *This, s32 Note);
+s32 scene_run(scene_t *This, s32 Unk2, s32 Unk3);
+scene_vtable_t *scene_get_vtable(void);
 
 #endif

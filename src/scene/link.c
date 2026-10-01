@@ -288,7 +288,7 @@ s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_object_model_list_t *a
  * a1,a0,zero`), gcc 2.6.3 coalesces arg0 into $a0 and loads into $a1 for every
  * ordering tried (named arg0 local before/after the load, direct parameter,
  * swapped declaration order, s32/s8 forms). Switch table grouping confirmed
- * from jtbl_8001188C: 2-4 day-offset, 5/6 mod3, 7 func_8005630C, 8/9 mod3==v6-7,
+ * from jtbl_8001188C: 2-4 day-offset, 5/6 mod3, 7 dream_generation_type_is_even, 8/9 mod3==v6-7,
  * 10-19 default, 20/21 parity.
  *
  * s32 link_check_object(s32 arg0, s8 *arg1) {
@@ -314,7 +314,7 @@ s32 link_spawn_object(s32 arg0, s32 arg1, u8 *arg2, class_object_model_list_t *a
  *         if (v5 % 3 == 0) return 0;
  *         goto success;
  *     case 7:
- *         v7 = func_8005630C();
+ *         v7 = dream_generation_type_is_even();
  *         break;
  *     case 8: case 9:
  *         if (v5 % 3 != v6 - 7) return 0;

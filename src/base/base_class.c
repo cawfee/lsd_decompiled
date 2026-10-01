@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "base/base_class.h"
+#include "base/memory.h"
 
 s32 D_8008A820 = 0;
 
@@ -196,10 +197,10 @@ s32 destroy_list(base_class_t **arr, s32 n) {
     }
 }
 
-void func_8001844C(s32 value) {
+void memory_set_lock(s32 value) {
     D_8008A820 = value;
 }
 
-s32 func_80018458(void) {
+s32 memory_is_locked(void) {
     return D_8008A820;
 }

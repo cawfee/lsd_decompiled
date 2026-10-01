@@ -1,6 +1,7 @@
 #include "dream/dream_session.h"
 #include "dream/dream_session_path.h"
 #include "base/base_class.h"
+#include "base/timer.h"
 #include "scene/scene.h"
 #include "scene/map_scene.h"
 #include "file/tmd_model.h"
@@ -10,31 +11,12 @@
 #include "file/tim_image.h"
 #include "utils/cd_paths.h"
 
-void dream_session_construct(dream_session_t *, game_graphics_ctx_t *, dream_sys_t *, s32);
-void dream_session_cleanup(dream_session_t *);
-void dream_session_on_tick(void);
-void func_80049A14(void);
-void dream_session_execute(dream_session_t *);
-void func_80049AC0(void);
-void func_80049B54(void);
-void func_80049C50(void);
-void func_80049CA8(void);
-void func_8004A35C(void);
-void func_8004A364(void);
-void func_8004A3EC(void);
-void func_8003E538(void);
-void func_8003E578(void);
-void func_8004A458(void);
-void func_8004A478(void);
-void func_80049EA4(void);
-void func_80049EAC(void);
-void on_link_code(void);
 
 dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
     0x1F230,
     base_class_destructor,
-    (void (*)(void *))dream_session_construct,
-    (void (*)(void *))dream_session_cleanup,
+    dream_session_construct,
+    dream_session_cleanup,
     base_class_attach,
     base_class_detach,
     base_class_detach_all,
@@ -45,33 +27,33 @@ dream_session_vtable_t g_DREAM_SESSION_VTABLE = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    (void (*)(void *))dream_session_on_tick,
+    dream_session_on_tick,
     NULL,
-    (void (*)(void *))func_80049A14,
-    (s32 (*)(void *))dream_session_execute,
-    (void (*)(void *))func_80049AC0,
-    (void (*)(void *))func_80049B54,
-    (void (*)(void *))func_80049C50,
-    (void (*)(void *))func_80049CA8,
-    (void (*)(void *))func_8004A35C,
-    (void (*)(void *))func_8004A364,
-    (void (*)(void *))func_8004A3EC,
-    (void (*)(void *))func_8003E538,
-    (void (*)(void *))func_8003E578,
-    (void (*)(void *))func_8004A458,
-    (void (*)(void *))func_8004A478,
+    dream_session_reset,
+    dream_session_execute,
+    dream_session_stop,
+    dream_session_start,
+    dream_session_update_actor,
+    dream_session_tick,
+    scene_noop,
+    (void (*)(void *, void **, void *))scene_update,
+    (void (*)(void *, s32))scene_finish,
+    (void (*)(void *))timer_begin_frame,
+    (void (*)(void *))timer_end_frame,
+    (void (*)(void *, s32))scene_set_duration,
+    (void (*)(void *, s32))scene_play_note,
     NULL,
     NULL,
-    (void (*)(void *))func_80049EA4,
-    (void (*)(void *))func_80049EAC,
-    (void (*)(void *))on_link_code,
+    dream_session_noop,
+    dream_session_noop2,
+    dream_session_on_link_code,
 };
 
 s32 D_80086650[3] = { 0, -1200, 0 };
 s32 D_8008665C[3] = { 0, -1200, 10000 };
 
 dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode) {
-    dream_session_t *allocated = (dream_session_t *) memory_allocate_mem(0x50);
+    dream_session_t *allocated = memory_allocate_mem(0x50);
 
     if (allocated) {
         dream_session_get_vtable()->dream_session_construct(allocated, GraphicsCtx, DreamSys, FrameSyncMode);
@@ -85,9 +67,9 @@ void dream_session_construct(dream_session_t *This,
                              game_graphics_ctx_t *GraphicsCtx,
                              dream_sys_t *DreamSys,
                              s32 FrameSyncMode) {
-    char *unk[4];
+    void *tmdArgs[4];
 
-    func_8004A4B8()->Construct(This, get_se_path(0), 0);
+    scene_get_vtable()->Construct(This, get_se_path(0), 0);
     This->vtable = dream_session_get_vtable();
 
     link_init_stage_objects();
@@ -95,25 +77,25 @@ void dream_session_construct(dream_session_t *This,
     This->m_TextureHelper->vtable->Unk14(This->m_TextureHelper);
     This->m_TextureHelper->vtable->Unk7(This->m_TextureHelper);
 
-    unk[0] = NULL;
-    unk[1] = "ETC\\DREAMER.TMD";
+    tmdArgs[0] = NULL;
+    tmdArgs[1] = "ETC\\DREAMER.TMD";
 
-    This->m_Unk17 = tmd_create(unk);
-    This->m_Unk15 = bgm_create(get_random_sound_type(NULL), 0, 1);
+    This->m_Model = tmd_create(tmdArgs);
+    This->m_Bgm = bgm_create(get_random_sound_type(NULL), 0, 1);
 
     dream_session_path_advance(1);
     frame_setup(FrameSyncMode == 0, 1, 1);
 
     This->m_GraphicsCtx = GraphicsCtx;
-    GraphicsCtx->cls_3da54 = func_8004D254();
+    GraphicsCtx->cls_3da54 = scene_renderer_create();
     GraphicsCtx->cls_32c00 = frame_phase_create();
-    GraphicsCtx->cls_3acc8 = func_8004A4C8(0, 1);
+    GraphicsCtx->cls_3acc8 = render_context_create(0, 1);
 
     This->m_DreamSys = DreamSys;
     This->vtable->Attach(This, DreamSys);
-    DreamSys->vtable->dream_sys_set_actor(DreamSys, This->m_Unk12);
+    DreamSys->vtable->dream_sys_set_actor(DreamSys, This->m_StageArg);
     DreamSys->vtable->dream_sys_set_texture(DreamSys, This->m_TextureHelper);
-    This->vtable->Unk15(This);
+    This->vtable->dream_session_reset(This);
 }
 
 void link_destroy_models(void);
@@ -128,32 +110,32 @@ void dream_session_cleanup(dream_session_t *This) {
     gfx->cls_3acc8 = gfx->cls_3acc8->vtable->Destroy(gfx->cls_3acc8);
     gfx->cls_32c00 = gfx->cls_32c00->vtable->Destroy(gfx->cls_32c00);
     gfx->cls_3da54 = gfx->cls_3da54->vtable->Destroy(gfx->cls_3da54);
-    bgm = (bgm_t *)This->m_Unk15;
+    bgm = (bgm_t *)This->m_Bgm;
     bgm->vtable->Destroy(bgm);
-    model = (tmd_model_t *)This->m_Unk17;
+    model = (tmd_model_t *)This->m_Model;
     model->vtable->Destroy(model);
     This->m_TextureHelper->vtable->Destruct(This->m_TextureHelper);
     link_destroy_models();
-    func_8004A4B8()->Cleanup(This);
+    scene_get_vtable()->Cleanup(This);
 }
 
 void dream_session_on_tick(dream_session_t *This, void **Unk2, s32 Unk3) {
     s32 value;
 
-    // unk2 could be either gshelper or 32c00?
+    // Unk2 could be either gshelper or 32c00?
 
-    func_8004A4B8()->OnNotify(This, Unk2, Unk3);
+    scene_get_vtable()->OnNotify(This, Unk2, Unk3);
     value = *(s32 *) *Unk2;
 
     if ((value & 0xFFFF) == 0x1F34) {
-        This->vtable->Unk31(This, Unk2, Unk3);
+        This->vtable->dream_session_noop2(This, Unk2, Unk3);
     } else if ((value & 0xFFFFF) == 0x2F230) {
-        This->vtable->on_link_code(This, Unk2, Unk3);
+        This->vtable->dream_session_on_link_code(This, (s32)Unk2, Unk3);
     }
 }
 
-void func_80049A14(dream_session_t *This) {
-    This->m_Unk14 = 0;
+void dream_session_reset(dream_session_t *This) {
+    This->m_State = 0;
 }
 
 void dream_session_execute(dream_session_t *This) {
@@ -161,86 +143,87 @@ void dream_session_execute(dream_session_t *This) {
     dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_16634);
     dream_sys->vtable->Attach(dream_sys, This->m_GraphicsCtx->cls_32c00);
     dream_sys->vtable->dream_sys_set_transform(dream_sys, This->m_GraphicsCtx->cls_3da54);
-    func_8004A4B8()->scene_run(This, This->m_GraphicsCtx, 0);
+    scene_get_vtable()->scene_run(This, This->m_GraphicsCtx, 0);
 }
 
-void func_80049AC0(dream_session_t *This) {
+void dream_session_stop(dream_session_t *This) {
     dream_sys_t *dream_sys;
 
     dream_sys = This->m_DreamSys;
-    func_8004A4B8()->Unk17(This);
+    scene_get_vtable()->Unk17(This);
     dream_sys->vtable->dream_sys_set_transform(dream_sys, 0);
     dream_sys->vtable->Detach(dream_sys, This->m_GraphicsCtx->cls_16634);
     dream_sys->vtable->Detach(dream_sys, This->m_Unk3);
 }
 
-typedef struct dream_ctx_actor_vtable dream_ctx_actor_vtable_t;
-typedef struct dream_ctx_child_vtable dream_ctx_child_vtable_t;
+typedef struct dream_session_child dream_session_child_t;
+typedef struct dream_session_child_vtable dream_session_child_vtable_t;
+typedef struct dream_session_actor_vtable dream_session_actor_vtable_t;
 
-typedef struct dream_ctx_child {
-    dream_ctx_child_vtable_t *vtable;
-} dream_ctx_child_t;
+struct dream_session_child {
+    dream_session_child_vtable_t *vtable;
+};
 
-typedef struct dream_ctx_actor {
-    dream_ctx_actor_vtable_t *vtable;
-} dream_ctx_actor_t;
-
-typedef struct dream_ctx_child_vtable {
+struct dream_session_child_vtable {
     u32 pad[0x18];
-    void (*Unk23)(dream_ctx_child_t *, s32);
-} dream_ctx_child_vtable_t;
+    void (*Unk23)(dream_session_child_t *, s32);
+};
 
-typedef struct dream_ctx_actor_vtable {
+struct dream_session_actor {
+    dream_session_actor_vtable_t *vtable;
+};
+
+struct dream_session_actor_vtable {
     u32 pad0[0x11];
-    void (*Unk16)(dream_ctx_actor_t *, void *);
+    void (*Unk16)(dream_session_actor_t *, void *);
     u32 pad1;
-    void (*Unk18)(dream_ctx_actor_t *, s32);
+    void (*Unk18)(dream_session_actor_t *, s32);
     u32 pad2[8];
-    void (*Unk27)(dream_ctx_actor_t *, dream_sys_t *, s32 *, s32 *, s32);
-    u32 pad3[6];
-    void (*Unk34)(dream_ctx_actor_t *);
-    u32 pad4[7];
-    dream_ctx_child_t *(*Unk42)(dream_ctx_actor_t *);
-} dream_ctx_actor_vtable_t;
+    void (*Unk27)(dream_session_actor_t *, dream_sys_t *, s32 *, s32 *, s32);
+    void (*Unk28)(dream_session_actor_t *);
+    u32 pad3[5];
+    void (*Unk34)(dream_session_actor_t *);
+    void (*Unk35)(dream_session_actor_t *);
+    u32 pad4[6];
+    dream_session_child_t *(*Unk42)(dream_session_actor_t *);
+};
 
-void func_80049B54(dream_session_t *This) {
-    display_t *gs;
-    dream_ctx_actor_t *actor;
-    dream_ctx_child_t *child;
+void dream_session_start(dream_session_t *This) {
+    display_t *display;
+    dream_session_actor_t *actor;
+    dream_session_child_t *child;
     void *screen;
 
-    gs = This->m_GraphicsCtx->display;
-    actor = (dream_ctx_actor_t *)This->m_Unk5;
-    screen = gs->vtable->display_get_screen_size(gs, 0);
+    display = This->m_GraphicsCtx->display;
+    actor = This->m_Actor;
+    screen = display->vtable->display_get_screen_size(display, 0);
     actor->vtable->Unk16(actor, screen);
     child = actor->vtable->Unk42(actor);
     child->vtable->Unk23(child, 1);
     actor->vtable->Unk18(actor, 0x4B0);
     actor->vtable->Unk27(actor, This->m_DreamSys, &D_80086650, &D_8008665C, 0);
     actor->vtable->Unk34(actor);
-    This->m_Unk14 = 1;
+    This->m_State = 1;
 }
 
-void func_80049C50(dream_session_t *This) {
-    s32 m_Unk5; // $s0
+void dream_session_update_actor(dream_session_t *This) {
+    dream_session_actor_t *actor;
 
-  m_Unk5 = This->m_Unk5;
-  (*(void ( **)(s32))(*(s32 *)m_Unk5 + 144))(m_Unk5);
-  (*(void ( **)(s32))(*(s32 *)m_Unk5 + 116))(m_Unk5);
+    actor = This->m_Actor;
+    actor->vtable->Unk35(actor);
+    actor->vtable->Unk28(actor);
 }
 
-void open_map(dream_session_t *This, s32 Unk);
-
-void func_80049CA8(dream_session_t *This, void *arg1, s32 arg2) {
+void dream_session_tick(dream_session_t *This, void *arg1, s32 arg2) {
     s32 state;
     s32 result;
-    map_scene_t *obj;
+    map_scene_t *mapScene;
 
-    func_8004A4B8()->Unk20(This, arg1, arg2);
+    scene_get_vtable()->Unk20(This, arg1, arg2);
     if (arg2 != 2) {
         return;
     }
-    state = This->m_Unk14;
+    state = This->m_State;
     if (state == arg2) {
         return;
     }
@@ -261,78 +244,78 @@ state1:
         return;
     }
     This->m_DreamSys->vtable->dream_sys_end_day(This->m_DreamSys, 0);
-    This->m_Unk9 = arg2;
-    This->vtable->Unk23(This, 3);
+    This->m_Result = arg2;
+    This->vtable->scene_finish(This, 3);
     return;
 state3:
-    obj = (map_scene_t *)This->m_Unk18;
-    ((void (*)(map_scene_t *))obj->vtable->Unk17)(obj);
-    obj = (map_scene_t *)This->m_Unk18;
-    obj->vtable->Destroy(obj);
+    mapScene = (map_scene_t *)This->m_MapScene;
+    ((void (*)(map_scene_t *))mapScene->vtable->Unk17)(mapScene);
+    mapScene = (map_scene_t *)This->m_MapScene;
+    mapScene->vtable->Destroy(mapScene);
     open_map(This, This->m_DreamSys->vtable->dream_sys_get_current_map(This->m_DreamSys));
 }
 
 void open_map(dream_session_t *This, s32 Unk) {
     void **obj;
 
-    This->m_Unk18 = (s32)map_scene_create(This->m_Unk12, This->m_Unk15, (s32)This->m_TextureHelper,
-                                         This->m_Unk17, Unk);
-    This->vtable->Attach(This, This->m_Unk18);
-    obj = (void **)This->m_Unk18;
+    This->m_MapScene = (s32)map_scene_create(This->m_StageArg, This->m_Bgm, (s32)This->m_TextureHelper,
+                                         This->m_Model, Unk);
+    This->vtable->Attach(This, This->m_MapScene);
+    obj = (void **)This->m_MapScene;
     (*(void (**)(void **, void *, void *))(*(u32 *)obj + 0x44))(obj, This->m_GraphicsCtx, This->m_DreamSys);
-    This->m_Unk14 = 2;
+    This->m_State = 2;
 }
 
-void func_80049EA4(void) {
+void dream_session_noop(dream_session_t *This) {
 }
 
-void func_80049EAC(void) {
+void dream_session_noop2(dream_session_t *This, void **Unk2, s32 Unk3) {
 }
 
-void on_link_code(dream_session_t *This, s32 Unk2, s32 Unk3) {
-    s32 unk;
-    s32 unk4;
-    s16 sp10[4];
+void dream_session_on_link_code(dream_session_t *This, s32 Unk2, s32 Unk3) {
+    s32 endDayMode;
+    s32 dayResult;
+    s16 cinematic[4];
     dream_sys_t *dream_sys;
     dream_sys_vtable_t *vtable;
 
     switch (Unk3) {
         case 4:
-            (*(void (**)(s32, s32))(*(s32 *) This->m_Unk18 + 0x48))(This->m_Unk18, Unk2);
-            (*(void (**)(s32))(*(s32 *) This->m_Unk18 + 4))(This->m_Unk18);
+            (*(void (**)(s32, s32))(*(s32 *) This->m_MapScene + 0x48))(This->m_MapScene, Unk2);
+            (*(void (**)(s32))(*(s32 *) This->m_MapScene + 4))(This->m_MapScene);
             if (This->m_DreamSys->vtable->dream_sys_end_day(This->m_DreamSys, 0) == 0) {
-                This->m_DreamSys->vtable->dream_sys_get_cinematic(sp10, This->m_DreamSys);
-                unk4 = 2;
-                if (sp10[1] < 0) {
-                    unk4 = 1;
+                This->m_DreamSys->vtable->dream_sys_get_cinematic(cinematic, This->m_DreamSys);
+                dayResult = 2;
+                if (cinematic[1] < 0) {
+                    dayResult = 1;
                 }
-                This->m_Unk9 = unk4;
+                This->m_Result = dayResult;
                 goto block_4_join;
             }
-            This->m_Unk9 = 3;
+            This->m_Result = 3;
         block_4_join:
-            This->vtable->Unk23(This, 3);
+            This->vtable->scene_finish(This, 3);
             break;
         case 5:
         case 6:
         case 7:
         case 8:
         case 10:
-            This->m_Unk14 = 3;
+            This->m_State = 3;
             break;
         case 12:
         case 13:
-            (*(void (**)(s32, s32))(*(s32 *) This->m_Unk18 + 0x48))(This->m_Unk18, Unk2);
-            (*(void (**)(s32))(*(s32 *) This->m_Unk18 + 4))(This->m_Unk18);
+            (*(void (**)(s32, s32))(*(s32 *) This->m_MapScene + 0x48))(This->m_MapScene, Unk2);
+            (*(void (**)(s32))(*(s32 *) This->m_MapScene + 4))(This->m_MapScene);
             dream_sys = This->m_DreamSys;
             vtable = dream_sys->vtable;
-            unk = 1;
+            endDayMode = 1;
             if (Unk3 != 12) {
-                unk = 2;
+                endDayMode = 2;
             }
-            vtable->dream_sys_end_day(dream_sys, unk);
-            This->m_Unk9 = 3;
-            This->vtable->Unk23(This, 3);
+            vtable->dream_sys_end_day(dream_sys, endDayMode);
+            This->m_Result = 3;
+            This->vtable->scene_finish(This, 3);
             break;
     }
 }

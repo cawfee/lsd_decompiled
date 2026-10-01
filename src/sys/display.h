@@ -41,36 +41,57 @@ struct display_vtable {
     /* 0x054 8006c0c4 */ s32 (*display_get_active_buffer)(display_t *);
     /* 0x058 8006c0c8 */ void (*display_load_image)(display_t *, s16 *, s32);
     /* 0x05C 8006c0cc */ void (*display_store_image)(display_t *, s32, s16 *);
-    /* 0x060 8006c0d0 */ s32 (*Unk23)(display_t *);
-    /* 0x064 8006c0d4 */ void (*Unk24)(display_t *, s16 *, s16, s16);
+    /* 0x060 8006c0d0 */ s32 (*display_get_status)(display_t *);
+    /* 0x064 8006c0d4 */ void (*display_move_image)(display_t *, s16 *, s16, s16);
     /* 0x068 8006c0d8 */ void (*display_do_vsync_internal)(display_t *);
-    /* 0x06C 8006c0dc */ void (*Unk26)(display_t *);
+    /* 0x06C 8006c0dc */ void (*display_update_timer)(display_t *);
     /* 0x070 8006c0e0 */ void (*display_set_vblanks)(display_t *, s32);
     /* 0x074 8006c0e4 */ s32 (*display_get_vblanks)(display_t *);
-    /* 0x078 8006c0e8 */ void (*Unk29)(display_t *, unsigned char *, s32);
+    /* 0x078 8006c0e8 */ void (*display_clear_image)(display_t *, unsigned char *, void *);
     /* 0x07C 8006c0ec */ void *(*display_get_screen_size)(display_t *, void *);
-    /* 0x080 8006c0f0 */ void (*Unk31)(display_t *, s32);
+    /* 0x080 8006c0f0 */ void (*display_set_sync_mode)(display_t *, s32);
     /* 0x084 8006c0f4 */ void (*display_set_vsync_callback)(display_t *, void (*Callback)(void));
 };
 
 struct display {
     /* 0x00 */ display_vtable_t *vtable;
-    /* 0x04 */ s32 m_Unk0;
-    /* 0x08 */ s32 m_Unk1;
-    /* 0x0C */ s32 m_Unk2;
-    /* 0x10 */ s32 m_VSyncCount;
+    /* 0x04 */ linked_list_node_t *m_Children;
+    /* 0x08 */ linked_list_node_t *m_Parents;
+    /* 0x0C */ s32 m_TimerExpired; // set once the vblank timer reaches m_NextVBlank
+    /* 0x10 */ s32 m_VSyncCount;   // non-zero while display_do_vsync_internal is running
     /* 0x14 */ vec2d_t m_ScreenSize;
-    /* 0x18 */ s32 m_VarMode;
-    /* 0x1C */ s32 m_NextVBlank;
-    /* 0x20 */ s32 m_Unk7;
-    /* 0x24 */ s32 m_Unk8;
-    /* 0x28 */ s32 m_Unk9;
-    /* 0x2C */ void (*m_VsyncCallback)(void);
-    /* 0x30 */ s32 m_Unk11;
-    /* 0x34 */ s32 m_Unk12;
+    /* 0x1C */ s32 m_VarMode;
+    /* 0x20 */ s32 m_NextVBlank;   // vblanks to wait in VSync, and the timer target
+    /* 0x24 */ s32 m_TimerCount;   // incremented by display_update_timer
+    /* 0x28 */ s32 m_Unk8;
+    /* 0x2C */ s32 m_SyncMode;     // draw-sync mode used by load/store_image
+    /* 0x30 */ void (*m_VsyncCallback)(void);
 };
 
 display_t *display_create(void);
+display_t *get_display(void);
+void set_display(display_t *value);
 display_vtable_t *display_get_vtable(void);
+
+void display_construct(display_t *This);
+void display_reset(display_t *This);
+void display_init_gs(display_t *This, vec2d_t *ScreenSize, s32 VarMode);
+void display_do_vsync(display_t *This);
+void display_reset_vsync_count(display_t *This);
+void display_swap_disp_buffer(display_t *This);
+s32 display_get_active_buffer(display_t *This);
+void display_load_image(display_t *This, s16 *Rect, s32 VramAddr);
+void display_store_image(display_t *This, s32 VramAddr, s16 *Rect);
+void display_copy_rect(u16 *Dest, void *Src);
+s32 display_get_status(display_t *This);
+void display_move_image(display_t *This, s16 *Rect, s16 X, s16 Y);
+void display_do_vsync_internal(display_t *This);
+void display_update_timer(display_t *This);
+void display_set_vblanks(display_t *This, s32 Count);
+s32 display_get_vblanks(display_t *This);
+void display_clear_image(display_t *This, unsigned char *Color, void *Rect);
+void *display_get_screen_size(display_t *This, void *OutRect);
+void display_set_sync_mode(display_t *This, s32 Mode);
+void display_set_vsync_callback(display_t *This, void (*Callback)(void));
 
 #endif

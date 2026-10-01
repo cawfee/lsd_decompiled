@@ -72,7 +72,7 @@ typedef struct {
 
 void *get_display(void);
 
-render_context_t *func_8004A4C8(u32 Unk1, u32 Unk2) {
+render_context_t *render_context_create(u32 Unk1, u32 Unk2) {
     render_context_t *allocated = (render_context_t *) memory_allocate_mem(0x1E8);
 
     if (allocated) {

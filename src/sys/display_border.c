@@ -2,16 +2,14 @@
 
 #include "sys/display.h"
 
-void *get_display(void);
-
-void func_8003B624(vram_rect_t *arg0, s32 count, vram_rect_t *arg2) {
+void display_draw_border(vram_rect_t *arg0, s32 count, vram_rect_t *arg2) {
     display_t *disp;
     void (*draw)(display_t *, s16 *, s32, s32);
     vram_rect_t rect;
     s32 i;
 
     disp = get_display();
-    draw = (void (*)(display_t *, s16 *, s32, s32))disp->vtable->Unk24;
+    draw = (void (*)(display_t *, s16 *, s32, s32))disp->vtable->display_move_image;
     if (count != 0) {
         for (i = 0; i < count; i++) {
             rect.x = arg0->x + arg0->w - 1;

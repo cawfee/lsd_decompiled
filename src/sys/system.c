@@ -9,11 +9,7 @@ extern s32 g_ScreenSize[];
 
 
 void system_construct(void *, s32);
-void nullsub25(void *);
 void func_8003B02C(void *, s32 *, s32);
-void game_flow_init_graphics(void *, display_t *, pad_t *, u32);
-void func_8003B108(void *);
-void game_flow_execute_phases(void *);
 
 system_vtable_t g_SYSTEM_VTABLE = {
     0x60,
@@ -34,7 +30,7 @@ system_vtable_t g_SYSTEM_VTABLE = {
     NULL,
     func_8003B02C,
     game_flow_init_graphics,
-    func_8003B108,
+    game_flow_pre_execute,
     game_flow_execute_phases,
     NULL,
     NULL,
@@ -58,7 +54,7 @@ void system_construct(system_t *This, s32 Unk) {
     This->vtable->Unk15(This, &g_ScreenSize, 0);
 }
 
-void nullsub25(void *) {
+void nullsub25(base_class_t *This) {
 }
 
 void func_8003B02C(system_t *This, const s32 *src, s32 val) {
@@ -66,7 +62,7 @@ void func_8003B02C(system_t *This, const s32 *src, s32 val) {
     This->m_Unk4 = val;
 }
 
-void game_flow_init_graphics(game_flow_t *This, display_t *Display, pad_t *Pad) {
+void game_flow_init_graphics(game_flow_t *This, display_t *Display, pad_t *Pad, u32 Unused) {
     if (!This->m_IsInit) {
         set_display(Display);
         Display->vtable->display_init_gs(Display, &This->m_ScreenSize, This->m_VarMode);
@@ -83,7 +79,7 @@ void game_flow_init_graphics(game_flow_t *This, display_t *Display, pad_t *Pad) 
     }
 }
 
-void func_8003B108(void *) {
+void game_flow_pre_execute(void *) {
 }
 
 // The main game loop
@@ -108,7 +104,7 @@ void game_flow_execute_phases(game_flow_t *This) {
                     }
 
                     // Debug left over? Empty function
-                    This->vtable->Menu_Unused(This);
+                    This->vtable->game_flow_menu_unused(This);
                 }
 
                 // Play the game itself

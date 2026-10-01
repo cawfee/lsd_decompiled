@@ -14,8 +14,8 @@ void func_8003E418(void);
 void func_8003C48C(void);
 void func_8003C51C(void);
 void func_8004D90C(void);
-void func_8003E538(void);
-void func_8003E578(void);
+void timer_begin_frame(void);
+void timer_end_frame(void);
 void func_8003C794(void);
 void func_8003C7B4(void);
 void func_8003C7F4(void);
@@ -87,8 +87,8 @@ main_menu_vtable_t g_MAIN_MENU_VTABLE = {
     (void (*)(void *))func_8003C48C,
     (void (*)(void *))func_8003C51C,
     (void (*)(void *))func_8004D90C,
-    (void (*)(void *))func_8003E538,
-    (void (*)(void *))func_8003E578,
+    (void (*)(void *))timer_begin_frame,
+    (void (*)(void *))timer_end_frame,
     (void (*)(void *))func_8003C794,
     (void (*)(void *))func_8003C7B4,
     (void (*)(void *))func_8003C7F4,

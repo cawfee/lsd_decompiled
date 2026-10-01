@@ -8,7 +8,7 @@ extern void *D_8008ACA4;
 extern s32 D_8008ACA8;
 extern void *D_8008ACAC;
 
-void func_80056F5C(s32 Unk1, void *obj, s32 Unk2, s32 Unk3) {
+void generation_apply_context(s32 Unk1, void *obj, s32 Unk2, s32 Unk3) {
     s32 i;
     s32 *src;
 

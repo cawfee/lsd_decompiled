@@ -96,7 +96,7 @@ scene_renderer_vtable_t D_800869D8 = {
     func_8004D374,
 };
 
-scene_renderer_t *func_8004D254() {
+scene_renderer_t *scene_renderer_create() {
     scene_renderer_t *allocated = (scene_renderer_t *) memory_allocate_mem(0xDC);
 
     if (allocated) {

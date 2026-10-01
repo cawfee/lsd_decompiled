@@ -15,7 +15,7 @@ extern s32 D_80087168[];
 
 void func_80053EB4(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);
 void link_destroy_teleport_entity(void);
-void func_80054D30(void);
+void dream_generation_stop(void);
 s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3);
 
 const char *get_random_stage_texture_path(s32 arg0, s32 seed_arg, s32 count);
@@ -36,7 +36,7 @@ map_scene_t *map_scene_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) 
 }
 
 void func_80052C10(map_scene_t *This, int Unk2, int Unk3, int Unk4, int Unk5, int Unk6) {
-    func_8004A4B8()->Construct(This, 0, Unk2);
+    scene_get_vtable()->Construct(This, 0, Unk2);
     This->vtable = func_800544D4();
     This->m_Unk24 = 0;
     This->m_LinkActive = 0;
@@ -52,13 +52,13 @@ void func_80052C10(map_scene_t *This, int Unk2, int Unk3, int Unk4, int Unk5, in
 }
 
 void func_80052CD8(map_scene_t *This) {
-    func_8004A4B8()->Cleanup(This);
+    scene_get_vtable()->Cleanup(This);
 }
 
 void func_80052D10(map_scene_t *This, void **Unk2, s32 Unk3) {
     s32 value;
 
-    func_8004A4B8()->OnNotify(This, Unk2, Unk3);
+    scene_get_vtable()->OnNotify(This, Unk2, Unk3);
     value = *(s32 *) *Unk2;
 
     if ((value & 0xFFF) == 0x114) {
@@ -80,7 +80,7 @@ void func_80052DE8(map_scene_t *This, void *arg1, s32 arg2) {
     (*(void (**)(void *, s32 (*)(map_scene_t *, s32, s32, s32), void *))(*(s32 *)obj + 0xC8))(
         obj, func_80052E7C, This);
     This->m_DreamSys = (dream_sys_t *)arg2;
-    func_8004A4B8()->scene_run(This, arg1, 1);
+    scene_get_vtable()->scene_run(This, arg1, 1);
     This->vtable->Attach(This, (void *)arg2);
 }
 
@@ -94,7 +94,7 @@ s32 func_80052E7C(map_scene_t *This, s32 Unk1, s32 Unk2, s32 Unk3) {
 
 void func_80052EBC(map_scene_t *This) {
     This->vtable->Detach(This, This->m_DreamSys);
-    func_8004A4B8()->Unk17(This);
+    scene_get_vtable()->Unk17(This);
 }
 
 void func_80052F10(map_scene_t *This, s32 arg1, s32 arg2, s32 arg3) {
@@ -149,7 +149,7 @@ void func_80052F10(map_scene_t *This, s32 arg1, s32 arg2, s32 arg3) {
 void func_80053134(map_scene_t *This) {
     This->vtable->Unk32(This);
     link_destroy_teleport_entity();
-    func_80054D30();
+    dream_generation_stop();
     (*(void (**)(void *))(*(s32 *)This->m_Music + 0x48))(This->m_Music);
 }
 

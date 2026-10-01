@@ -364,6 +364,8 @@ segments:
       - [0x772A0, .data, scene/notify_node]
       - [0x77360, .data, menu/main_menu]
       - [0x775C4, data]
+      - [0x77974, .data, dream/dream_generation]
+      - [0x77EFC, data]
       - [0x783dc, data] # DreamSys
       - [0x79528, data]
       - [0x7A2D4, .data, scene/entity]
@@ -394,6 +396,8 @@ segments:
       - [0x7b184, .sdata, menu/main_menu]
       - [0x7b230, .sdata, menu/card/memory_card]
       - [0x7b234, sdata]
+      - [0x7B34C, .sdata, dream/dream_generation_sdata]
+      - [0x7B394, sdata]
       - [0x7b3c0, sdata] # DreamSys
       - [0x7b3f8, .sdata, scene/link]
       - [0x7b40c, sdata]

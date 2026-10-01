@@ -5,7 +5,7 @@
 extern effect_base_vtable_t D_8006EAC0;
 extern s8 D_8008A924[];
 
-effect_base_t *func_800404D0(u32 Unk1, u32 Unk2, u32 Unk3) {
+effect_base_t *effect_base_create(u32 Unk1, u32 Unk2, u32 Unk3) {
     effect_base_t *allocated = (effect_base_t *) memory_allocate_mem(0x6C);
 
     if (allocated) {
@@ -37,14 +37,14 @@ void func_800405D0(effect_base_t *This, u16 *Data, s8 *Color, s32 Unk3) {
     if (Color == NULL) {
         Color = D_8008A924;
     }
-    vtable->Unk45(This, 1, Color);
+    vtable->set_color(This, 1, Color);
     This->vtable->Unk50(This, 0xD);
 }
 
 void func_80040664(effect_base_t *This, s32 Unk1, s32 Unk2) {
     if (This->m_Unk2 == 0) {
         ((void (*)(void *, s32, s32))func_8001E57C()->Unk18)(This, Unk1, 0);
-        This->vtable->Unk46(This, Unk2);
+        This->vtable->set_offset(This, Unk2);
     }
 }
 
@@ -91,7 +91,7 @@ void func_80040824(effect_base_t *This, s16 *Data) {
 }
 
 void func_80040854(effect_base_t *This, s32 Unk2, s32 Unk3, s32 Unk4) {
-    This->vtable->Unk18(This, Unk2, Unk3);
+    This->vtable->attach_to(This, Unk2, Unk3);
   This->m_Unk17 = 0;
   This->m_Unk18 = Unk4;
 }

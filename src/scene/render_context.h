@@ -223,5 +223,6 @@ typedef struct render_context {
 
 render_context_vtable_t *func_8004D244(void);
 void func_8004D108(render_context_t *, s32 *);
+render_context_t *render_context_create(u32 Unk1, u32 Unk2);
 
 #endif

@@ -1,141 +1,264 @@
-#include "common.h"
+#include "base/memory.h"
 
-typedef struct memory_block {
-    u32 header;
-    struct memory_block *next;
-    struct memory_block *prev;
-} memory_block_t;
+#include <psx/malloc.h>
+#include <psx/stdio.h>
 
-typedef struct memory_manager {
-    void *pool;
-    s32 pool_size;
-    memory_block_t *head;
-    memory_block_t *tail;
-    s32 ready;
-} memory_manager_t;
+static memory_manager_t *g_MemoryManager = NULL;
 
-static memory_manager_t *g_MEMORY_MANAGER = NULL;
-static void *g_PAD = NULL;
+/* Reserved .sbss slot directly after the manager pointer.  It is never
+ * referenced, but old gcc still allocates storage for it, so it must stay to
+ * keep the gp-relative data layout identical to the original. */
+static void *g_MemoryManagerPad = NULL;
 
-void *psyq_malloc_malloc(u32 size);
-int printf(char *fmt, ...);
-void memory_setup_manager(s32 *arg0);
-void func_8001844C(s32 value);
+/* Block header layout: the low 28 bits of `header` hold the byte size, the top
+ * nibble holds the free / previous-free flags.  The footer is the back-pointer
+ * written in the last word of every block. */
+#define BLOCK_SIZE(block)          ((block)->header & 0x0FFFFFFF)
+#define BLOCK_NEXT(block)          ((memory_block_t *)((u8 *)(block) + BLOCK_SIZE(block)))
+#define BLOCK_FOOTER(block)        (*(memory_block_t **)((u8 *)(block) - 4))
+#define BLOCK_FROM_PAYLOAD(payload) ((memory_block_t *)((u8 *)(payload) - 4))
 
-void *memory_create_manager(u32 arg0, s32 unused) {
-    u32 var_s1;
-    s32 *temp_s0;
+memory_manager_t *memory_create_manager(u32 size, s32 unused) {
+    long poolSize;
+    memory_manager_t *manager;
 
-    var_s1 = arg0;
-    if (var_s1 < 0x400U) {
-        var_s1 = 0x400;
+    poolSize = size;
+    if (poolSize < 0x400U) {
+        poolSize = 0x400;
     }
-    temp_s0 = (s32 *)psyq_malloc_malloc(var_s1 + 0x20);
-    if (temp_s0 != NULL) {
-        temp_s0[0] = (s32)((u8 *)temp_s0 + 0x1C);
-        temp_s0[1] = var_s1;
-        memory_setup_manager(temp_s0);
+    manager = psyq_malloc_malloc(poolSize + 0x20);
+    if (manager != NULL) {
+        manager->pool = manager->blocks;
+        manager->pool_size = poolSize;
+        memory_setup_manager(manager);
     } else {
-        printf("bMemPMgr = %p, poolSize = %ld in BMemPMgrInit\n", 0, var_s1);
+        printf("bMemPMgr = %p, poolSize = %ld in BMemPMgrInit\n", manager, poolSize);
     }
-    return temp_s0;
+    return manager;
 }
 
-void memory_set_manager(void *Manager) {
-    g_MEMORY_MANAGER = (memory_manager_t *)Manager;
+void memory_set_manager(memory_manager_t *manager) {
+    g_MemoryManager = manager;
 }
 
-void memory_free_buffer(void *Buffer) {
-    psyq_malloc_free(Buffer);
+void memory_free_raw(void *ptr) {
+    psyq_malloc_free(ptr);
 }
 
-void memory_setup_manager(s32 *arg0) {
-    s32 *var_a1;
-    s32 *temp_a0;
-    s32 *temp_v0;
+void memory_setup_manager(memory_manager_t *managerParam) {
+    memory_manager_t *manager;
+    memory_block_t *block;
+    memory_block_t *endBlock;
 
-    var_a1 = (s32 *)g_MEMORY_MANAGER;
-    if (var_a1 == NULL) {
-        var_a1 = arg0;
+    manager = g_MemoryManager;
+    if (manager == NULL) {
+        manager = managerParam;
     }
-    var_a1[4] = 1;
-    temp_a0 = (s32 *)var_a1[0];
-    var_a1[2] = (s32)temp_a0;
-    var_a1[3] = (s32)temp_a0;
-    *temp_a0 = var_a1[1] | 0x40000000;
-    ((s32 *)var_a1[2])[1] = 0;
-    ((s32 *)var_a1[3])[2] = 0;
-    temp_v0 = (s32 *)((s32)temp_a0 + (*temp_a0 & 0x0FFFFFFF));
-    temp_v0[-1] = (s32)temp_a0;
-    temp_v0[0] = 0x80000000;
+    manager->ready = 1;
+    block = manager->pool;
+    manager->head = block;
+    manager->tail = block;
+    block->header = manager->pool_size | 0x40000000;
+    manager->head->next = NULL;
+    manager->tail->prev = NULL;
+    endBlock = BLOCK_NEXT(block);
+    BLOCK_FOOTER(endBlock) = block;
+    endBlock->header = 0x80000000;
 }
-
-INCLUDE_ASM("asm/nonmatchings/base/memory", memory_allocate_mem);
 
 /*
- * Best-known C (105/107 insns, all relocations correct, structure matches):
- * gcc 2.6.3 hoists the block->next / block->prev loads above the merged-header
- * store and branches before it, while the target loads the header, stores it,
- * then loads next/prev. Swept: inline vs cached link/tmp, s32 vs u32 header,
- * memory_block_t* vs raw offsets, declaration order. No ordering reproduces the
- * target scheduler tie; target also keeps an extra nop after `lw a2,-8(s0)`.
- *
- * s32 memory_free_mem(void *arg0, void *arg1) {
- *     memory_manager_t *manager;
- *     memory_block_t *block;
- *     memory_block_t *next;
- *     memory_block_t *prev;
- *     memory_block_t *link;
- *     s32 header;
- *     s32 size;
- *     u32 next_free;
- *
- *     func_8001844C(1);
- *     manager = g_MEMORY_MANAGER;
- *     if (manager == NULL) {
- *         manager = (memory_manager_t *)arg1;
- *     }
- *     if (arg0 != NULL) {
- *         block = (memory_block_t *)((u8 *)arg0 - 4);
- *         header = block->header;
- *         size = header & 0x0FFFFFFF;
- *         next = (memory_block_t *)((u8 *)block + size);
- *         next_free = next->header & 0x40000000;
- *         if (header < 0) {
- *             block = *(memory_block_t **)((u8 *)block - 4);
- *             block->header = (block->header & 0xF0000000) |
- *                             (size + (block->header & 0x0FFFFFFF));
- *             prev = block->next;
- *             link = block->prev;
- *             if (prev != NULL) prev->prev = link; else manager->tail = link;
- *             prev = block->prev;
- *             link = block->next;
- *             if (prev != NULL) prev->next = link; else manager->head = link;
- *         }
- *         if (next_free != 0) {
- *             block->header = (block->header & 0xF0000000) |
- *                 ((next->header & 0x0FFFFFFF) + (block->header & 0x0FFFFFFF));
- *             prev = next->next;
- *             link = next->prev;
- *             if (prev != NULL) prev->prev = link; else manager->tail = link;
- *             prev = next->prev;
- *             link = next->next;
- *             if (prev != NULL) prev->next = link; else manager->head = link;
- *             next = (memory_block_t *)((u8 *)block + (block->header & 0x0FFFFFFF));
- *         }
- *         block->next = manager->head;
- *         manager->head = block;
- *         block->prev = NULL;
- *         if (block->next != NULL) block->next->prev = block; else manager->tail = block;
- *         *(memory_block_t **)((u8 *)next - 4) = block;
- *         block->header |= 0x40000000;
- *         next->header |= 0x80000000;
- *     }
- *     func_8001844C(0);
- *     return 0;
- * }
+ * First-fit scan of the free list starting at the head. A block big enough is
+ * unlinked and carved into the trailing remainder when that remainder is at
+ * least one minimum block (0x10 bytes including footer). The first/last links
+ * of the manager are repaired per unlink half, so the target reloads
+ * block->next / block->prev in each half instead of caching them.
  */
-INCLUDE_ASM("asm/nonmatchings/base/memory", memory_free_mem);
+void *memory_allocate_mem(u32 size, void *pool) {
+    memory_manager_t *manager;
+    memory_block_t *block;
+    void *payload;
+    memory_block_t *nextBlock;
+    memory_block_t *unusedNext;
+    u32 blockSize;
+    u32 padded;
 
-void nullsub3(void) {
+    memory_set_lock(1);
+    payload = NULL;
+    manager = g_MemoryManager;
+    if (manager == NULL) {
+        manager = pool;
+    }
+    if (size != 0) {
+        if (size & 0x3) {
+            padded = size + 4;
+            size = padded - (size & 0x3);
+        }
+        if (size < 0xC) {
+            size = 0xC;
+        }
+        block = manager->head;
+        size += 4;
+        while (block != NULL) {
+            blockSize = block->header & 0x0FFFFFFF;
+            if (blockSize >= size) {
+                block->header &= 0xBFFFFFFF;
+                payload = &block->next;
+                if (blockSize < size + 0x10) {
+                    nextBlock = BLOCK_NEXT(block);
+                    nextBlock->header &= 0x7FFFFFFF;
+                    {
+                        memory_block_t *prevLink;
+                        memory_block_t *nextLink;
+
+                        prevLink = block->prev;
+                        nextLink = block->next;
+                        if (nextLink != NULL) {
+                            nextLink->prev = prevLink;
+                        } else {
+                            manager->tail = prevLink;
+                        }
+                    }
+                    {
+                        memory_block_t *prevLink;
+                        memory_block_t *nextLink;
+
+                        prevLink = block->prev;
+                        nextLink = unusedNext = block->next;
+                        if (prevLink != NULL) {
+                            prevLink->next = nextLink;
+                        } else {
+                            manager->head = nextLink;
+                        }
+                    }
+                } else {
+                    block->header = (block->header & 0xF0000000) | size;
+                    nextBlock = BLOCK_NEXT(block);
+                    nextBlock->header = (blockSize - size) | 0x40000000;
+                    nextBlock->next = block->next;
+                    nextBlock->prev = block->prev;
+                    {
+                        memory_block_t *nextLink = block->next;
+
+                        if (nextLink != NULL) {
+                            nextLink->prev = nextBlock;
+                        } else {
+                            manager->tail = nextBlock;
+                        }
+                    }
+                    {
+                        memory_block_t *prevLink = block->prev;
+
+                        if (prevLink != NULL) {
+                            prevLink->next = nextBlock;
+                        } else {
+                            manager->head = nextBlock;
+                        }
+                    }
+                    BLOCK_FOOTER(BLOCK_NEXT(nextBlock)) = nextBlock;
+                }
+                break;
+            }
+            block = block->next;
+        }
+    }
+    memory_set_lock(0);
+    return payload;
+}
+
+/*
+ * Returns a block to the pool. A free lower neighbour is found through the
+ * footer stored just before the payload, and a free upper neighbour through
+ * the next block header; both are coalesced in. The merged block is pushed on
+ * the head of the free list and its follower gets the PREV_FREE flag.
+ * Note the target reloads next/prev inside each unlink half, and the upper
+ * unlink reuses the now-dead `nextSize` slot for its NULL test.
+ */
+void *memory_free_mem(void *ptr, void *pool) {
+    memory_manager_t *manager;
+    memory_block_t *block;
+    memory_block_t *next;
+    u32 nextFree;
+
+    memory_set_lock(1);
+    manager = g_MemoryManager;
+    if (manager == NULL) {
+        manager = pool;
+    }
+    if (ptr != NULL) {
+        block = BLOCK_FROM_PAYLOAD(ptr);
+        next = BLOCK_NEXT(block);
+        nextFree = next->header & 0x40000000;
+        if (block->header & 0x80000000) {
+            u32 freedSize = block->header & 0x0FFFFFFF;
+
+            block = BLOCK_FOOTER(block);
+            block->header = (block->header & 0xF0000000) |
+                            (freedSize + (block->header & 0x0FFFFFFF));
+            {
+                memory_block_t *prevLink = block->prev;
+                memory_block_t *nextLink = block->next;
+
+                if (nextLink != NULL) {
+                    nextLink->prev = prevLink;
+                } else {
+                    manager->tail = prevLink;
+                }
+            }
+            {
+                memory_block_t *nextLink = block->next;
+                memory_block_t *prevLink = block->prev;
+
+                if (prevLink != NULL) {
+                    prevLink->next = nextLink;
+                } else {
+                    manager->head = nextLink;
+                }
+            }
+        }
+        if (nextFree) {
+            u32 nextSize = next->header & 0x0FFFFFFF;
+
+            block->header = (block->header & 0xF0000000) |
+                            (nextSize + (block->header & 0x0FFFFFFF));
+            {
+                memory_block_t *prevLink = next->prev;
+                memory_block_t *nextLink = next->next;
+
+                if (nextLink != NULL) {
+                    nextLink->prev = prevLink;
+                } else {
+                    manager->tail = prevLink;
+                }
+            }
+            {
+                memory_block_t *nextLink = next->next;
+                memory_block_t *prevLink = next->prev;
+
+                nextSize = prevLink != NULL;
+                if (nextSize) {
+                    prevLink->next = nextLink;
+                } else {
+                    manager->head = nextLink;
+                }
+            }
+            next = BLOCK_NEXT(block);
+        }
+        block->next = manager->head;
+        manager->head = block;
+        block->prev = NULL;
+        if (block->next != NULL) {
+            block->next->prev = block;
+        } else {
+            manager->tail = block;
+        }
+        BLOCK_FOOTER(next) = block;
+        block->header |= 0x40000000;
+        next->header |= 0x80000000;
+    }
+    memory_set_lock(0);
+    return NULL;
+}
+
+void memory_nullsub3(void) {
+    (void)sizeof(g_MemoryManagerPad);
 }
