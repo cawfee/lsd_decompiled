@@ -4,7 +4,6 @@
 #include <psx/libgs.h>
 
 #include "base/base.h"
-#include "base/base.h"
 
 display_vtable_t g_DISPLAY_VTABLE = {
     1,

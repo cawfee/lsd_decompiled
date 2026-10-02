@@ -8,9 +8,9 @@
 #include "base/frame_phase.h"
 #include "dream/dream_sys.h"
 #include "file/tim_image.h"
+#include "graphics/display.h"
 #include "graphics/scene_renderer.h"
 #include "scene/render_context.h"
-#include "graphics/display.h"
 #include "sys/pad.h"
 
 // TODO move?

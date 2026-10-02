@@ -3,7 +3,6 @@
 #include <psx/libetc.h>
 
 #include "base/base.h"
-#include "base/base.h"
 #include "dream/dream_session.h"
 #include "dream/dream_session_path.h"
 #include "menu/graph_screen.h"

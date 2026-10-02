@@ -1,6 +1,5 @@
 #include "base/frame_phase.h"
 #include "base/base.h"
-#include "base/base.h"
 
 frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     0x5,

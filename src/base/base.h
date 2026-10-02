@@ -64,7 +64,16 @@ void memory_set_manager(memory_manager_t *Manager);
 #ifdef MEMORY_INTERNAL
 void *memory_allocate_mem(u32 Size, void *FallbackManager);
 void *memory_free_mem(void *Ptr, void *FallbackManager);
+
+#ifndef __clang_analyzer__
+#define MEMORY_MATCH_ALLOC(size) (((void *(*)(u32))memory_allocate_mem)((u32)(size)))
+#define MEMORY_MATCH_FREE(ptr)   (((void *(*)(void *))memory_free_mem)((void *)(ptr)))
 #else
+#define MEMORY_MATCH_ALLOC(size) memory_allocate_mem((size), NULL)
+#define MEMORY_MATCH_FREE(ptr)   memory_free_mem((ptr), NULL)
+#endif
+#else
+// We cant do anything about it
 void *memory_allocate_mem(u32 Size);
 void *memory_free_mem(void *Ptr);
 #endif

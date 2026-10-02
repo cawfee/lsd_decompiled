@@ -1,6 +1,7 @@
-#include "common.h"
+#include <psx/malloc.h>
+#include <psx/stdio.h>
 
-#include "base/base.h"
+#define MEMORY_INTERNAL
 #include "base/base.h"
 
 static memory_manager_t *g_MEMORY_MANAGER = NULL;
@@ -92,7 +93,7 @@ void memory_setup_manager(memory_manager_t *ManagerParam) {
  * of the manager are repaired per unlink half, so the target reloads
  * block->m_Next / block->m_Prev in each half instead of caching them.
  */
-void *memory_allocate_mem(u32 Size, void *Pool) {
+void *memory_allocate_mem(u32 Size, void *FallbackManager) {
     memory_manager_t *manager;
     memory_block_t *block;
     void *payload;
@@ -104,9 +105,19 @@ void *memory_allocate_mem(u32 Size, void *Pool) {
     memory_set_lock(1);
     payload = NULL;
     manager = g_MEMORY_MANAGER;
+
     if (manager == NULL) {
-        manager = Pool;
+        manager = FallbackManager;
     }
+
+#ifdef NON_MATCHING
+    // If fallbackmanager is null or something
+    if (manager == NULL) {
+        memory_set_lock(0);
+        return NULL;
+    }
+#endif
+
     if (Size != 0) {
         if (Size & 0x3) {
             padded = Size + 4;
@@ -121,7 +132,7 @@ void *memory_allocate_mem(u32 Size, void *Pool) {
             block_size = block->m_Header & 0x0FFFFFFF;
             if (block_size >= Size) {
                 block->m_Header &= 0xBFFFFFFF;
-                payload = &block->m_Next;
+                payload = (void *) &block->m_Next;
                 if (block_size < Size + 0x10) {
                     next_block = BLOCK_NEXT(block);
                     next_block->m_Header &= 0x7FFFFFFF;
@@ -143,6 +154,8 @@ void *memory_allocate_mem(u32 Size, void *Pool) {
 
                         prev_link = block->m_Prev;
                         next_link = unused_next = block->m_Next;
+                        (void)unused_next;
+
                         if (prev_link != NULL) {
                             prev_link->m_Next = next_link;
                         } else {
@@ -194,7 +207,7 @@ void *memory_allocate_mem(u32 Size, void *Pool) {
  * The `Pool` argument is the fallback manager the retail code consults when
  * g_MEMORY_MANAGER is NULL; game callers never pass it (see memory.h).
  */
-void *memory_free_mem(void *Ptr, void *Pool) {
+void *memory_free_mem(void *Ptr, void *FallbackManager) {
     memory_manager_t *manager;
     memory_block_t *block;
     memory_block_t *next;
@@ -202,9 +215,18 @@ void *memory_free_mem(void *Ptr, void *Pool) {
 
     memory_set_lock(1);
     manager = g_MEMORY_MANAGER;
+
     if (manager == NULL) {
-        manager = Pool;
+        manager = FallbackManager;
     }
+
+#ifdef NON_MATCHING
+    if (manager == NULL) {
+        memory_set_lock(0);
+        return NULL;
+    }
+#endif
+
     if (Ptr != NULL) {
         block = BLOCK_FROM_PAYLOAD(Ptr);
         next = BLOCK_NEXT(block);
@@ -282,10 +304,9 @@ void memory_nullsub3(void) {
     (void) sizeof(g_MEMORY_MANAGER_PAD);
 }
 
-
 base_class_t *base_class_destructor(base_class_t *This) {
     This->vtable->Cleanup(This);
-    memory_free_mem(This);
+    MEMORY_MATCH_FREE(This);
     return NULL;
 }
 
@@ -358,7 +379,7 @@ void base_class_iter_parents(base_class_t *This, void **OutValue, void **Cursor)
 s32 linked_list_prepend(linked_list_node_t **List, void *Value) {
     linked_list_node_t *mem;
 
-    mem = memory_allocate_mem(sizeof(linked_list_node_t));
+    mem = MEMORY_MATCH_ALLOC(sizeof(linked_list_node_t));
 
     if (mem) {
         mem->m_Next = *List;
@@ -384,7 +405,7 @@ void linked_list_remove(linked_list_node_t **List, void *Target) {
                 } else {
                     *List = node->m_Next;
                 }
-                memory_free_mem(node);
+                MEMORY_MATCH_FREE(node);
                 return;
             }
             prev = node;
@@ -402,7 +423,7 @@ void linked_list_clear(linked_list_node_t **ListHead) {
     if (cur) {
         do {
             next = next->m_Next;
-            memory_free_mem(cur);
+            MEMORY_MATCH_FREE(cur);
             cur = next;
         } while (next);
     }
