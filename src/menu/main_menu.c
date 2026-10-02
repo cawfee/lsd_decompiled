@@ -1,5 +1,5 @@
 #include "menu/main_menu.h"
-#include "base/base_class.h"
+#include "base/base.h"
 #include "menu/ui_screen.h"
 
 void func_8004D578(void);

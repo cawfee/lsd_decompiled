@@ -1,5 +1,5 @@
 #include "file/tim_image.h"
-#include "memory/memory.h"
+#include "base/base.h"
 #include "file/file_buf.h"
 #include "graphics/display.h"
 #include <psx/libgs.h>

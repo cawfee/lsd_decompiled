@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct dream_sys dream_sys_t;
 

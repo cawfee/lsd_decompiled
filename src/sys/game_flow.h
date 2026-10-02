@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 #include "dream/dream_session.h"
 #include "dream/dream_sys.h"

@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct notify_node_vtable {
     /* 0x000 80086aa0 */ u32 type_id;

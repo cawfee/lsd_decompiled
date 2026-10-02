@@ -2,7 +2,7 @@
 
 #include <psx/libgpu.h>
 
-#include "memory/memory.h"
+#include "base/base.h"
 #include "file/file_buf.h"
 
 void func_80044F90(void *, s32);

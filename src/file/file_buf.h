@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct file_buf_vtable {
     /* 0x000 8006d430 */ u32 type_id;

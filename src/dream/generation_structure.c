@@ -3,6 +3,11 @@
 
 extern generation_structure_vtable_t D_800876FC;
 
+extern void *D_8008ACAC;
+extern s32 D_8008ACB0;
+extern void *D_8008ACA4;
+extern s32 D_8008AB98[];
+
 generation_structure_t *generation_structure_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
     generation_structure_t *allocated = (generation_structure_t *) memory_allocate_mem(0x98);
 
@@ -50,13 +55,6 @@ void func_800564F4(generation_structure_t *This, s32 Unk1) {
     ++This->m_Unk8;
     func_80056640(This, Unk1);
 }
-
-#include "dream/generation_structure.h"
-
-extern void *D_8008ACAC;
-extern s32 D_8008ACB0;
-extern void *D_8008ACA4;
-extern s32 D_8008AB98[];
 
 void func_80056794(generation_structure_t *This, s32 *Unk1, s32 *Unk2);
 void func_800567D4(generation_structure_t *This, s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);

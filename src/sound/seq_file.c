@@ -1,6 +1,6 @@
 #include "sound/seq_file.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "file/file_buf.h"
 
 s32 file_buf_destroy(void *);

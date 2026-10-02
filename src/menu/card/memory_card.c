@@ -3,7 +3,7 @@
 #include <psx/kernel.h>
 #include <psx/libapi.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "menu/card/memory_card.h"
 
 extern memory_card_vtable_t g_MEMORY_CARD_VTABLE;

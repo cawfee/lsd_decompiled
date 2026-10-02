@@ -1,5 +1,5 @@
 #include "graphics/flat_light.h"
-#include "base/base_class.h"
+#include "base/base.h"
 
 #include <psx/libgs.h>
 

@@ -10,6 +10,8 @@
 extern s32 D_8006E854[3];
 extern ui_screen_vtable_t D_8006E730;
 
+extern char D_8006E860[];
+
 ui_screen_t *ui_screen_create(u32 Unk1, u32 Unk2, u32 Unk3) {
     ui_screen_t *allocated = (ui_screen_t *) memory_allocate_mem(0xA4);
 
@@ -53,8 +55,6 @@ void func_8003C008(ui_screen_t *This) {
     This->vtable->Unk54(This);
     timer_get_vtable()->Cleanup(This);
 }
-
-extern char D_8006E860[];
 
 void func_8003C11C(ui_screen_t *This) {
     ui_screen_vtable_t *vt;

@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct class_select_menu_vtable {
     /* 0x000 80086f88 */ u32 type_id;

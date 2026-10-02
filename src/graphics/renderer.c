@@ -1,5 +1,5 @@
 #include "graphics/renderer.h"
-#include "base/base_class.h"
+#include "base/base.h"
 #include "base/transform.h"
 #include "graphics/effect.h"
 

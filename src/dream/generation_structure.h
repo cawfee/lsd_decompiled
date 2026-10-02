@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct generation_structure_vtable {
     /* 0x000 800876fc */ u32 type_id;

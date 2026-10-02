@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct seq_file_vtable {
     /* 0x000 8006eed8 */ u32 type_id;

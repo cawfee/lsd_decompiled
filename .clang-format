@@ -44,6 +44,5 @@ AllowAllParametersOfDeclarationOnNextLine: true
 BinPackParameters: false
 Cpp11BracedListStyle: false
 
-# No space after casts: `(void)Size`, `(u32)value`, `(u8 *)ptr`.
-SpaceAfterCStyleCast: false
+SpaceAfterCStyleCast: true
 ...

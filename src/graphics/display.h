@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 /* 0xC bytes; w/h are 32-bit; display_copy_rect reads +0, +2, +4, +8 */
 typedef struct vram_rect {

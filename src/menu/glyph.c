@@ -2,7 +2,7 @@
 
 #include "menu/sprite_node.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 void func_8001CBA4(base_class_t *);
 void func_8001CC48(base_class_t *, base_class_t *);

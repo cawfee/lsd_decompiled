@@ -1,5 +1,5 @@
 #include "base/timer.h"
-#include "base/base_class.h"
+#include "base/base.h"
 #include "base/frame_phase.h"
 #include "graphics/light.h"
 #include "graphics/renderer.h"

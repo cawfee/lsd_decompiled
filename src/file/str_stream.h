@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct str_stream_vtable {
     /* 0x000 800817e0 */ u32 type_id;

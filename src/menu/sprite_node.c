@@ -2,7 +2,7 @@
 
 #include "menu/sprite.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 extern s32 D_8006EE10[3];
 

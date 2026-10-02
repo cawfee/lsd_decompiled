@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct effect_base_vtable {
     /* 0x000 8006eac0 */ u32 type_id;

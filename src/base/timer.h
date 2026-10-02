@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct timer timer_t;
 typedef struct timer_vtable timer_vtable_t;

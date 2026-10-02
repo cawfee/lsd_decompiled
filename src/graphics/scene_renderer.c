@@ -1,5 +1,5 @@
 #include "graphics/scene_renderer.h"
-#include "base/base_class.h"
+#include "base/base.h"
 #include "graphics/renderer.h"
 
 void func_8004D2A4(void *);

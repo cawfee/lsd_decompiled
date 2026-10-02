@@ -6,7 +6,7 @@
 extern long CdControlF(unsigned char, unsigned char *);
 extern long CdRead2(long);
 extern void StSetStream(unsigned long, unsigned long, unsigned long, void *, void *);
-#include "base/base_class.h"
+#include "base/base.h"
 
 // CD related class?
 

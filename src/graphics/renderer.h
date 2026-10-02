@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct renderer_vtable {
     /* 0x000 8006e8e4 */ u32 type_id;

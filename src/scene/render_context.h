@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct render_context_vtable {
     /* 0x000 800866e8 */ u32 type_id;

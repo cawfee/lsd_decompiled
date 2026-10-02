@@ -1,6 +1,6 @@
 #include "menu/card/comment_input.h"
-#include "base/base_class.h"
-#include "memory/memory.h"
+#include "base/base.h"
+#include "base/base.h"
 #include "file/tim_image.h"
 #include "menu/glyph.h"
 #include "menu/sprite_node.h"

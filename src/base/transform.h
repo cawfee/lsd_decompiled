@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct transform_vtable {
     /* 0x000 8006b5cc */ u32 type_id;

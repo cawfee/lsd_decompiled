@@ -1,7 +1,7 @@
 #ifndef LSD_ENTITY_H
 #define LSD_ENTITY_H
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "common.h"
 #include "graphics/effect.h"
 

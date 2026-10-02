@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct generation_sprite_vtable {
     /* 0x000 800879c4 */ u32 type_id;

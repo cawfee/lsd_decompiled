@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct class_comment_input_vtable {
     /* 0x000 80086ed0 */ u32 type_id;

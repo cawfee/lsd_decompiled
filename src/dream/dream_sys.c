@@ -1,7 +1,7 @@
 #include "dream/dream_sys.h"
 #include <psx/rand.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "scene/scene_node.h"
 #include "scene/stage_grid.h"
 

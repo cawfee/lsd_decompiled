@@ -1,7 +1,7 @@
 #ifndef LSD_EFFECT_H
 #define LSD_EFFECT_H
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "common.h"
 
 /* Effect: a short-lived colour-cycling primitive attached to an entity.

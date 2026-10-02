@@ -1,5 +1,5 @@
 #include "menu/mdec_movie.h"
-#include "base/base_class.h"
+#include "base/base.h"
 #include "file/str_stream.h"
 
 extern mdec_movie_vtable_t g_MDEC_MOVIE_VTABLE;

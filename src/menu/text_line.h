@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct text_line_vtable {
     /* 0x000 8006eb90 */ u32 type_id;

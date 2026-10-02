@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 #include "graphics/display.h"
 #include "sys/game_flow.h"

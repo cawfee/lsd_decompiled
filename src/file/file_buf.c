@@ -1,7 +1,7 @@
 #include "file/file_buf.h"
 
-#include "base/base_class.h"
-#include "memory/memory.h"
+#include "base/base.h"
+#include "base/base.h"
 #include "file/debug_file_driver.h"
 
 s32 file_buf_destroy(file_buf_t *);

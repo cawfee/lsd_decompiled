@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "memory/memory.h"
+#include "base/base.h"
 #include "file/file_buf.h"
 #include "graphics/display.h"
 
@@ -156,41 +156,42 @@ void cd_file_driver_open(file_buf_t *This, s32 arg1, s32 arg2, s32 arg3) {
     cd_file_driver_unlock();
 }
 
-void cd_file_driver_close(file_buf_t *arg0) {
+void cd_file_driver_close(file_buf_t *This) {
     if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
-        cd_file_driver_reset_cache();
+        cd_file_driver_reset_cache(This);
     } else {
         cd_file_driver_lock();
-        if (arg0->m_Unk9 != 0) {
+        if (This->m_Unk9 != 0) {
             if (g_CdReadBusy == 0) {
                 cd_file_driver_begin_read(0, 0);
-                arg0->m_Unk2 = 0;
+                This->m_Unk2 = 0;
                 cd_file_driver_end_read();
             }
         } else {
-            cd_file_driver_queue_request(arg0, 0, 3, 0, 0);
+            cd_file_driver_queue_request(This, 0, 3, 0, 0);
         }
         cd_file_driver_unlock();
     }
 }
 
-s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
+s32 cd_file_driver_seek(file_buf_t *This, u32 arg1, s32 arg2) {
     u32 temp_v0;
     u32 var_s0;
     s32 status;
 
     if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
-        return cd_file_driver_get_aligned_size();
+        return cd_file_driver_get_aligned_size(This);
     }
+
     cd_file_driver_lock();
-    if (arg0->m_Unk9 != 0) {
-        if (g_CdReadBusy == 0 && arg0->m_Unk2 != 0) {
+    if (This->m_Unk9 != 0) {
+        if (g_CdReadBusy == 0 && This->m_Unk2 != 0) {
             cd_file_driver_begin_read(2, 1);
             var_s0 = arg1 >> 11;
             if (arg1 & 0x7FF) {
                 var_s0 += 1;
             }
-            CdIntToPos(CdPosToInt((u8 *) &arg0->m_Unk5) + var_s0, D_8006D574);
+            CdIntToPos(CdPosToInt((u8 *) &This->m_Unk5) + var_s0, D_8006D574);
             if (arg2 == 0) {
                 if (g_CdFrameActive != 0) {
                     g_CdReadPos = (s32) D_8006D574 - 0x14;
@@ -207,7 +208,7 @@ s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
             } else {
                 cd_file_driver_end_read();
                 cd_file_driver_unlock();
-                temp_v0 = arg0->m_Unk6;
+                temp_v0 = This->m_Unk6;
                 if (temp_v0 & 0x7FF) {
                     return ((temp_v0 >> 11) + 1) << 11;
                 }
@@ -215,7 +216,7 @@ s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
             }
         }
     } else {
-        cd_file_driver_queue_request(arg0, 0, 4, arg1, arg2);
+        cd_file_driver_queue_request(This, 0, 4, arg1, arg2);
     }
     cd_file_driver_unlock();
     return 0;
@@ -224,16 +225,16 @@ s32 cd_file_driver_seek(file_buf_t *arg0, u32 arg1, s32 arg2) {
 void cd_file_driver_unk19(void) {
 }
 
-s32 cd_file_driver_read(file_buf_t *arg0, s32 arg1, u32 arg2) {
+s32 cd_file_driver_read(file_buf_t *This, s32 arg1, u32 arg2) {
     s32 status;
 
     if (g_CdFrameActive == 0 && g_CdFrameParam == 0) {
-        cd_file_driver_read_sectors();
+        cd_file_driver_read_sectors(This, arg1, arg2);
         return 0;
     }
     cd_file_driver_lock();
-    if (arg0->m_Unk9 != 0) {
-        if (g_CdReadBusy == 0 && arg0->m_Unk2 != 0) {
+    if (This->m_Unk9 != 0) {
+        if (g_CdReadBusy == 0 && This->m_Unk2 != 0) {
             cd_file_driver_begin_read(3, 7);
             if (g_CdFrameActive != 0) {
                 g_CdReadDest = arg2 >> 11;
@@ -252,7 +253,7 @@ s32 cd_file_driver_read(file_buf_t *arg0, s32 arg1, u32 arg2) {
             }
         }
     } else {
-        cd_file_driver_queue_request(arg0, 0, 5, arg1, arg2);
+        cd_file_driver_queue_request(This, 0, 5, arg1, arg2);
     }
     cd_file_driver_unlock();
     return 0;

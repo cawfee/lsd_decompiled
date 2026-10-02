@@ -3,8 +3,8 @@
 #include <psx/libetc.h>
 #include <psx/libgs.h>
 
-#include "base/base_class.h"
-#include "memory/memory.h"
+#include "base/base.h"
+#include "base/base.h"
 
 display_vtable_t g_DISPLAY_VTABLE = {
     1,

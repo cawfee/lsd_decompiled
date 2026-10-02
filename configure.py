@@ -330,7 +330,7 @@ c_psyq_targets = [
 c_game_targets = [
     "src/file/tim_list.c",
     "src/main.c",
-    "src/memory/memory.c",
+    "src/base/base.c",
     "src/utils/cd_paths.c",
     "src/menu/main_menu.c",
     "src/menu/card/memory_card.c",
@@ -347,7 +347,6 @@ c_game_targets = [
     "src/file/str_stream.c",
     "src/sys/pad.c",
     "src/sys/display_ref.c",
-    "src/base/base_class.c",
     "src/file/cd_file_driver.c",
     "src/file/tmd_prim_geom.c",
     "src/base/object_math.c",

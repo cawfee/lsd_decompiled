@@ -1,7 +1,7 @@
 #include "menu/text_line.h"
 #include "menu/glyph.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 void func_8001CC48(base_class_t *, base_class_t *);
 void func_8001CCB4(base_class_t *, base_class_t *);

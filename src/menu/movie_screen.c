@@ -1,6 +1,6 @@
 #include "menu/movie_screen.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "menu/ui_screen.h"
 
 s32 *func_8003DFCC(void);

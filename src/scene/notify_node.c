@@ -1,6 +1,6 @@
 #include "scene/notify_node.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "base/transform.h"
 
 void func_8004D3DC(void *);

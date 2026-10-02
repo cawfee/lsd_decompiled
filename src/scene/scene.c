@@ -1,6 +1,6 @@
 #include "scene/scene.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "base/timer.h"
 
 void func_8003E030(void *, void **, s32);

@@ -1,6 +1,6 @@
 #include "file/debug_file_driver.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "file/file_buf.h"
 
 s32 g_DebugFrameState = 0;

@@ -1,7 +1,7 @@
 #ifndef LSD_TMD_PRIM_H
 #define LSD_TMD_PRIM_H
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "common.h"
 
 typedef struct tmd_prim_vtable {

@@ -49,7 +49,7 @@ segments:
     # bss_size: Please fill out this value when you figure out the bss size
     subsegments:
       - [0x800, rodata]
-      - [0xA8C, .rodata, memory/memory]
+      - [0xA8C, .rodata, base/base]
       - [0xABC, rodata]
       - [0xF28, rodata]
       - [0xFA4, .rodata, sys/game_flow]
@@ -135,8 +135,7 @@ segments:
       - [0x7A10, c, psyq/gte/geo03]
       - [0x7D70, c, psyq/gte/msc02]
       - [0x8010, c, psyq/gte/smp00]
-      - [0x8220, c, memory/memory]
-      - [0x86b0, c, base/base_class]
+      - [0x8220, c, base/base]
       - [0x8c64, asm, psyq_unk2]
       - [0xAD64, c, psyq/gte/divf3a]
       - [0xB0D4, c, psyq/gte/divf4a]
@@ -319,7 +318,7 @@ segments:
       - [0x55DD4, c, scene/actor] #class
       - [0x57028, .data, main]
       - [0x57040, data]
-      - [0x5BD8C, .data, base/base_class]
+      - [0x5BD8C, .data, base/base]
       - [0x5BDCC, data]
       - [0x5C6A0, .data, file/tmd_prim]
       - [0x5C6F0, data]
@@ -372,9 +371,7 @@ segments:
       - [0x7AEC4, .data, scene/actor]
       - [0x7b008, .sdata, main]
       - [0x7B00C, sdata]
-      # - [0x7B018, .data, memory/memory]
-      - [0x7b018, .sdata, memory/memory]
-      - [0x7b020, .sdata, base/base_class]
+      - [0x7b018, .sdata, base/base]
       - [0x7b024, sdata]
       - [0x7B03C, .sdata, sys/display_ref]
       - [0x7B040, sdata]

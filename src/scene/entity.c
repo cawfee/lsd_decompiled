@@ -1,6 +1,6 @@
 #include <psx/rand.h>
 
-#include "memory/memory.h"
+#include "base/base.h"
 #include "base/transform.h"
 #include "dream/dream_sys.h"
 #include "scene/actor.h"

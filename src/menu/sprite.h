@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct sprite_unk24 {
     /* 0x00 */ u32 m_Unk24;

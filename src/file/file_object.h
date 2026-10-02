@@ -1,4 +1,4 @@
-#include "base/base_class.h"
+#include "base/base.h"
 #ifndef LSD_FILE_OBJECT_H
 #define LSD_FILE_OBJECT_H
 

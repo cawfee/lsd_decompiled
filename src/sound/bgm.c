@@ -2,7 +2,7 @@
 
 #include <psx/libsnd.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "sound/seq_file.h"
 #include "sound/sound.h"
 

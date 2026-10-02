@@ -1,6 +1,6 @@
 #include "base/transform.h"
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 extern s32 class_FA50_is_active(s32);
 

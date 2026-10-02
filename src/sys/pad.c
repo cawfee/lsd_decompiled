@@ -1,5 +1,5 @@
 #include "sys/pad.h"
-#include "base/base_class.h"
+#include "base/base.h"
 
 extern s32 g_PadInitRefCount;
 extern s32 g_PadState[];

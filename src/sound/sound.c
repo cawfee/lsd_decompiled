@@ -1,6 +1,6 @@
 #include <psx/libsnd.h>
 
-#include "memory/memory.h"
+#include "base/base.h"
 #include "scene/entity.h"
 #include "sound/sound.h"
 #include <psx/libspu.h>

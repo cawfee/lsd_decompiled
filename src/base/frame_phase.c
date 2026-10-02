@@ -1,5 +1,6 @@
 #include "base/frame_phase.h"
-#include "base/base_class.h"
+#include "base/base.h"
+#include "base/base.h"
 
 frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     0x5,
@@ -53,7 +54,7 @@ void frame_phase_remove_parent(frame_phase_t *This, base_class_t *Unk) {
 
     node = (void **) This->m_NotifyCursor;
     if (node != NULL && Unk == node[1]) {
-        This->m_NotifyCursor = (s32) node[0];
+        This->m_NotifyCursor = node[0];
     }
     base_class_get_vtable()->RemoveParent(This, Unk);
 }
@@ -61,20 +62,20 @@ void frame_phase_remove_parent(frame_phase_t *This, base_class_t *Unk) {
 void frame_phase_notify(frame_phase_t *This, s32 Unk) {
     base_class_t *cur;
 
-    This->m_NotifyCursor = This->m_Parents;
+    This->m_NotifyCursor = (void *) This->m_Parents;
     linked_list_next(&cur, (linked_list_node_t **) &This->m_NotifyCursor);
     while (cur != NULL) {
         cur->vtable->OnNotify(cur, This, Unk);
         linked_list_next(&cur, (linked_list_node_t **) &This->m_NotifyCursor);
     }
-    This->m_NotifyCursor = 0;
+    This->m_NotifyCursor = NULL;
 }
 
 void frame_phase_reset(frame_phase_t *This, s32 Unk) {
     This->m_Phase = Unk;
     This->m_Finished = 0;
     This->m_Waiting = 0;
-    This->m_NotifyCursor = 0;
+    This->m_NotifyCursor = NULL;
 }
 
 void frame_phase_advance(frame_phase_t *This) {

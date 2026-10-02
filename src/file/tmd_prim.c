@@ -1,5 +1,5 @@
 #include "file/tmd_prim.h"
-#include "base/base_class.h"
+#include "base/base.h"
 
 #include <psx/libgs.h>
 

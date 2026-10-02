@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct scene_renderer_vtable {
     /* 0x000 800869d8 */ u32 type_id;

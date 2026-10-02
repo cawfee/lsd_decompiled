@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 typedef struct class_object_model_vtable {
     /* 0x000 8006f384 */ u32 type_id;

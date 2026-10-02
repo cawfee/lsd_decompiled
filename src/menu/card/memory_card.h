@@ -1,4 +1,4 @@
-#include "base/base_class.h"
+#include "base/base.h"
 #ifndef LSD_MEMORY_CARD_H
 #define LSD_MEMORY_CARD_H
 

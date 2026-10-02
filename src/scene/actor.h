@@ -1,7 +1,7 @@
 #ifndef LSD_ACTOR_H
 #define LSD_ACTOR_H
 
-#include "base/base_class.h"
+#include "base/base.h"
 #include "common.h"
 
 /* actor is the engine's generic "actor" base class below entity:

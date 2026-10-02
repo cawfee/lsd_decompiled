@@ -2,7 +2,7 @@
 
 #include <psx/kernel.h>
 
-#include "memory/memory.h"
+#include "base/base.h"
 #include "graphics/display.h"
 #include "sys/game_flow.h"
 #include "sys/pad.h"

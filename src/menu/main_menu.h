@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#include "base/base_class.h"
+#include "base/base.h"
 
 #include "dream/dream_sys.h"
 #include "file/tim_image.h"
