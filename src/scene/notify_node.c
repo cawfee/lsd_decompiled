@@ -94,7 +94,7 @@ notify_node_vtable_t D_80086AA0 = {
 };
 
 notify_node_t *func_8004D38C() {
-    notify_node_t *allocated = (notify_node_t *) memory_allocate_mem(0x3C);
+    notify_node_t *allocated = ALLOCATE_STRUCT(notify_node_t);
 
     if (allocated) {
         func_8004D508()->Construct(allocated);

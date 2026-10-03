@@ -17,7 +17,7 @@ transform_t *func_8001CA94(void);
 s32 GsSetRefView2(void *);
 
 renderer_t *renderer_create(void) {
-    renderer_t *memory = (renderer_t *) memory_allocate_mem(0xBC);
+    renderer_t *memory = ALLOCATE_STRUCT(renderer_t);
 
     if (memory != 0) {
         renderer_get_vtable()->Construct(memory);

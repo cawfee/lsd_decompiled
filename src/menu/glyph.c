@@ -104,7 +104,7 @@ class_glyph_vtable_t g_GLYPH_VTABLE = {
 };
 
 class_glyph_t *glyph_create(s32 Unk1, u8 Unk2) {
-    class_glyph_t *allocated = (class_glyph_t *) memory_allocate_mem(0xAC);
+    class_glyph_t *allocated = ALLOCATE_STRUCT(class_glyph_t);
 
     if (allocated) {
         glyph_get_vtable()->Construct(allocated, Unk1, Unk2);

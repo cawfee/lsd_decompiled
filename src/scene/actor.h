@@ -136,7 +136,6 @@ typedef struct actor {
     /* 0x8C */ s32 m_Unk34;
     /* 0x90 */ s32 m_Unk35;
     /* 0x94 */ s32 m_Unk36;
-    /* 0x98 */ s32 m_Unk37;
 } actor_t;
 
 // actor_t *actor_create(s32 Unk1, s32 Unk2);

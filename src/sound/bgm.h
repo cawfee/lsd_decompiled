@@ -48,7 +48,6 @@ typedef struct bgm {
     /* 0x1C */ u16 m_Paused;
     /* 0x1E */ u16 m_Playing;
     /* 0x20 */ s32 m_AutoPlay;
-    /* 0x24 */ s32 m_Unk8;
 } bgm_t;
 
 bgm_vtable_t *bgm_get_vtable(void);

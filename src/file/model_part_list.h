@@ -53,7 +53,6 @@ typedef struct model_part_list {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
-    /* 0x2C */ s32 m_Unk10;
 } model_part_list_t;
 
 model_part_list_vtable_t *func_80045428(void);

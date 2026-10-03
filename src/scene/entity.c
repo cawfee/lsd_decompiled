@@ -507,7 +507,7 @@ void sound_entity_update(void *This, s32 *Ctx);
 void sound_entity_stop(void **This, s32 *Unk2);
 
 entity_t *entity_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    entity_t *allocated = (entity_t *) memory_allocate_mem(0x108);
+    entity_t *allocated = ALLOCATE_STRUCT(entity_t);
 
     if (allocated) {
         if (entity_get_vtable()->entity_construct(allocated, Unk1, Unk2, Unk3) == NULL) {

@@ -62,7 +62,6 @@ typedef struct tile_buffer {
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ u16 m_Unk15_1;
     /* 0x42 */ s16 m_Unk15_2;
-    /* 0x44 */ s32 m_Unk16;
 } tile_buffer_t;
 
 tile_buffer_t *func_80044CD4(s32 Unk1, void *Unk2);

@@ -45,7 +45,7 @@ seq_file_vtable_t g_SEQ_FILE_VTABLE = {
 };
 
 seq_file_t *seq_file_create(u32 Unk1) {
-    seq_file_t *allocated = (seq_file_t *) memory_allocate_mem(0x30);
+    seq_file_t *allocated = ALLOCATE_STRUCT(seq_file_t);
 
     if (allocated) {
         seq_file_get_vtable()->Construct(allocated, Unk1);

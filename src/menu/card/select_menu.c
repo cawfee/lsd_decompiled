@@ -7,7 +7,7 @@
 extern class_select_menu_vtable_t D_80086F88;
 
 class_select_menu_t *func_80051A5C(s32 Unk1, s32 Unk2) {
-    class_select_menu_t *allocated = (class_select_menu_t *) memory_allocate_mem(0x54);
+    class_select_menu_t *allocated = ALLOCATE_STRUCT(class_select_menu_t);
 
     if (allocated) {
         func_80052B60()->Construct(allocated, Unk1, Unk2);

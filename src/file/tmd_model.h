@@ -5,10 +5,19 @@
 
 #include "base/base.h"
 
+typedef struct {
+    s32 m_Unk0;
+    char *m_Path;
+    s32 m_Unk1;
+    s32 m_Unk2;
+} tmd_model_arg_t;
+
+typedef struct tmd_model tmd_model_t;
+
 typedef struct tmd_model_vtable {
     /* 0x000 8006f13c */ u32 type_id;
     /* 0x004 8006f140 */ base_class_t *(*Destroy)(base_class_t *);
-    /* 0x008 8006f144 */ s32 (*Construct)(void *, s32);
+    /* 0x008 8006f144 */ s32 (*Construct)(tmd_model_t *, tmd_model_arg_t *);
     /* 0x00C 8006f148 */ void (*Cleanup)(base_class_t *);
     /* 0x010 8006f14c */ void (*Attach)(base_class_t *, base_class_t *);
     /* 0x014 8006f150 */ void (*Detach)(base_class_t *, base_class_t *);
@@ -56,9 +65,9 @@ typedef struct tmd_model {
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Unk10;
-    /* 0x30 */ s32 m_Unk11;
 } tmd_model_t;
 
+tmd_model_t *tmd_create(tmd_model_arg_t *Args);
 tmd_model_vtable_t *func_80043B78(void);
 
 #endif // LSD_TMD_MODEL_H

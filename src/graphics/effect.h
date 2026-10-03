@@ -126,7 +126,6 @@ typedef struct effect {
     /* 0x94 */ s32 m_Unk36;
     /* 0x98 */ s32 m_Unk37;
     /* 0x9C */ s32 m_Unk38;
-    /* 0xA0 */ s32 m_Unk39;
 } effect_t;
 
 effect_t *effect_create(s32 Unk1, s32 Unk2, s32 Unk3);

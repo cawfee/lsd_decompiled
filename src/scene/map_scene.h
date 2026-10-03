@@ -99,7 +99,6 @@ typedef struct map_scene {
     /* 0x7C */ void *m_TextLine;
     /* 0x80 */ s32 m_TextStarted;
     /* 0x84 */ s32 m_Unk32;
-    /* 0x88 */ s32 m_Unk33;
 } map_scene_t;
 
 map_scene_vtable_t *func_800544D4(void);

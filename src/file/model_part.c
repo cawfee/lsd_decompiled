@@ -3,7 +3,7 @@
 extern model_part_vtable_t D_8006F240;
 
 model_part_t *func_80043E84(s32 Unk1) {
-    model_part_t *allocated = (model_part_t *) memory_allocate_mem(0x2C);
+    model_part_t *allocated = ALLOCATE_STRUCT(model_part_t);
 
     if (allocated) {
         func_800441A4()->Construct(allocated, Unk1);

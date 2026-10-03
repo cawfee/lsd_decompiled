@@ -58,4 +58,7 @@ typedef struct file_buf {
 void *get_file_driver();
 file_buf_vtable_t *file_buf_get_vtable(void);
 
+void set_data_folder(const char *Value);
+const char *get_current_data_folder();
+
 #endif

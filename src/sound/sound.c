@@ -34,7 +34,7 @@ extern s16 SsUtGetVagAtr(s16, s32, s16, s32);
 extern void SsSetMVol(s16, s16);
 
 sound_t *sound_create(u32 Unk1) {
-    sound_t *allocated = (sound_t *) memory_allocate_mem(0x64);
+    sound_t *allocated = ALLOCATE_STRUCT(sound_t);
 
     if (allocated) {
         sound_get_vtable()->sound_construct(allocated, Unk1);

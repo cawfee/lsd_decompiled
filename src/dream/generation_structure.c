@@ -9,7 +9,7 @@ extern void *D_8008ACA4;
 extern s32 D_8008AB98[];
 
 generation_structure_t *generation_structure_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
-    generation_structure_t *allocated = (generation_structure_t *) memory_allocate_mem(0x98);
+    generation_structure_t *allocated = ALLOCATE_STRUCT(generation_structure_t);
 
     if (allocated) {
         generation_structure_vtable_t *vtable = func_80056F4C();

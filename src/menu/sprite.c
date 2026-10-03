@@ -94,7 +94,7 @@ sprite_vtable_t D_8006EE1C = {
 };
 
 sprite_t *func_80041EE8(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
-    sprite_t *allocated = (sprite_t *) memory_allocate_mem(0xA0);
+    sprite_t *allocated = ALLOCATE_STRUCT(sprite_t);
 
     if (allocated) {
         func_800422BC()->Construct(allocated, Unk1, Unk2, Unk3, Unk4, Unk5);

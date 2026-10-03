@@ -115,7 +115,6 @@ typedef struct text_line {
     /* 0xAF */ s8 m_Unk42_4;
     /* 0xB0 */ s32 m_Spacing;
     /* 0xB4 */ void *m_Glyphs;
-    /* 0xB8 */ s32 m_Unk45;
 } text_line_t;
 
 text_line_vtable_t *text_line_get_vtable(void);

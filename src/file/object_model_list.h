@@ -60,7 +60,6 @@ typedef struct class_object_model_list {
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
-    /* 0x3C */ s32 m_Unk14;
 } class_object_model_list_t;
 
 class_object_model_list_vtable_t *func_80044CC4();

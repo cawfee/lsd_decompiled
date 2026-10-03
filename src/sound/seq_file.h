@@ -51,7 +51,6 @@ typedef struct seq_file {
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Flag;
-    /* 0x30 */ s32 m_Unk11;
 } seq_file_t;
 
 seq_file_t *seq_file_create(u32 Unk1);

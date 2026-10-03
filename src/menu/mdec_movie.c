@@ -23,7 +23,7 @@ void func_80046568(s32, s32);
 void func_800458AC(mdec_movie_t *This);
 
 mdec_movie_t *mdec_movie_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    mdec_movie_t *allocated = (mdec_movie_t *) memory_allocate_mem(0x6C);
+    mdec_movie_t *allocated = ALLOCATE_STRUCT(mdec_movie_t);
 
     if (allocated) {
         ;

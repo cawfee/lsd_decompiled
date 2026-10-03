@@ -129,7 +129,6 @@ typedef struct ui_screen {
     /* 0x98 */ s32 m_Unk37;
     /* 0x9C */ void (*m_Unk38)(void *);
     /* 0xA0 */ void *m_Unk39;
-    /* 0xA4 */ s32 m_Unk40;
 } ui_screen_t;
 
 ui_screen_t *ui_screen_create(u32 Unk1, u32 Unk2, u32 Unk3);

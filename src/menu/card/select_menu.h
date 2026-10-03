@@ -71,7 +71,6 @@ typedef struct class_select_menu {
     /* 0x48 */ s32 m_Unk17;
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
-    /* 0x54 */ s32 m_Unk20;
 } class_select_menu_t;
 
 class_select_menu_vtable_t *func_80052B60(void);

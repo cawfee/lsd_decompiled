@@ -191,7 +191,7 @@ static u8 D_8008AA28 = 0;
 static s32 D_8008AA2C = 0;
 
 main_menu_t *main_menu_create(u32 Unk1) {
-    main_menu_t *allocated = (main_menu_t *) memory_allocate_mem(0xC4);
+    main_menu_t *allocated = ALLOCATE_STRUCT(main_menu_t);
 
     if (allocated) {
         main_menu_get_vtable()->Construct(allocated, Unk1);

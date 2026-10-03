@@ -48,7 +48,7 @@ sprite_atlas_vtable_t D_8006F514 = {
 };
 
 sprite_atlas_t *func_80044F30(u32 Unk1) {
-    sprite_atlas_t *allocated = (sprite_atlas_t *) memory_allocate_mem(0x38);
+    sprite_atlas_t *allocated = ALLOCATE_STRUCT(sprite_atlas_t);
 
     if (allocated) {
         func_800451A8()->Construct(allocated, Unk1);

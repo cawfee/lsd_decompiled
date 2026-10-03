@@ -178,7 +178,7 @@ actor_vtable_t g_ACTOR_VTABLE = {
 };
 
 actor_t *actor_create(s32 Unk1, s32 Unk2) {
-    actor_t *allocated = (actor_t *) memory_allocate_mem(0x98);
+    actor_t *allocated = ALLOCATE_STRUCT(actor_t);
 
     if (allocated) {
         if (actor_get_vtable()->actor_construct(allocated, Unk1, Unk2)) {

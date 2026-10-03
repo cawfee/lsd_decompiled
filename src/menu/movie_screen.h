@@ -142,7 +142,6 @@ typedef struct movie_screen {
     /* 0xD0 */ s32 m_Unk51;
     /* 0xD4 */ s32 m_Unk52;
     /* 0xD8 */ s32 m_Unk53;
-    /* 0xDC */ s32 m_Unk54;
 } movie_screen_t;
 
 movie_screen_t *movie_screen_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4);

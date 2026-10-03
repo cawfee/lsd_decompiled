@@ -1,7 +1,7 @@
 #include "base/frame_phase.h"
 #include "base/base.h"
 
-frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
+static frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
     0x5,
     base_class_destructor,
     frame_phase_construct,
@@ -28,11 +28,11 @@ frame_phase_vtable_t g_FRAME_PHASE_VTABLE = {
 };
 
 frame_phase_t *frame_phase_create(void) {
-    frame_phase_t *allocated = (frame_phase_t *) memory_allocate_mem(0x1C);
+    frame_phase_t *cls = ALLOCATE_STRUCT(frame_phase_t);
 
-    if (allocated) {
-        frame_phase_get_vtable()->Construct(allocated);
-        return allocated;
+    if (cls) {
+        frame_phase_get_vtable()->Construct(cls);
+        return cls;
     }
 
     return NULL;
@@ -41,7 +41,7 @@ frame_phase_t *frame_phase_create(void) {
 void frame_phase_construct(frame_phase_t *This) {
     base_class_get_vtable()->Construct(This);
     This->vtable = frame_phase_get_vtable();
-    This->vtable->frame_phase_reset(This, 0);
+    This->vtable->Reset(This, 0);
 }
 
 void frame_phase_cleanup(frame_phase_t *This) {
@@ -61,7 +61,7 @@ void frame_phase_remove_parent(frame_phase_t *This, base_class_t *Unk) {
 void frame_phase_notify(frame_phase_t *This, s32 Unk) {
     base_class_t *cur;
 
-    This->m_NotifyCursor = (void *) This->m_Parents;
+    This->m_NotifyCursor = This->m_Parents;
     linked_list_next(&cur, (linked_list_node_t **) &This->m_NotifyCursor);
     while (cur != NULL) {
         cur->vtable->OnNotify(cur, This, Unk);

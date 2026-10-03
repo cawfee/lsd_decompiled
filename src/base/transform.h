@@ -72,7 +72,6 @@ typedef struct transform {
     /* 0x38 */ s32 m_Unk13;
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ s32 m_Unk15;
-    /* 0x44 */ s32 m_Unk16;
 } transform_t;
 
 /* Fixed-point helpers shared by the transform/object-math code.

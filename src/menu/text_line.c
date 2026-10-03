@@ -111,7 +111,7 @@ text_line_vtable_t g_TEXT_LINE_VTABLE = {
 };
 
 text_line_t *text_line_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    text_line_t *allocated = (text_line_t *) memory_allocate_mem(0xB8);
+    text_line_t *allocated = ALLOCATE_STRUCT(text_line_t);
 
     if (allocated) {
         text_line_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);

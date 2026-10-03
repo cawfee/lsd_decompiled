@@ -48,7 +48,7 @@ model_part_list_vtable_t D_8006F590 = {
 };
 
 model_part_list_t *func_800451B8(s32 Unk1) {
-    model_part_list_t *allocated = (model_part_list_t *) memory_allocate_mem(0x2C);
+    model_part_list_t *allocated = ALLOCATE_STRUCT(model_part_list_t);
 
     if (allocated) {
         if (func_80045428()->Construct(allocated, Unk1)) {

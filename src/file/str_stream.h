@@ -64,7 +64,6 @@ typedef struct str_stream {
     /* 0x50 */ s32 m_RingSize;
     /* 0x54 */ s32 m_Unk20;
     /* 0x58 */ s32 m_Unk21;
-    /* 0x5C */ s32 m_Unk22;
 } str_stream_t;
 
 str_stream_vtable_t *str_stream_get_vtable(void);

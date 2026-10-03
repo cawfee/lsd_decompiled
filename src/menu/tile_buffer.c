@@ -43,7 +43,7 @@ tile_buffer_vtable_t D_8006F498 = {
 };
 
 tile_buffer_t *func_80044CD4(s32 Unk1, void *Unk2) {
-    tile_buffer_t *allocated = (tile_buffer_t *) memory_allocate_mem(0x44);
+    tile_buffer_t *allocated = ALLOCATE_STRUCT(tile_buffer_t);
 
     if (allocated) {
         func_80044F20()->Construct(allocated, Unk1, Unk2);

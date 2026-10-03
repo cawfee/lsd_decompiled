@@ -1,55 +1,12 @@
-#include "common.h"
+#include "base/object_math.h"
 
-extern void GsLinkObject4(u8 *obj, void *coord, s32 offset);
-extern void ApplyMatrixSV(void *mtx, void *v0, void *v1);
-extern void ApplyMatrixLV(void *mtx, void *v0, void *v1);
-extern s16 ratan2(s32, s32);
+#include <psx/libgs.h>
+#include <psx/libgte.h>
 
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-} sv6_t;
+#include "base/transform.h"
+#include "scene/scene_node.h"
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} vec_t;
-
-typedef struct {
-    s16 min_x;
-    s16 min_y;
-    s16 min_z;
-    s16 max_x;
-    s16 max_y;
-    s16 max_z;
-} box_t;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-} pt_t;
-
-typedef struct {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 w;
-} sv8_t;
-
-typedef struct e7bc_obj {
-    void *vtable;
-    s32 m_Unk0;
-    s32 m_Unk1;
-    s32 m_Unk2;
-    s32 m_Unk3;
-    void *m_Unk4;
-    s32 m_Unk5;
-    s32 m_Unk6;
-    s32 m_Unk7;
-} e7bc_obj_t;
+// todo cleanup file its a pain
 
 extern s32 func_8001F8B8(void *arg0, void *arg1, void *arg2, s32 arg3, void *arg4, void *arg5);
 void func_8001EA8C(s32 *arg0, s16 *arg1, s16 *arg2);
@@ -76,9 +33,9 @@ void transform_local_to_world(void *arg0, s32 *arg1, void *arg2) {
     method = *(void (**)(void *, void *, s32))((u8 *) *(void **) arg0 + 0x84);
     method(arg0, buf, 0);
     func_8001EE98((u8 *) arg1, (u8 *) arg2, 1, (u8 *) buf);
-    arg1[0] += ((vec_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->x;
-    arg1[1] += ((vec_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->y;
-    arg1[2] += ((vec_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->z;
+    arg1[0] += ((vec3d_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->x;
+    arg1[1] += ((vec3d_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->y;
+    arg1[2] += ((vec3d_t *) (*(s32 *) ((u8 *) arg0 + 0xC) ? (u8 *) *(void **) ((u8 *) arg0 + 0x14) + 0x38 : 0))->z;
 }
 
 /* Reads the object's Euler rotation, converting GTE angle units (4096/rev) to
@@ -104,35 +61,35 @@ void func_8001E770(void *arg0, void *arg1) {
     GsLinkObject4((u8 *) *(void **) ((u8 *) obj + 0xC) + 0xC, (u8 *) arg0 + 0x10, 0);
 }
 
-void func_8001E7B0(void *arg0) {
-    ((s32 *) arg0)[6] = 0;
-    ((s32 *) arg0)[8] = 0;
+void func_8001E7B0(transform_t *This) {
+    This->m_Unk5 = 0;
+    This->m_Unk7 = 0;
 }
 
-s32 func_8001E7BC(e7bc_obj_t *arg0, s32 *arg1, u16 *arg2) {
-    sv8_t vecA, vecB, vecC, vecD;
+s32 func_8001E7BC(scene_node_t *This, s32 *arg1, u16 *arg2) {
+    vec4d_16_t vecA, vecB, vecC, vecD;
     s32 *a3;
-    e7bc_obj_t *node;
+    scene_node_t *scene_node;
 
-    if (arg0->m_Unk7 != 0) {
-        if (arg0->m_Unk3 < 0) {
-            if (arg0->m_Unk2 != 0) {
-                a3 = arg0->m_Unk4;
+    if (This->m_Unk7 != 0) {
+        if (This->m_Unk3 < 0) {
+            if (This->m_Unk2 != 0) {
+                a3 = This->m_Unk4;
                 if ((u8 *) a3 + 0x38 != 0) {
                     a3[0x38 / 4] = a3[0x18 / 4];
                     a3[0x3C / 4] = a3[0x1C / 4];
                     a3[0x40 / 4] = a3[0x20 / 4];
-                    node = (e7bc_obj_t *) arg0->m_Unk2;
-                    if (node != 0) {
+                    scene_node = This->m_Unk2;
+                    if (scene_node != 0) {
                         do {
-                            ((vec_t *) (arg0->m_Unk2 ? (u8 *) arg0->m_Unk4 + 0x38 : 0))->x +=
-                                *(s32 *) ((u8 *) node->m_Unk4 + 0x18);
-                            ((vec_t *) (arg0->m_Unk2 ? (u8 *) arg0->m_Unk4 + 0x38 : 0))->y +=
-                                *(s32 *) ((u8 *) node->m_Unk4 + 0x1C);
-                            ((vec_t *) (arg0->m_Unk2 ? (u8 *) arg0->m_Unk4 + 0x38 : 0))->z +=
-                                *(s32 *) ((u8 *) node->m_Unk4 + 0x20);
-                            node = (e7bc_obj_t *) node->m_Unk2;
-                        } while (node != 0);
+                            ((vec3d_t *) (This->m_Unk2 ? (u8 *) This->m_Unk4 + 0x38 : 0))->x +=
+                                *(s32 *) ((u8 *) scene_node->m_Unk4 + 0x18);
+                            ((vec3d_t *) (This->m_Unk2 ? (u8 *) This->m_Unk4 + 0x38 : 0))->y +=
+                                *(s32 *) ((u8 *) scene_node->m_Unk4 + 0x1C);
+                            ((vec3d_t *) (This->m_Unk2 ? (u8 *) This->m_Unk4 + 0x38 : 0))->z +=
+                                *(s32 *) ((u8 *) scene_node->m_Unk4 + 0x20);
+                            scene_node = scene_node->m_Unk2;
+                        } while (scene_node != 0);
                     }
                 }
             } else {
@@ -140,21 +97,21 @@ s32 func_8001E7BC(e7bc_obj_t *arg0, s32 *arg1, u16 *arg2) {
                 goto body;
             }
         }
-        a3 = arg0->m_Unk2 ? (s32 *) ((u8 *) arg0->m_Unk4 + 0x38) : 0;
+        a3 = This->m_Unk2 ? (s32 *) ((u8 *) This->m_Unk4 + 0x38) : 0;
     body:
         vecB.x = ((u16 *) arg2)[0] - ((u16 *) a3)[0];
         vecB.y = ((u16 *) arg2)[2] - ((u16 *) a3)[2];
         vecB.z = ((u16 *) arg2)[4] - ((u16 *) a3)[4];
-        ((void (*)(void *, s32, sv8_t *, sv8_t *, s32))((*(void ***) arg0)[0xA4 / 4]))(arg0, 0, &vecA, &vecB, 1);
+        ((void (*)(void *, s32, vec4d_16_t *, vec4d_16_t *, s32))((*(void ***) This)[0xA4 / 4]))(This, 0, &vecA, &vecB, 1);
         vecB.x = vecA.x;
         vecB.y = vecA.y - 0x400;
         vecB.z = vecA.z;
-        if (func_8001F8B8(arg0->m_Unk7, &vecD, &vecC, 0, &vecA, &vecB) != 0) {
+        if (func_8001F8B8(This->m_Unk7, &vecD, &vecC, 0, &vecA, &vecB) != 0) {
             func_8001EA8C(arg1, (s16 *) &vecA, (s16 *) &vecC);
             return 1;
         }
         vecB.y = vecA.y + 0x400;
-        if (func_8001F8B8(arg0->m_Unk7, &vecD, &vecC, 0, &vecA, &vecB) != 0) {
+        if (func_8001F8B8(This->m_Unk7, &vecD, &vecC, 0, &vecA, &vecB) != 0) {
             func_8001EA8C(arg1, (s16 *) &vecA, (s16 *) &vecC);
             return 1;
         }
@@ -214,24 +171,27 @@ s32 func_8001EC84(void *arg0) {
     return ((a / b) << 12) + (((a % b) << 12) / b);
 }
 
-s32 func_8001ECFC(box_t *box, pt_t *pt) {
+s32 func_8001ECFC(box3d_16_t *box, vec3d_16_t *pt) {
     s32 flags = 0;
 
-    if (box->max_x < pt->x) {
+    if (box->max.x < pt->x) {
         flags = 8;
-    } else if (pt->x < box->min_x) {
+    } else if (pt->x < box->min.x) {
         flags = 4;
     }
-    if (box->max_y < pt->y) {
+
+    if (box->max.y < pt->y) {
         flags |= 2;
-    } else if (pt->y < box->min_y) {
+    } else if (pt->y < box->min.y) {
         flags |= 1;
     }
-    if (box->max_z < pt->z) {
+
+    if (box->max.z < pt->z) {
         flags |= 0x20;
-    } else if (pt->z < box->min_z) {
+    } else if (pt->z < box->min.z) {
         flags |= 0x10;
     }
+
     return flags;
 }
 
@@ -263,7 +223,7 @@ void func_8001EE04(void *arg0, void *arg1, s32 arg2, void *arg3) {
     u8 *end = (u8 *) arg0 + arg2 * 6;
 
     while ((u8 *) arg0 < end) {
-        sv6_t v = *(sv6_t *) arg1;
+        vec3d_16_t v = *(vec3d_16_t *) arg1;
         ApplyMatrixSV(arg3, &v, arg0);
         arg0 = (u8 *) arg0 + 6;
         arg1 = (u8 *) arg1 + 6;

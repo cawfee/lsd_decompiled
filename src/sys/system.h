@@ -6,7 +6,7 @@
 #include "base/base.h"
 
 #include "graphics/display.h"
-#include "sys/game_flow.h"
+#include "game/game_flow.h"
 #include "sys/pad.h"
 
 typedef struct system_vtable {
@@ -27,9 +27,9 @@ typedef struct system_vtable {
     /* 0x038 8006E528 */ void (*OnNotify)(base_class_t *, base_class_t *, s32);
     /* 0x03C 8006E52C */ void (*Unk14)(void *);
     /* 0x040 8006E530 */ void (*Unk15)(void *, s32 *, s32);
-    /* 0x044 8006E534 */ void (*game_flow_init_graphics)(game_flow_t *, display_t *, pad_t *, u32);
-    /* 0x048 8006E538 */ void (*game_flow_pre_execute)(void *);
-    /* 0x04C 8006E53C */ void (*game_flow_execute_phases)(game_flow_t *);
+    /* 0x044 8006E534 */ void (*InitGraphics)(game_flow_t *, display_t *, pad_t *, u32);
+    /* 0x048 8006E538 */ void (*PreExecute)(void *);
+    /* 0x04C 8006E53C */ void (*ExecutePhases)(game_flow_t *);
     /* 0x050 8006E540 */ void (*Unk19)(void *);
     /* 0x054 8006E544 */ void (*Unk20)(void *);
     /* 0x058 8006E548 */ void (*Unk21)(void *);

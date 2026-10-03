@@ -43,7 +43,7 @@ display_vtable_t g_DISPLAY_VTABLE = {
 };
 
 display_t *display_create(void) {
-    display_t *allocated = memory_allocate_mem(0x34);
+    display_t *allocated = ALLOCATE_STRUCT(display_t);
 
     if (allocated) {
         display_vtable_t *vtable = display_get_vtable();

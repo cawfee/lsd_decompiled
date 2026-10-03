@@ -102,7 +102,6 @@ typedef struct sprite_node {
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
-    /* 0xA8 */ s32 m_Unk41;
 } sprite_node_t;
 
 sprite_node_vtable_t *sprite_node_get_vtable(void);

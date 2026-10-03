@@ -8,7 +8,7 @@ extern s32 D_80010764[];
 extern pad_vtable_t g_PAD_VTABLE;
 
 pad_t *pad_create(s32 Unk1, s32 Unk2) {
-    pad_t *allocated = (pad_t *) memory_allocate_mem(0x20);
+    pad_t *allocated = ALLOCATE_STRUCT(pad_t);
 
     if (allocated) {
         pad_get_vtable()->Construct(allocated, Unk1, Unk2);

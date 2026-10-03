@@ -13,7 +13,7 @@ s32 func_80057954(scene_node_t *This, void *a, s32 b, s32 c, void *d, void *e);
 s32 func_80057A18(scene_node_t *This, void *a, void *b, void *c, void *d);
 
 scene_node_t *func_80056FE4() {
-    scene_node_t *allocated = (scene_node_t *) memory_allocate_mem(0x58);
+    scene_node_t *allocated = ALLOCATE_STRUCT(scene_node_t);
 
     if (allocated) {
         if (scene_node_get_vtable()->Construct(allocated)) {

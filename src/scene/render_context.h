@@ -218,7 +218,6 @@ typedef struct render_context {
     /* 0x1DC */ s32 m_Unk118;
     /* 0x1E0 */ s32 m_Unk119;
     /* 0x1E4 */ s32 m_Unk120;
-    /* 0x1E8 */ s32 m_Unk121;
 } render_context_t;
 
 render_context_vtable_t *func_8004D244(void);

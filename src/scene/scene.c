@@ -42,7 +42,7 @@ scene_vtable_t D_80086668 = {
 };
 
 scene_t *scene_create(u32 Unk1, u32 Unk2) {
-    scene_t *allocated = (scene_t *) memory_allocate_mem(0x38);
+    scene_t *allocated = ALLOCATE_STRUCT(scene_t);
 
     if (allocated) {
         scene_get_vtable()->Construct(allocated, Unk1, Unk2);

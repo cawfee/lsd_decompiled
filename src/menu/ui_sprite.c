@@ -6,7 +6,7 @@ extern ui_sprite_vtable_t D_8006F2C4;
 extern s8 D_8008A938[];
 
 ui_sprite_t *func_800441B4(s32 Unk1, s32 Unk2) {
-    ui_sprite_t *allocated = (ui_sprite_t *) memory_allocate_mem(0x68);
+    ui_sprite_t *allocated = ALLOCATE_STRUCT(ui_sprite_t);
 
     if (allocated) {
         func_8004467C()->Construct(allocated, Unk1, Unk2);

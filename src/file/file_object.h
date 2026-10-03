@@ -50,7 +50,6 @@ typedef struct file_object {
     /* 0x28 */ s32 m_Unk9;
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
-    /* 0x34 */ s32 m_Unk12;
 } file_object_t;
 
 file_object_vtable_t *class_1C92C_get_vtable(void);

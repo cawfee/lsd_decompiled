@@ -5,7 +5,7 @@
 extern file_object_vtable_t g_CLASS_1C92C_VTABLE;
 
 file_object_t *class_1C92C_create(u32 Unk1) {
-    file_object_t *allocated = (file_object_t *) memory_allocate_mem(0x34);
+    file_object_t *allocated = ALLOCATE_STRUCT(file_object_t);
 
     if (allocated) {
         class_1C92C_get_vtable()->class_1C92C_construct(allocated, Unk1);

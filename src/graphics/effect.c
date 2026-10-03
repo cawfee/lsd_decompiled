@@ -7,7 +7,7 @@ extern s32 D_8006EAA8[];
 extern s32 D_8006EA90[];
 
 effect_t *effect_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    effect_t *allocated = (effect_t *) memory_allocate_mem(0xA0);
+    effect_t *allocated = ALLOCATE_STRUCT(effect_t);
 
     if (allocated) {
         effect_get_vtable()->effect_construct(allocated, Unk1, Unk2, Unk3);

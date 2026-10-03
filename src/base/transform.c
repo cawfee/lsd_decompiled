@@ -19,7 +19,7 @@ extern s32 D_8006B684[3];
 extern s32 D_8006B690[3];
 
 transform_t *func_8001CA94() {
-    transform_t *allocated = (transform_t *) memory_allocate_mem(0x44);
+    transform_t *allocated = ALLOCATE_STRUCT(transform_t);
 
     if (allocated) {
         if (func_8001E57C()->Construct(allocated)) {

@@ -58,7 +58,6 @@ typedef struct scene {
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ void *m_Unk11;
     /* 0x34 */ sound_t *m_Sound;
-    /* 0x38 */ s32 m_Unk13;
 } scene_t;
 
 scene_t *scene_create(u32 soundName, u32 soundEngine);

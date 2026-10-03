@@ -53,7 +53,6 @@ typedef struct tim_list {
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
-    /* 0x3C */ s32 m_Unk14;
 } tim_list_t;
 
 tim_list_vtable_t *func_80043E74(void);

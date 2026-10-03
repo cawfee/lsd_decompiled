@@ -73,7 +73,7 @@ typedef struct {
 void *get_display(void);
 
 render_context_t *render_context_create(u32 Unk1, u32 Unk2) {
-    render_context_t *allocated = (render_context_t *) memory_allocate_mem(0x1E8);
+    render_context_t *allocated = ALLOCATE_STRUCT(render_context_t);
 
     if (allocated) {
         func_8004D244()->Construct(allocated, Unk1, Unk2);

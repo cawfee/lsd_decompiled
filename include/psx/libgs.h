@@ -23,5 +23,6 @@ void GsGetTimInfo(unsigned long *im, gs_image_t *tim);
 void GsSetAmbient(unsigned long r, unsigned long g, unsigned long b);
 void GsMapModelingData(unsigned long address);
 void GsSetFlatLight(unsigned int id, gs_light_t *lt);
+void GsLinkObject4(u8 *obj, void *coord, s32 offset);
 
 #endif // PSX_LIBGS_H

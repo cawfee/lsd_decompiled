@@ -84,7 +84,6 @@ typedef struct memory_card {
     /* 0x78 */ void *m_Unk29;
     /* 0x7C */ void *m_Unk30;
     /* 0x80 */ s32 m_Unk31;
-    /* 0x84 */ s32 m_Unk32;
 } memory_card_t;
 
 memory_card_vtable_t *memory_card_get_vtable(void);

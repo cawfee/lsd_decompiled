@@ -31,7 +31,7 @@ class_flat_light_vtable_t D_8006F06C = {
 };
 
 class_flat_light_t *func_8004291C(s32 Unk1) {
-    class_flat_light_t *allocated = (class_flat_light_t *) memory_allocate_mem(0x20);
+    class_flat_light_t *allocated = ALLOCATE_STRUCT(class_flat_light_t);
 
     if (allocated) {
         func_80042A7C()->Construct(allocated, Unk1);

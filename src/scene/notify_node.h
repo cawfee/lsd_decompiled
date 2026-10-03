@@ -73,7 +73,6 @@ typedef struct notify_node {
     /* 0x34 */ s16 m_Unk12_1;
     /* 0x36 */ s16 m_Unk12_2;
     /* 0x38 */ s32 m_Unk13;
-    /* 0x3C */ s32 m_Unk14;
 } notify_node_t;
 
 notify_node_vtable_t *func_8004D508(void);

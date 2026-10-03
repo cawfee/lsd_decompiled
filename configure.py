@@ -359,7 +359,7 @@ c_game_targets = [
     "src/dream/generation_apply.c",
     "src/graphics/renderer.c",
     "src/base/timer.c",
-    "src/sys/game_flow.c",
+    "src/game/game_flow.c",
     "src/menu/movie_screen.c",
     "src/scene/stage_grid.c",
     "src/file/tmd_prim.c",

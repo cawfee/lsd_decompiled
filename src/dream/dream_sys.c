@@ -85,8 +85,8 @@ typedef struct {
     s8 m_NavChallenge;
 } dream_sys_spawn_entry_t;
 
-dream_sys_t *dream_sys_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    dream_sys_t *allocated = (dream_sys_t *) memory_allocate_mem(0x928);
+dream_sys_t *dream_sys_create(tmd_model_t *Unk1, s32 Unk2, s32 Unk3) {
+    dream_sys_t *allocated = ALLOCATE_STRUCT(dream_sys_t);
 
     if (allocated) {
         dream_sys_get_vtable()->dream_sys_construct(allocated, Unk1, Unk2, Unk3);

@@ -9,7 +9,7 @@ extern s16 D_80087AA4[];
 extern s32 D_80087AA6[];
 
 generation_sprite_t *func_80057C94(s32 Unk1, s32 Unk2, s32 Unk3) {
-    generation_sprite_t *allocated = (generation_sprite_t *) memory_allocate_mem(0xA8);
+    generation_sprite_t *allocated = ALLOCATE_STRUCT(generation_sprite_t);
 
     if (allocated) {
         func_80057F58()->Construct(allocated, Unk1, Unk2, Unk3);

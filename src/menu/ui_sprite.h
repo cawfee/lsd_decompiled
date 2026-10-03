@@ -88,7 +88,6 @@ typedef struct ui_sprite {
     /* 0x60 */ s16 m_Unk23_0;
     /* 0x62 */ s16 m_Unk23_1;
     /* 0x64 */ s32 m_Unk24;
-    /* 0x68 */ s32 m_Unk25;
 } ui_sprite_t;
 
 ui_sprite_t *func_800441B4(s32 Unk1, s32 Unk2);

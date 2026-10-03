@@ -6,7 +6,7 @@ extern effect_base_vtable_t D_8006EAC0;
 extern s8 D_8008A924[];
 
 effect_base_t *effect_base_create(u32 Unk1, u32 Unk2, u32 Unk3) {
-    effect_base_t *allocated = (effect_base_t *) memory_allocate_mem(0x6C);
+    effect_base_t *allocated = ALLOCATE_STRUCT(effect_base_t);
 
     if (allocated) {
         func_800408BC()->Construct(allocated, Unk1, Unk2, Unk3);

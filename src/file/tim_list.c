@@ -50,7 +50,7 @@ tim_list_vtable_t D_8006F1C4 = {
 s16 D_8008A934[2] = { 3, 0 };
 
 tim_list_t *func_80043B88(s32 Unk1) {
-    tim_list_t *allocated = (tim_list_t *) memory_allocate_mem(0x3C);
+    tim_list_t *allocated = ALLOCATE_STRUCT(tim_list_t);
 
     if (allocated) {
         func_80043E74()->Construct(allocated, Unk1);

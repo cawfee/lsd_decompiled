@@ -3,7 +3,7 @@
 extern cd_stream_vtable_t D_80081940;
 
 cd_stream_t *func_80048894() {
-    cd_stream_t *allocated = (cd_stream_t *) memory_allocate_mem(0x3C);
+    cd_stream_t *allocated = ALLOCATE_STRUCT(cd_stream_t);
 
     if (allocated) {
         func_80048CE0()->Construct(allocated);

@@ -103,7 +103,6 @@ typedef struct generation_sprite {
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ s32 m_Unk40;
-    /* 0xA8 */ s32 m_Unk41;
 } generation_sprite_t;
 
 generation_sprite_vtable_t *func_80057F58(void);

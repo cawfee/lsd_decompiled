@@ -77,7 +77,6 @@ typedef struct sound {
     /* 0x5A */ u16 unk22_2;
     /* 0x5C */ s32 unk23;
     /* 0x60 */ s32 unk24;
-    /* 0x64 */ s32 unk25;
 } sound_t;
 
 sound_t *sound_create(u32 Unk1);

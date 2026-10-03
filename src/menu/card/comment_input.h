@@ -72,7 +72,6 @@ typedef struct class_comment_input {
     /* 0x40 */ s32 m_Unk15;
     /* 0x44 */ s32 m_Unk16;
     /* 0x48 */ s32 m_Unk17;
-    /* 0x4C */ s32 m_Unk18;
 } class_comment_input_t;
 
 class_comment_input_vtable_t *func_80051A4C(void);

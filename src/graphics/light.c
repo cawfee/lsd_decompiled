@@ -99,7 +99,7 @@ class_light_vtable_t D_8006EFAC = {
 };
 
 class_light_t *func_80042694() {
-    class_light_t *allocated = (class_light_t *) memory_allocate_mem(0x54);
+    class_light_t *allocated = ALLOCATE_STRUCT(class_light_t);
 
     if (allocated) {
         func_800428E4()->Construct(allocated);

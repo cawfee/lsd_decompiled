@@ -55,7 +55,7 @@ void *get_display(void);
 void func_8003AE18(s16);
 
 bgm_t *bgm_create(u32 Unk1, u32 Unk2, u32 Unk3) {
-    bgm_t *allocated = (bgm_t *) memory_allocate_mem(0x24);
+    bgm_t *allocated = ALLOCATE_STRUCT(bgm_t);
 
     if (allocated) {
         bgm_get_vtable()->bgm_construct(allocated, Unk1, Unk2, Unk3);

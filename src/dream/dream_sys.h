@@ -6,6 +6,7 @@
 #include "base/base.h"
 
 #include "file/tim_image.h"
+#include "file/tmd_model.h"
 
 typedef enum {
     MOVE_NONE = 0,
@@ -328,9 +329,9 @@ typedef struct dream_sys {
     /* 0x918 */ dream_sys_spawn_t m_AutoMoveTarget;
     /* 0x922 */ s16 m_AutoMoveTargetPad;
     /* 0x924 */ s32 m_Flag; /* set by dream_sys_get_set_flag, never read */
-    /* 0x928 */ s32 m_Reserved928;
 } dream_sys_t;
 
+dream_sys_t *dream_sys_create(tmd_model_t *Unk1, s32 Unk2, s32 Unk3);
 dream_sys_vtable_t *dream_sys_get_vtable(void);
 
 #endif

@@ -60,7 +60,7 @@ struct base_class {
 memory_manager_t *memory_create_manager(u32 Size, s32 Unused);
 void memory_set_manager(memory_manager_t *Manager);
 
-// Alloc/free methods dont expose FallbackManager arg.
+// Alloc/free methods don't expose FallbackManager arg.
 #ifdef MEMORY_INTERNAL
 void *memory_allocate_mem(u32 Size, void *FallbackManager);
 void *memory_free_mem(void *Ptr, void *FallbackManager);
@@ -77,6 +77,7 @@ void *memory_free_mem(void *Ptr, void *FallbackManager);
 void *memory_allocate_mem(u32 Size);
 void *memory_free_mem(void *Ptr);
 #endif
+
 void memory_free_raw(void *Ptr);
 void memory_setup_manager(memory_manager_t *ManagerParam);
 void memory_set_lock(s32 Value);
@@ -109,5 +110,11 @@ void linked_list_remove(linked_list_node_t **List, void *Target);
 void linked_list_clear(linked_list_node_t **ListHead);
 void linked_list_next(void **OutValue, void **Cursor);
 s32 destroy_list(base_class_t **Array, s32 Count);
+
+//
+// Helper macros
+//
+
+#define ALLOCATE_STRUCT(T) ((T *) memory_allocate_mem(sizeof(T)))
 
 #endif

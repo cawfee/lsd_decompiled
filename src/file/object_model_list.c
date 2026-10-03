@@ -9,7 +9,7 @@ void file_buf_set_triple(void *, void *, s32, s32);
 class_object_model_t *func_8004468C(s32);
 
 class_object_model_list_t *func_80044A0C(s32 Unk1) {
-    class_object_model_list_t *allocated = (class_object_model_list_t *) memory_allocate_mem(0x3C);
+    class_object_model_list_t *allocated = ALLOCATE_STRUCT(class_object_model_list_t);
 
     if (allocated) {
         if (func_80044CC4()->Construct(allocated, Unk1)) {

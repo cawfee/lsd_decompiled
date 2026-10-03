@@ -106,7 +106,6 @@ typedef struct class_glyph {
     /* 0xA9 */ s8 m_Unk41_2;
     /* 0xAA */ s8 m_Unk41_3;
     /* 0xAB */ s8 m_Unk41_4;
-    /* 0xAC */ s32 m_Unk42;
 } class_glyph_t;
 
 class_glyph_t *glyph_create(s32 Unk1, u8 Unk2);

@@ -34,7 +34,6 @@ typedef struct class_flat_light {
     /* 0x14 */ s32 m_Unk4;
     /* 0x18 */ s32 m_Unk5;
     /* 0x1C */ s8 m_Unk6[4];
-    /* 0x20 */ s32 m_Unk7;
 } class_flat_light_t;
 
 class_flat_light_vtable_t *func_80042A7C();

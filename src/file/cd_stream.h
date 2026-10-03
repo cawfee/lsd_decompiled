@@ -63,7 +63,6 @@ typedef struct cd_stream {
     s16 m_Unk11_2;
     /* 0x34 */ s32 m_Unk12;
     /* 0x38 */ s32 m_Unk13;
-    /* 0x3C */ s32 m_Unk14;
 } cd_stream_t;
 
 cd_stream_vtable_t *func_80048CE0(void);

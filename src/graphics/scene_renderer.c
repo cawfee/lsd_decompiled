@@ -97,7 +97,7 @@ scene_renderer_vtable_t D_800869D8 = {
 };
 
 scene_renderer_t *scene_renderer_create() {
-    scene_renderer_t *allocated = (scene_renderer_t *) memory_allocate_mem(0xDC);
+    scene_renderer_t *allocated = ALLOCATE_STRUCT(scene_renderer_t);
 
     if (allocated) {
         func_8004D37C()->Construct(allocated);

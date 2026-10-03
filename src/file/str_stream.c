@@ -22,7 +22,7 @@ extern s32 get_current_data_folder(void);
 extern void *CdSearchFile(void *fp, char *name);
 
 str_stream_t *str_stream_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    str_stream_t *allocated = (str_stream_t *) memory_allocate_mem(0x5C);
+    str_stream_t *allocated = ALLOCATE_STRUCT(str_stream_t);
 
     if (allocated) {
         str_stream_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);

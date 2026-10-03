@@ -25,7 +25,7 @@ s32 dream_generation_start(void *a0, s32 a1, s32 *a2, s32 a3, s32 a4);
 void func_8001EF60(s32 arg);
 
 map_scene_t *map_scene_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4, s32 Unk5) {
-    map_scene_t *allocated = (map_scene_t *) memory_allocate_mem(0x88);
+    map_scene_t *allocated = ALLOCATE_STRUCT(map_scene_t);
 
     if (allocated) {
         func_800544D4()->Construct(allocated, Unk1, Unk2, Unk3, Unk4, Unk5);

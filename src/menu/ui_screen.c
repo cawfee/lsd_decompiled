@@ -13,7 +13,7 @@ extern ui_screen_vtable_t D_8006E730;
 extern char D_8006E860[];
 
 ui_screen_t *ui_screen_create(u32 Unk1, u32 Unk2, u32 Unk3) {
-    ui_screen_t *allocated = (ui_screen_t *) memory_allocate_mem(0xA4);
+    ui_screen_t *allocated = ALLOCATE_STRUCT(ui_screen_t);
 
     if (allocated) {
         func_8003DFBC()->Construct(allocated, Unk1, Unk2, Unk3);

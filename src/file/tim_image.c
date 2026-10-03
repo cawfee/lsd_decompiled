@@ -1,12 +1,11 @@
 #include "file/tim_image.h"
-#include "base/base.h"
 #include "file/file_buf.h"
 #include "graphics/display.h"
 #include <psx/libgs.h>
 extern tim_image_vtable_t g_TIM_IMAGE_VTABLE;
 extern display_t *get_display(void);
 tim_image_t *tim_image_create(const char *Unk1) {
-    tim_image_t *allocated = (tim_image_t *) memory_allocate_mem(0x50);
+    tim_image_t *allocated = ALLOCATE_STRUCT(tim_image_t);
     if (allocated) {
         tim_image_get_vtable()->Construct(allocated, Unk1);
         return allocated;

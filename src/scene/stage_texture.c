@@ -7,7 +7,7 @@ void file_driver_unlock(void);
 void func_80043648(class_stage_texture_slot_t *slot, s32 arg1);
 
 class_stage_texture_t *func_80043008(s32 Unk1, s32 Unk2) {
-    class_stage_texture_t *allocated = (class_stage_texture_t *) memory_allocate_mem(0x84);
+    class_stage_texture_t *allocated = ALLOCATE_STRUCT(class_stage_texture_t);
 
     if (allocated) {
         func_80043830()->Construct(allocated, Unk1);

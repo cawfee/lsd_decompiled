@@ -6,7 +6,7 @@
 #include "menu/text_line.h"
 
 class_comment_input_t *func_80050BA8(char *Unk1, s32 Unk2) {
-    class_comment_input_t *allocated = (class_comment_input_t *) memory_allocate_mem(0x4C);
+    class_comment_input_t *allocated = ALLOCATE_STRUCT(class_comment_input_t);
 
     if (allocated) {
         func_80051A4C()->Construct(allocated, Unk1, Unk2);

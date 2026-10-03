@@ -51,7 +51,7 @@ s32 D_80086650[3] = { 0, -1200, 0 };
 s32 D_8008665C[3] = { 0, -1200, 10000 };
 
 dream_session_t *dream_session_create(game_graphics_ctx_t *GraphicsCtx, dream_sys_t *DreamSys, s32 FrameSyncMode) {
-    dream_session_t *allocated = memory_allocate_mem(0x50);
+    dream_session_t *allocated = ALLOCATE_STRUCT(dream_session_t);
 
     if (allocated) {
         dream_session_get_vtable()->dream_session_construct(allocated, GraphicsCtx, DreamSys, FrameSyncMode);

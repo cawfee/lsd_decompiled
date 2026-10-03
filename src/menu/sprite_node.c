@@ -101,7 +101,7 @@ sprite_node_vtable_t g_SPRITE_NODE_VTABLE = {
 };
 
 sprite_node_t *sprite_node_create(s32 Unk1, s32 Unk2, s32 Unk3) {
-    sprite_node_t *allocated = (sprite_node_t *) memory_allocate_mem(0xA8);
+    sprite_node_t *allocated = ALLOCATE_STRUCT(sprite_node_t);
 
     if (allocated) {
         sprite_node_get_vtable()->Construct(allocated, Unk1, Unk2, Unk3);

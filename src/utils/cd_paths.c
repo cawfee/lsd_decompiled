@@ -159,15 +159,15 @@ const char *get_opening_movie_path(s32 *arg0) {
     return get_path_table(0) + 0x3D40;
 }
 
-const char *get_random_opening_movie_path(s32 *out, s32 unused) {
+const char *get_random_opening_movie_path(s32 *Out, s32 Unused) {
     s32 dur;
     u32 idx;
     const char *path;
 
-    idx = (u32) get_seeded_random(0, unused) % 7u;
+    idx = (u32) get_seeded_random(0, Unused) % 7u;
     path = get_opening_movie_path(&dur);
-    if (out != NULL) {
-        *out = idx + dur;
+    if (Out != NULL) {
+        *Out = idx + dur;
     }
     return path + (idx * 0x1C);
 }
@@ -229,24 +229,24 @@ const char *get_special_movie_path(s32 *DurationMaybe, s32 Index) {
 }
 
 // Takes in flags on a special day to play an event movie, or to play a special day movie
-const char *get_special_day_movie(s32 *out, s32 packed) {
+const char *get_special_day_movie(s32 *Out, s32 Packed) {
     s32 dur;
     const char *path;
     s32 val;
 
-    if (*(s16 *) &packed >= 0) {
-        path = get_special_movie_path(&dur, *(s16 *) &packed);
-        if (out != NULL) {
-            if (((u16 *) &packed)[1] < 2U) {
-                val = ((s16 *) &packed)[1] + dur;
+    if (*(s16 *) &Packed >= 0) {
+        path = get_special_movie_path(&dur, *(s16 *) &Packed);
+        if (Out != NULL) {
+            if (((u16 *) &Packed)[1] < 2U) {
+                val = ((s16 *) &Packed)[1] + dur;
             } else {
                 val = -1;
             }
-            *out = val;
+            *Out = val;
         }
-        return path + (((s16 *) &packed)[1] * 0x1C);
+        return path + (((s16 *) &Packed)[1] * 0x1C);
     }
-    return get_event_movie_path(out, ((s16 *) &packed)[1]);
+    return get_event_movie_path(Out, ((s16 *) &Packed)[1]);
 }
 
 s32 get_movie_duration_maybe(s32 Index) {
@@ -255,21 +255,21 @@ s32 get_movie_duration_maybe(s32 Index) {
 
 // Picks one of the special-day movies at `index` and sums the durations of
 // `count` consecutive movies (used to time the concatenated special reel).
-const char *get_special_reel_movie_path(s32 *out, s32 index, s32 count) {
+const char *get_special_reel_movie_path(s32 *Out, s32 Index, s32 Count) {
     s32 start;
     const char *path;
     s32 i;
     s32 end;
 
-    path = get_special_movie_path(&start, index);
-    end = count << 1;
-    *out = 0;
+    path = get_special_movie_path(&start, Index);
+    end = Count << 1;
+    *Out = 0;
     end += start;
     i = start;
     while (i < end) {
-        *out += g_MovieDurations[i] + 10;
+        *Out += g_MovieDurations[i] + 10;
         i++;
     }
-    *out -= 10;
+    *Out -= 10;
     return path;
 }

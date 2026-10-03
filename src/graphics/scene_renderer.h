@@ -114,7 +114,6 @@ typedef struct scene_renderer {
     /* 0xD0 */ s32 m_Unk51;
     /* 0xD4 */ s32 m_Unk52;
     /* 0xD8 */ s32 m_Unk53;
-    /* 0xDC */ s32 m_Unk54;
 } scene_renderer_t;
 
 scene_renderer_t *scene_renderer_create();

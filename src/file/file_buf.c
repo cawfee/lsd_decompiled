@@ -68,7 +68,7 @@ void *g_FILE_DRIVER_CLASS_VTABLES[] = {
 
 static s32 g_FileDriverClass = 0x13;
 static s32 D_8008A850 = 0;
-static s32 g_DataFolder = 0x8006D4A8;
+static const char *g_DataFolder = (const char *) 0x8006D4A8; // TODO fix
 extern char *strcat(char *, char *);
 s32 cd_file_driver_frame_setup(s32, s32, s32);
 void cd_file_driver_set_disc_table(s32);
@@ -287,11 +287,11 @@ s32 file_driver_lookup_path(s32 arg0, s32 arg1) {
     return 1;
 }
 
-void set_data_folder(s32 Value) {
+void set_data_folder(const char *Value) {
     g_DataFolder = Value;
 }
 
-s32 get_current_data_folder() {
+const char *get_current_data_folder() {
     return g_DataFolder;
 }
 

@@ -1,7 +1,7 @@
 #include "sys/system.h"
 
 #include "base/base.h"
-#include "sys/game_flow.h"
+#include "game/game_flow.h"
 #include <psx/libspu.h>
 
 static s32 g_CD_INIT = 0;
@@ -87,31 +87,31 @@ void game_flow_execute_phases(game_flow_t *This) {
 
     if (This->m_IsInit) {
         // Show the intro logos
-        This->vtable->game_flow_display_logo_sequence(This);
+        This->vtable->DisplayLogoSequence(This);
 
         while (1) {
             // Play the game movie
-            This->vtable->game_flow_play_intro_movie(This);
+            This->vtable->PlayIntroMovie(This);
 
             do {
                 while (1) {
                     // Handle main menu actions
-                    status = This->vtable->game_flow_execute_main_menu(This);
+                    status = This->vtable->ExecuteMainMenu(This);
 
                     if (status != 1) {
                         break;
                     }
 
                     // Debug left over? Empty function
-                    This->vtable->game_flow_menu_unused(This);
+                    This->vtable->MenuUnused(This);
                 }
 
                 // Play the game itself
                 if (status == 2) {
                     // Run the dream
-                    if (This->vtable->game_flow_execute_dream(This)) {
+                    if (This->vtable->ExecuteDream(This)) {
                         // Will play the ending movie if returns true
-                        This->vtable->game_flow_play_ending_movie(This);
+                        This->vtable->PlayEndingMovie(This);
                     }
                 }
             } while (status);

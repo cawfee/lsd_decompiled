@@ -148,7 +148,7 @@ movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
 };
 
 movie_screen_t *movie_screen_create(s32 Unk1, s32 Unk2, s32 Unk3, s32 Unk4) {
-    movie_screen_t *allocated = (movie_screen_t *) memory_allocate_mem(0xDC);
+    movie_screen_t *allocated = ALLOCATE_STRUCT(movie_screen_t);
 
     if (allocated) {
         movie_screen_get_vtable()->movie_screen_construct(allocated, Unk1, Unk2, Unk3, Unk4);

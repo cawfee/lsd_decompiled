@@ -58,7 +58,6 @@ typedef struct class_object_model {
     /* 0x2C */ s32 m_Unk10;
     /* 0x30 */ s32 m_Unk11;
     /* 0x34 */ s32 m_Unk12;
-    /* 0x38 */ s32 m_Unk13;
 } class_object_model_t;
 
 class_object_model_vtable_t *func_800449FC(void);

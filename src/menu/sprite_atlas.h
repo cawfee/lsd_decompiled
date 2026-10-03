@@ -56,7 +56,6 @@ typedef struct sprite_atlas {
     /* 0x30 */ u16 m_Unk11_1;
     /* 0x32 */ s16 m_Unk11_2;
     /* 0x34 */ s32 m_Unk12;
-    /* 0x38 */ s32 m_Unk13;
 } sprite_atlas_t;
 
 sprite_atlas_t *func_80044F30(u32 Unk1);

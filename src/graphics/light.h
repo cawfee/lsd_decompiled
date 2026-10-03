@@ -79,6 +79,7 @@ typedef struct class_light {
     /* 0x53 */ s8 m_Unk19_pad;
 } class_light_t;
 
+class_light_t *func_80042694();
 class_light_vtable_t *func_800428E4();
 
 #endif

@@ -34,7 +34,7 @@ tmd_prim_vtable_t g_CLASS_FA50_VTABLE = {
 };
 
 tmd_prim_t *class_FA50_create(s32 Unk1) {
-    tmd_prim_t *allocated = (tmd_prim_t *) memory_allocate_mem(0x24);
+    tmd_prim_t *allocated = ALLOCATE_STRUCT(tmd_prim_t);
 
     if (allocated) {
         class_FA50_get_vtable()->class_FA50_construct(allocated, Unk1);

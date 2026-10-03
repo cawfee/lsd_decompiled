@@ -4,7 +4,7 @@
 
 #include "base/base.h"
 #include "graphics/display.h"
-#include "sys/game_flow.h"
+#include "game/game_flow.h"
 #include "sys/pad.h"
 
 // data
@@ -35,8 +35,8 @@ void main(int argc, const char **argv) {
     g_GAME_FLOW = game_flow_create(&g_GAME_CONFIG);
 
     display = display_create();
-    g_GAME_FLOW->vtable->game_flow_init(g_GAME_FLOW, display, pad_create(0, 0));
-    g_GAME_FLOW->vtable->game_flow_execute_phases(g_GAME_FLOW);
+    g_GAME_FLOW->vtable->Init(g_GAME_FLOW, display, pad_create(0, 0));
+    g_GAME_FLOW->vtable->ExecutePhases(g_GAME_FLOW);
 }
 
 // NOLINTBEGIN

@@ -126,7 +126,7 @@ typedef struct graph_screen {
     /* 0x9C */ s32 m_Unk38;
     /* 0xA0 */ s32 m_Unk39;
     /* 0xA4 */ void *m_DreamSys;
-    /* 0x0A8 */ void *m_DreamCells[100]; /* one per stored dream day */
+    /* 0xA8 */ void *m_DreamCells[100]; /* one per stored dream day */
     s32 m_VideoReelReady;
     s32 m_EventCellIndex;
     void *m_EventCellIndices;

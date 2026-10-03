@@ -54,7 +54,6 @@ typedef struct model_part {
     /* 0x20 */ s32 m_Unk7;
     /* 0x24 */ s32 m_Unk8;
     /* 0x28 */ s32 m_Unk9;
-    /* 0x2C */ s32 m_Unk10;
 } model_part_t;
 
 model_part_vtable_t *func_800441A4(void);

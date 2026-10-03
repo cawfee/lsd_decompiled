@@ -49,7 +49,7 @@ s32 memory_card_delete_file_impl(memory_card_t *, s32, s32);
 s32 memory_card_call_event(memory_card_t *, long (*)(long), s32);
 
 memory_card_t *memory_card_create(u32 Unk1, u32 Unk2) {
-    memory_card_t *allocated = (memory_card_t *) memory_allocate_mem(0x84);
+    memory_card_t *allocated = ALLOCATE_STRUCT(memory_card_t);
 
     if (allocated) {
         memory_card_get_vtable()->memory_card_on_construct(allocated, Unk1, Unk2);

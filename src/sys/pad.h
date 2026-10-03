@@ -40,7 +40,6 @@ typedef struct pad {
     /* 0x14 */ s32 m_Released;
     /* 0x18 */ s32 m_Pressed;
     /* 0x1C */ s32 m_Unk6;
-    /* 0x20 */ s32 m_Unk7;
 } pad_t;
 
 pad_t *pad_create(s32 Unk1, s32 Unk2);

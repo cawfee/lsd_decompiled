@@ -6,11 +6,11 @@ extern void *get_file_driver(void);
 
 extern tmd_model_vtable_t D_8006F13C;
 
-tmd_model_t *tmd_create(s32 Unk1) {
-    tmd_model_t *allocated = (tmd_model_t *) memory_allocate_mem(0x30);
+tmd_model_t *tmd_create(tmd_model_arg_t *Args) {
+    tmd_model_t *allocated = ALLOCATE_STRUCT(tmd_model_t);
 
     if (allocated) {
-        if (func_80043B78()->Construct(allocated, Unk1)) {
+        if (func_80043B78()->Construct(allocated, Args)) {
             return allocated;
         }
 
@@ -20,21 +20,23 @@ tmd_model_t *tmd_create(s32 Unk1) {
     return NULL;
 }
 
-tmd_model_t *func_800438B0(tmd_model_t *This, s32 *Unk) {
+tmd_model_t *func_800438B0(tmd_model_t *This, tmd_model_arg_t *Args) {
     (*(void (**)(void *))((s32) get_file_driver() + 8))(This);
     This->vtable = func_80043B78();
-    if (Unk == NULL) {
+
+    if (Args == NULL) {
         return This;
     }
-    if (*Unk != 0) {
-        This->m_Unk3 = *Unk;
+
+    if (Args->m_Unk0 != 0) {
+        This->m_Unk3 = Args->m_Unk0;
         This->m_Unk4 = 0;
         if (This->vtable->Unk24(This) != 0) {
             goto fail;
         }
         return This;
     }
-    This->vtable->Unk26(This, Unk[1]);
+    This->vtable->Unk26(This, Args->m_Path);
     return This;
 fail:
     return NULL;

@@ -9,11 +9,13 @@
 #include "menu/main_menu.h"
 #include "menu/movie_screen.h"
 #include "menu/ui_screen.h"
-#include "sys/game_flow.h"
+#include "game/game_flow.h"
 #include "sys/system.h"
 #include "utils/cd_paths.h"
+#include "file/file_buf.h"
+#include "file/tmd_model.h"
 
-game_flow_vtable_t g_GAME_FLOW_VTABLE = {
+static game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     0x1F60,
     base_class_destructor,
     game_flow_construct,
@@ -29,7 +31,7 @@ game_flow_vtable_t g_GAME_FLOW_VTABLE = {
     base_class_notify,
     base_class_nop,
     base_class_on_notify,
-    0,
+    NULL,
     game_flow_get_day_rand,
     game_flow_init,
     game_flow_pre_execute,
@@ -43,11 +45,11 @@ game_flow_vtable_t g_GAME_FLOW_VTABLE = {
 };
 
 game_flow_t *game_flow_create(game_config_t *Config) {
-    game_flow_t *allocated = memory_allocate_mem(0x2C);
+    game_flow_t *cls = ALLOCATE_STRUCT(game_flow_t);
 
-    if (allocated) {
-        game_flow_get_vtable()->game_flow_construct(allocated, Config);
-        return allocated;
+    if (cls) {
+        game_flow_get_vtable()->Construct(cls, Config);
+        return cls;
     }
 
 #ifdef NON_MATCHING
@@ -56,7 +58,7 @@ game_flow_t *game_flow_create(game_config_t *Config) {
 }
 
 void game_flow_construct(game_flow_t *This, game_config_t *Config) {
-    char *tmd_args[4];
+    tmd_model_arg_t tmd_args;
 
     system_get_vtable()->Construct(This, Config->m_FileDriverClass);
     This->vtable = game_flow_get_vtable();
@@ -64,13 +66,13 @@ void game_flow_construct(game_flow_t *This, game_config_t *Config) {
 
     set_data_folder(get_data_folder());
 
-    tmd_args[0] = NULL;
-    tmd_args[1] = "ETC\\DREAME5.TMD";
+    tmd_args.m_Unk0 = NULL;
+    tmd_args.m_Path = "ETC\\DREAME5.TMD";
 
     This->m_DreamSys = dream_sys_create(tmd_create(&tmd_args), 0, 0);
     This->m_SkipDreamChart = 0;
     This->m_DreamSys->vtable->dream_sys_get_set_flag(This->m_DreamSys, Config->m_UnusedFlag);
-    This->vtable->game_flow_get_day_rand(This);
+    This->vtable->GetDayRand(This);
 }
 
 s32 game_flow_get_day_rand(void *This) {
@@ -79,7 +81,7 @@ s32 game_flow_get_day_rand(void *This) {
 
 void game_flow_init(game_flow_t *This, display_t *Display, pad_t *Pad) {
     if (!This->m_IsInit) {
-        system_get_vtable()->game_flow_init_graphics(This, Display, Pad, 0);
+        system_get_vtable()->InitGraphics(This, Display, Pad, 0);
     }
 }
 

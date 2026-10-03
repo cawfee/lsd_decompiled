@@ -101,9 +101,9 @@ typedef struct renderer {
     /* 0xB0 */ s32 m_Unk43;
     /* 0xB4 */ s32 m_Unk44;
     /* 0xB8 */ s32 m_Unk45;
-    /* 0xBC */ s32 m_Unk46;
 } renderer_t;
 
+renderer_t *renderer_create(void);
 renderer_vtable_t *renderer_get_vtable(void);
 
 #endif

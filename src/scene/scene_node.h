@@ -92,7 +92,6 @@ typedef struct scene_node {
     /* 0x4C */ s32 m_Unk18;
     /* 0x50 */ s32 m_Unk19;
     /* 0x54 */ s32 m_Unk20;
-    /* 0x58 */ s32 m_Unk21;
 } scene_node_t;
 
 scene_node_vtable_t *scene_node_get_vtable(void);

@@ -8,7 +8,7 @@ s32 func_800451B8(void *);
 extern class_object_model_vtable_t D_8006F384;
 
 class_object_model_t *func_8004468C(s32 Unk1) {
-    class_object_model_t *allocated = (class_object_model_t *) memory_allocate_mem(0x38);
+    class_object_model_t *allocated = ALLOCATE_STRUCT(class_object_model_t);
 
     if (allocated) {
         if (func_800449FC()->Construct(allocated, Unk1, 1)) {

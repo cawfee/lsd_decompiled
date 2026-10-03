@@ -70,7 +70,6 @@ typedef struct class_stage_texture {
     /* 0x3C */ s32 m_Unk14;
     /* 0x40 */ class_stage_texture_slot_t m_Slots[4];
     /* 0x80 */ s32 m_Unk31;
-    /* 0x84 */ s32 m_Unk32;
 } class_stage_texture_t;
 
 class_stage_texture_vtable_t *func_80043830(void);
