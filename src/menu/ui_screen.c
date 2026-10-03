@@ -24,7 +24,7 @@ ui_screen_t *ui_screen_create(u32 Unk1, u32 Unk2, u32 Unk3) {
 }
 
 void func_8003BF10(ui_screen_t *This, s32 Unk2, s32 Unk3, sound_t *Unk4) {
-    timer_get_vtable()->timer_create(This);
+    timer_get_vtable()->Construct(This);
     This->vtable = func_8003DFBC();
     This->vtable->Unk53(This, Unk2);
 
@@ -182,7 +182,7 @@ void func_8003C51C(ui_screen_t *This, void **Unk2, s32 Unk3) {
     ui_screen_vtable_t *vtable;
 
     vtable = This->vtable;
-    timer_get_vtable()->timer_increment(This, Unk2, Unk3);
+    timer_get_vtable()->Increment(This, Unk2, Unk3);
 
     if (This->m_HasIdleTimeout && This->m_TicksPassed > This->m_TimeoutIdleTime) {
         vtable->Unk23(This, 6);

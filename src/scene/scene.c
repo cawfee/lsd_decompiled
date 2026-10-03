@@ -3,7 +3,7 @@
 #include "base/base.h"
 #include "base/timer.h"
 
-void func_8003E030(void *, void **, s32);
+void timer_on_notify(void *, void **, s32);
 void func_8003E418(void *, void *, s32);
 
 scene_vtable_t D_80086668 = {
@@ -21,7 +21,7 @@ scene_vtable_t D_80086668 = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    func_8003E030,
+    timer_on_notify,
     NULL,
     scene_reset,
     (void (*)(void *, void *, s32)) scene_run,
@@ -53,7 +53,7 @@ scene_t *scene_create(u32 Unk1, u32 Unk2) {
 }
 
 void scene_construct(scene_t *This, void *Unk2, sound_vtable_t *SoundEngine) {
-    timer_get_vtable()->timer_create(This);
+    timer_get_vtable()->Construct(This);
     This->vtable = scene_get_vtable();
 
     if (Unk2) {
@@ -92,7 +92,7 @@ void scene_noop(void *) {
 }
 
 void scene_update(scene_t *This, void **Unk2, void *Unk3) {
-    timer_get_vtable()->timer_increment(This, Unk2, Unk3);
+    timer_get_vtable()->Increment(This, Unk2, Unk3);
 
     if (This->m_Unk6 > This->m_Unk10) {
         This->vtable->Unk23(This, 4);

@@ -4,67 +4,63 @@
 #include "graphics/light.h"
 #include "graphics/renderer.h"
 
-extern class_light_t *func_80042694(void);
-extern renderer_t *renderer_create(void);
+// not timer related but has timer seeming functions
+// todo new name
+// todo cleanup
 
-void timer_create(timer_t *This);
-void func_8003E030(timer_t *, void **, void *);
-void timer_reset(timer_t *);
-void func_8003E10C(timer_t *, s32 *, s32);
-void func_8003E280(timer_t *);
-void func_8003E418(timer_t *, s32, s32);
-void timer_increment(timer_t *, void **, s32);
-void func_8003E4B8(timer_t *, s32);
-
-timer_vtable_t g_TIMER_VTABLE = {
-    0x30,
-    base_class_destructor,
-    timer_create,
-    base_class_cleanup,
-    base_class_attach,
-    base_class_detach,
-    base_class_detach_all,
-    base_class_iter_children,
-    base_class_add_parent,
-    base_class_remove_parent,
-    base_class_clear_parents,
-    base_class_iter_parents,
-    base_class_notify,
-    base_class_nop,
-    func_8003E030,
-    0,
-    timer_reset,
-    func_8003E10C,
-    func_8003E280,
-    NULL,
-    NULL,
-    func_8003E418,
-    NULL,
-    timer_increment,
-    func_8003E4B8,
-    timer_begin_frame,
-    timer_end_frame,
+static timer_vtable_t g_TIMER_VTABLE = {
+    .type_id = 0x30,
+    .Destroy = base_class_destructor,
+    .Construct = timer_create,
+    .Cleanup = base_class_cleanup,
+    .Attach = base_class_attach,
+    .Detach = base_class_detach,
+    .DetachAll = base_class_detach_all,
+    .IterChildren = base_class_iter_children,
+    .AddParent = base_class_add_parent,
+    .RemoveParent = base_class_remove_parent,
+    .ClearParents = base_class_clear_parents,
+    .IterParents = base_class_iter_parents,
+    .Notify = base_class_notify,
+    .Nop = base_class_nop,
+    .OnNotify = timer_on_notify,
+    .Unused1 = NULL,
+    .Reset = timer_reset,
+    .Unk16 = func_8003E10C,
+    .Unk17 = func_8003E280,
+    .Unk18 = NULL,
+    .Unk19 = NULL,
+    .Unk20 = func_8003E418,
+    .Unk21 = NULL,
+    .Increment = timer_increment,
+    .Unk23 = func_8003E4B8,
+    .Unk24 = timer_begin_frame,
+    .Unk25 = timer_end_frame,
 };
 
 void timer_create(timer_t *This) {
     base_class_get_vtable()->Construct(This);
 
     This->vtable = timer_get_vtable();
-    This->vtable->timer_reset(This);
+    This->vtable->Reset(This);
 }
 
-void func_8003E030(timer_t *This, void **Unk2, void *Unk3) {
-    u32 value;
-    base_class_get_vtable()->OnNotify(This, Unk2, Unk3);
+// Use timer_t as large enough struct
+// Sender is generic class?
+void timer_on_notify(timer_t *This, base_class_t *Sender, s32 Code) {
+    u32 type_id;
+    base_class_get_vtable()->OnNotify(This, Sender, Code);
 
-    value = *(u32 *) *Unk2 & 0xF;
+    // 0xF of the type id is ..?
+    type_id = Sender->vtable->type_id & 0xF;
 
-    if (value == 1) {
-        This->vtable->Unk20(This, Unk2, Unk3);
-    } else if (value == 2) {
-        This->vtable->Unk21(This, Unk2, Unk3);
-    } else if (value == 5) {
-        This->vtable->timer_increment(This, Unk2, Unk3);
+    // TODO check if on notify
+    if (type_id == 1) {
+        This->vtable->Unk20(This, Sender, Code);
+    } else if (type_id == 2) {
+        This->vtable->Unk21(This, Sender, Code);
+    } else if (type_id == 5) {
+        This->vtable->Increment(This, Sender, Code);
     }
 }
 
@@ -76,7 +72,7 @@ void timer_reset(timer_t *This) {
 void func_8003E10C(timer_t *This, s32 *Unk2, s32 Unk3) {
     s32 value;
     timer_vtable_t *vtable;
-    void *m_Unk5;
+    void *unk5;
 
     value = Unk2[2];
     vtable = This->vtable;
@@ -98,15 +94,15 @@ void func_8003E10C(timer_t *This, s32 *Unk2, s32 Unk3) {
     This->m_Unk5 = (void *) value;
 
     This->m_Unk2 = (s32) Unk2;
-    m_Unk5 = This->m_Unk5;
+    unk5 = This->m_Unk5;
     vtable->Attach(This, Unk2[0]);
     vtable->Attach(This, Unk2[1]);
     vtable->Attach(This, (s32) This->m_Unk3);
     vtable->Unk18(This, 0, 0, 0);
     This->m_Unk8 = Unk3;
     if (Unk3 == 0) {
-        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x10))(m_Unk5, Unk2[0]);
-        (*(void (**)(void *, s32))(*(s32 *) m_Unk5 + 0x10))(m_Unk5, (s32) This->m_Unk3);
+        (*(void (**)(void *, s32))(*(s32 *) unk5 + 0x10))(unk5, Unk2[0]);
+        (*(void (**)(void *, s32))(*(s32 *) unk5 + 0x10))(unk5, (s32) This->m_Unk3);
         (*(void (**)(void *, s32))(*(s32 *) This->m_Unk4 + 0x10))(This->m_Unk4, (s32) This->m_Unk3);
         vtable->Unk23(This, 2);
         vtable->Unk17(This);
@@ -145,10 +141,10 @@ void func_8003E280(timer_t *This) {
     }
 }
 
-void func_8003E418(timer_t *This, s32 Unk2, s32 Unk3) {
+void func_8003E418(timer_t *This, base_class_t *Sender, s32 Code) {
     s32 obj;
 
-    if (Unk3 == 2) {
+    if (Code == 2) {
         (*(void (**)(void *))(*(s32 *) This->m_Unk3 + 0x44))(This->m_Unk3);
         obj = *(s32 *) (This->m_Unk2 + 4);
         (*(void (**)(s32))(*(s32 *) obj + 0x44))(obj);
@@ -156,7 +152,7 @@ void func_8003E418(timer_t *This, s32 Unk2, s32 Unk3) {
     }
 }
 
-void timer_increment(timer_t *This, void **Unk2, s32 Unk3) {
+void timer_increment(timer_t *This, base_class_t *Sender, s32 Code) {
     This->m_TicksPassed++;
 }
 

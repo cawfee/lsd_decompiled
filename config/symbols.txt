@@ -1174,6 +1174,7 @@ timer_reset = 0x8003E100;
 timer_increment = 0x8003E4A4;
 timer_begin_frame = 0x8003E538;
 timer_end_frame = 0x8003E578;
+timer_on_notify = 0x8003E030;
 
 // main.c
 main = 0x800118DC;

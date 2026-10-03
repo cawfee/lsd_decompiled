@@ -8,7 +8,7 @@ s32 mdec_movie_create(s32, s32, s32);
 
 void movie_screen_construct(void *);
 void movie_screen_cleanup(void *);
-void func_8003E030(void *);
+void timer_on_notify(void *);
 void func_8003BA38(void *);
 void func_8003BA58(void *);
 void func_8003E280(void *);
@@ -81,7 +81,7 @@ movie_screen_vtable_t g_MOVIE_SCREEN_VTABLE = {
     base_class_iter_parents,
     base_class_notify,
     base_class_nop,
-    func_8003E030,
+    timer_on_notify,
     NULL,
     func_8003BA38,
     func_8003BA58,

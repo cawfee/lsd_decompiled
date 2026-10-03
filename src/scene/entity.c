@@ -223,7 +223,7 @@ entity_vtable_t g_ENTITY_VTABLE = {
     base_class_notify,
     base_class_nop,
     (void (*)(base_class_t *, base_class_t *, s32)) func_80065790,
-    0x00000000,
+    NULL,
     entity_init,
     (void (*)(void *, s32, s32 *)) func_8001CEB4,
     (void (*)(void *, s32, s32 *)) func_8001D008,
@@ -252,7 +252,7 @@ entity_vtable_t g_ENTITY_VTABLE = {
     (void (*)(void *)) func_8001D950,
     (void (*)(void *)) func_8001DA28,
     (void (*)(void *)) func_8001DDF4,
-    0x00000000,
+    NULL,
     (void (*)(void *)) func_8001E4A4,
     (void (*)(void *, s32)) func_80057384,
     (void (*)(void *, s32 *)) func_800573A8,
@@ -307,8 +307,6 @@ entity_vtable_t g_ENTITY_VTABLE = {
     entity_check_link_proximity,
 };
 
-/* A 12-bit fixed-point fraction: value = num * 4096 / den (see func_8001EC84).
- * Two s16 packed into one 4-byte word, matching the raw table layout. */
 frac_t g_RotatePitchEighth[3] = { { 1, 8 }, { 0, 1 }, { 0, 1 } };
 frac_t g_RotateYawNine[3] = { { 0, 1 }, { 9, 1 }, { 0, 1 } };
 frac_t g_RotateYawNegNine[3] = { { 0, 1 }, { -9, 1 }, { 0, 1 } };
@@ -327,17 +325,17 @@ frac_t g_RotateYawFour[3] = { { 0, 1 }, { 4, 1 }, { 0, 1 } };
 frac_t g_RotatePitchNinety[3] = { { 90, 1 }, { 0, 1 }, { 0, 1 } };
 frac_t g_RotateYawOne[3] = { { 0, 1 }, { 1, 1 }, { 0, 1 } };
 frac_t g_RotateRollNeg90Yaw270[6] = { { 0, 1 }, { 0, 1 }, { -90, 1 }, { 0, 1 }, { 270, 1 }, { 0, 1 } };
-fixed_vec3_t g_MoveUp256[1] = { 0, 256, 0 };
-fixed_vec3_t g_MoveDown4096[1] = { 0, -4096, 0 };
-fixed_vec3_t g_MoveDown512[1] = { 0, -512, 0 };
-fixed_vec3_t g_MoveUp64[1] = { 0, 64, 0 };
-fixed_vec3_t g_MoveUp8[1] = { 0, 8, 0 };
-fixed_vec3_t g_MoveDown64Then32[2] = { { 0, -64, 0 }, { 0, -32, 0 } };
-fixed_vec3_t g_MoveDown256[1] = { 0, -256, 0 };
-fixed_vec3_t g_MoveLeft64[1] = { -64, 0, 0 };
-fixed_vec3_t g_MoveUp64Back64[1] = { 0, 64, -64 };
-fixed_vec3_t g_MoveDown1500Back1024[1] = { 0, -1500, 1024 };
-fixed_vec3_t g_MoveBack256[1] = { 0, 0, -256 };
+vec3d_t g_MoveUp256[1] = { 0, 256, 0 };
+vec3d_t g_MoveDown4096[1] = { 0, -4096, 0 };
+vec3d_t g_MoveDown512[1] = { 0, -512, 0 };
+vec3d_t g_MoveUp64[1] = { 0, 64, 0 };
+vec3d_t g_MoveUp8[1] = { 0, 8, 0 };
+vec3d_t g_MoveDown64Then32[2] = { { 0, -64, 0 }, { 0, -32, 0 } };
+vec3d_t g_MoveDown256[1] = { 0, -256, 0 };
+vec3d_t g_MoveLeft64[1] = { -64, 0, 0 };
+vec3d_t g_MoveUp64Back64[1] = { 0, 64, -64 };
+vec3d_t g_MoveDown1500Back1024[1] = { 0, -1500, 1024 };
+vec3d_t g_MoveBack256[1] = { 0, 0, -256 };
 frac_t g_OffsetQuarter[3] = { { 1, 4 }, { 1, 4 }, { 1, 4 } };
 frac_t g_OffsetHalf[3] = { { 1, 2 }, { 1, 2 }, { 1, 2 } };
 frac_t g_Offset080102100[3] = { { 4, 5 }, { 6, 5 }, { 5, 5 } };

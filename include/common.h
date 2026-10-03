@@ -40,4 +40,9 @@ typedef struct {
     vec3d_16_t max;
 } box3d_16_t;
 
+typedef struct {
+    s16 num;
+    s16 den;
+} frac_t;
+
 #endif
